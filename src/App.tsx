@@ -1,10 +1,10 @@
-import { Navigate, Routes, Route, useNavigate } from 'react-router-dom'
-import { protectedRoutes, publicRoutes } from './utils/AppRouter'
-import { Suspense, useEffect, useState } from 'react'
+import { Navigate, Routes, Route } from 'react-router-dom'
+import { publicRoutes } from './utils/AppRouter'
+import { Suspense } from 'react'
 import { NOTFOUND_ROUTE } from './utils/constants/routes.consts'
 
 function App() {
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     return (
         <Routes>
             {publicRoutes.map(({ path, Component, Loader }) => (
