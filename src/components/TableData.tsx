@@ -2,6 +2,7 @@ import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot } from '@chakra-
 import { Order } from '../utils/types/types'
 import RevertTh from './ui/RevertTh'
 
+//TODO: Используй константы вместо let если не изменяется
 const TableData = ({ data }: { data: Order[] }) => {
     console.log(data)
     let uniqProducts = new Set<string>()

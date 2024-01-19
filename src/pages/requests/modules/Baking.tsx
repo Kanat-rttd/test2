@@ -1,9 +1,8 @@
-import { Box } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot } from '@chakra-ui/react'
-import { getAll } from '../../../utils/services/baking.service'
+import { Box, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot } from '@chakra-ui/react'
+import { getAll } from '@/utils/services/baking.service'
 
-import TopNavBar from '../../../components/NavBar'
+import TopNavBar from '@/components/NavBar'
 import dayjs from 'dayjs'
 
 interface Baking {

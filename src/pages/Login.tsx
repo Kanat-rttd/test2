@@ -41,7 +41,7 @@ const Login = () => {
     const handleConfirmClick = () => {
         console.log(phoneNumber)
         console.log(password)
-        let data = { phone: phoneNumber, pass: password }
+        const data = { phone: phoneNumber, pass: password }
 
         authUser(data).then((res) => {
             console.log(res)
@@ -49,45 +49,43 @@ const Login = () => {
     }
 
     return (
-        <>
-            <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                height="80vh"
-            >
-                <Stack spacing={4}>
-                    <Heading textAlign={'center'}>Login Page</Heading>
-                    <InputGroup size={'lg'}>
-                        <InputLeftAddon>+7</InputLeftAddon>
-                        <Input
-                            type="tel"
-                            placeholder="(777)-777-77-77"
-                            value={phoneNumber}
-                            onChange={handleInputChange}
-                        />
-                    </InputGroup>
-                    <InputGroup size="lg">
-                        <Input
-                            pr="4.5rem"
-                            type={show ? 'text' : 'password'}
-                            placeholder="Enter password"
-                            value={password}
-                            onChange={handlePasswordChange}
-                        />
-                        <InputRightElement width="4.5rem">
-                            <Button h="1.75rem" size="sm" onClick={handleClick}>
-                                {show ? 'Hide' : 'Show'}
-                            </Button>
-                        </InputRightElement>
-                    </InputGroup>
-                    <Button size={'lg'} onClick={handleConfirmClick}>
-                        Confirm
-                    </Button>
-                </Stack>
-            </Box>
-        </>
+        <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            height="80vh"
+        >
+            <Stack spacing={4}>
+                <Heading textAlign={'center'}>Login Page</Heading>
+                <InputGroup size={'lg'}>
+                    <InputLeftAddon>+7</InputLeftAddon>
+                    <Input
+                        type="tel"
+                        placeholder="(777)-777-77-77"
+                        value={phoneNumber}
+                        onChange={handleInputChange}
+                    />
+                </InputGroup>
+                <InputGroup size="lg">
+                    <Input
+                        pr="4.5rem"
+                        type={show ? 'text' : 'password'}
+                        placeholder="Enter password"
+                        value={password}
+                        onChange={handlePasswordChange}
+                    />
+                    <InputRightElement width="4.5rem">
+                        <Button h="1.75rem" size="sm" onClick={handleClick}>
+                            {show ? 'Hide' : 'Show'}
+                        </Button>
+                    </InputRightElement>
+                </InputGroup>
+                <Button size={'lg'} onClick={handleConfirmClick}>
+                    Confirm
+                </Button>
+            </Stack>
+        </Box>
     )
 }
 

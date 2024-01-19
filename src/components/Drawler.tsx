@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom'
  * Default Loader which you can use between page or big fetch
  * @returns {JSX}
  */
+//TODO:comment не совпадает с действительностью плюс название компонента по лучше можно
 const Drawler = () => {
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()

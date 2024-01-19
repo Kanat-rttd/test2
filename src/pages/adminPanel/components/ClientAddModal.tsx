@@ -56,42 +56,40 @@ const ClientAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
     }
 
     return (
-        <>
-            <Modal isCentered isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
-                <ModalContent>
-                    <ModalHeader>{data ? 'Редактировать' : 'Добавить'} клиента</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <Stack spacing={4}>
-                            <InputGroup>
-                                <Input
-                                    name="name"
-                                    onChange={handleChange}
-                                    placeholder="Имя клиента"
-                                    value={formData?.name ?? ''}
-                                />
-                            </InputGroup>
+        <Modal isCentered isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+            <ModalContent>
+                <ModalHeader>{data ? 'Редактировать' : 'Добавить'} клиента</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <Stack spacing={4}>
+                        <InputGroup>
+                            <Input
+                                name="name"
+                                onChange={handleChange}
+                                placeholder="Имя клиента"
+                                value={formData?.name ?? ''}
+                            />
+                        </InputGroup>
 
-                            <InputGroup>
-                                <Input
-                                    name="email"
-                                    onChange={handleChange}
-                                    placeholder="Почта клиента"
-                                    value={formData?.email ?? ''}
-                                />
-                            </InputGroup>
-                        </Stack>
-                    </ModalBody>
-                    <ModalFooter display={'flex'} alignSelf={'center'} gap={5}>
-                        <Button onClick={data ? updClient : addClient}>
-                            {data ? 'Редактировать' : 'Добавить'} клиента
-                        </Button>
-                        <Button onClick={onClose}>Закрыть</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-        </>
+                        <InputGroup>
+                            <Input
+                                name="email"
+                                onChange={handleChange}
+                                placeholder="Почта клиента"
+                                value={formData?.email ?? ''}
+                            />
+                        </InputGroup>
+                    </Stack>
+                </ModalBody>
+                <ModalFooter display={'flex'} alignSelf={'center'} gap={5}>
+                    <Button onClick={data ? updClient : addClient}>
+                        {data ? 'Редактировать' : 'Добавить'} клиента
+                    </Button>
+                    <Button onClick={onClose}>Закрыть</Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     )
 }
 

@@ -1,13 +1,12 @@
-import { Box } from '@chakra-ui/react'
-import { Tabs, TabList, Tab, TabIndicator, TabPanels, TabPanel } from '@chakra-ui/react'
+import { Box, Tabs, TabList, Tab, TabIndicator, TabPanels, TabPanel } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 
-import TopNavBar from '../../../components/NavBar'
-import AccordionClients from '../../../components/AccordionClients'
-import { OrderArray } from '../../../utils/types/types'
-import TableData from '../../../components/TableData'
+import TopNavBar from '@/components/NavBar'
+import AccordionClients from '@/components/AccordionClients'
+import { OrderArray } from '@/utils/types/types'
+import TableData from '@/components/TableData'
 
-import { getAll } from '../../../utils/services/request.service'
+import { getAll } from '@/utils/services/request.service'
 
 const RequestPage = () => {
     const [data, setData] = useState<OrderArray | null>(null)

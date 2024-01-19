@@ -6,6 +6,7 @@ const NavMenuBlock = () => {
             h="10vh"
             alignItems="center"
             p="5"
+            //TODO: Это кто такой на 1?
             boxShadow={1 ? 'base' : 'none'}
             position="sticky"
             top="0"
