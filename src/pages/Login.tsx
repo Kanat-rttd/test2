@@ -7,18 +7,20 @@ import {
     Button,
     Input,
     Heading,
+    useToast,
 } from '@chakra-ui/react'
 
 import { authUser } from '../utils/services/user.service'
 
-// import { MAIN_ROUTE } from '../utils/constants/routes.consts'
-// import { useNavigate } from 'react-router-dom'
+import { MAIN_ROUTE } from '../utils/constants/routes.consts'
+import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 
 const Login = () => {
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
     const [phoneNumber, setPhoneNumber] = useState('')
     const [password, setPassword] = useState('')
+    const toast = useToast()
 
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show)
@@ -39,13 +41,23 @@ const Login = () => {
     }
 
     const handleConfirmClick = () => {
-        console.log(phoneNumber)
-        console.log(password)
         const data = { phone: phoneNumber, pass: password }
 
-        authUser(data).then((res) => {
-            console.log(res)
-        })
+        authUser(data)
+            .then((res) => {
+                window.localStorage.setItem('authToken', res.data.token)
+                navigate(MAIN_ROUTE)
+            })
+            .catch((error) => {
+                console.log(error)
+                toast({
+                    title: 'Ошибка авторизаций.',
+                    description: error.response.data,
+                    status: 'error',
+                    duration: 9000,
+                    isClosable: true,
+                })
+            })
     }
 
     return (

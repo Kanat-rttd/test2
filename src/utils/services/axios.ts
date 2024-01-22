@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const $host = axios.create({
-    baseURL: 'http://localhost:5001/api/',
+    baseURL: import.meta.env.BASE_URL,
     headers: {
         'Content-Type': 'application/json',
     },

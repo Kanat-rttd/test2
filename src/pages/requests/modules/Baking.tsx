@@ -32,14 +32,8 @@ const BakingPage = () => {
         <>
             <TopNavBar></TopNavBar>
             <Box p={5} display="flex" flexDirection={'column'} height="80vh">
-                <TableContainer maxWidth={'100%'} width={'100%'} p={5}>
-                    <Table
-                        variant="striped"
-                        colorScheme="teal"
-                        size="lg"
-                        width={'100%'}
-                        overflowY={'scroll'}
-                    >
+                <TableContainer maxWidth={'100%'} width={'100%'} p={5} overflowY={'scroll'}>
+                    <Table variant="striped" colorScheme="teal" size="lg" width={'100%'}>
                         <Thead>
                             <Tr>
                                 <Th>Вид хлеба</Th>
