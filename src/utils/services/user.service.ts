@@ -1,6 +1,6 @@
 import $host from './axios'
 
-export const getAll = async () => {
+export const getAllUsers = async () => {
     const { data } = await $host.get('user')
     return data
 }
@@ -18,9 +18,14 @@ export const updateUser = async (
     return response
 }
 
-export const authUser = async (data: { phone: string; pass: string }) => {
+export const loginUser = async (data: { phone: string; pass: string }) => {
     const response = await $host.post('user/login', data)
     return response
+}
+
+export const auth = async () => {
+    const { data } = await $host.get(`user/auth`)
+    return data
 }
 
 // export const deleteClient = async (id: number) => {

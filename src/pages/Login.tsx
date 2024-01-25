@@ -8,9 +8,12 @@ import {
     Input,
     Heading,
     useToast,
+    Text,
 } from '@chakra-ui/react'
 
-import { authUser } from '../utils/services/user.service'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+
+import { loginUser } from '../utils/services/user.service'
 
 import { MAIN_ROUTE } from '../utils/constants/routes.consts'
 import { useNavigate } from 'react-router-dom'
@@ -43,7 +46,7 @@ const Login = () => {
     const handleConfirmClick = () => {
         const data = { phone: phoneNumber, pass: password }
 
-        authUser(data)
+        loginUser(data)
             .then((res) => {
                 window.localStorage.setItem('authToken', res.data.token)
                 navigate(MAIN_ROUTE)
@@ -66,35 +69,59 @@ const Login = () => {
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
-            height="80vh"
+            height="100vh"
+            width={'100%'}
+            p={'3em'}
         >
-            <Stack spacing={4}>
-                <Heading textAlign={'center'}>Login Page</Heading>
-                <InputGroup size={'lg'}>
-                    <InputLeftAddon>+7</InputLeftAddon>
-                    <Input
-                        type="tel"
-                        placeholder="(777)-777-77-77"
-                        value={phoneNumber}
-                        onChange={handleInputChange}
-                    />
-                </InputGroup>
-                <InputGroup size="lg">
-                    <Input
-                        pr="4.5rem"
-                        type={show ? 'text' : 'password'}
-                        placeholder="Enter password"
-                        value={password}
-                        onChange={handlePasswordChange}
-                    />
-                    <InputRightElement width="4.5rem">
-                        <Button h="1.75rem" size="sm" onClick={handleClick}>
-                            {show ? 'Hide' : 'Show'}
-                        </Button>
-                    </InputRightElement>
-                </InputGroup>
-                <Button size={'lg'} onClick={handleConfirmClick}>
-                    Confirm
+            <Box width={'100%'} marginBottom={5}>
+                <Heading textAlign={'left'}>Вход</Heading>
+                <Text color={'#7C7C7C'}>Введите телефон и пароль</Text>
+            </Box>
+            <Stack width={'100%'} spacing={4}>
+                <Box>
+                    <Text mb="8px">Телефон: </Text>
+                    <InputGroup size={'lg'}>
+                        <InputLeftAddon>+7</InputLeftAddon>
+                        <Input
+                            type="tel"
+                            placeholder="(777)-777-77-77"
+                            value={phoneNumber}
+                            onChange={handleInputChange}
+                        />
+                    </InputGroup>
+                </Box>
+
+                <Box marginBottom={15}>
+                    <Text mb="8px">Пароль: </Text>
+                    <InputGroup size="lg">
+                        <Input
+                            pr="4.5rem"
+                            type={show ? 'text' : 'password'}
+                            placeholder="Введите пароль"
+                            value={password}
+                            onChange={handlePasswordChange}
+                        />
+                        <InputRightElement width="4.5rem">
+                            <Button
+                                h="1.75rem"
+                                size="lg"
+                                backgroundColor={'transparent'}
+                                onClick={handleClick}
+                            >
+                                {show ? <ViewOffIcon /> : <ViewIcon />}
+                            </Button>
+                        </InputRightElement>
+                    </InputGroup>
+                </Box>
+
+                <Button
+                    size={'lg'}
+                    borderRadius={15}
+                    onClick={handleConfirmClick}
+                    backgroundColor={'#F7B23B'}
+                    color={'white'}
+                >
+                    Войти
                 </Button>
             </Stack>
         </Box>

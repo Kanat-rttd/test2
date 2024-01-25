@@ -1,14 +1,14 @@
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 
-import { getAll } from '../../../utils/services/product.service'
+import { getAllProducts } from '../../../utils/services/product.service'
 import { ProductList } from '../../../utils/types/types'
 
 const AdminPanel = () => {
     const [data, setData] = useState<ProductList[]>([])
 
     useEffect(() => {
-        getAll().then((responseData) => {
+        getAllProducts().then((responseData) => {
             setData(responseData)
             //console.log(responseData)
         })

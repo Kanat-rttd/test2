@@ -2,26 +2,22 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect, lazy, Suspense } from 'react'
 import { NOTFOUND_ROUTE } from '../../utils/constants/routes.consts'
 import Loading from '../../components/Loading'
-import getUserInfo from '@/utils/helpers/getUserInfo'
 
-const Products = lazy(() => import('./modules/Products'))
-const Clients = lazy(() => import('./modules/Clients'))
-const Users = lazy(() => import('./modules/Users'))
+const RequestForm = lazy(() => import('./modules/RequestForm'))
+// const Baking = lazy(() => import('./modules/Baking'))
 
-type PageType = 'user' | 'users' | 'clients' | 'products'
+type PageType = 'user' | 'score' | 'baking' | 'requestForm'
 
-const AdminPanel = () => {
+const salesPage = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
     const { page } = useParams<{ page: PageType }>()
     const navigate = useNavigate()
 
-    console.log(getUserInfo())
-
     const pagesMap: { [key in PageType]: JSX.Element } = {
         user: <div />,
-        users: <Users />,
-        clients: <Clients />,
-        products: <Products />,
+        score: <input />,
+        baking: <div />,
+        requestForm: <RequestForm />,
     }
 
     useEffect(() => {
@@ -35,4 +31,4 @@ const AdminPanel = () => {
     return <Suspense fallback={<Loading />}>{content}</Suspense>
 }
 
-export default AdminPanel
+export default salesPage

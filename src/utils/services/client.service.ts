@@ -1,6 +1,6 @@
 import $host from './axios'
 
-export const getAll = async () => {
+export const getAllClients = async () => {
     const { data } = await $host.get('client')
     return data
 }

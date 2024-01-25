@@ -14,7 +14,7 @@ import {
 import TopNavBar from '../../../components/NavBar'
 import ProductAddModal from '../components/ProductAddModal'
 import { useEffect, useState } from 'react'
-import { getAll, deleteProduct } from '../../../utils/services/product.service'
+import { getAllProducts, deleteProduct } from '../../../utils/services/product.service'
 import { ProductList } from '../../../utils/types/types'
 
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
@@ -32,7 +32,7 @@ const AdminPanel = () => {
     }
 
     useEffect(() => {
-        getAll().then((responseData) => {
+        getAllProducts().then((responseData) => {
             setData(responseData)
         })
     }, [])

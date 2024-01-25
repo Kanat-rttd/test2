@@ -18,6 +18,7 @@ import { menuItems, subMenuItems } from '../utils/constants/menu.consts'
 import { LOGIN_ROUTE } from '../utils/constants/routes.consts'
 import { useEffect, useRef, Fragment } from 'react'
 import { useNavigate } from 'react-router-dom'
+import getUserInfo from '@/utils/helpers/getUserInfo'
 
 /**
  * Default Loader which you can use between page or big fetch
@@ -28,6 +29,14 @@ const Drawler = () => {
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef<HTMLButtonElement | null>(null)
+
+    const userInfo = getUserInfo()
+
+    const filteredMenuItems = menuItems.filter((item) => {
+        console.log(item)
+        console.log(userInfo)
+        return userInfo.class && item.allowedClasses && item.allowedClasses.includes(userInfo.class)
+    })
 
     useEffect(() => {
         if (isOpen && btnRef.current) {
@@ -49,7 +58,7 @@ const Drawler = () => {
                     <DrawerHeader>Меню</DrawerHeader>
 
                     <DrawerBody display="flex" p={2} gap="0.5rem" flexDirection="column">
-                        {menuItems.map((MenuItem) => (
+                        {filteredMenuItems.map((MenuItem) => (
                             <Fragment key={MenuItem.route}>
                                 <Divider />
                                 <Heading paddingLeft={'0.5rem'} p={2} size="sm">

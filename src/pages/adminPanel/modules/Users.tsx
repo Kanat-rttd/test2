@@ -14,7 +14,7 @@ import {
 import TopNavBar from '../../../components/NavBar'
 import UserAddModal from '../components/UserAddModal'
 import { useEffect, useState } from 'react'
-import { getAll } from '../../../utils/services/user.service'
+import { getAllUsers } from '../../../utils/services/user.service'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 
 interface Users {
@@ -39,7 +39,7 @@ const AdminPanel = () => {
     }
 
     useEffect(() => {
-        getAll().then((responseData) => {
+        getAllUsers().then((responseData) => {
             setData(responseData)
         })
     }, [])

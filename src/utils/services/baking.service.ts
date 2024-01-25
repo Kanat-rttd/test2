@@ -5,7 +5,7 @@ import $host from './axios'
 //     return response
 // }
 
-export const getAll = async () => {
+export const getAllBakings = async () => {
     const { data } = await $host.get('baking')
     return data
 }

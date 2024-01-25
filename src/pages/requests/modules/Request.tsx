@@ -1,21 +1,35 @@
-import { Box, Tabs, TabList, Tab, TabIndicator, TabPanels, TabPanel } from '@chakra-ui/react'
+import {
+    Box,
+    Tabs,
+    TabList,
+    Tab,
+    TabIndicator,
+    TabPanels,
+    TabPanel,
+    Button,
+    useDisclosure,
+} from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
+
+import RequestAddModal from '@/pages/requests/components/RequestAddModal'
 
 import TopNavBar from '@/components/NavBar'
 import AccordionClients from '@/components/AccordionClients'
 import { OrderArray } from '@/utils/types/types'
 import TableData from '@/components/TableData'
 
-import { getAll } from '@/utils/services/request.service'
+import { getAllRequests } from '@/utils/services/request.service'
 
 const RequestPage = () => {
+    const { onOpen, onClose, isOpen } = useDisclosure()
+
     const [data, setData] = useState<OrderArray | null>(null)
     const [orderCount, setOrderCount] = useState(0)
     const [doneOrderCount, setDoneOrderCount] = useState(0)
 
     useEffect(() => {
-        getAll().then((res: OrderArray) => {
-            console.log(res)
+        getAllRequests().then((res: OrderArray) => {
+            //console.log(res)
             setData(res)
             setOrderCount(res.filter((order) => Boolean(order.done) === false).length)
             setDoneOrderCount(res.filter((order) => Boolean(order.done) === true).length)
@@ -42,10 +56,17 @@ const RequestPage = () => {
             <TopNavBar></TopNavBar>
             <Box p={5} display="flex" flexDirection={'column'} height="80vh">
                 <Tabs position="relative" variant="variant">
-                    <TabList>
-                        <Tab>Заказы {orderCount}</Tab>
-                        <Tab>Готово {doneOrderCount}</Tab>
+                    <TabList display={'flex'} justifyContent={'space-between'}>
+                        <Box display={'flex'}>
+                            <Tab>Заказы {orderCount}</Tab>
+                            <Tab>Готово {doneOrderCount}</Tab>
+                        </Box>
+                        <Box>
+                            <Button onClick={onOpen}>Добавить заказ</Button>
+                            <RequestAddModal isOpen={isOpen} onClose={onClose} />
+                        </Box>
                     </TabList>
+
                     <TabIndicator mt="-1.5px" height="2px" bg="blue.500" borderRadius="1px" />
                     <TabPanels>
                         <TabPanel>

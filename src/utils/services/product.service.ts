@@ -1,6 +1,6 @@
 import $host from './axios'
 
-export const getAll = async () => {
+export const getAllProducts = async () => {
     const { data } = await $host.get('product')
     return data
 }
