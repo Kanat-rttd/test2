@@ -10,7 +10,6 @@ const AdminPanel = () => {
     useEffect(() => {
         getAllProducts().then((responseData) => {
             setData(responseData)
-            //console.log(responseData)
         })
     }, [])
 
@@ -27,7 +26,6 @@ const AdminPanel = () => {
                 </Thead>
                 <Tbody>
                     {data.map((product, index) => {
-                        //console.log(product)
                         return (
                             <Tr key={index}>
                                 <Td>{product.id}</Td>

@@ -1,0 +1,79 @@
+import { Box, Heading, Text, IconButton } from '@chakra-ui/react'
+import MobileNavbar from '@/components/MobileNavbar'
+import { getAllSales } from '@/utils/services/sales.service'
+import { useState, useEffect } from 'react'
+import { ChevronRightIcon } from '@chakra-ui/icons'
+import dayjs from 'dayjs'
+import ru from 'dayjs/locale/ru'
+import { useNavigate } from 'react-router-dom'
+import { SALES_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
+
+interface SalesOrder {
+    id: number
+    userId: number
+    totalPrice: number
+    createdAt: string
+    orderDetails: OrderDetails[]
+}
+
+interface OrderDetails {
+    productId: number
+    product: ProductDetails[]
+}
+
+interface ProductDetails {
+    name: string
+    price: number
+}
+
+const History = () => {
+    const navigator = useNavigate()
+    const [getSalesData, setSalesData] = useState<SalesOrder[]>([])
+
+    useEffect(() => {
+        getAllSales().then((res) => {
+            console.log(res.data)
+            setSalesData(res.data)
+        })
+    }, [])
+
+    return (
+        <>
+            <MobileNavbar></MobileNavbar>
+            <Box display="flex" flexDirection={'column'} height="100vh" textAlign={'center'}>
+                <Box borderBottom={'1px solid black'} p={5}>
+                    <Heading size={'md'}>История</Heading>
+                </Box>
+                <Box>
+                    {getSalesData.map((order, index) => (
+                        <Box
+                            key={index}
+                            p={5}
+                            display={'flex'}
+                            flexDirection={'row'}
+                            justifyContent={'space-between'}
+                            alignItems={'center'}
+                            borderBottom={'1px solid black'}
+                        >
+                            <Box display={'flex'} flexDirection={'row'} gap={10}>
+                                <Text>{dayjs(order.createdAt).locale(ru).format('DD MMM')}</Text>
+                                <Text fontWeight={'bold'}>#{order.id}</Text>
+                            </Box>
+                            <IconButton
+                                variant="filled"
+                                w={8}
+                                h={8}
+                                colorScheme="black"
+                                aria-label="Edit product"
+                                icon={<ChevronRightIcon />}
+                                onClick={() => navigator(`${SALES_HISTORY_ROUTE}/${order.id}`)}
+                            />
+                        </Box>
+                    ))}
+                </Box>
+            </Box>
+        </>
+    )
+}
+
+export default History

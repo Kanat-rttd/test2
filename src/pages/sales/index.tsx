@@ -4,24 +4,26 @@ import { NOTFOUND_ROUTE } from '../../utils/constants/routes.consts'
 import Loading from '../../components/Loading'
 
 const RequestForm = lazy(() => import('./modules/RequestForm'))
-// const Baking = lazy(() => import('./modules/Baking'))
+const History = lazy(() => import('./modules/History'))
+const OrderHistory = lazy(() => import('./modules/OrderHistory'))
 
-type PageType = 'user' | 'score' | 'baking' | 'requestForm'
+type PageType = 'user' | 'history' | 'requestForm'
 
 const salesPage = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
-    const { page } = useParams<{ page: PageType }>()
+    const { page, id } = useParams<{ page: PageType; id: string }>()
     const navigate = useNavigate()
 
     const pagesMap: { [key in PageType]: JSX.Element } = {
         user: <div />,
-        score: <input />,
-        baking: <div />,
+        history: <History />,
         requestForm: <RequestForm />,
     }
 
     useEffect(() => {
-        if (page && pagesMap[page]) {
+        if (page == 'history' && id) {
+            setContent(<OrderHistory />)
+        } else if (page && pagesMap[page]) {
             setContent(pagesMap[page])
         } else {
             navigate(NOTFOUND_ROUTE)

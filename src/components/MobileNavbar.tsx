@@ -1,6 +1,6 @@
 import { Box, Icon, createIcon, Text } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
-import { SALES_REQUEST_FORM_ROUTE } from '@/utils/constants/routes.consts'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { SALES_REQUEST_FORM_ROUTE, SALES_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
 
 const MySvgIcon = createIcon({
     displayName: 'MySvgIcon',
@@ -14,6 +14,8 @@ const MySvgIcon = createIcon({
 })
 
 const MobileNavbar = () => {
+    const location = useLocation()
+    console.log(location)
     const navigate = useNavigate()
     return (
         <Box
@@ -31,11 +33,11 @@ const MobileNavbar = () => {
         >
             <Box textAlign={'center'} p={5} onClick={() => navigate(SALES_REQUEST_FORM_ROUTE)}>
                 <Icon as={MySvgIcon} boxSize={8} color="red.500" />
-                <Text>Заказ</Text>
+                <Text fontWeight={'bold'}>Заказ</Text>
             </Box>
-            <Box textAlign={'center'} p={5}>
+            <Box textAlign={'center'} p={5} onClick={() => navigate(SALES_HISTORY_ROUTE)}>
                 <Icon as={MySvgIcon} boxSize={8} color="red.500" />
-                <Text>История</Text>
+                <Text fontWeight={'bold'}>История</Text>
             </Box>
         </Box>
     )

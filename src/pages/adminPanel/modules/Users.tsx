@@ -30,8 +30,6 @@ const AdminPanel = () => {
     const [selectedData, setSelectedData] = useState<Users | undefined>(undefined)
     const [data, setData] = useState<Users[]>([])
 
-    console.log(data)
-
     const handleClose = () => {
         onClose()
         setSelectedData(undefined)
@@ -67,7 +65,8 @@ const AdminPanel = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {data?.map((user, index) => {
+                            {
+                            data.map((user, index) => {
                                 return (
                                     <Tr key={index}>
                                         <Td>{user.name}</Td>

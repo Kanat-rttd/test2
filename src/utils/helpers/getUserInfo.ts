@@ -10,13 +10,14 @@ interface DecodedToken {
 }
 
 export default function getUserInfo() {
-    const token = localStorage.getItem('authToken')
-
-    if (!token) {
-        throw new Error('Authentication token not found.')
+    try {
+        const token = localStorage.getItem('authToken')
+    
+        const decodedToken: DecodedToken = jwtDecode(token)
+    
+        return decodedToken
+    } catch(error) {
+        console.error(error)
     }
 
-    const decodedToken: DecodedToken = jwtDecode(token)
-
-    return decodedToken
 }

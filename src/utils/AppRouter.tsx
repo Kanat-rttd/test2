@@ -37,14 +37,13 @@ export const publicRoutes = [
         Loader: Loading,
     },
     { path: SALES_ROUTE, Component: salesPage, Loader: Loading },
-]
-
-export const adminRoutes = [
     {
         path: ADMIN_ROUTE,
         Component: AdminPanel,
         Loader: Loading,
     },
 ]
+
+export const adminRoutes = []
 
 export const clientRoutes = [{ path: SALES_ROUTE, Component: salesPage, Loader: Loading }]

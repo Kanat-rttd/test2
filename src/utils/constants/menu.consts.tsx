@@ -10,6 +10,7 @@ import {
     REQUEST_BAKING_ROUTE,
     SALES_ROUTE,
     SALES_REQUEST_FORM_ROUTE,
+    SALES_HISTORY_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -81,6 +82,12 @@ export const subMenuItems: MenuItem[] = [
     {
         route: SALES_REQUEST_FORM_ROUTE,
         label: 'Форма заявок',
+        path: SALES_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: SALES_HISTORY_ROUTE,
+        label: 'История заказов',
         path: SALES_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
