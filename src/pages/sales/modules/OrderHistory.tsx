@@ -1,5 +1,5 @@
-import { Box, Heading, Input, IconButton, Text, VStack, useToast } from '@chakra-ui/react'
-import { AddIcon, CloseIcon } from '@chakra-ui/icons'
+import { Box, Heading, Input, IconButton, Text, VStack } from '@chakra-ui/react'
+import { CloseIcon } from '@chakra-ui/icons'
 import { useState, ChangeEvent, useEffect } from 'react'
 import dayjs from 'dayjs'
 import MobileNavbar from '@/components/MobileNavbar'
@@ -67,9 +67,9 @@ const OrderHistory = () => {
             setOrderData(updatedOrderData)
             setSelectedProducts(updatedOrderData)
 
-            setRemovedOrderData((prevRemovedOrderData) => ({
-                ...prevRemovedOrderData,
-                id: orderData.id,
+            setRemovedOrderData((prevRemovedOrderData: Order | null) => ({
+                ...prevRemovedOrderData!,
+                id: orderData!.id,
                 orderDetails: [
                     ...(prevRemovedOrderData?.orderDetails || []),
                     ...removedOrderDetails,

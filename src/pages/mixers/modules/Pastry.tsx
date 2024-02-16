@@ -1,0 +1,132 @@
+import {
+    Box,
+    Button,
+    Avatar,
+    TableContainer,
+    Table,
+    Thead,
+    Tr,
+    Th,
+    Tbody,
+    Td,
+    Tfoot,
+    Input,
+    Select,
+} from '@chakra-ui/react'
+import { useState } from 'react'
+import Drawler from '@/components/Drawler'
+import { color } from 'framer-motion'
+
+const styles = {
+    fontSize: '15px',
+    borderBottom: '1px solid black',
+    textAlign: 'center',
+    fontWeight: 'bold',
+}
+
+const MixersPage = () => {
+    const [backgroundCol, setColor] = useState('rgba(217, 217, 217, 1)')
+    return (
+        <>
+            <Box height={'100vh'} width={'100vw'}>
+                <Box
+                    display="flex"
+                    justifyContent={'space-between'}
+                    flexDirection={'row'}
+                    backgroundColor={'rgba(128, 128, 128, 0.1)'}
+                >
+                    <Box width={'100%'}>
+                        <Drawler></Drawler>
+                        <Button bg={backgroundCol} height={'100%'} width={'20%'}>
+                            Заявки
+                        </Button>
+                        <Button height={'100%'} width={'20%'}>
+                            Выпечка
+                        </Button>
+                    </Box>
+                    <Avatar size={'md'} bg="teal.500" />
+                </Box>
+                <Box width={'100%'} height={'100%'} p={3}>
+                    <Box marginBottom={10} display={'flex'} justifyContent={'space'}>
+                        <Input
+                            placeholder="Select Date and Time"
+                            size="md"
+                            type="datetime-local"
+                            width={'20%'}
+                        />
+                        <Select placeholder="Select option" width={'20%'}>
+                            <option value="option1">Option 1</option>
+                            <option value="option2">Option 2</option>
+                            <option value="option3">Option 3</option>
+                        </Select>
+                    </Box>
+                    <Box
+                        backgroundColor={'rgba(255, 255, 255, 1)'}
+                        width={'100%'}
+                        height={'100%'}
+                        p={5}
+                    >
+                        <TableContainer>
+                            <Table
+                                size="sm"
+                                variant="unstyled"
+                                overflow={'scroll'}
+                                style={{ borderCollapse: 'separate', borderSpacing: '0 10px' }}
+                            >
+                                <Thead>
+                                    <Tr>
+                                        <Th borderBottom={'1px solid black'} fontSize={'15px'}>
+                                            Реализаторы
+                                        </Th>
+                                        <Th sx={styles}>Заводской</Th>
+                                        <Th sx={styles}>Домашний</Th>
+                                    </Tr>
+                                </Thead>
+                                <Tbody>
+                                    <Tr>
+                                        <Td borderBottom={'1px solid black'}>Алишер 1</Td>
+                                        <Td sx={styles} isNumeric>
+                                            23
+                                        </Td>
+                                        <Td sx={styles} isNumeric>
+                                            25
+                                        </Td>
+                                    </Tr>
+                                    <Tr>
+                                        <Td borderBottom={'1px solid black'}>Алишер 2</Td>
+                                        <Td sx={styles} isNumeric>
+                                            50
+                                        </Td>
+                                        <Td sx={styles} isNumeric>
+                                            30
+                                        </Td>
+                                    </Tr>
+                                    <Tr>
+                                        <Td borderBottom={'1px solid black'}>Алишер 3</Td>
+                                        <Td sx={styles} isNumeric>
+                                            10
+                                        </Td>
+                                        <Td sx={styles} isNumeric>
+                                            44
+                                        </Td>
+                                    </Tr>
+                                </Tbody>
+                                <Tfoot>
+                                    <Tr>
+                                        <Th>Итого</Th>
+                                        <Th sx={styles}>into</Th>
+                                        <Th sx={styles} isNumeric>
+                                            multiply by
+                                        </Th>
+                                    </Tr>
+                                </Tfoot>
+                            </Table>
+                        </TableContainer>
+                    </Box>
+                </Box>
+            </Box>
+        </>
+    )
+}
+
+export default MixersPage

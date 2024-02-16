@@ -5,6 +5,7 @@ import {
     REQUEST_ROUTE,
     ADMIN_ROUTE,
     SALES_ROUTE,
+    MIXERS_ROUTE,
 } from './constants/routes.consts'
 
 import NotFound from '../pages/404'
@@ -14,6 +15,7 @@ import AdminPanel from '../pages/adminPanel/index'
 import salesPage from '../pages/sales/index'
 import Login from '../pages/Login'
 import Loading from '../components/Loading'
+import MixersPage from '@/pages/mixers'
 
 export const publicRoutes = [
     {
@@ -40,6 +42,11 @@ export const publicRoutes = [
     {
         path: ADMIN_ROUTE,
         Component: AdminPanel,
+        Loader: Loading,
+    },
+    {
+        path: MIXERS_ROUTE,
+        Component: MixersPage,
         Loader: Loading,
     },
 ]

@@ -11,6 +11,8 @@ import {
     SALES_ROUTE,
     SALES_REQUEST_FORM_ROUTE,
     SALES_HISTORY_ROUTE,
+    MIXERS_ROUTE,
+    MIXERS_PASTRY_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -44,6 +46,11 @@ export const menuItems: MenuItem[] = [
     {
         route: SALES_ROUTE,
         label: 'Продажи',
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: MIXERS_ROUTE,
+        label: 'Производство',
         allowedClasses: ['Admin', 'Client'],
     },
 ]
@@ -89,6 +96,12 @@ export const subMenuItems: MenuItem[] = [
         route: SALES_HISTORY_ROUTE,
         label: 'История заказов',
         path: SALES_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: MIXERS_PASTRY_ROUTE,
+        label: 'Выпечка',
+        path: MIXERS_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
 ]
