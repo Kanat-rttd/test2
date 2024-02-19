@@ -13,6 +13,7 @@ import {
     SALES_HISTORY_ROUTE,
     MIXERS_ROUTE,
     MIXERS_PASTRY_ROUTE,
+    MIXERS_BAKINGPRODUCTS_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -100,6 +101,12 @@ export const subMenuItems: MenuItem[] = [
     },
     {
         route: MIXERS_PASTRY_ROUTE,
+        label: 'Заявки',
+        path: MIXERS_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: MIXERS_BAKINGPRODUCTS_ROUTE,
         label: 'Выпечка',
         path: MIXERS_ROUTE,
         allowedClasses: ['Admin', 'Client'],

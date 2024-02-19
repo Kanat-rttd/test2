@@ -4,8 +4,9 @@ import { NOTFOUND_ROUTE } from '../../utils/constants/routes.consts'
 import Loading from '../../components/Loading'
 
 const Pastry = lazy(() => import('./modules/Pastry'))
+const BakingProducts = lazy(() => import('./modules/BakingProducts'))
 
-type PageType = 'user' | 'score' | 'baking' | 'pastry'
+type PageType = 'user' | 'score' | 'bakingProducts' | 'pastry'
 
 const MixersPage = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
@@ -15,7 +16,7 @@ const MixersPage = () => {
     const pagesMap: { [key in PageType]: JSX.Element } = {
         user: <div />,
         score: <input />,
-        baking: <input />,
+        bakingProducts: <BakingProducts />,
         pastry: <Pastry />,
     }
 

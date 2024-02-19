@@ -1,11 +1,21 @@
 import $host from './axios'
 
-// export const createRequest = async () => {
-//     const response = await $host.post('baking')
-//     return response
-// }
-
 export const getAllBakings = async () => {
     const { data } = await $host.get('baking')
     return data
+}
+
+export const createBaking = async (data: {
+    breadType: string
+    flour: string
+    salt: string
+    yeast: string
+    malt: string
+    butter: string
+    temperature: string
+    time: string
+    output: string
+}) => {
+    const response = await $host.post('baking', data)
+    return response
 }

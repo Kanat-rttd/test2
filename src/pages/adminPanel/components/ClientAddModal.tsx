@@ -41,7 +41,7 @@ const ClientAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
 
     const addClient = () => {
         createClient(formData).then((res) => {
-            console.log(res)
+            //console.log(res)
         })
         onClose()
     }
@@ -49,7 +49,7 @@ const ClientAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
     const updClient = () => {
         if (data) {
             updateClient(data.id, formData).then((res) => {
-                console.log(res)
+                //console.log(res)
             })
         }
         onClose()

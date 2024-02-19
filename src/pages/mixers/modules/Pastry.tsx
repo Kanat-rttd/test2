@@ -15,7 +15,8 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import Drawler from '@/components/Drawler'
-import { color } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import { MIXERS_BAKINGPRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 
 const styles = {
     fontSize: '15px',
@@ -25,10 +26,11 @@ const styles = {
 }
 
 const MixersPage = () => {
+    const navigate = useNavigate()
     const [backgroundCol, setColor] = useState('rgba(217, 217, 217, 1)')
     return (
         <>
-            <Box height={'100vh'} width={'100vw'}>
+            <Box>
                 <Box
                     display="flex"
                     justifyContent={'space-between'}
@@ -40,32 +42,32 @@ const MixersPage = () => {
                         <Button bg={backgroundCol} height={'100%'} width={'20%'}>
                             Заявки
                         </Button>
-                        <Button height={'100%'} width={'20%'}>
+                        <Button
+                            height={'100%'}
+                            width={'20%'}
+                            onClick={() => navigate(MIXERS_BAKINGPRODUCTS_ROUTE)}
+                        >
                             Выпечка
                         </Button>
                     </Box>
                     <Avatar size={'md'} bg="teal.500" />
                 </Box>
-                <Box width={'100%'} height={'100%'} p={3}>
+                <Box width={'100%'} height={'100%'} p={5}>
                     <Box marginBottom={10} display={'flex'} justifyContent={'space'}>
                         <Input
                             placeholder="Select Date and Time"
                             size="md"
                             type="datetime-local"
                             width={'20%'}
+                            marginRight={30}
                         />
-                        <Select placeholder="Select option" width={'20%'}>
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
+                        <Select placeholder="Цехи" width={'20%'}>
+                            <option value="Лепешечный">Лепешечный</option>
+                            <option value="Булочный">Булочный</option>
+                            <option value="Заварной">Заварной</option>
                         </Select>
                     </Box>
-                    <Box
-                        backgroundColor={'rgba(255, 255, 255, 1)'}
-                        width={'100%'}
-                        height={'100%'}
-                        p={5}
-                    >
+                    <Box backgroundColor={'rgba(255, 255, 255, 1)'} width={'100%'} height={'100%'}>
                         <TableContainer>
                             <Table
                                 size="sm"
@@ -114,10 +116,8 @@ const MixersPage = () => {
                                 <Tfoot>
                                     <Tr>
                                         <Th>Итого</Th>
-                                        <Th sx={styles}>into</Th>
-                                        <Th sx={styles} isNumeric>
-                                            multiply by
-                                        </Th>
+                                        <Th>into</Th>
+                                        <Th isNumeric>multiply by</Th>
                                     </Tr>
                                 </Tfoot>
                             </Table>

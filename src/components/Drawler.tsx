@@ -33,8 +33,8 @@ const Drawler = () => {
     const userInfo = getUserInfo()
 
     const filteredMenuItems = menuItems.filter((item) => {
-        console.log(item)
-        console.log(userInfo)
+        //console.log(item)
+        //console.log(userInfo)
         return userInfo.class && item.allowedClasses && item.allowedClasses.includes(userInfo.class)
     })
 

@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react'
 import TopNavBar from '../../../components/NavBar'
 import ProductAddModal from '../components/ProductAddModal'
+import FacilityUnitAddModal from '../components/FacilityUnitAddModal'
 import { useEffect, useState } from 'react'
 import { getAllProducts, deleteProduct } from '../../../utils/services/product.service'
 import { ProductList } from '../../../utils/types/types'
@@ -20,15 +21,26 @@ import { ProductList } from '../../../utils/types/types'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 
 const AdminPanel = () => {
-    const { onOpen, onClose, isOpen } = useDisclosure()
+    const {
+        onOpen: openProductModal,
+        onClose: closeProductModal,
+        isOpen: isProductModalOpen,
+    } = useDisclosure()
+    const {
+        onOpen: openFacilityModal,
+        onClose: closeFacilityModal,
+        isOpen: isFacilityModalOpen,
+    } = useDisclosure()
     const [selectedData, setSelectedData] = useState<ProductList>()
     const [data, setData] = useState<ProductList[]>([])
 
-    console.log(data)
-
-    const handleClose = () => {
-        onClose()
+    const handleProductClose = () => {
+        closeProductModal()
         setSelectedData(undefined)
+    }
+
+    const handleFacilityClose = () => {
+        closeFacilityModal()
     }
 
     useEffect(() => {
@@ -39,7 +51,7 @@ const AdminPanel = () => {
 
     const delProduct = (data: ProductList) => {
         deleteProduct(data.id).then((res) => {
-            console.log(res)
+            //console.log(res)
         })
     }
 
@@ -48,8 +60,19 @@ const AdminPanel = () => {
             <TopNavBar></TopNavBar>
             <Box display="flex" flexDirection="column" height="100vh" p={5}>
                 <Box marginBottom={5} textAlign={'right'}>
-                    <Button onClick={onOpen}>Добавить продукт</Button>
-                    <ProductAddModal data={selectedData} isOpen={isOpen} onClose={handleClose} />
+                    <Button onClick={openFacilityModal}>Добавить цех</Button>
+                    <FacilityUnitAddModal
+                        isOpen={isFacilityModalOpen}
+                        onClose={handleFacilityClose}
+                    />
+                </Box>
+                <Box marginBottom={5} textAlign={'right'}>
+                    <Button onClick={openProductModal}>Добавить продукт</Button>
+                    <ProductAddModal
+                        data={selectedData}
+                        isOpen={isProductModalOpen}
+                        onClose={handleProductClose}
+                    />
                 </Box>
                 <TableContainer maxWidth={'100%'} width={'100%'}>
                     <Table variant="striped" colorScheme="teal" size="lg" width={'100%'}>
@@ -74,7 +97,7 @@ const AdminPanel = () => {
                                                 marginRight={3}
                                                 onClick={() => {
                                                     setSelectedData(product)
-                                                    onOpen()
+                                                    openProductModal()
                                                 }}
                                                 icon={<EditIcon />}
                                             />
@@ -84,7 +107,7 @@ const AdminPanel = () => {
                                                 colorScheme="teal"
                                                 aria-label="Send email"
                                                 onClick={() => {
-                                                    console.log(product)
+                                                    //console.log(product)
                                                     setData(
                                                         data.filter(
                                                             (elem) => elem.id !== product.id,

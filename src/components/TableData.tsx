@@ -4,10 +4,10 @@ import RevertTh from './ui/RevertTh'
 
 //TODO: Используй константы вместо let если не изменяется
 const TableData = ({ data }: { data: Order[] }) => {
-    console.log(data)
+    //console.log(data)
     let uniqProducts = new Set<string>()
     data.forEach((order) => {
-        console.log(order)
+        //console.log(order)
         order.products.forEach((product) => {
             uniqProducts.add(product.productName)
         })

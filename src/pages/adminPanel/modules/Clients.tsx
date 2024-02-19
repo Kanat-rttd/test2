@@ -13,8 +13,6 @@ const AdminPanel = () => {
         })
     }, [])
 
-    console.log(data)
-
     return (
         <TableContainer maxWidth={'100%'} width={'100%'} p={5}>
             <Table variant="striped" colorScheme="teal" size="lg" width={'100%'}>

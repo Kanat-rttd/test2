@@ -15,7 +15,7 @@ const AdminPanel = () => {
     const { page } = useParams<{ page: PageType }>()
     const navigate = useNavigate()
 
-    console.log(getUserInfo())
+    //console.log(getUserInfo())
 
     const pagesMap: { [key in PageType]: JSX.Element } = {
         user: <div />,

@@ -5,13 +5,10 @@ import { LOGIN_ROUTE, NOTFOUND_ROUTE } from './utils/constants/routes.consts'
 import { useNavigate } from 'react-router-dom'
 import { auth } from './utils/services/user.service'
 import { useToast } from '@chakra-ui/react'
-import getUserInfo from './utils/helpers/getUserInfo'
 
 function App() {
     const navigate = useNavigate()
     const toast = useToast()
-
-    console.log(getUserInfo())
 
     useEffect(() => {
         auth()

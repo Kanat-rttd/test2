@@ -35,7 +35,7 @@ const Login = () => {
         if (cleanedInput.length <= 10) {
             setPhoneNumber(cleanedInput)
         } else {
-            console.log('limit')
+            //console.log('limit')
         }
     }
 
@@ -52,7 +52,7 @@ const Login = () => {
                 navigate(MAIN_ROUTE)
             })
             .catch((error) => {
-                console.log(error)
+                //console.log(error)
                 toast({
                     title: 'Ошибка авторизаций.',
                     description: error.response.data,

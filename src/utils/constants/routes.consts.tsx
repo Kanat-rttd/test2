@@ -10,6 +10,7 @@ export const SALES_HISTORY_ROUTE = '/sales/history'
 
 export const MIXERS_ROUTE = '/mixers/:page'
 export const MIXERS_PASTRY_ROUTE = '/mixers/pastry'
+export const MIXERS_BAKINGPRODUCTS_ROUTE = '/mixers/bakingProducts'
 
 //Admin routes
 export const ADMIN_ROUTE = '/admin/:page'

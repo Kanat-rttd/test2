@@ -33,7 +33,7 @@ const AdminPanel = () => {
     const handleClose = () => {
         onClose()
         setSelectedData(undefined)
-        console.log(selectedData)
+        //console.log(selectedData)
     }
 
     useEffect(() => {
@@ -65,8 +65,7 @@ const AdminPanel = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {
-                            data.map((user, index) => {
+                            {data.map((user, index) => {
                                 return (
                                     <Tr key={index}>
                                         <Td>{user.name}</Td>

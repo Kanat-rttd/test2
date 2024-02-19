@@ -39,7 +39,7 @@ const ProductAddModal = ({ data, isOpen, onClose }: ProductAddModalProps) => {
     }, [data])
 
     const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        console.log(formData)
+        //console.log(formData)
         const { name, value } = target
         setFormData({
             ...formData,
@@ -48,15 +48,15 @@ const ProductAddModal = ({ data, isOpen, onClose }: ProductAddModalProps) => {
     }
 
     const addProduct = () => {
-        console.log(formData)
+        //console.log(formData)
         createProduct(formData).then((res) => {
-            console.log(res)
+            //console.log(res)
         })
         onClose()
     }
 
     const updProduct = () => {
-        console.log(formData)
+        //console.log(formData)
         if (data) {
             updateProduct(data.id, formData).then((res) => {
                 console.log(res)
