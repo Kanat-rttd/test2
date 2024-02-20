@@ -36,6 +36,15 @@ interface Baking {
     spoilage: number
 }
 
+interface BakingTotals {
+    totalButter: number
+    totalFlour: number
+    totalMalt: number
+    totalOutput: number
+    totalSalt: number
+    totalYeast: number
+}
+
 const styles = {
     fontSize: '15px',
     borderBottom: '1px solid black',
@@ -50,26 +59,14 @@ const BakingPage = () => {
     const [selectedBaking, setSelectedBaking] = useState<Baking | null>(null)
     const [bakingData, setBakingData] = useState<Baking[]>()
 
-    const [totals, setTotals] = useState<Baking | null>(null)
+    const [totals, setTotals] = useState<BakingTotals | null>(null)
 
     useEffect(() => {
         getAllBakings().then((res) => {
             console.log(res)
-            setBakingData(res)
 
-            const totalsData = {
-                flour: res.reduce((acc, curr) => acc + curr.flour, 0),
-                salt: res.reduce((acc, curr) => acc + curr.salt, 0),
-                yeast: res.reduce((acc, curr) => acc + curr.yeast, 0),
-                malt: res.reduce((acc, curr) => acc + curr.malt, 0),
-                butter: res.reduce((acc, curr) => acc + curr.butter, 0),
-                temperature: null,
-                time: null,
-                output: res.reduce((acc, curr) => acc + curr.output, 0),
-                spoilage: null,
-            }
-
-            setTotals(totalsData)
+            setBakingData(res.bakingData)
+            setTotals(res.totals)
         })
     }, [])
 
@@ -185,6 +182,7 @@ const BakingPage = () => {
                                                         color={'white'}
                                                         aria-label="Edit"
                                                         onClick={() => {
+                                                            console.log(bakingRow)
                                                             setSelectedBaking(bakingRow)
                                                             onOpen()
                                                         }}
@@ -207,24 +205,24 @@ const BakingPage = () => {
                                             Итого
                                         </Td>
                                         <Td style={{ borderTop: '1px solid black' }}>
-                                            {totals?.flour}
+                                            {totals?.totalFlour}
                                         </Td>
                                         <Td style={{ borderTop: '1px solid black' }}>
-                                            {totals?.salt}
+                                            {totals?.totalSalt}
                                         </Td>
                                         <Td style={{ borderTop: '1px solid black' }}>
-                                            {totals?.yeast}
+                                            {totals?.totalYeast}
                                         </Td>
                                         <Td style={{ borderTop: '1px solid black' }}>
-                                            {totals?.malt}
+                                            {totals?.totalMalt}
                                         </Td>
                                         <Td style={{ borderTop: '1px solid black' }}>
-                                            {totals?.butter}
+                                            {totals?.totalButter}
                                         </Td>
                                         <Td style={{ borderTop: '1px solid black' }}></Td>
                                         <Td style={{ borderTop: '1px solid black' }}></Td>
                                         <Td style={{ borderTop: '1px solid black' }}>
-                                            {totals?.output}
+                                            {totals?.totalOutput}
                                         </Td>
                                         <Td style={{ borderTop: '1px solid black' }}></Td>
                                     </Tr>

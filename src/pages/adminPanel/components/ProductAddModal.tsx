@@ -15,6 +15,7 @@ import {
 
 import { ChangeEvent, useEffect, useState } from 'react'
 import { createProduct, updateProduct } from '../../../utils/services/product.service'
+import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
 
 interface Product {
     id: number
@@ -29,17 +30,25 @@ interface ProductAddModalProps {
 }
 
 const ProductAddModal = ({ data, isOpen, onClose }: ProductAddModalProps) => {
-    const [formData, setFormData] = useState({ name: '', bakeryType: '' })
+    const [formData, setFormData] = useState({ name: '', bakingFacilityUnitId: '' })
+    const [facilityUnits, setFacilityUnits] = useState()
     useEffect(() => {
         if (data) {
             setFormData(data)
         } else {
-            setFormData({ name: '', bakeryType: '' })
+            setFormData({ name: '', bakingFacilityUnitId: '' })
         }
     }, [data])
 
+    useEffect(() => {
+        getAllBakingFacilityUnits().then((responseData) => {
+            setFacilityUnits(responseData)
+            console.log(responseData)
+        })
+    }, [])
+
     const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        //console.log(formData)
+        console.log(formData)
         const { name, value } = target
         setFormData({
             ...formData,
@@ -86,15 +95,17 @@ const ProductAddModal = ({ data, isOpen, onClose }: ProductAddModalProps) => {
                             <Select
                                 variant="filled"
                                 placeholder="Тип цеха"
-                                name="bakeryType"
+                                name="bakingFacilityUnitId"
                                 onChange={handleChange}
-                                value={formData?.bakeryType ?? ''}
+                                // value={''}
                             >
-                                <option value="Булочный">Булочный</option>
-                                <option value="Лавашечный">Лавашечный</option>
-                                <option value="Заварной">Заварной</option>
-                                <option value="Лепешечный">Лепешечный</option>
-                                <option value="Коптильный">Коптильный</option>
+                                {facilityUnits?.map((unit, index) => {
+                                    return (
+                                        <option key={index} value={unit.id}>
+                                            {unit.facilityUnit}
+                                        </option>
+                                    )
+                                })}
                             </Select>
                         </Stack>
                     </ModalBody>

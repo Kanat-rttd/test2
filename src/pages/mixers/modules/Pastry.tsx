@@ -13,10 +13,11 @@ import {
     Input,
     Select,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Drawler from '@/components/Drawler'
 import { useNavigate } from 'react-router-dom'
 import { MIXERS_BAKINGPRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
+import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
 
 const styles = {
     fontSize: '15px',
@@ -26,6 +27,15 @@ const styles = {
 }
 
 const MixersPage = () => {
+    const [facilityUnit, setFacilityUnits] = useState()
+
+    useEffect(() => {
+        getAllBakingFacilityUnits().then((responseData) => {
+            setFacilityUnits(responseData)
+            console.log(responseData)
+        })
+    }, [])
+
     const navigate = useNavigate()
     const [backgroundCol, setColor] = useState('rgba(217, 217, 217, 1)')
     return (
@@ -62,9 +72,11 @@ const MixersPage = () => {
                             marginRight={30}
                         />
                         <Select placeholder="Цехи" width={'20%'}>
-                            <option value="Лепешечный">Лепешечный</option>
-                            <option value="Булочный">Булочный</option>
-                            <option value="Заварной">Заварной</option>
+                            {facilityUnit?.map((unit) => (
+                                <option key={unit.id} value={unit.id}>
+                                    {unit.facilityUnit}
+                                </option>
+                            ))}
                         </Select>
                     </Box>
                     <Box backgroundColor={'rgba(255, 255, 255, 1)'} width={'100%'} height={'100%'}>
@@ -116,8 +128,8 @@ const MixersPage = () => {
                                 <Tfoot>
                                     <Tr>
                                         <Th>Итого</Th>
-                                        <Th>into</Th>
-                                        <Th isNumeric>multiply by</Th>
+                                        <Th></Th>
+                                        <Th isNumeric></Th>
                                     </Tr>
                                 </Tfoot>
                             </Table>

@@ -5,12 +5,15 @@ export const getAllProducts = async () => {
     return data
 }
 
-export const createProduct = async (data: { name: string; bakeryType: string }) => {
+export const createProduct = async (data: { name: string; bakingFacilityUnitId: string }) => {
     const response = await $host.post('product', data)
     return response
 }
 
-export const updateProduct = async (id: number, data: { name: string; bakeryType: string }) => {
+export const updateProduct = async (
+    id: number,
+    data: { name: string; bakingFacilityUnitId: string },
+) => {
     const response = await $host.put(`product/${id}`, data)
     return response
 }

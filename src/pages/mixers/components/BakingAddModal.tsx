@@ -67,22 +67,13 @@ const BakingAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
     })
 
     useEffect(() => {
+        console.log(data)
         if (data) {
             setFormData(data)
         }
     }, [data])
 
     const [products, setProducts] = useState([])
-
-    // const [selectedProduct, setSelectedProduct] = useState('')
-
-    // useEffect(() => {
-    //     if (data) {
-    //         setSelectedProduct(data.product.id)
-    //     } else {
-    //         setSelectedProduct('')
-    //     }
-    // }, [data])
 
     useEffect(() => {
         Promise.all([getAllProducts()])

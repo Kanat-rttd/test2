@@ -54,24 +54,20 @@ const UserAddModal = ({ data, isOpen, onClose }: UserAddModalProps) => {
     }
 
     const addUser = () => {
-        //console.log(formData)
         createUser(formData).then((res) => {
-            //console.log(res)
+            console.log(res)
         })
         onClose()
     }
 
     const updUser = () => {
-        //console.log(formData)
         if (data) {
             updateUser(data.id, formData).then((res) => {
-                //console.log(res)
+                console.log(res)
             })
         }
         onClose()
     }
-
-    //console.log(formData)
 
     return (
         <>

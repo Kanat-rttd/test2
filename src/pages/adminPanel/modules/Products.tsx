@@ -46,6 +46,7 @@ const AdminPanel = () => {
     useEffect(() => {
         getAllProducts().then((responseData) => {
             setData(responseData)
+            console.log(responseData)
         })
     }, [])
 
@@ -87,7 +88,7 @@ const AdminPanel = () => {
                                 return (
                                     <Tr key={index}>
                                         <Td>{product.name}</Td>
-                                        <Td>{product.bakeryType}</Td>
+                                        <Td>{product.bakingFacilityUnit.facilityUnit}</Td>
                                         <Td sx={{ width: '5%' }}>
                                             <IconButton
                                                 variant="outline"
@@ -107,7 +108,6 @@ const AdminPanel = () => {
                                                 colorScheme="teal"
                                                 aria-label="Send email"
                                                 onClick={() => {
-                                                    //console.log(product)
                                                     setData(
                                                         data.filter(
                                                             (elem) => elem.id !== product.id,
