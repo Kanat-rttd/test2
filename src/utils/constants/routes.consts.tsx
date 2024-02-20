@@ -12,6 +12,10 @@ export const MIXERS_ROUTE = '/mixers/:page'
 export const MIXERS_PASTRY_ROUTE = '/mixers/pastry'
 export const MIXERS_BAKINGPRODUCTS_ROUTE = '/mixers/bakingProducts'
 
+export const RELEASE_ROUTE = '/release/:page'
+export const RELEASE_DISTRIBUTION_ROUTE = 'release/distribution'
+export const RELEASE_REFUND_ROUTE = '/release/refund'
+
 //Admin routes
 export const ADMIN_ROUTE = '/admin/:page'
 export const ADMIN_CLIENTS_ROUTE = '/admin/clients'

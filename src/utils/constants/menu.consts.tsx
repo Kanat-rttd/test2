@@ -14,6 +14,9 @@ import {
     MIXERS_ROUTE,
     MIXERS_PASTRY_ROUTE,
     MIXERS_BAKINGPRODUCTS_ROUTE,
+    RELEASE_ROUTE,
+    RELEASE_DISTRIBUTION_ROUTE,
+    RELEASE_REFUND_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -52,6 +55,11 @@ export const menuItems: MenuItem[] = [
     {
         route: MIXERS_ROUTE,
         label: 'Производство',
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: RELEASE_ROUTE,
+        label: 'Выдача',
         allowedClasses: ['Admin', 'Client'],
     },
 ]
@@ -109,6 +117,18 @@ export const subMenuItems: MenuItem[] = [
         route: MIXERS_BAKINGPRODUCTS_ROUTE,
         label: 'Выпечка',
         path: MIXERS_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: RELEASE_DISTRIBUTION_ROUTE,
+        label: 'Выдача',
+        path: RELEASE_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: RELEASE_REFUND_ROUTE,
+        label: 'Возврат',
+        path: RELEASE_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
 ]

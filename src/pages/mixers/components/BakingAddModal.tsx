@@ -35,6 +35,10 @@ interface bakingsData {
     temperature: string
     time: string
     output: string
+    product?: {
+        name: string
+        id: string
+    }
 }
 
 const modalData = {
@@ -47,6 +51,10 @@ const modalData = {
     temperature: '',
     time: '',
     output: '',
+    product: {
+        name: '',
+        id: '',
+    },
 }
 
 const BakingAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
@@ -69,11 +77,23 @@ const BakingAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
     useEffect(() => {
         console.log(data)
         if (data) {
-            setFormData(data)
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                breadType: data.breadType,
+                flour: data.flour,
+                salt: data.salt,
+                yeast: data.yeast,
+                malt: data.malt,
+                butter: data.butter,
+                temperature: data.temperature,
+                time: data.time,
+                output: data.output,
+                product: data.product || { name: '', id: '' },
+            }))
         }
     }, [data])
 
-    const [products, setProducts] = useState([])
+    const [products, setProducts] = useState<{ id: string; name: string }[]>([])
 
     useEffect(() => {
         Promise.all([getAllProducts()])
@@ -86,7 +106,7 @@ const BakingAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
             })
     }, [])
 
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target
         setFormData({
             ...formData,
@@ -136,7 +156,7 @@ const BakingAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
                                 <option disabled value="">
                                     Выберите хлеб
                                 </option>
-                                {products.map((product, index) => (
+                                {products.map((product) => (
                                     <option key={product.id} value={product.id}>
                                         {product.name}
                                     </option>
