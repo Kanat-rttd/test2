@@ -19,7 +19,7 @@ import { createBaking } from '@/utils/services/baking.service'
 import { useState, useEffect } from 'react'
 
 interface ClientAddModalProps {
-    data: bakingsData | undefined
+    data?: bakingsData | null
     isOpen: boolean
     quantity?: number
     onClose: () => void

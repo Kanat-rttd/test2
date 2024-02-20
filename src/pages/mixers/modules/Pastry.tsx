@@ -26,8 +26,13 @@ const styles = {
     fontWeight: 'bold',
 }
 
+interface FacilityUnit {
+    id: number
+    facilityUnit: string
+}
+
 const MixersPage = () => {
-    const [facilityUnit, setFacilityUnits] = useState()
+    const [facilityUnit, setFacilityUnits] = useState<FacilityUnit[]>([])
 
     useEffect(() => {
         getAllBakingFacilityUnits().then((responseData) => {

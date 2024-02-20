@@ -20,6 +20,9 @@ export interface ProductList {
     id: number
     name: string
     bakeryType: string
+    bakingFacilityUnit?: {
+        facilityUnit: string
+    }
 }
 
 export interface OrderArray extends Array<Order> {}

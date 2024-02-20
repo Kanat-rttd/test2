@@ -52,7 +52,7 @@ const AdminPanel = () => {
 
     const delProduct = (data: ProductList) => {
         deleteProduct(data.id).then((res) => {
-            //console.log(res)
+            console.log(res)
         })
     }
 
@@ -88,7 +88,7 @@ const AdminPanel = () => {
                                 return (
                                     <Tr key={index}>
                                         <Td>{product.name}</Td>
-                                        <Td>{product.bakingFacilityUnit.facilityUnit}</Td>
+                                        <Td>{product.bakingFacilityUnit?.facilityUnit}</Td>
                                         <Td sx={{ width: '5%' }}>
                                             <IconButton
                                                 variant="outline"

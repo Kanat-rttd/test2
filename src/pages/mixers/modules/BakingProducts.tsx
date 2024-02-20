@@ -23,17 +23,20 @@ import BakingAddModal from '../components/BakingAddModal'
 import DateRangePicker from '@/components/DateRangePicker'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 
-interface Baking {
+interface bakingsData {
     breadType: string
-    flour: number
-    salt: number
-    yeast: number
-    malt: number
-    butter: number
-    temperature: number
-    time: Date
-    output: number
-    spoilage: number
+    flour: string
+    salt: string
+    yeast: string
+    malt: string
+    butter: string
+    temperature: string
+    time: string
+    output: string
+    product?: {
+        name: string
+        id: string
+    }
 }
 
 interface BakingTotals {
@@ -56,8 +59,8 @@ const BakingPage = () => {
     const { onOpen, onClose, isOpen } = useDisclosure()
     const navigate = useNavigate()
     const [backgroundCol, setColor] = useState('rgba(217, 217, 217, 1)')
-    const [selectedBaking, setSelectedBaking] = useState<Baking | null>(null)
-    const [bakingData, setBakingData] = useState<Baking[]>()
+    const [selectedBaking, setSelectedBaking] = useState<bakingsData | null>(null)
+    const [bakingData, setBakingData] = useState<bakingsData[]>()
 
     const [totals, setTotals] = useState<BakingTotals | null>(null)
 
@@ -166,14 +169,14 @@ const BakingPage = () => {
                                     {bakingData?.map((bakingRow, index) => {
                                         return (
                                             <Tr key={index}>
-                                                <Td>{bakingRow.product.name}</Td>
+                                                <Td>{bakingRow.product?.name}</Td>
                                                 <Td>{bakingRow.flour}</Td>
                                                 <Td>{bakingRow.salt}</Td>
                                                 <Td>{bakingRow.yeast}</Td>
                                                 <Td>{bakingRow.malt}</Td>
                                                 <Td>{bakingRow.butter}</Td>
                                                 <Td>{bakingRow.temperature}</Td>
-                                                <Td>{bakingRow.time}</Td>
+                                                <Td>{bakingRow.time.toLocaleString()}</Td>
                                                 <Td>{bakingRow.output}</Td>
                                                 <Td>
                                                     <IconButton

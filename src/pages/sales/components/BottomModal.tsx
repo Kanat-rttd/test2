@@ -15,8 +15,19 @@ import { Slide } from '@chakra-ui/transition'
 import { getAllProducts } from '@/utils/services/product.service'
 import { useEffect, useState } from 'react'
 
-const BottomModal = ({ isOpen, onClose, handleAddProduct }) => {
-    const [products, setProducts] = useState([])
+interface Product {
+    id: number
+    name: string
+    price: number
+    quantity: number
+}
+
+const BottomModal: React.FC<{
+    isOpen: boolean
+    onClose: () => void
+    handleAddProduct: (product: Product) => void
+}> = ({ isOpen, onClose, handleAddProduct }) => {
+    const [products, setProducts] = useState<Product[]>([])
     const [searchTerm, setSearchTerm] = useState('')
 
     const { getRootProps, getRadioProps } = useRadioGroup()

@@ -47,6 +47,8 @@ const RequestForm = () => {
         setSelectedProducts(updatedProducts)
     }
 
+    const clientId = userInfo?.userId || ''
+
     const handleSubmit = (): void => {
         const requestData = {
             date: dayjs(dateForm).format('DD.MM.YYYY'),
@@ -56,7 +58,7 @@ const RequestForm = () => {
                 price: product.price,
             })),
             comment: comment,
-            clientId: userInfo?.userId,
+            clientId: clientId,
         }
         console.log(requestData)
         if (requestData.products.length === 0) {

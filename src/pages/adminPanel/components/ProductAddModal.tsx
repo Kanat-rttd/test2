@@ -29,12 +29,20 @@ interface ProductAddModalProps {
     onClose: () => void
 }
 
+interface FacilityUnit {
+    id: number
+    facilityUnit: string
+}
+
 const ProductAddModal = ({ data, isOpen, onClose }: ProductAddModalProps) => {
     const [formData, setFormData] = useState({ name: '', bakingFacilityUnitId: '' })
-    const [facilityUnits, setFacilityUnits] = useState()
+    const [facilityUnits, setFacilityUnits] = useState<FacilityUnit[] | undefined>()
     useEffect(() => {
         if (data) {
-            setFormData(data)
+            setFormData({
+                name: data.name,
+                bakingFacilityUnitId: data.bakeryType || '',
+            })
         } else {
             setFormData({ name: '', bakingFacilityUnitId: '' })
         }
@@ -57,15 +65,13 @@ const ProductAddModal = ({ data, isOpen, onClose }: ProductAddModalProps) => {
     }
 
     const addProduct = () => {
-        //console.log(formData)
         createProduct(formData).then((res) => {
-            //console.log(res)
+            console.log(res)
         })
         onClose()
     }
 
     const updProduct = () => {
-        //console.log(formData)
         if (data) {
             updateProduct(data.id, formData).then((res) => {
                 console.log(res)
@@ -97,7 +103,6 @@ const ProductAddModal = ({ data, isOpen, onClose }: ProductAddModalProps) => {
                                 placeholder="Тип цеха"
                                 name="bakingFacilityUnitId"
                                 onChange={handleChange}
-                                // value={''}
                             >
                                 {facilityUnits?.map((unit, index) => {
                                     return (

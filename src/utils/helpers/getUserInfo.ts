@@ -12,12 +12,15 @@ interface DecodedToken {
 export default function getUserInfo() {
     try {
         const token = localStorage.getItem('authToken')
-    
+
+        if (token === null) {
+            throw new Error('Auth token not found')
+        }
+
         const decodedToken: DecodedToken = jwtDecode(token)
-    
+
         return decodedToken
-    } catch(error) {
+    } catch (error) {
         console.error(error)
     }
-
 }

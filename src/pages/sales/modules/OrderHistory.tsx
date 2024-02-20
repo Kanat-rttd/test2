@@ -29,7 +29,7 @@ interface OrderDetail {
 }
 
 const OrderHistory = () => {
-    const { id } = useParams()
+    const { id } = useParams<{ id?: string }>()
     console.log(id)
     const navigator = useNavigate()
 
@@ -37,17 +37,21 @@ const OrderHistory = () => {
     const [selectedProducts, setSelectedProducts] = useState<OrderDetail[]>([])
     const [removedOrderData, setRemovedOrderData] = useState<Order | null>(null)
 
+    const orderId = id ? parseInt(id, 10) : undefined
+
     useEffect(() => {
-        getSaleById(id)
-            .then((res) => {
-                console.log(res.data)
-                setOrderData(res.data)
-                setSelectedProducts(res.data.orderDetails)
-            })
-            .catch((error) => {
-                console.error('Error fetching order:', error)
-            })
-    }, [id])
+        if (orderId !== undefined) {
+            getSaleById(orderId)
+                .then((res) => {
+                    console.log(res.data)
+                    setOrderData(res.data)
+                    setSelectedProducts(res.data.orderDetails)
+                })
+                .catch((error) => {
+                    console.error('Error fetching order:', error)
+                })
+        }
+    }, [orderId])
 
     const handleRemoveProduct = (productId: number): void => {
         if (orderData) {
@@ -65,11 +69,11 @@ const OrderHistory = () => {
             }
 
             setOrderData(updatedOrderData)
-            setSelectedProducts(updatedOrderData)
+            setSelectedProducts(updatedOrderData.orderDetails)
 
             setRemovedOrderData((prevRemovedOrderData: Order | null) => ({
                 ...prevRemovedOrderData!,
-                id: orderData!.id,
+                id: orderId!,
                 orderDetails: [
                     ...(prevRemovedOrderData?.orderDetails || []),
                     ...removedOrderDetails,
