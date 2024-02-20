@@ -18,7 +18,6 @@ interface Product {
 }
 
 const RequestForm = () => {
-    const [dateForm, setDate] = useState<Date>(new Date())
     const [selectedProducts, setSelectedProducts] = useState<Product[]>([])
     const [comment, setComment] = useState<string>('')
     const [isSuccess, setIsSuccess] = useState(false)
@@ -51,7 +50,7 @@ const RequestForm = () => {
 
     const handleSubmit = (): void => {
         const requestData = {
-            date: dayjs(dateForm).format('DD.MM.YYYY'),
+            date: dayjs(new Date()).format('DD.MM.YYYY'),
             products: selectedProducts.map((product) => ({
                 productId: product.id,
                 orderedQuantity: product.quantity,
@@ -127,7 +126,7 @@ const RequestForm = () => {
                                 width={'50%'}
                                 borderRadius={'15'}
                                 name="date"
-                                defaultValue={dayjs(dateForm).format('DD.MM.YYYY')}
+                                defaultValue={dayjs(new Date()).format('DD.MM.YYYY')}
                                 textAlign={'center'}
                             />
                         </Box>

@@ -42,7 +42,6 @@ const MixersPage = () => {
     }, [])
 
     const navigate = useNavigate()
-    const [backgroundCol, setColor] = useState('rgba(217, 217, 217, 1)')
     return (
         <>
             <Box>
@@ -54,7 +53,7 @@ const MixersPage = () => {
                 >
                     <Box width={'100%'}>
                         <Drawler></Drawler>
-                        <Button bg={backgroundCol} height={'100%'} width={'20%'}>
+                        <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'20%'}>
                             Заявки
                         </Button>
                         <Button

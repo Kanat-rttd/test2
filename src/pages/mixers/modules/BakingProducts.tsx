@@ -58,7 +58,6 @@ const styles = {
 const BakingPage = () => {
     const { onOpen, onClose, isOpen } = useDisclosure()
     const navigate = useNavigate()
-    const [backgroundCol, setColor] = useState('rgba(217, 217, 217, 1)')
     const [selectedBaking, setSelectedBaking] = useState<bakingsData | null>(null)
     const [bakingData, setBakingData] = useState<bakingsData[]>()
 
@@ -91,7 +90,7 @@ const BakingPage = () => {
                         >
                             Заявки
                         </Button>
-                        <Button bg={backgroundCol} height={'100%'} width={'20%'}>
+                        <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'20%'}>
                             Выпечка
                         </Button>
                     </Box>
