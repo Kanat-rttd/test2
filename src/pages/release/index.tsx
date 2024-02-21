@@ -1,14 +1,14 @@
 import { useNavigate, useParams } from 'react-router-dom'
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense, lazy } from 'react'
 import { NOTFOUND_ROUTE } from '../../utils/constants/routes.consts'
 import Loading from '../../components/Loading'
 
-// const Pastry = lazy(() => import('./modules/Pastry'))
-// const BakingProducts = lazy(() => import('./modules/BakingProducts'))
+const Distribution = lazy(() => import('./modules/Distribution'))
+const Refund = lazy(() => import('./modules/Refund'))
 
-type PageType = 'user' | 'score' | 'bakingProducts' | 'pastry'
+type PageType = 'user' | 'score' | 'distribution' | 'refound'
 
-const MixersPage = () => {
+const ReleasePage = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
     const { page } = useParams<{ page: PageType }>()
     const navigate = useNavigate()
@@ -16,8 +16,8 @@ const MixersPage = () => {
     const pagesMap: { [key in PageType]: JSX.Element } = {
         user: <div />,
         score: <input />,
-        bakingProducts: <div />,
-        pastry: <div />,
+        distribution: <Distribution />,
+        refound: <Refund />,
     }
 
     useEffect(() => {
@@ -31,4 +31,4 @@ const MixersPage = () => {
     return <Suspense fallback={<Loading />}>{content}</Suspense>
 }
 
-export default MixersPage
+export default ReleasePage

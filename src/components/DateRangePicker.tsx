@@ -29,7 +29,7 @@ const DateRangePicker = () => {
     }
 
     return (
-        <Box>
+        <Box border={'1px solid #E2E8F0'} borderRadius={'8px'} paddingRight={'10px'}>
             <Flex align="center">
                 <Popover isOpen={isOpen} onClose={() => setIsOpen(false)}>
                     <PopoverTrigger>
