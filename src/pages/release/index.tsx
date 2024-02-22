@@ -6,7 +6,7 @@ import Loading from '../../components/Loading'
 const Distribution = lazy(() => import('./modules/Distribution'))
 const Refund = lazy(() => import('./modules/Refund'))
 
-type PageType = 'user' | 'score' | 'distribution' | 'refound'
+type PageType = 'user' | 'score' | 'distribution' | 'refund'
 
 const ReleasePage = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
@@ -17,7 +17,7 @@ const ReleasePage = () => {
         user: <div />,
         score: <input />,
         distribution: <Distribution />,
-        refound: <Refund />,
+        refund: <Refund />,
     }
 
     useEffect(() => {

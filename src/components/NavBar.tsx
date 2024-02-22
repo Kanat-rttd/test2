@@ -1,7 +1,11 @@
 import { Text, Flex, Image } from '@chakra-ui/react'
 import Drawler from './Drawler'
+import { useNavigate } from 'react-router-dom'
+import { MAIN_ROUTE } from '@/utils/constants/routes.consts'
 
 const TopNavBar = () => {
+    const navigate = useNavigate()
+
     return (
         <Flex
             h="10vh"
@@ -22,8 +26,16 @@ const TopNavBar = () => {
                 boxSize="50px"
                 src="https://w7.pngwing.com/pngs/802/361/png-transparent-bakery-bread-logo-pretzel-cafe-logo-idea-food-label-cake.png"
                 alt="bakery"
+                cursor={'pointer'}
+                onClick={() => navigate(MAIN_ROUTE)}
             />
-            <Text fontSize="xl" fontWeight="bold" padding={'10px'}>
+            <Text
+                fontSize="xl"
+                fontWeight="bold"
+                padding={'10px'}
+                cursor={'pointer'}
+                onClick={() => navigate(MAIN_ROUTE)}
+            >
                 Bread Factory
             </Text>
         </Flex>

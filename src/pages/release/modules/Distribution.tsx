@@ -1,6 +1,6 @@
 import DateRangePicker from '@/components/DateRangePicker'
 import Drawler from '@/components/Drawler'
-import { RELEASE_DISTRIBUTION_ROUTE } from '@/utils/constants/routes.consts'
+import { RELEASE_DISTRIBUTION_ROUTE, RELEASE_REFUND_ROUTE } from '@/utils/constants/routes.consts'
 import {
     Avatar,
     Box,
@@ -16,7 +16,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
-import DistributionModal from '../components/Modal'
+import DistributionModal from '../components/DistributionModal'
 
 const Distribution = () => {
     const navigate = useNavigate()
@@ -39,7 +39,12 @@ const Distribution = () => {
                     >
                         Выдача
                     </Button>
-                    <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'20%'}>
+                    <Button
+                        bg={'rgba(217, 217, 217, 1)'}
+                        height={'100%'}
+                        width={'20%'}
+                        onClick={() => navigate(RELEASE_REFUND_ROUTE)}
+                    >
                         Возврат
                     </Button>
                 </Box>
