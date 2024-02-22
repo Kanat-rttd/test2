@@ -48,9 +48,9 @@ const Distribution = () => {
 
             <Box width={'100%'} height={'100%'} p={5}>
                 <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
-                    <Box display={'flex'} gap={'15px'} width={'30%'}>
+                    <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <DateRangePicker></DateRangePicker>
-                        <Select placeholder="Цехи" width={'25%'}>
+                        <Select placeholder="Цехи" width={'fit-content'}>
                             <option value="Лепешечный">Лепешечный</option>
                             <option value="Булочный">Булочный</option>
                             <option value="Заварной">Заварной</option>
