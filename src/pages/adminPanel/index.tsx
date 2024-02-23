@@ -6,8 +6,9 @@ import Loading from '../../components/Loading'
 const Products = lazy(() => import('./modules/Products'))
 const Clients = lazy(() => import('./modules/Clients'))
 const Users = lazy(() => import('./modules/Users'))
+const Releases = lazy(() => import('./modules/Release'))
 
-type PageType = 'user' | 'users' | 'clients' | 'products'
+type PageType = 'user' | 'users' | 'clients' | 'products' | 'releases'
 
 const AdminPanel = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
@@ -19,6 +20,7 @@ const AdminPanel = () => {
         users: <Users />,
         clients: <Clients />,
         products: <Products />,
+        releases: <Releases />,
     }
 
     useEffect(() => {

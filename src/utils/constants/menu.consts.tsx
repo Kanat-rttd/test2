@@ -17,6 +17,7 @@ import {
     RELEASE_ROUTE,
     RELEASE_DISTRIBUTION_ROUTE,
     RELEASE_REFUND_ROUTE,
+    ADMIN_RELEASE_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -80,6 +81,12 @@ export const subMenuItems: MenuItem[] = [
     {
         route: ADMIN_USERS_ROUTE,
         label: 'Пользователи',
+        path: ADMIN_ROUTE,
+        allowedClasses: ['Admin'],
+    },
+    {
+        route: ADMIN_RELEASE_ROUTE,
+        label: 'Реализаторы',
         path: ADMIN_ROUTE,
         allowedClasses: ['Admin'],
     },
