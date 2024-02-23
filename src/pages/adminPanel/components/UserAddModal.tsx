@@ -12,6 +12,7 @@ import {
     Input,
     InputRightElement,
     InputLeftAddon,
+    Select,
 } from '@chakra-ui/react'
 
 import { ChangeEvent, useEffect, useState } from 'react'
@@ -78,14 +79,32 @@ const UserAddModal = ({ data, isOpen, onClose }: UserAddModalProps) => {
                     <ModalCloseButton />
                     <ModalBody>
                         <Stack spacing={4}>
-                            <InputGroup>
-                                <Input
-                                    name="name"
-                                    onChange={handleChange}
-                                    placeholder="Имя пользователя"
-                                    value={formData?.name ?? ''}
-                                />
-                            </InputGroup>
+                            <Input
+                                name="name"
+                                onChange={handleChange}
+                                placeholder="Имя"
+                                value={formData?.name ?? ''}
+                            />
+                            <Input
+                                name="surname"
+                                onChange={handleChange}
+                                placeholder="Фамилия"
+                                value={formData?.name ?? ''}
+                            />
+                            <Input
+                                name="telegram"
+                                onChange={handleChange}
+                                placeholder="Телеграм ID"
+                                value={formData?.name ?? ''}
+                            />
+                            <Select placeholder="Доступ">
+                                <option value={'admin'}>Админ</option>
+                                <option value={'client'}>Клиент</option>
+                            </Select>
+                            <Select placeholder="Статус">
+                                <option value={'active'}>Активен</option>
+                                <option value={'Не активен'}>Не активен</option>
+                            </Select>
 
                             <InputGroup size={'lg'}>
                                 <InputLeftAddon>+7</InputLeftAddon>
@@ -103,32 +122,40 @@ const UserAddModal = ({ data, isOpen, onClose }: UserAddModalProps) => {
                                     name="pass"
                                     pr="4.5rem"
                                     type={show ? 'text' : 'password'}
-                                    placeholder="Введите новый пароль"
+                                    placeholder="Пароль"
                                     value={formData?.pass ?? ''}
                                     onChange={handleChange}
                                 />
                                 <InputRightElement width="4.5rem">
                                     <Button h="1.75rem" size="sm" onClick={handleClick}>
-                                        {show ? 'Hide' : 'Show'}
+                                        {show ? 'Скрыть' : 'Показать'}
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
-
                             <InputGroup>
                                 <Input
-                                    name="userClass"
+                                    name="pass"
+                                    pr="4.5rem"
+                                    type={show ? 'text' : 'password'}
+                                    placeholder="Подвердите пароль"
+                                    value={formData?.pass ?? ''}
                                     onChange={handleChange}
-                                    placeholder="Класс"
-                                    value={formData?.userClass ?? ''}
                                 />
+                                <InputRightElement width="4.5rem">
+                                    <Button h="1.75rem" size="sm" onClick={handleClick}>
+                                        {show ? 'Скрыть' : 'Показать'}
+                                    </Button>
+                                </InputRightElement>
                             </InputGroup>
                         </Stack>
                     </ModalBody>
-                    <ModalFooter display={'flex'} alignSelf={'center'} gap={5}>
-                        <Button onClick={data ? updUser : addUser}>
-                            {data ? 'Редактировать' : 'Добавить'} пользователя
+                    <ModalFooter gap={3}>
+                        <Button onClick={onClose} colorScheme="red">
+                            Отмена
                         </Button>
-                        <Button onClick={onClose}>Закрыть</Button>
+                        <Button onClick={data ? updUser : addUser} colorScheme="purple">
+                            {data ? 'Редактировать' : 'Добавить'}
+                        </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>
