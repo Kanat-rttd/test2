@@ -18,6 +18,7 @@ import {
     RELEASE_DISTRIBUTION_ROUTE,
     RELEASE_REFUND_ROUTE,
     ADMIN_RELEASE_ROUTE,
+    ADMIN_UNIQUEPRICE_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -87,6 +88,12 @@ export const subMenuItems: MenuItem[] = [
     {
         route: ADMIN_RELEASE_ROUTE,
         label: 'Реализаторы',
+        path: ADMIN_ROUTE,
+        allowedClasses: ['Admin'],
+    },
+    {
+        route: ADMIN_UNIQUEPRICE_ROUTE,
+        label: 'Уникальные цены',
         path: ADMIN_ROUTE,
         allowedClasses: ['Admin'],
     },

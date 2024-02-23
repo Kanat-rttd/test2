@@ -1,5 +1,5 @@
 import Drawler from '@/components/Drawler'
-import { ADMIN_RELEASE_ROUTE } from '@/utils/constants/routes.consts'
+import { ADMIN_RELEASE_ROUTE, ADMIN_UNIQUEPRICE_ROUTE } from '@/utils/constants/routes.consts'
 import { EditIcon } from '@chakra-ui/icons'
 import {
     Avatar,
@@ -57,7 +57,7 @@ const AdminPanel = () => {
                             bg={'rgba(217, 217, 217, 1)'}
                             height={'100%'}
                             width={'20%'}
-                            // onClick={() => navigate(RELEASE_REFUND_ROUTE)}
+                            onClick={() => navigate(ADMIN_UNIQUEPRICE_ROUTE)}
                         >
                             Уникальные цены
                         </Button>
