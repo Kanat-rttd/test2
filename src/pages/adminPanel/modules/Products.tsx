@@ -7,115 +7,131 @@ import {
     Tbody,
     Td,
     Box,
-    IconButton,
     useDisclosure,
     Button,
+    Avatar,
+    Select,
 } from '@chakra-ui/react'
-import TopNavBar from '../../../components/NavBar'
-import ProductAddModal from '../components/ProductAddModal'
-import FacilityUnitAddModal from '../components/FacilityUnitAddModal'
-import { useEffect, useState } from 'react'
-import { getAllProducts, deleteProduct } from '../../../utils/services/product.service'
-import { ProductList } from '../../../utils/types/types'
-
-import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
+import ProductAddModal, { Product } from '../components/ProductAddModal'
+import { useState } from 'react'
+// import { getAllProducts, deleteProduct } from '../../../utils/services/product.service'
+// import { ProductList } from '../../../utils/types/types'
+import { EditIcon } from '@chakra-ui/icons'
+import Drawler from '@/components/Drawler'
+import { useNavigate } from 'react-router-dom'
+import { ADMIN_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 
 const AdminPanel = () => {
-    const {
-        onOpen: openProductModal,
-        onClose: closeProductModal,
-        isOpen: isProductModalOpen,
-    } = useDisclosure()
-    const {
-        onOpen: openFacilityModal,
-        onClose: closeFacilityModal,
-        isOpen: isFacilityModalOpen,
-    } = useDisclosure()
-    const [selectedData, setSelectedData] = useState<ProductList>()
-    const [data, setData] = useState<ProductList[]>([])
+    const navigate = useNavigate()
+    const { onOpen, isOpen, onClose } = useDisclosure()
+    const [selectedData, setSelectedData] = useState<Product>()
+    // const [data, setData] = useState<ProductList[]>([])
 
-    const handleProductClose = () => {
-        closeProductModal()
-        setSelectedData(undefined)
-    }
+    // const handleProductClose = () => {
+    //     closeProductModal()
+    //     setSelectedData(undefined)
+    // }
 
-    const handleFacilityClose = () => {
-        closeFacilityModal()
-    }
+    // const handleFacilityClose = () => {
+    //     closeFacilityModal()
+    // }
 
-    useEffect(() => {
-        getAllProducts().then((responseData) => {
-            setData(responseData)
-            console.log(responseData)
-        })
-    }, [])
+    // useEffect(() => {
+    //     getAllProducts().then((responseData) => {
+    //         setData(responseData)
+    //         console.log(responseData)
+    //     })
+    // }, [])
 
-    const delProduct = (data: ProductList) => {
-        deleteProduct(data.id).then((res) => {
-            console.log(res)
-        })
-    }
+    // const delProduct = (data: ProductList) => {
+    //     deleteProduct(data.id).then((res) => {
+    //         console.log(res)
+    //     })
+    // }
+
+    const data = [
+        {
+            id: 1,
+            name: 'Итальяснкий',
+            bakerType: 'Бетонный',
+            status: 'Активен',
+            price: 100,
+            costPrice: 50,
+        },
+    ]
 
     return (
         <>
-            <TopNavBar></TopNavBar>
-            <Box display="flex" flexDirection="column" height="100vh" p={5}>
-                <Box marginBottom={5} textAlign={'right'}>
-                    <Button onClick={openFacilityModal}>Добавить цех</Button>
-                    <FacilityUnitAddModal
-                        isOpen={isFacilityModalOpen}
-                        onClose={handleFacilityClose}
-                    />
+            <Box
+                display="flex"
+                justifyContent={'space-between'}
+                flexDirection={'row'}
+                backgroundColor={'rgba(128, 128, 128, 0.1)'}
+            >
+                <Box width={'100%'}>
+                    <Drawler></Drawler>
+                    <Button
+                        height={'100%'}
+                        width={'20%'}
+                        onClick={() => navigate(ADMIN_PRODUCTS_ROUTE)}
+                        background={'#D8D9D9'}
+                    >
+                        Продукты
+                    </Button>
                 </Box>
-                <Box marginBottom={5} textAlign={'right'}>
-                    <Button onClick={openProductModal}>Добавить продукт</Button>
-                    <ProductAddModal
-                        data={selectedData}
-                        isOpen={isProductModalOpen}
-                        onClose={handleProductClose}
-                    />
+                <Avatar bg="teal.500" />
+            </Box>
+
+            <Box display="flex" flexDirection="column" height="100vh" p={5}>
+                <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+                    <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                        <Select placeholder="Имя" width={'fit-content'}>
+                            <option value="Наименование">Итальянский</option>
+                        </Select>
+                        <Select placeholder="Цех" width={'fit-content'}>
+                            <option value="Батонный">Батонный</option>
+                        </Select>
+                        <Select placeholder="Статус" width={'fit-content'}>
+                            <option value="Активен">Активен</option>
+                            <option value="Приостановлен">Приостановлен</option>
+                        </Select>
+                    </Box>
+
+                    <Button colorScheme="purple" onClick={onOpen}>
+                        Добавить
+                    </Button>
                 </Box>
                 <TableContainer maxWidth={'100%'} width={'100%'}>
-                    <Table variant="striped" colorScheme="teal" size="lg" width={'100%'}>
+                    <Table variant="simple">
                         <Thead>
                             <Tr>
-                                <Th p={0}>Выпечка</Th>
-                                <Th p={0}>Цех</Th>
+                                <Th>№</Th>
+                                <Th>Наименование</Th>
+                                <Th>Цех</Th>
+                                <Th>Статус</Th>
+                                <Th>Цена</Th>
+                                <Th>Себестоимость</Th>
+                                <Th>Действия</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
                             {data.map((product, index) => {
                                 return (
                                     <Tr key={index}>
+                                        <Td>{product.id}</Td>
                                         <Td>{product.name}</Td>
-                                        <Td>{product.bakingFacilityUnit?.facilityUnit}</Td>
-                                        <Td sx={{ width: '5%' }}>
-                                            <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
-                                                marginRight={3}
+                                        <Td>{product.bakerType}</Td>
+                                        <Td>{product.status}</Td>
+                                        <Td>{product.price}</Td>
+                                        <Td>{product.costPrice}</Td>
+                                        <Td>
+                                            <EditIcon
+                                                boxSize={'1.5em'}
+                                                cursor={'pointer'}
                                                 onClick={() => {
                                                     setSelectedData(product)
-                                                    openProductModal()
+                                                    onOpen()
                                                 }}
-                                                icon={<EditIcon />}
-                                            />
-                                            <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
-                                                onClick={() => {
-                                                    setData(
-                                                        data.filter(
-                                                            (elem) => elem.id !== product.id,
-                                                        ),
-                                                    )
-                                                    delProduct(product)
-                                                }}
-                                                icon={<DeleteIcon />}
                                             />
                                         </Td>
                                     </Tr>
@@ -124,6 +140,7 @@ const AdminPanel = () => {
                         </Tbody>
                     </Table>
                 </TableContainer>
+                <ProductAddModal data={selectedData} isOpen={isOpen} onClose={onClose} />
             </Box>
         </>
     )
