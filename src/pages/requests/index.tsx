@@ -3,10 +3,10 @@ import { useState, useEffect, lazy, Suspense } from 'react'
 import { NOTFOUND_ROUTE } from '../../utils/constants/routes.consts'
 import Loading from '../../components/Loading'
 
-const Request = lazy(() => import('./modules/Request'))
-const Baking = lazy(() => import('./modules/Baking'))
+const ProcessingPage = lazy(() => import('./modules/Processing'))
+const ProcessedPage = lazy(() => import('./modules/Processed'))
 
-type PageType = 'user' | 'score' | 'baking' | 'prepare'
+type PageType = 'user' | 'score' | 'processing' | 'processed'
 
 const RequestPage = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
@@ -16,8 +16,8 @@ const RequestPage = () => {
     const pagesMap: { [key in PageType]: JSX.Element } = {
         user: <div />,
         score: <input />,
-        baking: <Baking />,
-        prepare: <Request />,
+        processing: <ProcessingPage />,
+        processed: <ProcessedPage />,
     }
 
     useEffect(() => {

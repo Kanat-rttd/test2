@@ -14,23 +14,45 @@ import {
     Button,
 } from '@chakra-ui/react'
 
-import { OrderArray } from '../utils/types/types'
+interface OrderArray {
+    id: number
+    userId: string
+    totalPrice: string
+    createdAt: Date
+    done: string
+    orderDetails: [
+        {
+            orderDetailsId: string
+            productId: string
+            orderedQuantity: string
+            product: {
+                name: string
+                price: string
+            }
+        },
+    ]
+    user: {
+        id: string
+        name: string
+    }
+}
 
 type accorfionClientType = {
-    data: OrderArray
-    handleChangeStatus: (clientName: string) => void
+    data: OrderArray[]
+    handleChangeStatus: (clientName: []) => void
 }
 
 const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => {
+    console.log(data)
     const defaultIndex = Array.from({ length: data.length }, (_, index) => index)
 
-    const handleConfirmClick = (clientName: string) => {
+    const handleConfirmClick = (clientName: []) => {
         handleChangeStatus(clientName)
     }
 
     return (
         <Accordion defaultIndex={defaultIndex} allowMultiple>
-            {data.map((order, index) => (
+            {data?.map((order, index) => (
                 <AccordionItem key={index}>
                     <h2>
                         <AccordionButton backgroundColor={'#e6e6e6'}>
@@ -41,8 +63,8 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
                                 flex="1"
                                 textAlign="left"
                             >
-                                <Heading size={'sm'}>{order.name}</Heading>
-                                <Heading size={'sm'}>Total - {order.total}</Heading>
+                                <Heading size={'sm'}>{order.user.name}</Heading>
+                                <Heading size={'sm'}>Total</Heading>
                             </Box>
                             <AccordionIcon />
                         </AccordionButton>
@@ -50,10 +72,10 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
                     <AccordionPanel pb={0}>
                         <Table variant="unstyled">
                             <Tbody>
-                                {order.products.map((item, index) => (
+                                {order.orderDetails.map((item, index) => (
                                     <Tr key={index}>
-                                        <Td width={'80%'}>{item.productName}</Td>
-                                        <Td>{item.quantity}</Td>
+                                        <Td width={'80%'}>{item.product.name}</Td>
+                                        <Td>{item.orderedQuantity}</Td>
                                     </Tr>
                                 ))}
                             </Tbody>
@@ -63,7 +85,7 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
                                     <Td>
                                         <Button
                                             width={'100%'}
-                                            onClick={() => handleConfirmClick(order.name)}
+                                            onClick={() => handleConfirmClick(order)}
                                         >
                                             Подтвердить
                                         </Button>

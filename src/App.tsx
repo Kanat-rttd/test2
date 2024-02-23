@@ -39,7 +39,7 @@ function App() {
                     }
                 />
             ))}
-            <Route path="*" element={<Navigate to={NOTFOUND_ROUTE} replace />} />
+            {/* <Route path="*" element={<Navigate to={NOTFOUND_ROUTE} replace />} /> */}
         </Routes>
     )
 }

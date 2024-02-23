@@ -1,15 +1,42 @@
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot } from '@chakra-ui/react'
-import { Order } from '../utils/types/types'
 import RevertTh from './ui/RevertTh'
 
-//TODO: Используй константы вместо let если не изменяется
-const TableData = ({ data }: { data: Order[] }) => {
-    //console.log(data)
-    let uniqProducts = new Set<string>()
+interface OrderArray {
+    id: number
+    userId: string
+    totalPrice: string
+    createdAt: Date
+    done: string
+    orderDetails: [
+        {
+            orderDetailsId: string
+            productId: string
+            orderedQuantity: string
+            product: {
+                name: string
+                price: string
+            }
+        },
+    ]
+    user: {
+        id: string
+        name: string
+    }
+}
+
+const styles = {
+    fontSize: '15px',
+    borderBottom: '1px solid black',
+    textAlign: 'center',
+    fontWeight: 'bold',
+}
+
+const TableData = ({ data }: { data: OrderArray[] }) => {
+    console.log(data)
+    const uniqProducts = new Set<string>()
     data.forEach((order) => {
-        //console.log(order)
-        order.products.forEach((product) => {
-            uniqProducts.add(product.productName)
+        order.orderDetails.forEach((detail) => {
+            uniqProducts.add(detail.product.name)
         })
     })
 
@@ -21,25 +48,41 @@ const TableData = ({ data }: { data: Order[] }) => {
     }
 
     return (
-        <TableContainer maxWidth={'100%'} width={'100%'} p={5}>
-            <Table variant="striped" colorScheme="teal" size="lg" width={'100%'}>
+        <TableContainer>
+            <Table
+                size="sm"
+                variant="unstyled"
+                overflow={'scroll'}
+                style={{ borderCollapse: 'separate', borderSpacing: '0 10px' }}
+            >
                 <Thead>
                     <Tr>
-                        <Th p={0}>Реализаторы</Th>
+                        <Th borderBottom={'1px solid black'} fontSize={'15px'}>
+                            Реализаторы
+                        </Th>
                         {Array.from(uniqProducts).map((name, index) => (
-                            <RevertTh key={index} text={name} />
+                            <Th sx={styles} key={index}>
+                                {name}
+                            </Th>
                         ))}
                     </Tr>
                 </Thead>
                 <Tbody>
                     {data.map((item, index) => (
                         <Tr key={index}>
-                            <Td width={'80%'}>{item.name}</Td>
+                            <Td
+                                width={'80%'}
+                                borderBottom={'1px solid black'}
+                                fontSize={'15px'}
+                                fontWeight={'bold'}
+                            >
+                                {item.user.name}
+                            </Td>
                             {Array.from(uniqProducts).map((productName, productIndex) => (
-                                <Td key={productIndex}>
-                                    {item.products.find(
-                                        (product) => product.productName === productName,
-                                    )?.quantity || ''}
+                                <Td sx={styles} key={productIndex}>
+                                    {item.orderDetails.find(
+                                        (prod) => prod.product.name === productName,
+                                    )?.orderedQuantity || ''}
                                 </Td>
                             ))}
                         </Tr>
@@ -48,9 +91,9 @@ const TableData = ({ data }: { data: Order[] }) => {
                 <Tfoot>
                     <Tr>
                         <Td width={'80%'}>Итого</Td>
-                        {Array.from(uniqProducts).map((productName, productIndex) => (
+                        {/* {Array.from(uniqProducts).map((productName, productIndex) => (
                             <Td key={productIndex}>{getColumnTotal(productName)}</Td>
-                        ))}
+                        ))} */}
                     </Tr>
                 </Tfoot>
             </Table>

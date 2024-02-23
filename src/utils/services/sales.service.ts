@@ -19,3 +19,8 @@ export const getSaleById = async (id: number) => {
     const { data } = await $host.get(`sales/${id}`)
     return data
 }
+
+export const setDoneStatus = async (id: number) => {
+    const response = await $host.put(`sales/status/${id}`)
+    return response
+}

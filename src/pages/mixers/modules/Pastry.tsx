@@ -50,6 +50,8 @@ const MixersPage = () => {
                     justifyContent={'space-between'}
                     flexDirection={'row'}
                     backgroundColor={'rgba(128, 128, 128, 0.1)'}
+                    px={5}
+                    py={2}
                 >
                     <Box width={'100%'}>
                         <Drawler></Drawler>
