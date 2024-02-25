@@ -13,6 +13,10 @@ interface OrderArray {
             productId: string
             orderedQuantity: string
             product: {
+                bakingFacilityUnit: {
+                    id: string
+                    facilityUnit: string
+                }
                 name: string
                 price: string
             }

@@ -1,11 +1,11 @@
-import { Box, Button, Avatar, Input } from '@chakra-ui/react'
+import { Box, Button, Avatar, Input, Select } from '@chakra-ui/react'
 import Drawler from '@/components/Drawler'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ChangeEvent } from 'react'
 import { REQUEST_PROCESSING_ROUTE } from '@/utils/constants/routes.consts'
 
 import TableData from '@/components/TableData'
-import { getAllSales } from '@/utils/services/sales.service'
-import { setDoneStatus } from '@/utils/services/sales.service'
+import { getAllSales, getByFacilityUnit } from '@/utils/services/sales.service'
+import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
 import { useNavigate } from 'react-router-dom'
 
 interface OrderArray {
@@ -20,6 +20,10 @@ interface OrderArray {
             productId: string
             orderedQuantity: string
             product: {
+                bakingFacilityUnit: {
+                    id: string
+                    facilityUnit: string
+                }
                 name: string
                 price: string
             }
@@ -31,9 +35,22 @@ interface OrderArray {
     }
 }
 
+interface FacilityUnit {
+    id: number
+    facilityUnit: string
+}
+
 const ProcessedPage = () => {
     const navigate = useNavigate()
     const [getSalesData, setSalesData] = useState<OrderArray[]>([])
+    const [facilityUnits, setFacilityUnits] = useState<FacilityUnit[] | undefined>()
+
+    useEffect(() => {
+        getAllBakingFacilityUnits().then((responseData) => {
+            setFacilityUnits(responseData)
+            console.log(responseData)
+        })
+    }, [])
 
     useEffect(() => {
         getAllSales().then((res) => {
@@ -42,17 +59,17 @@ const ProcessedPage = () => {
         })
     }, [])
 
-    const handleChangeStatus = async (clientName: OrderArray) => {
-        setDoneStatus(clientName.id)
+    const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        console.log(target.value)
+        const data = { facilityUnitId: target.value }
+
+        getByFacilityUnit(data)
             .then((res) => {
-                console.log(res)
-                const updatedSalesData = getSalesData.map((sale) =>
-                    sale.id === clientName.id ? { ...sale, done: 1 } : sale,
-                )
-                setSalesData(updatedSalesData)
+                console.log(res.data.data)
+                setSalesData(res.data.data)
             })
             .catch((error) => {
-                console.error('Error updating order status:', error)
+                console.log(error)
             })
     }
 
@@ -82,40 +99,24 @@ const ProcessedPage = () => {
                 </Box>
                 <Box width={'100%'} height={'100%'} p={5}>
                     <Box>
-                        {/* <Button onClick={onOpen}>Добавить заказ</Button>
-                        <RequestAddModal isOpen={isOpen} onClose={onClose} /> */}
                         <Input type="Date" />
+                        <Select
+                            variant="filled"
+                            placeholder="Тип цеха"
+                            name="bakingFacilityUnitId"
+                            onChange={handleChange}
+                        >
+                            {facilityUnits?.map((unit, index) => {
+                                return (
+                                    <option key={index} value={unit.id}>
+                                        {unit.facilityUnit}
+                                    </option>
+                                )
+                            })}
+                        </Select>
                     </Box>
-                    {/* <AccordionClients
-                        data={data.filter((order) => Boolean(order.done) === false)}
-                        handleChangeStatus={handleChangeStatus}
-                    /> */}
-                    {/* <AccordionClients
-                        data={getSalesData.filter((sale) => sale.done === 0)}
-                        handleChangeStatus={handleChangeStatus}
-                    /> */}
                     <TableData data={getSalesData.filter((sale) => sale.done === 1)} />
                 </Box>
-
-                {/* <Tabs position="relative" variant="variant">
-                    <TabList display={'flex'} justifyContent={'space-between'}>
-                        <Box display={'flex'}>
-                            <Tab>Заказы {orderCount}</Tab>
-                            <Tab>Готово {doneOrderCount}</Tab>
-                        </Box>
-                        
-                    </TabList>
-
-                    <TabIndicator mt="-1.5px" height="2px" bg="blue.500" borderRadius="1px" />
-                    <TabPanels>
-                        <TabPanel> */}
-
-                {/* </TabPanel>
-                        <TabPanel>
-                            
-                        </TabPanel>
-                    </TabPanels>
-                </Tabs> */}
             </Box>
         </>
     )

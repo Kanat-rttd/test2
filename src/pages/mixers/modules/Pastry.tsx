@@ -1,38 +1,47 @@
-import {
-    Box,
-    Button,
-    Avatar,
-    TableContainer,
-    Table,
-    Thead,
-    Tr,
-    Th,
-    Tbody,
-    Td,
-    Tfoot,
-    Input,
-    Select,
-} from '@chakra-ui/react'
-import { useState, useEffect } from 'react'
+import { Box, Button, Avatar, Input, Select } from '@chakra-ui/react'
+import { useState, useEffect, ChangeEvent } from 'react'
 import Drawler from '@/components/Drawler'
 import { useNavigate } from 'react-router-dom'
 import { MIXERS_BAKINGPRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
-
-const styles = {
-    fontSize: '15px',
-    borderBottom: '1px solid black',
-    textAlign: 'center',
-    fontWeight: 'bold',
-}
+import { getAllSales, getByFacilityUnit } from '@/utils/services/sales.service'
+import TableData from '@/components/TableData'
 
 interface FacilityUnit {
     id: number
     facilityUnit: string
 }
 
+interface OrderArray {
+    id: number
+    userId: string
+    totalPrice: string
+    createdAt: Date
+    done: string
+    orderDetails: [
+        {
+            orderDetailsId: string
+            productId: string
+            orderedQuantity: string
+            product: {
+                bakingFacilityUnit: {
+                    id: string
+                    facilityUnit: string
+                }
+                name: string
+                price: string
+            }
+        },
+    ]
+    user: {
+        id: string
+        name: string
+    }
+}
+
 const MixersPage = () => {
-    const [facilityUnit, setFacilityUnits] = useState<FacilityUnit[]>([])
+    const [facilityUnits, setFacilityUnits] = useState<FacilityUnit[] | undefined>()
+    const [getSalesData, setSalesData] = useState<OrderArray[]>([])
 
     useEffect(() => {
         getAllBakingFacilityUnits().then((responseData) => {
@@ -40,6 +49,27 @@ const MixersPage = () => {
             console.log(responseData)
         })
     }, [])
+
+    useEffect(() => {
+        getAllSales().then((res) => {
+            console.log(res.data)
+            setSalesData(res.data)
+        })
+    }, [])
+
+    const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        console.log(target.value)
+        const data = { facilityUnitId: target.value }
+
+        getByFacilityUnit(data)
+            .then((res) => {
+                console.log(res.data.data)
+                setSalesData(res.data.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
 
     const navigate = useNavigate()
     return (
@@ -77,70 +107,22 @@ const MixersPage = () => {
                             width={'20%'}
                             marginRight={30}
                         />
-                        <Select placeholder="Цехи" width={'20%'}>
-                            {facilityUnit?.map((unit) => (
-                                <option key={unit.id} value={unit.id}>
-                                    {unit.facilityUnit}
-                                </option>
-                            ))}
+                        <Select
+                            variant="filled"
+                            placeholder="Тип цеха"
+                            name="bakingFacilityUnitId"
+                            onChange={handleChange}
+                        >
+                            {facilityUnits?.map((unit, index) => {
+                                return (
+                                    <option key={index} value={unit.id}>
+                                        {unit.facilityUnit}
+                                    </option>
+                                )
+                            })}
                         </Select>
                     </Box>
-                    <Box backgroundColor={'rgba(255, 255, 255, 1)'} width={'100%'} height={'100%'}>
-                        <TableContainer>
-                            <Table
-                                size="sm"
-                                variant="unstyled"
-                                overflow={'scroll'}
-                                style={{ borderCollapse: 'separate', borderSpacing: '0 10px' }}
-                            >
-                                <Thead>
-                                    <Tr>
-                                        <Th borderBottom={'1px solid black'} fontSize={'15px'}>
-                                            Реализаторы
-                                        </Th>
-                                        <Th sx={styles}>Заводской</Th>
-                                        <Th sx={styles}>Домашний</Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    <Tr>
-                                        <Td borderBottom={'1px solid black'}>Алишер 1</Td>
-                                        <Td sx={styles} isNumeric>
-                                            23
-                                        </Td>
-                                        <Td sx={styles} isNumeric>
-                                            25
-                                        </Td>
-                                    </Tr>
-                                    <Tr>
-                                        <Td borderBottom={'1px solid black'}>Алишер 2</Td>
-                                        <Td sx={styles} isNumeric>
-                                            50
-                                        </Td>
-                                        <Td sx={styles} isNumeric>
-                                            30
-                                        </Td>
-                                    </Tr>
-                                    <Tr>
-                                        <Td borderBottom={'1px solid black'}>Алишер 3</Td>
-                                        <Td sx={styles} isNumeric>
-                                            10
-                                        </Td>
-                                        <Td sx={styles} isNumeric>
-                                            44
-                                        </Td>
-                                    </Tr>
-                                </Tbody>
-                                <Tfoot>
-                                    <Tr>
-                                        <Th>Итого</Th>
-                                        <Th></Th>
-                                        <Th isNumeric></Th>
-                                    </Tr>
-                                </Tfoot>
-                            </Table>
-                        </TableContainer>
-                    </Box>
+                    <TableData data={getSalesData.filter((sale) => sale.done === 1)} />
                 </Box>
             </Box>
         </>

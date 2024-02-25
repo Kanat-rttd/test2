@@ -24,3 +24,8 @@ export const setDoneStatus = async (id: number) => {
     const response = await $host.put(`sales/status/${id}`)
     return response
 }
+
+export const getByFacilityUnit = async (data: { facilityUnitId: string }) => {
+    const response = await $host.post('sales/status/test', data)
+    return response
+}

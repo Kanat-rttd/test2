@@ -83,41 +83,13 @@ const ProcessingPage = () => {
                 </Box>
                 <Box width={'100%'} height={'100%'} p={5}>
                     <Box>
-                        {/* <Button onClick={onOpen}>Добавить заказ</Button>
-                        <RequestAddModal isOpen={isOpen} onClose={onClose} /> */}
                         <Input type="Date" />
                     </Box>
-                    {/* <AccordionClients
-                        data={data.filter((order) => Boolean(order.done) === false)}
-                        handleChangeStatus={handleChangeStatus}
-                    /> */}
                     <AccordionClients
                         data={getSalesData.filter((sale) => sale.done === 0)}
                         handleChangeStatus={handleChangeStatus}
                     />
                 </Box>
-
-                {/* <Tabs position="relative" variant="variant">
-                    <TabList display={'flex'} justifyContent={'space-between'}>
-                        <Box display={'flex'}>
-                            <Tab>Заказы {orderCount}</Tab>
-                            <Tab>Готово {doneOrderCount}</Tab>
-                        </Box>
-                        
-                    </TabList>
-
-                    <TabIndicator mt="-1.5px" height="2px" bg="blue.500" borderRadius="1px" />
-                    <TabPanels>
-                        <TabPanel> */}
-
-                {/* </TabPanel>
-                        <TabPanel>
-                            <TableData
-                                data={data.filter((order) => Boolean(order.done) === true)}
-                            />
-                        </TabPanel>
-                    </TabPanels>
-                </Tabs> */}
             </Box>
         </>
     )
