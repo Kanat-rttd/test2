@@ -13,52 +13,88 @@ import {
     Select,
 } from '@chakra-ui/react'
 import ProductAddModal, { Product } from '../components/ProductAddModal'
-import { useState } from 'react'
-// import { getAllProducts, deleteProduct } from '../../../utils/services/product.service'
-// import { ProductList } from '../../../utils/types/types'
-import { EditIcon } from '@chakra-ui/icons'
+import { useState, useEffect } from 'react'
+import {
+    getAllProducts,
+    deleteProduct,
+    findByFilters,
+} from '../../../utils/services/product.service'
+import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Drawler'
 import { useNavigate } from 'react-router-dom'
+import Dialog from '@/components/Dialog'
 import { ADMIN_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
+
+interface ProductList {
+    id: number
+    name: string
+    price: number
+    costPrice: number
+    status: string
+    bakingFacilityUnit: {
+        id: number
+        facilityUnit: string
+    }
+}
 
 const AdminPanel = () => {
     const navigate = useNavigate()
     const { onOpen, isOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Product>()
-    // const [data, setData] = useState<ProductList[]>([])
+    const [data, setData] = useState<ProductList[]>([])
+    const [filters, setFilters] = useState({ name: '', bakingFacilityUnitId: '', status: '' })
+    const [dialog, setDialog] = useState({
+        isOpen: false,
+        onClose: () => setDialog({ ...dialog, isOpen: false }),
+    })
 
-    // const handleProductClose = () => {
-    //     closeProductModal()
-    //     setSelectedData(undefined)
-    // }
+    useEffect(() => {
+        getAllProducts().then((responseData) => {
+            setData(responseData)
+            console.log(responseData)
+        })
+    }, [])
 
-    // const handleFacilityClose = () => {
-    //     closeFacilityModal()
-    // }
+    const handleAddProduct = () => {
+        getAllProducts().then((responseData) => {
+            setData(responseData)
+        })
+    }
 
-    // useEffect(() => {
-    //     getAllProducts().then((responseData) => {
-    //         setData(responseData)
-    //         console.log(responseData)
-    //     })
-    // }, [])
+    const delProduct = (selectedData: Product | undefined) => {
+        if (selectedData) {
+            // console.log(data)
+            deleteProduct(selectedData.id).then((res) => {
+                console.log(res)
+            })
+        } else {
+            console.error('No product data available to delete.')
+        }
+    }
 
-    // const delProduct = (data: ProductList) => {
-    //     deleteProduct(data.id).then((res) => {
-    //         console.log(res)
-    //     })
-    // }
+    const handleClose = () => {
+        setSelectedData(undefined)
+        onClose()
+    }
 
-    const data = [
-        {
-            id: 1,
-            name: 'Итальяснкий',
-            bakerType: 'Бетонный',
-            status: 'Активен',
-            price: 100,
-            costPrice: 50,
-        },
-    ]
+    useEffect(() => {
+        applyFilters()
+    }, [filters])
+
+    const applyFilters = async () => {
+        findByFilters(filters).then((res) => {
+            console.log(res)
+            setData(res.data.data)
+        })
+    }
+
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = event.target
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            [name]: value,
+        }))
+    }
 
     return (
         <>
@@ -85,15 +121,30 @@ const AdminPanel = () => {
             <Box display="flex" flexDirection="column" height="100vh" p={5}>
                 <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        <Select placeholder="Имя" width={'fit-content'}>
-                            <option value="Наименование">Итальянский</option>
+                        <Select
+                            placeholder="Имя"
+                            width={'fit-content'}
+                            name="name"
+                            onChange={handleSelectChange}
+                        >
+                            <option value="Наименование">Домашний</option>
                         </Select>
-                        <Select placeholder="Цех" width={'fit-content'}>
+                        <Select
+                            placeholder="Цех"
+                            width={'fit-content'}
+                            name="bakingFacilityUnitId"
+                            onChange={handleSelectChange}
+                        >
                             <option value="Батонный">Батонный</option>
                         </Select>
-                        <Select placeholder="Статус" width={'fit-content'}>
-                            <option value="Активен">Активен</option>
-                            <option value="Приостановлен">Приостановлен</option>
+                        <Select
+                            placeholder="Статус"
+                            width={'fit-content'}
+                            name="status"
+                            onChange={handleSelectChange}
+                        >
+                            <option value="1">Активен</option>
+                            <option value="0">Приостановлен</option>
                         </Select>
                     </Box>
 
@@ -120,7 +171,7 @@ const AdminPanel = () => {
                                     <Tr key={index}>
                                         <Td>{product.id}</Td>
                                         <Td>{product.name}</Td>
-                                        <Td>{product.bakerType}</Td>
+                                        <Td>{product.bakingFacilityUnit.facilityUnit}</Td>
                                         <Td>{product.status}</Td>
                                         <Td>{product.price}</Td>
                                         <Td>{product.costPrice}</Td>
@@ -133,6 +184,18 @@ const AdminPanel = () => {
                                                     onOpen()
                                                 }}
                                             />
+                                            <DeleteIcon
+                                                boxSize={'1.5em'}
+                                                color={'red'}
+                                                cursor={'pointer'}
+                                                onClick={() => {
+                                                    setSelectedData(product)
+                                                    setDialog({
+                                                        ...dialog,
+                                                        isOpen: true,
+                                                    })
+                                                }}
+                                            />
                                         </Td>
                                     </Tr>
                                 )
@@ -140,7 +203,24 @@ const AdminPanel = () => {
                         </Tbody>
                     </Table>
                 </TableContainer>
-                <ProductAddModal data={selectedData} isOpen={isOpen} onClose={onClose} />
+                <ProductAddModal
+                    data={selectedData}
+                    isOpen={isOpen}
+                    onClose={handleClose}
+                    onAddProduct={handleAddProduct}
+                />
+                <Dialog
+                    isOpen={dialog.isOpen}
+                    onOpen={onOpen}
+                    onClose={dialog.onClose}
+                    header="Удалить"
+                    body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                    actionBtn={() => {
+                        onClose()
+                        delProduct(selectedData)
+                    }}
+                    actionText="Удалить"
+                />
             </Box>
         </>
     )

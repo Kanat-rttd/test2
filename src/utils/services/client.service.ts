@@ -5,17 +5,43 @@ export const getAllClients = async () => {
     return data
 }
 
-export const createClient = async (data: { name: string; email: string }) => {
+export const createClient = async (data: {
+    name: string
+    surname: string
+    contact: string
+    telegrammId: string
+    status: string
+    password: string
+}) => {
     const response = await $host.post('client', data)
     return response
 }
 
-export const updateClient = async (id: number, data: { name: string; email: string }) => {
+export const updateClient = async (
+    id: number,
+    data: {
+        name: string
+        surname: string
+        contact: string
+        telegrammId: string
+        status: string
+        password: string
+    },
+) => {
     const response = await $host.put(`client/${id}`, data)
     return response
 }
 
-export const deleteClient = async (id: number) => {
-    const response = await $host.delete(`client/${id}`)
+export const findByFilters = async (data: {
+    name: string
+    telegrammId: string
+    status: string
+}) => {
+    const response = await $host.post('client/find', data)
     return response
 }
+
+// export const deleteClient = async (id: number) => {
+//     const response = await $host.delete(`client/${id}`)
+//     return response
+// }

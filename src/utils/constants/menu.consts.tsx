@@ -3,7 +3,6 @@ import {
     MAIN_ROUTE,
     NOTFOUND_ROUTE,
     REQUEST_ROUTE,
-    ADMIN_CLIENTS_ROUTE,
     ADMIN_PRODUCTS_ROUTE,
     ADMIN_USERS_ROUTE,
     REQUEST_PROCESSING_ROUTE,
@@ -67,12 +66,6 @@ export const menuItems: MenuItem[] = [
 ]
 
 export const subMenuItems: MenuItem[] = [
-    {
-        route: ADMIN_CLIENTS_ROUTE,
-        label: 'Клиенты',
-        path: ADMIN_ROUTE,
-        allowedClasses: ['Admin'],
-    },
     {
         route: ADMIN_PRODUCTS_ROUTE,
         label: 'Продукты',

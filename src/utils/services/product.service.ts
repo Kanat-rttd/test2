@@ -5,14 +5,35 @@ export const getAllProducts = async () => {
     return data
 }
 
-export const createProduct = async (data: { name: string; bakingFacilityUnitId: string }) => {
+export const createProduct = async (data: {
+    name: string
+    bakingFacilityUnitId?: string
+    price: number
+    costPrice: number
+    status: string
+}) => {
     const response = await $host.post('product', data)
+    return response
+}
+
+export const findByFilters = async (data: {
+    name: string
+    bakingFacilityUnitId: string
+    status: string
+}) => {
+    const response = await $host.post('product/find', data)
     return response
 }
 
 export const updateProduct = async (
     id: number,
-    data: { name: string; bakingFacilityUnitId: string },
+    data: {
+        name: string
+        bakingFacilityUnitId?: string
+        price: number
+        costPrice: number
+        status: string
+    },
 ) => {
     const response = await $host.put(`product/${id}`, data)
     return response

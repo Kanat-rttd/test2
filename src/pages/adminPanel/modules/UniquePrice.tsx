@@ -109,9 +109,9 @@ const AdminPanel = () => {
                             <Text>Время изменения</Text>
                         </Box>
                         <Accordion>
-                            {data.map((item) => {
+                            {data.map((item, index) => {
                                 return (
-                                    <AccordionItem>
+                                    <AccordionItem key={index}>
                                         <h2>
                                             <AccordionButton background={'#F5F5F5'}>
                                                 <Box

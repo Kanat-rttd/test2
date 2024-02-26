@@ -18,23 +18,47 @@ import {
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import ReleaseAddModal, { Releaser } from '../components/ReleaseAddModal'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { getAllClients, findByFilters } from '@/utils/services/client.service'
 
 const AdminPanel = () => {
     const navigate = useNavigate()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Releaser | undefined>(undefined)
+    const [data, setData] = useState<Releaser[]>([])
+    const [filters, setFilters] = useState({ name: '', telegrammId: '', status: '' })
 
-    const data = [
-        {
-            id: 1,
-            name: 'Алишер',
-            surname: '',
-            phone: '+77007007070',
-            telegram: '-0101010101',
-            status: 'Активен',
-        },
-    ]
+    useEffect(() => {
+        getAllClients().then((responseData) => {
+            setData(responseData)
+            console.log(responseData)
+        })
+    }, [])
+
+    useEffect(() => {
+        applyFilters()
+    }, [filters])
+
+    const onCloseModal = () => {
+        setSelectedData(undefined)
+        onClose()
+    }
+
+    const applyFilters = async () => {
+        findByFilters(filters).then((res) => {
+            console.log(res)
+            setData(res.data.data)
+        })
+    }
+
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = event.target
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            [name]: value,
+        }))
+    }
+
     return (
         <>
             <Box>
@@ -68,15 +92,30 @@ const AdminPanel = () => {
                 <Box width={'100%'} height={'100%'} p={5}>
                     <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                            <Select placeholder="Имя" width={'fit-content'}>
+                            <Select
+                                name="name"
+                                placeholder="Имя"
+                                width={'fit-content'}
+                                onChange={handleSelectChange}
+                            >
                                 <option value="Алишер">Алишер</option>
                             </Select>
-                            <Select placeholder="Телеграм ID" width={'fit-content'}>
+                            <Select
+                                name="telegrammId"
+                                placeholder="Телеграм ID"
+                                width={'fit-content'}
+                                onChange={handleSelectChange}
+                            >
                                 <option value="-0101010101">-0101010101</option>
                             </Select>
-                            <Select placeholder="Статус" width={'fit-content'}>
-                                <option value="Активен">Активен</option>
-                                <option value="Приостановлен">Приостановлен</option>
+                            <Select
+                                name="status"
+                                placeholder="Статус"
+                                width={'fit-content'}
+                                onChange={handleSelectChange}
+                            >
+                                <option value="1">Активен</option>
+                                <option value="0">Приостановлен</option>
                             </Select>
                         </Box>
 
@@ -105,8 +144,8 @@ const AdminPanel = () => {
                                                 <Td>{user.id}</Td>
                                                 <Td>{user.name}</Td>
                                                 <Td>{user.surname}</Td>
-                                                <Td>{user.phone}</Td>
-                                                <Td>{user.telegram}</Td>
+                                                <Td>{user.contact}</Td>
+                                                <Td>{user.telegrammId}</Td>
                                                 <Td>{user.status}</Td>
                                                 <Td sx={{ width: '5%' }}>
                                                     <IconButton
@@ -131,7 +170,7 @@ const AdminPanel = () => {
                     </Box>
                 </Box>
             </Box>
-            <ReleaseAddModal onClose={onClose} isOpen={isOpen} data={selectedData} />
+            <ReleaseAddModal onClose={onCloseModal} isOpen={isOpen} data={selectedData} />
         </>
     )
 }

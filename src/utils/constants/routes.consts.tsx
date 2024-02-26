@@ -18,7 +18,6 @@ export const RELEASE_REFUND_ROUTE = '/release/refund'
 
 //Admin routes
 export const ADMIN_ROUTE = '/admin/:page'
-export const ADMIN_CLIENTS_ROUTE = '/admin/clients'
 export const ADMIN_PRODUCTS_ROUTE = '/admin/products'
 export const ADMIN_USERS_ROUTE = '/admin/users'
 export const ADMIN_RELEASE_ROUTE = '/admin/releases'

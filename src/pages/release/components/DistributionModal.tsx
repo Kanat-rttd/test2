@@ -11,6 +11,7 @@ import {
     ModalHeader,
     ModalOverlay,
     Select,
+    Text,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 
@@ -36,17 +37,45 @@ const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose }
         },
     ]
 
-    const [selectedBreads, setSelectedBreads] = useState<string[]>([])
+    const [recipient, setRecipient] = useState<string>('')
+    const [selectedBreads, setSelectedBreads] = useState<{ name: string; quantity: number }[]>([])
+
+    const handleRecipientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setRecipient(event.target.value)
+    }
 
     const handleBreadSelection = (bread: string) => {
-        if (selectedBreads.includes(bread)) {
-            setSelectedBreads(selectedBreads.filter((selected) => selected !== bread))
+        if (selectedBreads.find((item) => item.name === bread)) {
+            setSelectedBreads(
+                selectedBreads.map((item) =>
+                    item.name === bread ? { ...item, quantity: item.quantity + 1 } : item,
+                ),
+            )
         } else {
-            setSelectedBreads([...selectedBreads, bread])
+            setSelectedBreads([...selectedBreads, { name: bread, quantity: 1 }])
         }
     }
 
-    console.log(selectedBreads)
+    const handleQuantityChange = (
+        event: React.ChangeEvent<HTMLInputElement>,
+        breadName: string,
+    ) => {
+        const quantity = parseInt(event.target.value)
+        setSelectedBreads(
+            selectedBreads.map((bread) =>
+                bread.name === breadName ? { ...bread, quantity } : bread,
+            ),
+        )
+    }
+
+    const handleConfirm = () => {
+        const distributionData = {
+            userId: recipient,
+            Products: selectedBreads.map(({ name, quantity }) => ({ name, Количество: quantity })),
+        }
+        console.log(distributionData)
+        onClose()
+    }
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -55,7 +84,12 @@ const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose }
                 <ModalHeader>Выдача продукции</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody display={'flex'} gap={'10px'} flexDirection={'column'}>
-                    <Select placeholder="Выберите получаетля" width={'100%'}>
+                    <Select
+                        placeholder="Выберите получателя"
+                        width={'100%'}
+                        onChange={handleRecipientChange}
+                        value={recipient}
+                    >
                         <option value="Алишер">Алишер</option>
                         <option value="Алишер 1">Алишер 1</option>
                         <option value="Алишер 2">Алишер 2</option>
@@ -75,7 +109,9 @@ const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose }
                         {data.map((bread) => {
                             return (
                                 <Checkbox
-                                    checked={selectedBreads.includes(bread.bread)}
+                                    checked={selectedBreads.some(
+                                        (item) => item.name === bread.bread,
+                                    )}
                                     onChange={() => handleBreadSelection(bread.bread)}
                                     key={bread.bread}
                                 >
@@ -86,15 +122,19 @@ const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose }
                     </Box>
 
                     <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
-                        {selectedBreads &&
-                            selectedBreads.map((bread: string) => {
-                                return (
-                                    <Box display={'flex'} gap={'10px'}>
-                                        <Input placeholder={bread} />
-                                        <Input placeholder="Кол-во" />
-                                    </Box>
-                                )
-                            })}
+                        {selectedBreads.map(({ name, quantity }) => {
+                            return (
+                                <Box display={'flex'} gap={'10px'} key={name}>
+                                    <Text>{name}</Text>
+                                    <Input
+                                        type="number"
+                                        placeholder="Кол-во"
+                                        value={quantity}
+                                        onChange={(e) => handleQuantityChange(e, name)}
+                                    />
+                                </Box>
+                            )
+                        })}
                     </Box>
                 </ModalBody>
 
@@ -102,7 +142,9 @@ const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose }
                     <Button mr={3} onClick={onClose} colorScheme={'red'}>
                         Отмена
                     </Button>
-                    <Button colorScheme={'purple'}>Подтвердить</Button>
+                    <Button colorScheme={'purple'} onClick={handleConfirm}>
+                        Подтвердить
+                    </Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

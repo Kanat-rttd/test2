@@ -9,72 +9,101 @@ import {
     ModalOverlay,
     Button,
     Input,
+    Select,
 } from '@chakra-ui/react'
 
-// import { ChangeEvent, useEffect, useState } from 'react'
-// import { createProduct, updateProduct } from '../../../utils/services/product.service'
-// import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
+import { createProduct, updateProduct } from '@/utils/services/product.service'
+import { ChangeEvent, useEffect, useState } from 'react'
+import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
+
+interface FacilityUnit {
+    id: number
+    facilityUnit: string
+}
 
 export interface Product {
     id: number
     name: string
-    bakerType: string
-    status: string
     price: number
     costPrice: number
+    status: string
+    bakingFacilityUnit: {
+        id: number
+        facilityUnit: string
+    }
 }
 
 interface ProductAddModalProps {
     data: Product | undefined
     isOpen: boolean
     onClose: () => void
+    onAddProduct: () => void
 }
 
-const ProductAddModal = ({ data, isOpen, onClose }: ProductAddModalProps) => {
-    // const [formData, setFormData] = useState({ name: '', bakingFacilityUnitId: '' })
-    // const [facilityUnits, setFacilityUnits] = useState<FacilityUnit[] | undefined>()
-    // useEffect(() => {
-    //     if (data) {
-    //         setFormData({
-    //             name: data.name,
-    //             bakingFacilityUnitId: data.bakeryType || '',
-    //         })
-    //     } else {
-    //         setFormData({ name: '', bakingFacilityUnitId: '' })
-    //     }
-    // }, [data])
+const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModalProps) => {
+    const [formData, setFormData] = useState<Product>({
+        id: 0,
+        name: '',
+        bakingFacilityUnit: {
+            id: 0,
+            facilityUnit: '',
+        },
+        price: 0,
+        costPrice: 0,
+        status: '',
+    })
 
-    // useEffect(() => {
-    //     getAllBakingFacilityUnits().then((responseData) => {
-    //         setFacilityUnits(responseData)
-    //         console.log(responseData)
-    //     })
-    // }, [])
+    const [facilityUnits, setFacilityUnits] = useState<FacilityUnit[] | undefined>()
 
-    // const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    //     console.log(formData)
-    //     const { name, value } = target
-    //     setFormData({
-    //         ...formData,
-    //         [name]: value,
-    //     })
-    // }
+    useEffect(() => {
+        if (data) {
+            setFormData(data)
+        } else {
+            setFormData({
+                id: 0,
+                name: '',
+                bakingFacilityUnit: {
+                    id: 0,
+                    facilityUnit: '',
+                },
+                price: 0,
+                costPrice: 0,
+                status: '',
+            })
+        }
+    }, [data])
 
-    // const addProduct = () => {
-    //     createProduct(formData).then((res) => {
-    //         console.log(res)
-    //     })
-    //     onClose()
-    // }
+    useEffect(() => {
+        getAllBakingFacilityUnits().then((responseData) => {
+            setFacilityUnits(responseData)
+        })
+    }, [])
 
-    // const updProduct = () => {
-    //     if (data) {
-    //         updateProduct(data.id, formData).then((res) => {
-    //             console.log(res)
-    //         })
-    //     }
-    //     onClose()
-    // }
+    const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, value } = target
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }))
+    }
+
+    const addProduct = () => {
+        console.log(formData)
+        createProduct(formData).then((res) => {
+            console.log(res)
+            onAddProduct()
+        })
+        onClose()
+    }
+
+    const updProduct = () => {
+        console.log('upd')
+        updateProduct(formData.id, formData).then((res) => {
+            console.log(res)
+            onAddProduct()
+        })
+        onClose()
+    }
 
     return (
         <>
@@ -87,42 +116,51 @@ const ProductAddModal = ({ data, isOpen, onClose }: ProductAddModalProps) => {
                         <Stack spacing={4}>
                             <Input
                                 name="name"
-                                // onChange={handleChange}
+                                onChange={handleChange}
                                 placeholder="Наименование"
-                                value={data?.name ?? ''}
+                                value={formData.name}
                             />
-                            <Input
-                                name="bakerType"
-                                // onChange={handleChange}
+                            <Select
+                                name="bakingFacilityUnitId"
+                                onChange={handleChange}
                                 placeholder="Цех"
-                                value={data?.bakerType ?? ''}
-                            />
+                                value={formData.bakingFacilityUnit.id}
+                            >
+                                {facilityUnits?.map((unit, index) => (
+                                    <option key={index} value={unit.id}>
+                                        {unit.facilityUnit}
+                                    </option>
+                                ))}
+                            </Select>
                             <Input
+                                type="number"
                                 name="price"
-                                // onChange={handleChange}
+                                onChange={handleChange}
                                 placeholder="Цена"
-                                value={data?.price ?? ''}
+                                value={formData.price}
                             />
                             <Input
+                                type="number"
                                 name="costPrice"
-                                // onChange={handleChange}
+                                onChange={handleChange}
                                 placeholder="Себестоимость"
-                                value={data?.costPrice ?? ''}
+                                value={formData.costPrice}
                             />
-                            <Input
+                            <Select
                                 name="status"
-                                // onChange={handleChange}
+                                onChange={handleChange}
                                 placeholder="Статус"
-                                value={data?.status ?? ''}
-                            />
+                                value={formData.status}
+                            >
+                                <option value="">Статус</option>
+                                <option value={'0'}>Неактивный</option>
+                                <option value={'1'}>Активный</option>
+                            </Select>
                         </Stack>
                     </ModalBody>
                     <ModalFooter gap={3}>
                         <Button onClick={onClose}>Закрыть</Button>
-                        <Button
-
-                        // onClick={data ? updProduct : addProduct}
-                        >
+                        <Button onClick={data ? updProduct : addProduct}>
                             {data ? 'Редактировать' : 'Добавить'} продукт
                         </Button>
                     </ModalFooter>
