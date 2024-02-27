@@ -71,7 +71,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose }
     const handleConfirm = () => {
         const distributionData = {
             userId: recipient,
-            Products: selectedBreads.map(({ name, quantity }) => ({ name, Количество: quantity })),
+            products: selectedBreads.map(({ name, quantity }) => ({ name, Количество: quantity })),
         }
         console.log(distributionData)
         onClose()
