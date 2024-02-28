@@ -7,6 +7,7 @@ import {
     SALES_ROUTE,
     MIXERS_ROUTE,
     RELEASE_ROUTE,
+    FINANCE_ROUTE,
 } from './constants/routes.consts'
 
 import NotFound from '../pages/404'
@@ -18,6 +19,7 @@ import Login from '../pages/Login'
 import Loading from '../components/Loading'
 import MixersPage from '@/pages/mixers'
 import ReleasePage from '@/pages/release'
+import FinancePage from '@/pages/finance'
 
 export const publicRoutes = [
     {
@@ -54,6 +56,11 @@ export const publicRoutes = [
     {
         path: RELEASE_ROUTE,
         Component: ReleasePage,
+        Loader: Loading,
+    },
+    {
+        path: FINANCE_ROUTE,
+        Component: FinancePage,
         Loader: Loading,
     },
 ]

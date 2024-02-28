@@ -18,6 +18,8 @@ import {
     RELEASE_REFUND_ROUTE,
     ADMIN_RELEASE_ROUTE,
     ADMIN_UNIQUEPRICE_ROUTE,
+    FINANCE_ROUTE,
+    FINANCE_INPUT_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -62,6 +64,11 @@ export const menuItems: MenuItem[] = [
         route: RELEASE_ROUTE,
         label: 'Выдача',
         allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: FINANCE_ROUTE,
+        label: 'Финансы',
+        allowedClasses: ['Admin'],
     },
 ]
 
@@ -136,6 +143,13 @@ export const subMenuItems: MenuItem[] = [
         route: RELEASE_REFUND_ROUTE,
         label: 'Возврат',
         path: RELEASE_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+
+    {
+        route: FINANCE_INPUT_ROUTE,
+        label: 'Ввод',
+        path: FINANCE_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
 ]
