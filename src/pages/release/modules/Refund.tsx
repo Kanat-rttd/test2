@@ -74,16 +74,16 @@ const Refund = () => {
                         </TabList>
                         <TabPanels>
                             <TabPanel>
-                                <ListTable />
+                                <ListTable status="1" />
                             </TabPanel>
                             <TabPanel>
-                                <PivotTable />
+                                <PivotTable status="1" />
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
                 </Box>
             </Box>
-            <DistributionModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+            <DistributionModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} status="1" />
         </Box>
     )
 }

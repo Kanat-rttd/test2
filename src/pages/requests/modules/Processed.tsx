@@ -13,7 +13,7 @@ interface OrderArray {
     userId: string
     totalPrice: string
     createdAt: Date
-    done: string
+    done: number
     orderDetails: [
         {
             orderDetailsId: string
@@ -98,13 +98,14 @@ const ProcessedPage = () => {
                     <Avatar size={'md'} bg="teal.500" />
                 </Box>
                 <Box width={'100%'} height={'100%'} p={5}>
-                    <Box>
-                        <Input type="Date" />
+                    <Box display={'flex'}>
+                        <Input type="Date" width={'20%'} marginRight={10} />
                         <Select
                             variant="filled"
                             placeholder="Тип цеха"
                             name="bakingFacilityUnitId"
                             onChange={handleChange}
+                            width={'20%'}
                         >
                             {facilityUnits?.map((unit, index) => {
                                 return (

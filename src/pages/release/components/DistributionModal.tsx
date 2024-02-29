@@ -13,46 +13,68 @@ import {
     Select,
     Text,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+import { getBreadNames } from '@/utils/services/product.service'
+import { getAllClients } from '@/utils/services/client.service'
+import { createDispatch } from '@/utils/services/dispatch.service'
 
 interface DistributionModalProps {
     isOpen: boolean
     onOpen: () => void
     onClose: () => void
+    status: string
 }
 
-const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose }) => {
-    const data = [
-        {
-            bread: 'Итальяснкий',
-        },
-        {
-            bread: 'Заводской',
-        },
-        {
-            bread: 'Батон',
-        },
-        {
-            bread: 'Городской',
-        },
-    ]
+interface Client {
+    id: number
+    name: string
+}
+
+interface BreadNames {
+    id: string
+    bread: string
+}
+
+const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose, status }) => {
+    const [breadNames, setBreadNames] = useState<BreadNames[]>([])
+    const [clientsData, setClientsData] = useState<Client[]>([])
+
+    useEffect(() => {
+        getBreadNames().then((responseData) => {
+            setBreadNames(responseData)
+            console.log(responseData)
+        })
+    }, [])
+
+    useEffect(() => {
+        getAllClients().then((responseData) => {
+            setClientsData(responseData)
+            console.log(responseData)
+        })
+    }, [])
 
     const [recipient, setRecipient] = useState<string>('')
-    const [selectedBreads, setSelectedBreads] = useState<{ name: string; quantity: number }[]>([])
+    const [selectedBreads, setSelectedBreads] = useState<
+        { id: string; name: string; quantity: number }[]
+    >([])
 
     const handleRecipientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setRecipient(event.target.value)
     }
 
-    const handleBreadSelection = (bread: string) => {
+    const handleBreadSelection = (bread: string, id: string) => {
+        console.log('breadSelection')
         if (selectedBreads.find((item) => item.name === bread)) {
+            console.log('if')
             setSelectedBreads(
                 selectedBreads.map((item) =>
                     item.name === bread ? { ...item, quantity: item.quantity + 1 } : item,
                 ),
             )
         } else {
-            setSelectedBreads([...selectedBreads, { name: bread, quantity: 1 }])
+            console.log('else')
+            setSelectedBreads([...selectedBreads, { name: bread, id: id, quantity: 1 }])
         }
     }
 
@@ -71,9 +93,21 @@ const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose }
     const handleConfirm = () => {
         const distributionData = {
             userId: recipient,
-            products: selectedBreads.map(({ name, quantity }) => ({ name, Количество: quantity })),
+            products: selectedBreads.map(({ name, id, quantity }) => ({
+                name,
+                id,
+                quantity: quantity,
+            })),
+            dispatch: status,
         }
-        console.log(distributionData)
+        createDispatch(distributionData)
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((error) => {
+                console.error('Error creating sale:', error)
+            })
+
         onClose()
     }
 
@@ -81,7 +115,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose }
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Выдача продукции</ModalHeader>
+                <ModalHeader>{status == '0' ? 'Выдача' : 'Возврат'} продукции</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody display={'flex'} gap={'10px'} flexDirection={'column'}>
                     <Select
@@ -90,12 +124,14 @@ const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose }
                         onChange={handleRecipientChange}
                         value={recipient}
                     >
-                        <option value="Алишер">Алишер</option>
-                        <option value="Алишер 1">Алишер 1</option>
-                        <option value="Алишер 2">Алишер 2</option>
+                        {clientsData?.map((client, index) => {
+                            return (
+                                <option key={index} value={client.id}>
+                                    {client.name}
+                                </option>
+                            )
+                        })}
                     </Select>
-
-                    <Select placeholder="Выберите хлеб" width={'100%'} disabled></Select>
 
                     <Box
                         display={'grid'}
@@ -106,13 +142,13 @@ const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose }
                         borderRadius={'8px'}
                         marginTop={'5px'}
                     >
-                        {data.map((bread) => {
+                        {breadNames.map((bread) => {
                             return (
                                 <Checkbox
                                     checked={selectedBreads.some(
                                         (item) => item.name === bread.bread,
                                     )}
-                                    onChange={() => handleBreadSelection(bread.bread)}
+                                    onChange={() => handleBreadSelection(bread.bread, bread.id)}
                                     key={bread.bread}
                                 >
                                     {bread.bread}

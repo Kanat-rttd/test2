@@ -17,7 +17,7 @@ interface OrderArray {
     userId: string
     totalPrice: string
     createdAt: Date
-    done: string
+    done: number
     orderDetails: [
         {
             orderDetailsId: string

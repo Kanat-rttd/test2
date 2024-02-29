@@ -15,15 +15,40 @@ import {
     InputRightAddon,
     Select,
 } from '@chakra-ui/react'
+import { getAllProducts } from '@/utils/services/product.service'
+import { useState, useEffect } from 'react'
+import { getAllClients } from '@/utils/services/client.service'
+import { createIndividualPrice } from '@/utils/services/individualPrices.service'
+
+interface Client {
+    id: string
+    name: string
+    surname: string
+    contact: string
+    telegrammId: string
+    status: string
+}
+
+interface Product {
+    id: string
+    name: string
+    price: string
+    costPrice: string
+    status: string
+    bakingFacilityUnit: {
+        facilityUnit: string
+        id: string
+    }
+}
 
 export interface UniquePrice {
-    release: string
-    date: string
+    clientId: string
+    clientName: string
     detail: {
-        id: number
-        bread: string
+        id: string
+        name: string
         price: string
-        date: string
+        date: Date
     }[]
 }
 
@@ -35,6 +60,48 @@ interface UniquePriceAddModal {
 }
 
 const UniquePriceAddModal = ({ data, selectedRelease, isOpen, onClose }: UniquePriceAddModal) => {
+    const [products, setProducts] = useState<Product[]>([])
+    const [selectedProduct, setSelectedProduct] = useState('')
+    const [clientsData, setClientsData] = useState<Client[]>([])
+    const [price, setPrice] = useState('')
+
+    useEffect(() => {
+        getAllProducts().then((responseData) => {
+            setProducts(responseData)
+            console.log(responseData)
+        })
+    }, [])
+
+    useEffect(() => {
+        getAllClients().then((responseData) => {
+            setClientsData(responseData)
+            console.log(responseData)
+        })
+    }, [])
+
+    const handleAddOrUpdate = () => {
+        const newData = {
+            clientId: clientsData?.find((client) => client.name == selectedRelease)?.id || '',
+            detail: [
+                {
+                    id: selectedProduct,
+                    name: products.find((product) => product.id == selectedProduct)?.name || '',
+                    price: price,
+                },
+            ],
+        }
+
+        createIndividualPrice(newData).then((res) => {
+            console.log(res)
+        })
+
+        onClose()
+    }
+
+    const handleCancel = () => {
+        onClose()
+    }
+
     return (
         <>
             <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -49,11 +116,11 @@ const UniquePriceAddModal = ({ data, selectedRelease, isOpen, onClose }: UniqueP
                                     <>
                                         <Box display={'flex'} gap={'10px'}>
                                             <Text>Реализатор:</Text>
-                                            <Text fontWeight={600}>{data?.release}</Text>
+                                            <Text fontWeight={600}>{data?.clientName}</Text>
                                         </Box>
                                         <Box display={'flex'} gap={'10px'}>
                                             <Text>Продукт: </Text>
-                                            <Text fontWeight={600}>{data.detail[0].bread}</Text>
+                                            <Text fontWeight={600}>{data.detail[0].name}</Text>
                                         </Box>
                                         <InputGroup>
                                             <Input type="number" placeholder="Цена" />
@@ -66,11 +133,25 @@ const UniquePriceAddModal = ({ data, selectedRelease, isOpen, onClose }: UniqueP
                                             <Text>Реализатор:</Text>
                                             <Text fontWeight={600}>{selectedRelease}</Text>
                                         </Box>
-                                        <Select placeholder="Продукт">
-                                            <option value={'Итальяснкий'}>Итальянский</option>
+                                        <Select
+                                            variant="filled"
+                                            placeholder="Продукт"
+                                            value={selectedProduct}
+                                            onChange={(e) => setSelectedProduct(e.target.value)}
+                                        >
+                                            {products?.map((product, index) => (
+                                                <option key={index} value={product.id}>
+                                                    {product.name}
+                                                </option>
+                                            ))}
                                         </Select>
                                         <InputGroup>
-                                            <Input type="number" placeholder="Цена" />
+                                            <Input
+                                                type="number"
+                                                placeholder="Цена"
+                                                value={price}
+                                                onChange={(e) => setPrice(e.target.value)}
+                                            />
                                             <InputRightAddon>₸</InputRightAddon>
                                         </InputGroup>
                                     </>
@@ -79,11 +160,12 @@ const UniquePriceAddModal = ({ data, selectedRelease, isOpen, onClose }: UniqueP
                         </Stack>
                     </ModalBody>
                     <ModalFooter gap={3}>
-                        <Button onClick={onClose} colorScheme="red">
+                        <Button colorScheme="red" onClick={handleCancel}>
                             Закрыть
                         </Button>
                         <Button
                             colorScheme="purple"
+                            onClick={handleAddOrUpdate}
                             // onClick={data ? updUser : addUser}
                         >
                             {data ? 'Изменить' : 'Добавить'}

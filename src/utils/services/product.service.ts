@@ -5,6 +5,11 @@ export const getAllProducts = async () => {
     return data
 }
 
+export const getBreadNames = async () => {
+    const { data } = await $host.get('product/bread')
+    return data
+}
+
 export const createProduct = async (data: {
     name: string
     bakingFacilityUnitId?: string

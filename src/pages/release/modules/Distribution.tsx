@@ -74,16 +74,16 @@ const Distribution = () => {
                         </TabList>
                         <TabPanels>
                             <TabPanel>
-                                <ListTable />
+                                <ListTable status="0" />
                             </TabPanel>
                             <TabPanel>
-                                <PivotTable />
+                                <PivotTable status="0" />
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
                 </Box>
             </Box>
-            <DistributionModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+            <DistributionModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} status="0" />
         </Box>
     )
 }

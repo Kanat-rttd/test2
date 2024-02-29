@@ -2,35 +2,57 @@ import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react'
 import EditModal from './EditModal'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { getAllDispatches } from '@/utils/services/dispatch.service'
+import dayjs from 'dayjs'
 
-const ListTable = () => {
+interface Dispatch {
+    id: number
+    clientId: number
+    createdAt: Date
+    dispatch: string
+    goodsDispatchDetails: [
+        {
+            id: number
+            productId: number
+            quantity: number
+            product: {
+                name: string
+                price: number
+                bakingFacilityUnit: {
+                    id: number
+                    facilityUnit: string
+                }
+            }
+        },
+    ]
+    client: {
+        id: number
+        name: string
+    }
+}
+
+interface ListTableProps {
+    status: string
+}
+
+const ListTable: React.FC<ListTableProps> = ({ status }) => {
+    console.log(status)
+    console.log(status)
+    const [data, setData] = useState<Dispatch[]>([])
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    useEffect(() => {
+        getAllDispatches().then((res) => {
+            console.log(res.data)
+            setData(res.data.filter((row: Dispatch) => row.dispatch == status))
+        })
+    }, [])
 
     const [modal, setModal] = useState({
         isOpen: false,
         onClose: () => setModal({ ...modal, isOpen: false }),
     })
-
-    const data = [
-        {
-            id: 1,
-            realisator: 'Алишер',
-            bread: 'Итальянский',
-            qty: '20',
-            date: '14:20 15.02.2024',
-            edit: (
-                <EditIcon
-                    boxSize={'1.5em'}
-                    cursor={'pointer'}
-                    onClick={() => setModal({ ...modal, isOpen: true })}
-                />
-            ),
-            delete: (
-                <DeleteIcon boxSize={'1.5em'} color={'red'} cursor={'pointer'} onClick={onOpen} />
-            ),
-        },
-    ]
 
     return (
         <>
@@ -47,17 +69,42 @@ const ListTable = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {data.map((row) => {
+                        {data?.map((row) => {
                             return (
                                 <Tr key={row.id}>
                                     <Td>{row.id}</Td>
-                                    <Td>{row.realisator}</Td>
-                                    <Td>{row.bread}</Td>
-                                    <Td>{row.qty}</Td>
-                                    <Td>{row.date}</Td>
-                                    <Td display={'flex'} gap={'10px'}>
-                                        {row.edit}
-                                        {row.delete}
+                                    <Td>{row.client.name}</Td>
+                                    <Td>
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            {row.goodsDispatchDetails.map((details, index) => (
+                                                <span key={index}>{details.product.name}</span>
+                                            ))}
+                                        </div>
+                                    </Td>
+                                    <Td>
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            {row.goodsDispatchDetails.map((details, index) => (
+                                                <span key={index}>{details.quantity}</span>
+                                            ))}
+                                        </div>
+                                    </Td>
+                                    <Td>{dayjs(row.createdAt).format('HH:MM DD.MM.YYYY')}</Td>
+                                    <Td style={{ display: 'flex', gap: '10px' }}>
+                                        {
+                                            <EditIcon
+                                                boxSize={'1.5em'}
+                                                cursor={'pointer'}
+                                                onClick={() => setModal({ ...modal, isOpen: true })}
+                                            />
+                                        }
+                                        {
+                                            <DeleteIcon
+                                                boxSize={'1.5em'}
+                                                color={'red'}
+                                                cursor={'pointer'}
+                                                onClick={onOpen}
+                                            />
+                                        }
                                     </Td>
                                 </Tr>
                             )
