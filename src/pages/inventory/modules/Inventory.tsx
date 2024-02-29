@@ -3,7 +3,7 @@ import { INVENTORY_DETAILS_ROUTE } from '@/utils/constants/routes.consts'
 import { Avatar, Box, Button, Input, Select, useDisclosure } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import InventoryTable from '../components/InventoryTable'
-import EditModal from '../components/Modal'
+import CorrectModal from '../components/Modal'
 
 const Inventory = () => {
     const navigate = useNavigate()
@@ -34,13 +34,20 @@ const Inventory = () => {
             <Box width={'100%'} height={'100%'} p={5}>
                 <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        <Input type="date" defaultValue={new Date().toISOString().split('T')[0]} />
-                        <Select placeholder="Место">
-                            <option value="Лепешечный">Улица</option>
-                            <option value="Булочный">Дом</option>
-                        </Select>
+                        {/*  */}
+                        {/* Это не фильтр по дате, а для удобства пользователей */}
+                        <Input
+                            type="date"
+                            disabled
+                            defaultValue={new Date().toISOString().split('T')[0]}
+                        />
+                        {/*  */}
                         <Select placeholder="Товар">
                             <option value="Лепешечный">Товар 1</option>
+                            <option value="Булочный">Дом</option>
+                        </Select>
+                        <Select placeholder="Место">
+                            <option value="Лепешечный">Улица</option>
                             <option value="Булочный">Дом</option>
                         </Select>
                     </Box>
@@ -54,7 +61,7 @@ const Inventory = () => {
                 </Box>
             </Box>
 
-            <EditModal isOpen={isOpen} onClose={onClose} />
+            <CorrectModal isOpen={isOpen} onClose={onClose} />
         </>
     )
 }

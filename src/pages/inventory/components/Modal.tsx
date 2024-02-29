@@ -29,7 +29,7 @@ type EditModalInputs = {
     comment: string
 }
 
-const EditModal = ({ isOpen, onClose }: EditModalProps) => {
+const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -128,4 +128,4 @@ const EditModal = ({ isOpen, onClose }: EditModalProps) => {
     )
 }
 
-export default EditModal
+export default CorrectModal

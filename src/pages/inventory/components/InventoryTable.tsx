@@ -1,7 +1,13 @@
-import { EditIcon } from '@chakra-ui/icons'
-import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer } from '@chakra-ui/react'
+import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer, Input } from '@chakra-ui/react'
+import { Dispatch, SetStateAction, useState } from 'react'
+
+type EditInput = {
+    rowId: number | null
+    value: number
+}
 
 const InventoryTable = () => {
+    const [showInput, setShowInput] = useState<EditInput>()
     const data = {
         table: [
             {
@@ -28,65 +34,98 @@ const InventoryTable = () => {
         divergence: 42,
     }
 
-    console.log(data)
-
     return (
-        <TableContainer>
-            <Table variant="simple">
-                <Thead>
-                    <Tr>
-                        <Th>№</Th>
-                        <Th>Товары</Th>
-                        <Th>Единица измерения</Th>
-                        <Th>Количество по учету</Th>
-                        <Th>Количество фактическое</Th>
-                        <Th>Расхождение</Th>
-                        <Th>Время изменения</Th>
-                        <Th>Действия</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    {data.table.map((item) => {
-                        return (
-                            <Tr key={item.id}>
-                                <Td>{item.id}</Td>
-                                <Td>{item.items}</Td>
-                                <Td>{item.units}</Td>
-                                <Td>{item.qtyRegister}</Td>
-                                <Td>{item.qtyFact}</Td>
-                                <Td>{item.divergence}</Td>
-                                <Td>{item.date}</Td>
-                                <Td>
-                                    <EditIcon />
-                                </Td>
-                            </Tr>
-                        )
-                    })}
-                </Tbody>
-                <Tfoot>
-                    <Tr>
-                        <Th fontSize={15} color={'#000'}>
-                            ИТОГО
-                        </Th>
-                        <Th> </Th>
-                        <Th> </Th>
-                        <Th fontSize={15} color={'#000'}>
-                            {data.totalRegister}
-                        </Th>
-                        <Th fontSize={15} color={'#000'}>
-                            {data.totalFact}
-                        </Th>
-                        <Th fontSize={15} color={'#000'}>
-                            {' '}
-                            {data.divergence}
-                        </Th>
-                        <Th> </Th>
-                        <Th> </Th>
-                    </Tr>
-                </Tfoot>
-            </Table>
-        </TableContainer>
+        <>
+            <TableContainer>
+                <Table variant="simple">
+                    <Thead>
+                        <Tr>
+                            <Th>№</Th>
+                            <Th>Товары</Th>
+                            <Th>Единица измерения</Th>
+                            <Th>Количество по учету</Th>
+                            <Th>Количество фактическое</Th>
+                            <Th>Расхождение</Th>
+                            <Th>Время изменения</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {data.table.map((item) => {
+                            return (
+                                <Tr key={item.id}>
+                                    <Td>{item.id}</Td>
+                                    <Td>{item.items}</Td>
+                                    <Td>{item.units}</Td>
+                                    <Td>{item.qtyRegister}</Td>
+                                    <Td
+                                        onClick={() =>
+                                            setShowInput({ rowId: item.id, value: item.qtyFact })
+                                        }
+                                    >
+                                        {showInput?.rowId === item.id ? (
+                                            <EditInput
+                                                setShowInput={setShowInput}
+                                                showInput={showInput}
+                                            />
+                                        ) : (
+                                            item.qtyFact
+                                        )}
+                                    </Td>
+                                    <Td>{item.divergence}</Td>
+                                    <Td>{item.date}</Td>
+                                </Tr>
+                            )
+                        })}
+                    </Tbody>
+                    <Tfoot>
+                        <Tr>
+                            <Th fontSize={15} color={'#000'}>
+                                ИТОГО
+                            </Th>
+                            <Th> </Th>
+                            <Th> </Th>
+                            <Th fontSize={15} color={'#000'}>
+                                {data.totalRegister}
+                            </Th>
+                            <Th fontSize={15} color={'#000'}>
+                                {data.totalFact}
+                            </Th>
+                            <Th fontSize={15} color={'#000'}>
+                                {' '}
+                                {data.divergence}
+                            </Th>
+                            <Th> </Th>
+                            <Th> </Th>
+                        </Tr>
+                    </Tfoot>
+                </Table>
+            </TableContainer>
+        </>
     )
 }
 
 export default InventoryTable
+
+type EditInputProps = {
+    setShowInput: Dispatch<SetStateAction<EditInput | undefined>>
+    showInput: EditInput
+}
+
+const EditInput = ({ setShowInput, showInput }: EditInputProps) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setShowInput({ rowId: showInput.rowId, value: Number(e.target.value) })
+    }
+
+    return (
+        <Input
+            onChange={(e) => handleChange(e)}
+            value={showInput.value}
+            onBlur={() => {
+                setShowInput({ rowId: null, value: showInput.value })
+                //fetch
+            }}
+            type="number"
+            autoFocus
+        />
+    )
+}
