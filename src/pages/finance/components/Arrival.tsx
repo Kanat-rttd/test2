@@ -2,6 +2,31 @@ import { ArrivalInputs } from '@/utils/types/finance.types'
 import { Box, Button, FormControl, FormErrorMessage, Input, Textarea } from '@chakra-ui/react'
 import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
+import { useState, useEffect } from 'react'
+
+import { getAllClients } from '@/utils/services/client.service'
+
+const categories = [
+    {
+        id: 1,
+        name: 'Категория 1',
+    },
+    {
+        id: 2,
+        name: 'Категория 2',
+    },
+]
+
+const account = [
+    {
+        id: 1,
+        name: 'Счёт 1',
+    },
+    {
+        id: 2,
+        name: 'Счёт 2',
+    },
+]
 
 const Arrival = () => {
     const {
