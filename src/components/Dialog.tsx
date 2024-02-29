@@ -5,16 +5,16 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogOverlay,
+    Box,
     Button,
 } from '@chakra-ui/react'
-import { MutableRefObject, useRef } from 'react'
+import { MutableRefObject, ReactNode, useRef } from 'react'
 
 interface DialogProps {
     isOpen: boolean
-    onOpen: () => void
     onClose: () => void
     header: string
-    body: string
+    body: ReactNode
     actionBtn: () => void
     actionText: string
 }
@@ -37,7 +37,9 @@ const Dialog: React.FC<DialogProps> = ({
                         {header}
                     </AlertDialogHeader>
 
-                    <AlertDialogBody>{body}</AlertDialogBody>
+                    <AlertDialogBody>
+                        <Box>{body}</Box>
+                    </AlertDialogBody>
 
                     <AlertDialogFooter>
                         <Button ref={cancelRef} onClick={onClose}>

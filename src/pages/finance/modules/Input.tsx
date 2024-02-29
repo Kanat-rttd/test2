@@ -1,18 +1,29 @@
-// import { Box } from '@chakra-ui/react'
-
 import IsMobile from '@/utils/helpers/isMobile'
-import { Box, Link, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import { Avatar, Box, Link, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import Arrival from '../components/Arrival'
 import Consumption from '../components/Consumption'
 import Transfer from '../components/Transfer'
+import Drawler from '@/components/Drawler'
+import { FINANCE_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
 
 const Input = () => {
     return (
         <>
+            <Box
+                display="flex"
+                justifyContent={'space-between'}
+                flexDirection={'row'}
+                backgroundColor={'rgba(128, 128, 128, 0.1)'}
+            >
+                <Box width={'100%'}>
+                    <Drawler></Drawler>
+                </Box>
+                <Avatar bg="teal.500" />
+            </Box>
             <Box display={'flex'} width={'100%'} justifyContent={'center'} marginTop={10}>
                 <Box
                     height={'100%'}
-                    width={IsMobile() ? '100%' : '30%'}
+                    width={IsMobile() ? '100%' : '25%'}
                     display={'flex'}
                     flexDirection={'column'}
                     gap={'30px'}
@@ -43,7 +54,7 @@ const Input = () => {
                     </Box>
                     <Box style={{ textAlign: 'end' }}>
                         <Link
-                            href={'#'}
+                            href={FINANCE_HISTORY_ROUTE}
                             style={{
                                 color: '#2196f3',
                                 textAlign: 'end',

@@ -1,49 +1,112 @@
-import { Box, Button, Input, Select, Textarea } from '@chakra-ui/react'
+import { Box, Button, FormControl, FormErrorMessage, Input, Textarea } from '@chakra-ui/react'
+import Select from 'react-select'
+import { useForm, Controller } from 'react-hook-form'
+import { TransferInputs } from '@/utils/types/finance.types'
+// import { useNotify } from '@/utils/providers/ToastProvider'
 
 const Transfer = () => {
+    const {
+        register,
+        handleSubmit: handleSubmitForm,
+        control,
+        formState: { errors },
+        // reset,
+    } = useForm<TransferInputs>()
+
+    // const { success } = useNotify()
+
+    const sendData = (formData: TransferInputs) => {
+        console.log(formData)
+        // success('')
+    }
+
     return (
-        <>
-            <Select placeholder="Со счета">
-                <option value={'Kaspi'}>Kaspi</option>
-            </Select>
-            <Input
-                name="sum"
-                maxLength={20}
-                type="number"
-                autoComplete="off"
-                placeholder="Сумма *"
-                // onChange={handleInputChange}
-                // value={formData.sum}
-            />
-            <Select placeholder="На счет">
-                <option value={'Kaspi'}>Kaspi</option>
-            </Select>
-            <Input
-                placeholder="Дата"
-                type="date"
-                name="date"
-                // onChange={handleInputChange}
-                // value={formData.date}
-            />
+        <Box display={'flex'} flexDirection={'column'} gap={4}>
+            <FormControl isInvalid={!!errors.sum}>
+                <Input
+                    maxLength={20}
+                    {...register('sum', { required: 'Поле является обязательным' })}
+                    autoComplete="off"
+                    placeholder="Сумма *"
+                    type="number"
+                />
+                <FormErrorMessage>{errors.sum?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl>
+                <Input
+                    {...register('date', { required: 'Поле является обязательным' })}
+                    autoComplete="off"
+                    placeholder="Дата *"
+                    type="date"
+                />
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.fromAccount}>
+                <Controller
+                    name="fromAccount"
+                    control={control}
+                    rules={{ required: 'Поля является обязательным' }}
+                    render={() => {
+                        // const { onChange, value } = field
+                        return (
+                            <Select
+                                // options={scores}
+                                // getOptionValue={(option) => `${option.id}`}
+                                // getOptionLabel={(option) => option.score}
+                                // value={scores?.filter((option) => String(option.id) == value)}
+                                // onChange={(val) => onChange(val?.id)}
+                                placeholder="Со счета*"
+                                isClearable
+                                isSearchable
+                            />
+                        )
+                    }}
+                />
+                <FormErrorMessage>{errors.fromAccount?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.toAccount}>
+                <Controller
+                    name="toAccount"
+                    control={control}
+                    rules={{ required: 'Поля является обязательным' }}
+                    render={() => {
+                        // const { onChange, value } = field
+                        return (
+                            <Select
+                                // options={scores}
+                                // getOptionValue={(option) => `${option.id}`}
+                                // getOptionLabel={(option) => option.score}
+                                // value={scores?.filter((option) => String(option.id) == value)}
+                                // onChange={(val) => onChange(val?.id)}
+                                placeholder="На счет*"
+                                isClearable
+                                isSearchable
+                            />
+                        )
+                    }}
+                />
+                <FormErrorMessage>{errors.toAccount?.message}</FormErrorMessage>
+            </FormControl>
+
             <Textarea
                 placeholder="Комментарий"
-                name="comment"
                 maxLength={50}
                 size="sm"
+                {...register('comment')}
                 resize="none"
-                // value={formData.comment}
-                // onChange={handleInputChange}
             />
+
             <Box style={{ width: '100%', textAlign: 'center' }}>
                 <Button
+                    onClick={handleSubmitForm(sendData)}
                     style={{ background: '#29647C', color: '#fff' }}
-                    // isLoading={isLoading}
-                    // onClick={sendData}
                 >
                     Отправить
                 </Button>
             </Box>
-        </>
+        </Box>
     )
 }
 

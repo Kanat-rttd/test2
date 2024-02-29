@@ -2,21 +2,17 @@ import Loading from '@/components/Loading'
 import { NOTFOUND_ROUTE } from '@/utils/constants/routes.consts'
 import { Suspense, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import Input from './modules/Input'
-import History from './modules/History'
-import Report from './modules/Report'
+import Products from './modules/Products'
 
-type PageType = 'input' | 'history' | 'report'
+type PageType = 'products'
 
-const FinancePage = () => {
+const PurchasePage = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
     const { page } = useParams<{ page: PageType }>()
     const navigate = useNavigate()
 
     const pagesMap: { [key in PageType]: JSX.Element } = {
-        input: <Input />,
-        history: <History />,
-        report: <Report />,
+        products: <Products />,
     }
 
     useEffect(() => {
@@ -30,4 +26,4 @@ const FinancePage = () => {
     return <Suspense fallback={<Loading />}>{content}</Suspense>
 }
 
-export default FinancePage
+export default PurchasePage

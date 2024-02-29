@@ -115,7 +115,6 @@ const ListTable: React.FC<ListTableProps> = ({ status }) => {
             <EditModal isOpen={modal.isOpen} onClose={modal.onClose} />
             <Dialog
                 isOpen={isOpen}
-                onOpen={onOpen}
                 onClose={onClose}
                 header="Удалить"
                 body="Вы уверены? Вы не сможете отменить это действие впоследствии."
