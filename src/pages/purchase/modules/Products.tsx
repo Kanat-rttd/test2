@@ -16,6 +16,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
+import PurchaseModal from '../components/PurchaseModal'
 
 const Products = () => {
     const navigate = useNavigate()
@@ -93,6 +94,7 @@ const Products = () => {
                 </Box>
                 <Box></Box>
             </Box>
+            <PurchaseModal isOpen={isOpen} onClose={onClose} />
         </>
     )
 }
