@@ -1,47 +1,129 @@
-import { Box, Button, Input, Select, Textarea } from '@chakra-ui/react'
+import { Box, Button, FormControl, FormErrorMessage, Input, Textarea } from '@chakra-ui/react'
+import Select from 'react-select'
+import { useForm, Controller } from 'react-hook-form'
+import { ArrivalInputs } from '@/utils/types/finance.types'
 
 const Consumption = () => {
+    const {
+        register,
+        handleSubmit: handleSubmitForm,
+        control,
+        formState: { errors },
+        // reset,
+    } = useForm<ArrivalInputs>()
+
+    const sendData = (formData: ArrivalInputs) => {
+        console.log(formData)
+    }
     return (
         <>
-            <Input
-                name="sum"
-                maxLength={20}
-                autoComplete="off"
-                placeholder="Сумма *"
-                type="number"
-                // value={formData.sum}
-                // onChange={handleInputChange}
-            />
-            <Input
-                placeholder="Дата"
-                type="date"
-                name="date"
-                // value={formData.date}
-                // onChange={handleInputChange}
-            />
-            <Select placeholder="Выберите счет">
-                <option value={'Kaspi'}>Kaspi</option>
-            </Select>
-            <Select placeholder="Категория">
-                <option value={'Расходы'}>Расходы</option>
-            </Select>
-            <Select placeholder="Контрагент">
-                <option value={'Райымбек'}>Райымбек</option>
-            </Select>
-            <Textarea
-                placeholder="Комментарий"
-                name="comment"
-                maxLength={50}
-                size="sm"
-                resize="none"
-                // value={formData.comment}
-                // onChange={handleInputChange}
-            />
+            <FormControl isInvalid={!!errors.sum}>
+                <Input
+                    maxLength={20}
+                    {...register('sum', { required: 'Поле является обязательным' })}
+                    autoComplete="off"
+                    placeholder="Сумма *"
+                    type="number"
+                />
+                <FormErrorMessage>{errors.sum?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl variant={'floating'} isInvalid={!!errors.date}>
+                <Input
+                    {...register('date', { required: 'Поле является обязательным' })}
+                    autoComplete="off"
+                    placeholder="Дата"
+                    type="date"
+                />
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.account}>
+                <Controller
+                    name="account"
+                    control={control}
+                    rules={{ required: 'Поля является обязательным' }}
+                    render={() => {
+                        // const { onChange, value } = field
+                        return (
+                            <Select
+                                // options={categories}
+                                // getOptionLabel={(option) => option.category}
+                                // getOptionValue={(option) => `${option.id}`}
+                                // value={categories?.filter((option) => String(option.id) == value)}
+                                // onChange={(val) => onChange(val?.id)}
+                                placeholder="Выберите счет *"
+                                isClearable
+                                isSearchable
+                            />
+                        )
+                    }}
+                />
+                <FormErrorMessage>{errors.account?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.category}>
+                <Controller
+                    name="category"
+                    control={control}
+                    rules={{ required: 'Поля является обязательным' }}
+                    render={() => {
+                        // const { onChange, value } = field
+                        return (
+                            <Select
+                                // options={categories}
+                                // getOptionLabel={(option) => option.category}
+                                // getOptionValue={(option) => `${option.id}`}
+                                // value={categories?.filter((option) => String(option.id) == value)}
+                                // onChange={(val) => onChange(val?.id)}
+                                placeholder="Категория *"
+                                isClearable
+                                isSearchable
+                            />
+                        )
+                    }}
+                />
+                <FormErrorMessage>{errors.category?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.contragent}>
+                <Controller
+                    name="contragent"
+                    control={control}
+                    rules={{ required: 'Поля является обязательным' }}
+                    render={() => {
+                        // const { onChange, value } = field
+                        return (
+                            <Select
+                                // options={categories}
+                                // getOptionLabel={(option) => option.category}
+                                // getOptionValue={(option) => `${option.id}`}
+                                // value={categories?.filter((option) => String(option.id) == value)}
+                                // onChange={(val) => onChange(val?.id)}
+                                placeholder="Контрагент *"
+                                isClearable
+                                isSearchable
+                            />
+                        )
+                    }}
+                />
+                <FormErrorMessage>{errors.contragent?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl>
+                <Textarea
+                    placeholder="Комментарий"
+                    maxLength={50}
+                    size="sm"
+                    {...register('comment')}
+                    resize="none"
+                />
+            </FormControl>
+
             <Box style={{ width: '100%', textAlign: 'center' }}>
                 <Button
                     // isLoading={isLoading}
                     style={{ background: '#29647C', color: '#fff' }}
-                    // onClick={sendData}
+                    onClick={handleSubmitForm(sendData)}
                 >
                     Отправить
                 </Button>

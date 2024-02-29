@@ -5,13 +5,16 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import theme from './utils/helpers/theme.ts'
+import { ToastProvider } from './utils/providers/ToastProvider.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
         <ChakraProvider theme={theme}>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
+            <ToastProvider>
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+            </ToastProvider>
         </ChakraProvider>
     </React.StrictMode>,
 )

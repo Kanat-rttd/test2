@@ -25,3 +25,9 @@ export const ADMIN_UNIQUEPRICE_ROUTE = '/admin/uniquePrice'
 
 export const FINANCE_ROUTE = '/finance/:page'
 export const FINANCE_INPUT_ROUTE = '/finance/input'
+export const FINANCE_HISTORY_ROUTE = '/finance/history'
+export const FINANCE_REPORT_ROUTE = '/finance/report'
+
+export const PURCHASE_ROUTE = '/purchase/:page'
+export const PURCHASE_PRODUCTS_ROUTE = '/purchase/products'
+// export const PURCHASE_

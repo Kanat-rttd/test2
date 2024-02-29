@@ -211,7 +211,6 @@ const AdminPanel = () => {
                 />
                 <Dialog
                     isOpen={dialog.isOpen}
-                    onOpen={onOpen}
                     onClose={dialog.onClose}
                     header="Удалить"
                     body="Вы уверены? Вы не сможете отменить это действие впоследствии."

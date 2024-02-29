@@ -20,6 +20,10 @@ import {
     ADMIN_UNIQUEPRICE_ROUTE,
     FINANCE_ROUTE,
     FINANCE_INPUT_ROUTE,
+    FINANCE_HISTORY_ROUTE,
+    FINANCE_REPORT_ROUTE,
+    PURCHASE_PRODUCTS_ROUTE,
+    PURCHASE_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -69,6 +73,11 @@ export const menuItems: MenuItem[] = [
         route: FINANCE_ROUTE,
         label: 'Финансы',
         allowedClasses: ['Admin'],
+    },
+    {
+        route: PURCHASE_ROUTE,
+        label: 'Закуп',
+        allowedClasses: ['Admin', 'Client'],
     },
 ]
 
@@ -150,6 +159,25 @@ export const subMenuItems: MenuItem[] = [
         route: FINANCE_INPUT_ROUTE,
         label: 'Ввод',
         path: FINANCE_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: FINANCE_HISTORY_ROUTE,
+        label: 'История',
+        path: FINANCE_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: FINANCE_REPORT_ROUTE,
+        label: 'Фин. отчет',
+        path: FINANCE_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+
+    {
+        route: PURCHASE_PRODUCTS_ROUTE,
+        label: 'Закуп',
+        path: PURCHASE_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
 ]
