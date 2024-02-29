@@ -1,6 +1,6 @@
 import DateRangePicker from '@/components/DateRangePicker'
 import Drawler from '@/components/Drawler'
-import { PURCHASE_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
+import { PURCHASE_DEBT_ROUTE, PURCHASE_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import {
     Avatar,
     Box,
@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import ListTable from '../components/ListTable'
+import PivotTable from '../components/PivotTable'
 
 const Products = () => {
     const navigate = useNavigate()
@@ -40,7 +41,7 @@ const Products = () => {
                     <Button
                         height={'100%'}
                         width={'20%'}
-                        // onClick={() => navigate(PURCHASE_PRODUCTS_ROUTE)}
+                        onClick={() => navigate(PURCHASE_DEBT_ROUTE)}
                         background={'rgba(217, 217, 217, 1)'}
                     >
                         Долги по закупу
@@ -81,7 +82,12 @@ const Products = () => {
                                 </Box>
                                 <ListTable />
                             </TabPanel>
-                            <TabPanel>{/* <PivotTable /> */}</TabPanel>
+                            <TabPanel>
+                                <Box width={'25%'}>
+                                    <DateRangePicker></DateRangePicker>
+                                </Box>
+                                <PivotTable />
+                            </TabPanel>
                         </TabPanels>
                     </Tabs>
                 </Box>

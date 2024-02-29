@@ -30,4 +30,4 @@ export const FINANCE_REPORT_ROUTE = '/finance/report'
 
 export const PURCHASE_ROUTE = '/purchase/:page'
 export const PURCHASE_PRODUCTS_ROUTE = '/purchase/products'
-// export const PURCHASE_
+export const PURCHASE_DEBT_ROUTE = '/purchase/debt'
