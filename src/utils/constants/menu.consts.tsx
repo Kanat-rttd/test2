@@ -25,6 +25,8 @@ import {
     PURCHASE_PRODUCTS_ROUTE,
     PURCHASE_ROUTE,
     PURCHASE_DEBT_ROUTE,
+    INVENTORY_ROUTE,
+    INVENTORY_DETAILS_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -78,6 +80,11 @@ export const menuItems: MenuItem[] = [
     {
         route: PURCHASE_ROUTE,
         label: 'Закуп',
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: INVENTORY_ROUTE,
+        label: 'Инвентаризация',
         allowedClasses: ['Admin', 'Client'],
     },
 ]
@@ -185,6 +192,12 @@ export const subMenuItems: MenuItem[] = [
         route: PURCHASE_DEBT_ROUTE,
         label: 'Долги по закупу',
         path: PURCHASE_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: INVENTORY_DETAILS_ROUTE,
+        label: 'Инвентаризация',
+        path: INVENTORY_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
 ]
