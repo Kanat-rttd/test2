@@ -1,4 +1,4 @@
-import { Table, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
+import { Box, Table, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
 
 const PivotTable = () => {
     const data = [
@@ -19,51 +19,53 @@ const PivotTable = () => {
     ]
 
     return (
-        <TableContainer>
-            <Table variant="simple">
-                <Thead>
-                    <Tr>
-                        <Th>№</Th>
-                        <Th>Товар</Th>
-                        <Th>Количество</Th>
-                        <Th>Сумма доставки</Th>
-                        <Th>Сумма</Th>
-                    </Tr>
-                </Thead>
-                <Tbody>
-                    {data.map((purchase) => {
-                        return (
-                            <Tr key={purchase.id}>
-                                <Td>{purchase.id}</Td>
-                                <Td>{purchase.item}</Td>
-                                <Td>{purchase.qty}</Td>
-                                <Td>{purchase.deliveryCost}</Td>
-                                <Td>{purchase.totalSum}</Td>
-                            </Tr>
-                        )
-                    })}
-                </Tbody>
-                <Tfoot marginTop={10}>
-                    <Tr>
-                        <Th color={'#000'} fontSize={15}>
-                            ИТОГО
-                        </Th>
-                        <Th></Th>
-                        <Th color={'#000'} fontSize={15}>
-                            50000
-                        </Th>
-                        <Th color={'#000'} fontSize={15}>
-                            50000
-                        </Th>
-                        <Th color={'#000'} fontSize={15}>
-                            5000
-                        </Th>
-                        <Th> </Th>
-                        <Th> </Th>
-                    </Tr>
-                </Tfoot>
-            </Table>
-        </TableContainer>
+        <Box width={'100%'}>
+            <TableContainer>
+                <Table variant="simple">
+                    <Thead>
+                        <Tr>
+                            <Th>№</Th>
+                            <Th>Товар</Th>
+                            <Th>Количество</Th>
+                            <Th>Сумма доставки</Th>
+                            <Th>Сумма</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {data.map((purchase) => {
+                            return (
+                                <Tr key={purchase.id}>
+                                    <Td>{purchase.id}</Td>
+                                    <Td>{purchase.item}</Td>
+                                    <Td>{purchase.qty}</Td>
+                                    <Td>{purchase.deliveryCost}</Td>
+                                    <Td>{purchase.totalSum}</Td>
+                                </Tr>
+                            )
+                        })}
+                    </Tbody>
+                    <Tfoot marginTop={10}>
+                        <Tr>
+                            <Th color={'#000'} fontSize={15}>
+                                ИТОГО
+                            </Th>
+                            <Th></Th>
+                            <Th color={'#000'} fontSize={15}>
+                                50000
+                            </Th>
+                            <Th color={'#000'} fontSize={15}>
+                                50000
+                            </Th>
+                            <Th color={'#000'} fontSize={15}>
+                                5000
+                            </Th>
+                            <Th> </Th>
+                            <Th> </Th>
+                        </Tr>
+                    </Tfoot>
+                </Table>
+            </TableContainer>
+        </Box>
     )
 }
 
