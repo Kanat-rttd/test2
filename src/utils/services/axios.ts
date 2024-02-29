@@ -16,4 +16,9 @@ $host.interceptors.request.use((config) => {
     return config
 })
 
+export const fetcher = async (url: string) => {
+    const response = await $host.get(url)
+    return response.data
+}
+
 export default $host

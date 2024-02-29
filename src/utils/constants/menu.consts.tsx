@@ -24,6 +24,7 @@ import {
     FINANCE_REPORT_ROUTE,
     PURCHASE_PRODUCTS_ROUTE,
     PURCHASE_ROUTE,
+    PURCHASE_DEBT_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -177,6 +178,12 @@ export const subMenuItems: MenuItem[] = [
     {
         route: PURCHASE_PRODUCTS_ROUTE,
         label: 'Закуп',
+        path: PURCHASE_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: PURCHASE_DEBT_ROUTE,
+        label: 'Долги по закупу',
         path: PURCHASE_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },

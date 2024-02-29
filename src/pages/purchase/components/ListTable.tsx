@@ -56,14 +56,22 @@ const ListTable = () => {
                 </Tbody>
                 <Tfoot marginTop={10}>
                     <Tr>
-                        <Th>ИТОГО</Th>
+                        <Th color={'#000'} fontSize={15}>
+                            ИТОГО
+                        </Th>
                         <Th> </Th>
                         <Th> </Th>
                         <Th> </Th>
-                        <Th>50000</Th>
+                        <Th color={'#000'} fontSize={15}>
+                            50000
+                        </Th>
                         <Th> </Th>
-                        <Th>50000</Th>
-                        <Th>5000</Th>
+                        <Th color={'#000'} fontSize={15}>
+                            50000
+                        </Th>
+                        <Th color={'#000'} fontSize={15}>
+                            5000
+                        </Th>
                         <Th> </Th>
                         <Th> </Th>
                     </Tr>
