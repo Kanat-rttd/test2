@@ -1,22 +1,59 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
+import { getAllDispatches } from '@/utils/services/dispatch.service'
 
-const PivotTable = () => {
-    interface Headers {
-        bread: string
+interface Dispatch {
+    id: number
+    clientId: number
+    createdAt: Date
+    dispatch: string
+    goodsDispatchDetails: {
+        id: number
+        productId: number
+        quantity: number
+        product: {
+            name: string
+            price: number
+            bakingFacilityUnit: {
+                id: number
+                facilityUnit: string
+            }
+        }
+    }[]
+    client: {
+        id: number
+        name: string
     }
+}
 
-    const headers = [
-        {
-            bread: 'Итальяснкий',
-        },
-        {
-            bread: 'Заводской',
-        },
-        {
-            bread: 'Батон',
-        },
-    ]
+interface PivotTableProps {
+    status: string
+}
+
+const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
+    console.log(status)
+    const [data, setData] = useState<Dispatch[]>([])
+    const [headers, setHeaders] = useState<any[]>([])
+
+    useEffect(() => {
+        getAllDispatches().then((res) => {
+            console.log(res.data)
+            const uniqueProductNames = [
+                ...new Set(
+                    res.data
+                        .filter((row: Dispatch) => row.dispatch == status)
+                        .flatMap((item: Dispatch) =>
+                            item.goodsDispatchDetails.map((detail) => detail.product.name),
+                        ),
+                ),
+            ]
+            const headers = uniqueProductNames.map((name) => ({ bread: name }))
+
+            setHeaders(headers)
+            setData(res.data.filter((row: Dispatch) => row.dispatch == status))
+        })
+    }, [])
 
     return (
         <>
@@ -26,23 +63,32 @@ const PivotTable = () => {
                         <Tr>
                             <Th>№</Th>
                             <Th>Реализатор</Th>
-                            {headers.map((head: Headers) => {
-                                return <Th key={head.bread}>{head.bread}</Th>
-                            })}
+                            {headers.map((head) => (
+                                <Th key={head.bread}>{head.bread}</Th>
+                            ))}
                         </Tr>
                     </Thead>
                     <Tbody>
-                        <Tr>
-                            <Td>1</Td>
-                            <Td>Алишер</Td>
-                            <Td>20</Td>
-                            <Td>30</Td>
-                            <Td> </Td>
-                            <Td display={'flex'} gap={'10px'}>
-                                <EditIcon boxSize={'1.5em'} cursor={'pointer'} />
-                                <DeleteIcon boxSize={'1.5em'} color={'red'} cursor={'pointer'} />
-                            </Td>
-                        </Tr>
+                        {data.map((row) => (
+                            <Tr key={row.id}>
+                                <Td>{row.id}</Td>
+                                <Td>{row.client.name}</Td>
+                                {headers.map((header, index) => {
+                                    const quantity = row.goodsDispatchDetails.find(
+                                        (detail) => detail.product.name === header.bread,
+                                    )?.quantity
+                                    return <Td key={index}>{quantity}</Td>
+                                })}
+                                <Td display={'flex'} gap={'10px'}>
+                                    <EditIcon boxSize={'1.5em'} cursor={'pointer'} />
+                                    <DeleteIcon
+                                        boxSize={'1.5em'}
+                                        color={'red'}
+                                        cursor={'pointer'}
+                                    />
+                                </Td>
+                            </Tr>
+                        ))}
                     </Tbody>
                 </Table>
             </TableContainer>

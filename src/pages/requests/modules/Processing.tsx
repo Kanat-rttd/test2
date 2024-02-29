@@ -14,7 +14,7 @@ interface OrderArray {
     userId: string
     totalPrice: string
     createdAt: Date
-    done: string
+    done: number
     orderDetails: [
         {
             orderDetailsId: string
@@ -83,7 +83,7 @@ const ProcessingPage = () => {
                 </Box>
                 <Box width={'100%'} height={'100%'} p={5}>
                     <Box>
-                        <Input type="Date" />
+                        <Input type="Date" width={'20%'} />
                     </Box>
                     <AccordionClients
                         data={getSalesData.filter((sale) => sale.done === 0)}

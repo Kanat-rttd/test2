@@ -19,7 +19,7 @@ interface OrderArray {
     userId: string
     totalPrice: string
     createdAt: Date
-    done: string
+    done: number
     orderDetails: [
         {
             orderDetailsId: string
@@ -39,14 +39,14 @@ interface OrderArray {
 
 type accorfionClientType = {
     data: OrderArray[]
-    handleChangeStatus: (clientName: []) => void
+    handleChangeStatus: (clientName: OrderArray) => void
 }
 
 const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => {
     console.log(data)
     const defaultIndex = Array.from({ length: data.length }, (_, index) => index)
 
-    const handleConfirmClick = (clientName: []) => {
+    const handleConfirmClick = (clientName: OrderArray) => {
         handleChangeStatus(clientName)
     }
 

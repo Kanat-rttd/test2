@@ -1,16 +1,15 @@
 import $host from './axios'
 
-export const getAllDispatches = async () => {
-    const { data } = await $host.get('release')
+export const getAllIndividualPrices = async () => {
+    const { data } = await $host.get('inPrice')
     return data
 }
 
-export const createDispatch = async (data: {
-    userId: string
-    products: { name: string; quantity: number; id: string }[]
-    dispatch: string
+export const createIndividualPrice = async (data: {
+    clientId: string
+    detail: { id: string; name: string; price: string }[]
 }) => {
-    const response = await $host.post('release', data)
+    const response = await $host.post('inPrice', data)
     return response
 }
 

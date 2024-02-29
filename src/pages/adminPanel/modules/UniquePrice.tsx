@@ -1,6 +1,7 @@
 import Drawler from '@/components/Drawler'
 import { ADMIN_RELEASE_ROUTE, ADMIN_UNIQUEPRICE_ROUTE } from '@/utils/constants/routes.consts'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
+import dayjs from 'dayjs'
 import {
     Avatar,
     Box,
@@ -23,8 +24,32 @@ import {
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import UniquePriceAddModal, { UniquePrice } from '../components/UniquePriceAddModal'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Dialog from '@/components/Dialog'
+import { getAllClients } from '@/utils/services/client.service'
+import { getAllIndividualPrices } from '@/utils/services/individualPrices.service'
+
+interface Client {
+    id: string
+    name: string
+    surname: string
+    contact: string
+    telegrammId: string
+    status: string
+}
+
+interface individualPrice {
+    clientId: string
+    clientName: string
+    detail: [
+        {
+            id: string
+            name: string
+            price: string
+            date: Date
+        },
+    ]
+}
 
 const AdminPanel = () => {
     const navigate = useNavigate()
@@ -36,34 +61,22 @@ const AdminPanel = () => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const data = [
-        {
-            release: 'Алишер',
-            date: '14:20 21.02.2024',
-            detail: [
-                {
-                    id: 1,
-                    bread: 'Итальянский',
-                    price: '50',
-                    date: '14:20 21.02.2024',
-                },
-            ],
-        },
-        {
-            release: 'Алишер 1',
-            date: '14:20 21.02.2024',
-            detail: [
-                {
-                    id: 2,
-                    bread: 'Городской',
-                    price: '100',
-                    date: '14:25 22.02.2024',
-                },
-            ],
-        },
-    ]
+    const [clients, setClientsData] = useState<Client[]>([])
+    const [inPriceData, setInPriceData] = useState<individualPrice[]>([])
 
-    console.log(selectedData)
+    useEffect(() => {
+        getAllClients().then((responseData) => {
+            setClientsData(responseData)
+            console.log(clients)
+        })
+    }, [])
+
+    useEffect(() => {
+        getAllIndividualPrices().then((responseData) => {
+            setInPriceData(responseData)
+            console.log(responseData)
+        })
+    }, [])
 
     return (
         <>
@@ -109,7 +122,7 @@ const AdminPanel = () => {
                             <Text>Время изменения</Text>
                         </Box>
                         <Accordion>
-                            {data.map((item, index) => {
+                            {inPriceData?.map((item, index) => {
                                 return (
                                     <AccordionItem key={index}>
                                         <h2>
@@ -120,16 +133,7 @@ const AdminPanel = () => {
                                                     textAlign="left"
                                                     fontWeight={600}
                                                 >
-                                                    {item.release}
-                                                </Box>
-                                                <Box
-                                                    as="span"
-                                                    flex="1"
-                                                    textAlign="right"
-                                                    fontWeight={600}
-                                                    // marginRight={'2%'}
-                                                >
-                                                    {item.date}
+                                                    {item.clientName}
                                                 </Box>
                                                 <AccordionIcon />
                                             </AccordionButton>
@@ -149,7 +153,7 @@ const AdminPanel = () => {
                                                             item.detail.map((value) => {
                                                                 return (
                                                                     <Tr key={value.id}>
-                                                                        <Td>{value.bread}</Td>
+                                                                        <Td>{value.name}</Td>
                                                                         <Td>{value.price}</Td>
                                                                         <Td
                                                                             isNumeric
@@ -159,7 +163,9 @@ const AdminPanel = () => {
                                                                                 'flex-end'
                                                                             }
                                                                         >
-                                                                            {value.date}
+                                                                            {dayjs(
+                                                                                value.date,
+                                                                            ).format('DD.MM.YYYY')}
                                                                             <Box>
                                                                                 <EditIcon
                                                                                     boxSize={
@@ -205,7 +211,7 @@ const AdminPanel = () => {
                                                                     colorScheme="purple"
                                                                     onClick={() => {
                                                                         setSelectedRelease(
-                                                                            item.release,
+                                                                            item.clientName,
                                                                         )
                                                                         onOpen()
                                                                     }}

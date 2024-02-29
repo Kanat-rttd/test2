@@ -1,12 +1,11 @@
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot } from '@chakra-ui/react'
-import RevertTh from './ui/RevertTh'
 
 interface OrderArray {
     id: number
     userId: string
     totalPrice: string
     createdAt: Date
-    done: string
+    done: number
     orderDetails: [
         {
             orderDetailsId: string
@@ -44,12 +43,12 @@ const TableData = ({ data }: { data: OrderArray[] }) => {
         })
     })
 
-    const getColumnTotal = (productName: string) => {
-        return data.reduce((total, item) => {
-            const product = item.products.find((product) => product.productName === productName)
-            return total + (product?.quantity || 0)
-        }, 0)
-    }
+    // const getColumnTotal = (productName: string) => {
+    //     return data.reduce((total, item) => {
+    //         const product = item.products.find((product) => product.productName === productName)
+    //         return total + (product?.quantity || 0)
+    //     }, 0)
+    // }
 
     return (
         <TableContainer>
