@@ -2,9 +2,27 @@ import { Box, Button, FormControl, FormErrorMessage, Input, Textarea } from '@ch
 import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
 import { TransferInputs } from '@/utils/types/finance.types'
-// import { useNotify } from '@/utils/providers/ToastProvider'
+import { createTransfer } from '@/utils/services/finance.service'
+import { useNotify } from '@/utils/providers/ToastProvider'
+
+const account = [
+    {
+        id: 1,
+        name: 'Счёт 1',
+    },
+    {
+        id: 2,
+        name: 'Счёт 2',
+    },
+]
+
+interface Account {
+    id: number
+    name: string
+}
 
 const Transfer = () => {
+    const { success } = useNotify()
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -13,24 +31,29 @@ const Transfer = () => {
         // reset,
     } = useForm<TransferInputs>()
 
-    // const { success } = useNotify()
-
     const sendData = (formData: TransferInputs) => {
         console.log(formData)
-        // success('')
+        createTransfer(formData)
+            .then((res) => {
+                console.log(res)
+                success('')
+            })
+            .catch((error) => {
+                console.error('Error creating sale:', error)
+            })
     }
 
     return (
         <Box display={'flex'} flexDirection={'column'} gap={4}>
-            <FormControl isInvalid={!!errors.sum}>
+            <FormControl isInvalid={!!errors.amount}>
                 <Input
                     maxLength={20}
-                    {...register('sum', { required: 'Поле является обязательным' })}
+                    {...register('amount', { required: 'Поле является обязательным' })}
                     autoComplete="off"
                     placeholder="Сумма *"
                     type="number"
                 />
-                <FormErrorMessage>{errors.sum?.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl>
@@ -47,15 +70,15 @@ const Transfer = () => {
                     name="fromAccount"
                     control={control}
                     rules={{ required: 'Поля является обязательным' }}
-                    render={() => {
-                        // const { onChange, value } = field
+                    render={({ field }) => {
+                        const { onChange, value } = field
                         return (
                             <Select
-                                // options={scores}
-                                // getOptionValue={(option) => `${option.id}`}
-                                // getOptionLabel={(option) => option.score}
-                                // value={scores?.filter((option) => String(option.id) == value)}
-                                // onChange={(val) => onChange(val?.id)}
+                                options={account}
+                                getOptionValue={(option: Account) => `${option.id}`}
+                                getOptionLabel={(option: Account) => option.name}
+                                value={account?.filter((option) => String(option.name) == value)}
+                                onChange={(val: Account) => onChange(val?.name)}
                                 placeholder="Со счета*"
                                 isClearable
                                 isSearchable
@@ -71,15 +94,15 @@ const Transfer = () => {
                     name="toAccount"
                     control={control}
                     rules={{ required: 'Поля является обязательным' }}
-                    render={() => {
-                        // const { onChange, value } = field
+                    render={({ field }) => {
+                        const { onChange, value } = field
                         return (
                             <Select
-                                // options={scores}
-                                // getOptionValue={(option) => `${option.id}`}
-                                // getOptionLabel={(option) => option.score}
-                                // value={scores?.filter((option) => String(option.id) == value)}
-                                // onChange={(val) => onChange(val?.id)}
+                                options={account}
+                                getOptionValue={(option: Account) => `${option.id}`}
+                                getOptionLabel={(option: Account) => option.name}
+                                value={account?.filter((option) => String(option.name) == value)}
+                                onChange={(val: Account) => onChange(val?.name)}
                                 placeholder="На счет*"
                                 isClearable
                                 isSearchable

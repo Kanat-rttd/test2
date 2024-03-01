@@ -3,8 +3,26 @@ import styles from '../style.module.css'
 import DateRange from '../../../components/DateRange'
 import { useState } from 'react'
 import Drawler from '@/components/Drawler'
+import { getAllFinances } from '@/utils/services/finance.service'
+import useSWR from 'swr'
+
+interface Finance {
+    id: number
+    amount: string
+    date: Date
+    category: string
+    clientId: number
+    account: string
+    comment: string
+}
 
 const Report = () => {
+    const { data: financeData } = useSWR<Finance[]>(['finance'], {
+        fetcher: () => getAllFinances(),
+    })
+
+    console.log(financeData)
+
     const [selectionRange, setSelectionRange] = useState({
         startDate: new Date(),
         endDate: new Date(),

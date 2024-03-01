@@ -15,12 +15,14 @@ interface DateRangeProps {
 }
 
 const DateRange = ({ setSelectionRange, selectionRange }: DateRangeProps) => {
-    const handleSelectDate = (rangesByKey: RangeKeyDict) => {
-        const { range1 } = rangesByKey
-
-        if (range1 && range1.startDate && range1.endDate) {
-            const { startDate, endDate } = range1
-            setSelectionRange({ startDate, endDate })
+    const handleSelectDate = (ranges: RangeKeyDict) => {
+        console.log('test')
+        console.log(ranges)
+        if (ranges.range1.startDate && ranges.range1.endDate) {
+            setSelectionRange({
+                startDate: ranges.range1.startDate,
+                endDate: ranges.range1.endDate,
+            })
         }
     }
 

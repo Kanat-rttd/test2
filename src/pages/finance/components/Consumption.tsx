@@ -1,9 +1,56 @@
+import { ArrivalInputs } from '@/utils/types/finance.types'
 import { Box, Button, FormControl, FormErrorMessage, Input, Textarea } from '@chakra-ui/react'
 import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
-import { ArrivalInputs } from '@/utils/types/finance.types'
+// import { useState, useEffect } from 'react'
+import useSWR from 'swr'
 
-const Consumption = () => {
+import { getAllClients } from '@/utils/services/client.service'
+import { getAllFinancesCategories } from '@/utils/services/financeCategories.service'
+// import { fetcher } from '@/utils/services/axios'
+// import { useNotify } from '@/utils/providers/ToastProvider'
+import { createConsumption } from '@/utils/services/finance.service'
+
+const account = [
+    {
+        id: 1,
+        name: 'Счёт 1',
+    },
+    {
+        id: 2,
+        name: 'Счёт 2',
+    },
+]
+
+interface Category {
+    id: number
+    name: string
+    type: string
+}
+
+interface Account {
+    id: number
+    name: string
+}
+
+interface Client {
+    id: number
+    name: string
+    surname: string
+    contact: string
+    telegrammId: string
+    status: number
+}
+
+const Arrival = () => {
+    const { data: clientsData } = useSWR<Client[]>(['client'], {
+        fetcher: () => getAllClients(),
+    })
+
+    const { data: categoriesData } = useSWR<Category[]>(['financeCategories'], {
+        fetcher: () => getAllFinancesCategories(),
+    })
+
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -14,18 +61,32 @@ const Consumption = () => {
 
     const sendData = (formData: ArrivalInputs) => {
         console.log(formData)
+        createConsumption(formData)
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((error) => {
+                console.error('Error creating sale:', error)
+            })
+        // mutate()
     }
+
+    // const { success } = useNotify()
+    // console.log(data)
+
+    // success('Отправлено')
+
     return (
         <>
-            <FormControl isInvalid={!!errors.sum}>
+            <FormControl isInvalid={!!errors.amount}>
                 <Input
                     maxLength={20}
-                    {...register('sum', { required: 'Поле является обязательным' })}
+                    {...register('amount', { required: 'Поле является обязательным' })}
                     autoComplete="off"
                     placeholder="Сумма *"
                     type="number"
                 />
-                <FormErrorMessage>{errors.sum?.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl variant={'floating'} isInvalid={!!errors.date}>
@@ -42,15 +103,15 @@ const Consumption = () => {
                     name="account"
                     control={control}
                     rules={{ required: 'Поля является обязательным' }}
-                    render={() => {
-                        // const { onChange, value } = field
+                    render={({ field }) => {
+                        const { onChange, value } = field
                         return (
                             <Select
-                                // options={categories}
-                                // getOptionLabel={(option) => option.category}
-                                // getOptionValue={(option) => `${option.id}`}
-                                // value={categories?.filter((option) => String(option.id) == value)}
-                                // onChange={(val) => onChange(val?.id)}
+                                options={account}
+                                getOptionLabel={(option: Account) => option.name}
+                                getOptionValue={(option: Account) => `${option.name}`}
+                                value={account?.filter((option) => String(option.name) == value)}
+                                onChange={(val: Account) => onChange(val?.name)}
                                 placeholder="Выберите счет *"
                                 isClearable
                                 isSearchable
@@ -63,18 +124,20 @@ const Consumption = () => {
 
             <FormControl isInvalid={!!errors.category}>
                 <Controller
-                    name="category"
+                    name="financeCategoryId"
                     control={control}
                     rules={{ required: 'Поля является обязательным' }}
-                    render={() => {
-                        // const { onChange, value } = field
+                    render={({ field }) => {
+                        const { onChange, value } = field
                         return (
                             <Select
-                                // options={categories}
-                                // getOptionLabel={(option) => option.category}
-                                // getOptionValue={(option) => `${option.id}`}
-                                // value={categories?.filter((option) => String(option.id) == value)}
-                                // onChange={(val) => onChange(val?.id)}
+                                options={categoriesData}
+                                getOptionLabel={(option: Category) => option.name}
+                                getOptionValue={(option: Category) => `${option.id}`}
+                                value={categoriesData?.filter(
+                                    (option) => String(option.id) == value,
+                                )}
+                                onChange={(val: Category) => onChange(val?.id)}
                                 placeholder="Категория *"
                                 isClearable
                                 isSearchable
@@ -85,20 +148,20 @@ const Consumption = () => {
                 <FormErrorMessage>{errors.category?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.contragent}>
+            <FormControl isInvalid={!!errors.clientId}>
                 <Controller
-                    name="contragent"
+                    name="clientId"
                     control={control}
                     rules={{ required: 'Поля является обязательным' }}
-                    render={() => {
-                        // const { onChange, value } = field
+                    render={({ field }) => {
+                        const { onChange, value } = field
                         return (
                             <Select
-                                // options={categories}
-                                // getOptionLabel={(option) => option.category}
-                                // getOptionValue={(option) => `${option.id}`}
-                                // value={categories?.filter((option) => String(option.id) == value)}
-                                // onChange={(val) => onChange(val?.id)}
+                                options={clientsData}
+                                getOptionLabel={(option: Client) => option.name}
+                                getOptionValue={(option: Client) => `${option.id}`}
+                                value={clientsData?.filter((option) => String(option.id) == value)}
+                                onChange={(val: Client) => onChange(val?.id)}
                                 placeholder="Контрагент *"
                                 isClearable
                                 isSearchable
@@ -106,7 +169,7 @@ const Consumption = () => {
                         )
                     }}
                 />
-                <FormErrorMessage>{errors.contragent?.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.clientId?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl>
@@ -132,4 +195,4 @@ const Consumption = () => {
     )
 }
 
-export default Consumption
+export default Arrival

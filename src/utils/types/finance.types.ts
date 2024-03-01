@@ -1,15 +1,15 @@
 export type ArrivalInputs = {
-    sum: string
+    amount: string
     date: Date
     account: string
     category: string
-    contragent: string
+    clientId: number
     comment: string
 }
 
 export type TransferInputs = {
     fromAccount: string
-    sum: number
+    amount: string
     toAccount: string
     date: Date
     comment: string

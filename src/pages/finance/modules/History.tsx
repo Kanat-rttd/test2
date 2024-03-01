@@ -15,55 +15,69 @@ import {
     useDisclosure,
 } from '@chakra-ui/react'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DateRange from '../../../components/DateRange'
 import IsMobile from '@/utils/helpers/isMobile'
+import useSWR from 'swr'
+import { getAllFinances } from '@/utils/services/finance.service'
 
 export type History = {
-    date: string
+    date: Date
     account: string
     category: string
-    sum: number
+    amount: string
+}
+
+interface Finance {
+    id: number
+    amount: string
+    date: Date
+    category: string
+    clientId: number
+    account: string
+    comment: string
 }
 
 const History = () => {
     const [sortOrder, setSortOrder] = useState('asc')
     const [isHovered, setIsHovered] = useState(false)
-    const [data, setData] = useState([
-        {
-            date: '2024-02-28',
-            account: 'Kaspi',
-            category: 'Расходы',
-            sum: 10000,
-        },
-        {
-            date: '2024-02-27',
-            account: 'Kaspi',
-            category: 'Расходы',
-            sum: 10000,
-        },
-    ])
+
+    // const { data } = useSWR<Finance[]>('finance', fetcher)
+    console.log(sortOrder)
+
+    const { data } = useSWR<Finance[]>(['finance', sortOrder], {
+        fetcher: () => getAllFinances(sortOrder),
+    })
+
+    console.log(data)
+
     const [selectedData, setSelectedData] = useState<History | null>(null)
     const { isOpen, onOpen, onClose } = useDisclosure()
+
     const [selectionRange, setSelectionRange] = useState({
         startDate: new Date(),
         endDate: new Date(),
     })
 
-    const sortData = (order: string) => {
-        const sorted = data.slice().sort((a, b) => {
-            const dateA = new Date(a.date)
-            const dateB = new Date(b.date)
+    useEffect(() => {
+        console.log(selectionRange.startDate)
+        console.log(selectionRange.endDate)
+    }, [selectionRange])
 
-            if (order === 'asc') {
-                return dateA.getTime() - dateB.getTime()
-            } else {
-                return dateB.getTime() - dateA.getTime()
-            }
-        })
+    const sortData = (order: string) => {
+        // const sorted = data.slice().sort((a, b) => {
+        //     const dateA = new Date(a.date)
+        //     const dateB = new Date(b.date)
+
+        //     if (order === 'asc') {
+        //         return dateA.getTime() - dateB.getTime()
+        //     } else {
+        //         return dateB.getTime() - dateA.getTime()
+        //     }
+        // })
 
         setSortOrder(order)
-        setData(sorted)
+        // setData(sorted)
     }
 
     const handleMouseEnter = () => {
@@ -78,6 +92,8 @@ const History = () => {
         onOpen()
         setSelectedData(transaction)
     }
+
+    // console.log(dayjs(selectionRange.startDate).format('DD.MM.YYYY'))
 
     return (
         <>
@@ -141,12 +157,12 @@ const History = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {data.map((transaction, index) => (
+                            {data?.map((transaction, index) => (
                                 <Tr key={index} onClick={() => handleDelete(transaction)}>
                                     <Td>{dayjs(transaction.date).format('DD.MM.YYYY')}</Td>
                                     <Td>{transaction.account}</Td>
                                     <Td>{transaction.category}</Td>
-                                    <Td>{transaction.sum}</Td>
+                                    <Td>{transaction.amount}</Td>
                                 </Tr>
                             ))}
                         </Tbody>
@@ -166,7 +182,7 @@ const History = () => {
                                 <strong>Счет:</strong> {selectedData?.account}
                             </Text>
                             <Text>
-                                <strong>Сумма:</strong> {selectedData?.sum}
+                                <strong>Сумма:</strong> {selectedData?.amount}
                             </Text>
                             <Text>
                                 <strong>Категория:</strong> {selectedData?.category}
