@@ -2,13 +2,14 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect, lazy, Suspense } from 'react'
 import { NOTFOUND_ROUTE } from '../../utils/constants/routes.consts'
 import Loading from '../../components/Loading'
+import AdminProvider from './modules/Provider'
 
 const Products = lazy(() => import('./modules/Products'))
 const Users = lazy(() => import('./modules/Users'))
 const Releases = lazy(() => import('./modules/Release'))
 const UniquePrice = lazy(() => import('./modules/UniquePrice'))
 
-type PageType = 'user' | 'users' | 'products' | 'releases' | 'uniquePrice'
+type PageType = 'user' | 'users' | 'products' | 'releases' | 'uniquePrice' | 'provirder'
 
 const AdminPanel = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
@@ -21,6 +22,7 @@ const AdminPanel = () => {
         products: <Products />,
         releases: <Releases />,
         uniquePrice: <UniquePrice />,
+        provirder: <AdminProvider />,
     }
 
     useEffect(() => {

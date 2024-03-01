@@ -27,6 +27,7 @@ import {
     PURCHASE_DEBT_ROUTE,
     INVENTORY_ROUTE,
     INVENTORY_DETAILS_ROUTE,
+    ADMIN_PROVIDER_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -111,6 +112,12 @@ export const subMenuItems: MenuItem[] = [
     {
         route: ADMIN_UNIQUEPRICE_ROUTE,
         label: 'Уникальные цены',
+        path: ADMIN_ROUTE,
+        allowedClasses: ['Admin'],
+    },
+    {
+        route: ADMIN_PROVIDER_ROUTE,
+        label: 'Поставщик-товары',
         path: ADMIN_ROUTE,
         allowedClasses: ['Admin'],
     },

@@ -22,6 +22,7 @@ export const ADMIN_PRODUCTS_ROUTE = '/admin/products'
 export const ADMIN_USERS_ROUTE = '/admin/users'
 export const ADMIN_RELEASE_ROUTE = '/admin/releases'
 export const ADMIN_UNIQUEPRICE_ROUTE = '/admin/uniquePrice'
+export const ADMIN_PROVIDER_ROUTE = '/admin/provirder'
 
 export const FINANCE_ROUTE = '/finance/:page'
 export const FINANCE_INPUT_ROUTE = '/finance/input'
