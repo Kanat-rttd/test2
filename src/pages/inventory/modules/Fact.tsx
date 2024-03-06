@@ -3,6 +3,7 @@ import { INVENTORY_DETAILS_ROUTE, INVENTORY_FACT_ROUTE } from '@/utils/constants
 import { Avatar, Box, Button, Input, Select, useDisclosure } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import FactTable from '../components/FactTable'
+import FactModal from '../components/AddFactModal'
 
 const Fact = () => {
     const navigate = useNavigate()
@@ -67,6 +68,8 @@ const Fact = () => {
                     <FactTable />
                 </Box>
             </Box>
+
+            <FactModal isOpen={isOpen} onClose={onClose} />
         </>
     )
 }
