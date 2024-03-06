@@ -34,4 +34,5 @@ export const PURCHASE_PRODUCTS_ROUTE = '/purchase/products'
 export const PURCHASE_DEBT_ROUTE = '/purchase/debt'
 
 export const INVENTORY_ROUTE = '/inventory/:page'
+export const INVENTORY_FACT_ROUTE = '/inventory/fact'
 export const INVENTORY_DETAILS_ROUTE = '/inventory/details'

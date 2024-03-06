@@ -2,10 +2,9 @@ import Drawler from '@/components/Drawler'
 import { INVENTORY_DETAILS_ROUTE, INVENTORY_FACT_ROUTE } from '@/utils/constants/routes.consts'
 import { Avatar, Box, Button, Input, Select, useDisclosure } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-import InventoryTable from '../components/InventoryTable'
-import CorrectModal from '../components/Modal'
+import FactTable from '../components/FactTable'
 
-const Inventory = () => {
+const Fact = () => {
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -22,7 +21,7 @@ const Inventory = () => {
                     <Button
                         height={'100%'}
                         width={'20%'}
-                        // bg={'rgba(217, 217, 217, 1)'}
+                        bg={'rgba(217, 217, 217, 1)'}
                         onClick={() => navigate(INVENTORY_FACT_ROUTE)}
                     >
                         Ввод факт
@@ -30,7 +29,7 @@ const Inventory = () => {
                     <Button
                         height={'100%'}
                         width={'20%'}
-                        bg={'rgba(217, 217, 217, 1)'}
+                        // bg={'rgba(217, 217, 217, 1)'}
                         onClick={() => navigate(INVENTORY_DETAILS_ROUTE)}
                     >
                         Инвентаризация
@@ -61,17 +60,15 @@ const Inventory = () => {
                     </Box>
 
                     <Button colorScheme="purple" onClick={onOpen}>
-                        Корректировка
+                        Добавить факт
                     </Button>
                 </Box>
                 <Box>
-                    <InventoryTable />
+                    <FactTable />
                 </Box>
             </Box>
-
-            <CorrectModal isOpen={isOpen} onClose={onClose} />
         </>
     )
 }
 
-export default Inventory
+export default Fact

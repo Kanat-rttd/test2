@@ -1,13 +1,6 @@
-import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer, Input } from '@chakra-ui/react'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer } from '@chakra-ui/react'
 
-type EditInput = {
-    rowId: number | null
-    value: number
-}
-
-const InventoryTable = () => {
-    const [showInput, setShowInput] = useState<EditInput>()
+const FactTable = () => {
     const data = {
         table: [
             {
@@ -28,8 +21,6 @@ const InventoryTable = () => {
             },
         ],
         totalRegister: 1500,
-        totalFact: 1458,
-        divergence: 42,
     }
 
     return (
@@ -100,28 +91,4 @@ const InventoryTable = () => {
     )
 }
 
-export default InventoryTable
-
-type EditInputProps = {
-    setShowInput: Dispatch<SetStateAction<EditInput | undefined>>
-    showInput: EditInput
-}
-
-const EditInput = ({ setShowInput, showInput }: EditInputProps) => {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setShowInput({ rowId: showInput.rowId, value: Number(e.target.value) })
-    }
-
-    return (
-        <Input
-            onChange={(e) => handleChange(e)}
-            value={showInput.value}
-            onBlur={() => {
-                setShowInput({ rowId: null, value: showInput.value })
-                //fetch
-            }}
-            type="number"
-            autoFocus
-        />
-    )
-}
+export default FactTable
