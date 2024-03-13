@@ -17,7 +17,6 @@ const InventoryTable = () => {
                 qtyRegister: 1000,
                 qtyFact: 988,
                 divergence: 12,
-                date: '14:20 15.02.2024',
             },
             {
                 id: 2,
@@ -26,7 +25,6 @@ const InventoryTable = () => {
                 qtyRegister: 500,
                 qtyFact: 470,
                 divergence: 30,
-                date: '14:25 15.02.2024',
             },
         ],
         totalRegister: 1500,
@@ -46,7 +44,6 @@ const InventoryTable = () => {
                             <Th>Количество по учету</Th>
                             <Th>Количество фактическое</Th>
                             <Th>Расхождение</Th>
-                            <Th>Время изменения</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -72,7 +69,6 @@ const InventoryTable = () => {
                                         )}
                                     </Td>
                                     <Td>{item.divergence}</Td>
-                                    <Td>{item.date}</Td>
                                 </Tr>
                             )
                         })}
