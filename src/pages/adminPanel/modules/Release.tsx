@@ -19,36 +19,31 @@ import {
 import { useNavigate } from 'react-router-dom'
 import ReleaseAddModal, { Releaser } from '../components/ReleaseAddModal'
 import { useState, useEffect } from 'react'
-import { getAllClients, findByFilters } from '@/utils/services/client.service'
+import { getAllClients } from '@/utils/services/client.service'
+import useSWR, { mutate } from 'swr'
 
 const AdminPanel = () => {
     const navigate = useNavigate()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Releaser | undefined>(undefined)
-    const [data, setData] = useState<Releaser[]>([])
+
     const [filters, setFilters] = useState({ name: '', telegrammId: '', status: '' })
 
-    useEffect(() => {
-        getAllClients().then((responseData) => {
-            setData(responseData)
-            console.log(responseData)
-        })
-    }, [])
+    const { data: clientsData } = useSWR<Releaser[]>(['client', filters], {
+        fetcher: () => getAllClients(filters),
+    })
+
+    const { data: filtersData } = useSWR<Releaser[]>('clientFilter', {
+        fetcher: () => getAllClients({ name: '', telegrammId: '', status: '' }),
+    })
 
     useEffect(() => {
-        applyFilters()
+        mutate(['client', filters])
     }, [filters])
 
     const onCloseModal = () => {
         setSelectedData(undefined)
         onClose()
-    }
-
-    const applyFilters = async () => {
-        findByFilters(filters).then((res) => {
-            console.log(res)
-            setData(res.data.data)
-        })
     }
 
     const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -57,6 +52,12 @@ const AdminPanel = () => {
             ...prevFilters,
             [name]: value,
         }))
+    }
+
+    console.log(filters)
+
+    const handledSuccess = () => {
+        mutate(['client', filters])
     }
 
     return (
@@ -98,7 +99,11 @@ const AdminPanel = () => {
                                 width={'fit-content'}
                                 onChange={handleSelectChange}
                             >
-                                <option value="Алишер">Алишер</option>
+                                {filtersData?.map((client, index) => (
+                                    <option key={index} value={client.name}>
+                                        {client.name}
+                                    </option>
+                                ))}
                             </Select>
                             <Select
                                 name="telegrammId"
@@ -106,7 +111,11 @@ const AdminPanel = () => {
                                 width={'fit-content'}
                                 onChange={handleSelectChange}
                             >
-                                <option value="-0101010101">-0101010101</option>
+                                {filtersData?.map((client, index) => (
+                                    <option key={index} value={client.telegrammId}>
+                                        {client.telegrammId}
+                                    </option>
+                                ))}
                             </Select>
                             <Select
                                 name="status"
@@ -114,8 +123,8 @@ const AdminPanel = () => {
                                 width={'fit-content'}
                                 onChange={handleSelectChange}
                             >
-                                <option value="1">Активен</option>
-                                <option value="0">Приостановлен</option>
+                                <option value="Активный">Активный</option>
+                                <option value="Неактивный">Неактивный</option>
                             </Select>
                         </Box>
 
@@ -138,7 +147,7 @@ const AdminPanel = () => {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {data.map((user, index) => {
+                                    {clientsData?.map((user, index) => {
                                         return (
                                             <Tr key={index}>
                                                 <Td>{user.id}</Td>
@@ -170,7 +179,12 @@ const AdminPanel = () => {
                     </Box>
                 </Box>
             </Box>
-            <ReleaseAddModal onClose={onCloseModal} isOpen={isOpen} data={selectedData} />
+            <ReleaseAddModal
+                onClose={onCloseModal}
+                isOpen={isOpen}
+                data={selectedData}
+                onSuccess={handledSuccess}
+            />
         </>
     )
 }

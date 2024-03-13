@@ -78,7 +78,11 @@ const Transfer = () => {
                                 getOptionValue={(option: Account) => `${option.id}`}
                                 getOptionLabel={(option: Account) => option.name}
                                 value={account?.filter((option) => String(option.name) == value)}
-                                onChange={(val: Account) => onChange(val?.name)}
+                                onChange={(selectedOption: Account | null) => {
+                                    if (selectedOption) {
+                                        onChange(selectedOption.name)
+                                    }
+                                }}
                                 placeholder="Со счета*"
                                 isClearable
                                 isSearchable
@@ -102,7 +106,11 @@ const Transfer = () => {
                                 getOptionValue={(option: Account) => `${option.id}`}
                                 getOptionLabel={(option: Account) => option.name}
                                 value={account?.filter((option) => String(option.name) == value)}
-                                onChange={(val: Account) => onChange(val?.name)}
+                                onChange={(selectedOption: Account | null) => {
+                                    if (selectedOption) {
+                                        onChange(selectedOption.name)
+                                    }
+                                }}
                                 placeholder="На счет*"
                                 isClearable
                                 isSearchable

@@ -1,18 +1,34 @@
 import $host from './axios'
 
-export const getAllUsers = async () => {
-    const { data } = await $host.get('user')
+export const getAllUsers = async (selectedStatus: string | undefined) => {
+    const { data } = await $host.get('user', {
+        params: { status: selectedStatus },
+    })
     return data
 }
 
-export const createUser = async (data: { name: string; userClass: string }) => {
+export const createUser = async (data: {
+    name: string
+    userClass: string
+    surname: string
+    phone: string
+    pass: string
+    status: string
+}) => {
     const response = await $host.post('user', data)
     return response
 }
 
 export const updateUser = async (
     id: number,
-    data: { name: string; userClass: string; pass: string; phone: string },
+    data: {
+        name: string
+        userClass: string
+        surname: string
+        phone: string
+        pass: string
+        status: string
+    },
 ) => {
     const response = await $host.put(`user/${id}`, data)
     return response

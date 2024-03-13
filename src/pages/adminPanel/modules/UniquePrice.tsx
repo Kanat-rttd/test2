@@ -26,8 +26,12 @@ import { useNavigate } from 'react-router-dom'
 import UniquePriceAddModal, { UniquePrice } from '../components/UniquePriceAddModal'
 import { useState, useEffect } from 'react'
 import Dialog from '@/components/Dialog'
+import {
+    getAllIndividualPrices,
+    deleteIndividualPrice,
+} from '@/utils/services/individualPrices.service'
+
 import { getAllClients } from '@/utils/services/client.service'
-import { getAllIndividualPrices } from '@/utils/services/individualPrices.service'
 
 interface Client {
     id: string
@@ -43,6 +47,7 @@ interface individualPrice {
     clientName: string
     detail: [
         {
+            individualPriceId: string
             id: string
             name: string
             price: string
@@ -61,13 +66,18 @@ const AdminPanel = () => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const [clients, setClientsData] = useState<Client[]>([])
+    const [_clients, setClientsData] = useState<Client[]>([])
     const [inPriceData, setInPriceData] = useState<individualPrice[]>([])
 
+    const handleClose = () => {
+        onClose()
+        setSelectedData(undefined)
+    }
+
     useEffect(() => {
-        getAllClients().then((responseData) => {
+        getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
             setClientsData(responseData)
-            console.log(clients)
+            console.log(responseData)
         })
     }, [])
 
@@ -123,6 +133,7 @@ const AdminPanel = () => {
                         </Box>
                         <Accordion>
                             {inPriceData?.map((item, index) => {
+                                console.log(item)
                                 return (
                                     <AccordionItem key={index}>
                                         <h2>
@@ -151,6 +162,7 @@ const AdminPanel = () => {
                                                     <Tbody>
                                                         {item.detail &&
                                                             item.detail.map((value) => {
+                                                                console.log(value)
                                                                 return (
                                                                     <Tr key={value.id}>
                                                                         <Td>{value.name}</Td>
@@ -176,7 +188,22 @@ const AdminPanel = () => {
                                                                                     }
                                                                                     onClick={() => {
                                                                                         setSelectedData(
-                                                                                            item,
+                                                                                            {
+                                                                                                clientId:
+                                                                                                    item.clientId,
+                                                                                                clientName:
+                                                                                                    item.clientName,
+                                                                                                detail: [
+                                                                                                    {
+                                                                                                        individualPriceId:
+                                                                                                            value.individualPriceId,
+                                                                                                        id: value.id,
+                                                                                                        name: value.name,
+                                                                                                        price: value.price,
+                                                                                                        date: value.date,
+                                                                                                    },
+                                                                                                ],
+                                                                                            },
                                                                                         )
                                                                                         onOpen()
                                                                                     }}
@@ -189,12 +216,30 @@ const AdminPanel = () => {
                                                                                     cursor={
                                                                                         'pointer'
                                                                                     }
-                                                                                    onClick={() =>
+                                                                                    onClick={() => {
+                                                                                        setSelectedData(
+                                                                                            {
+                                                                                                clientId:
+                                                                                                    item.clientId,
+                                                                                                clientName:
+                                                                                                    item.clientName,
+                                                                                                detail: [
+                                                                                                    {
+                                                                                                        individualPriceId:
+                                                                                                            value.individualPriceId,
+                                                                                                        id: value.id,
+                                                                                                        name: value.name,
+                                                                                                        price: value.price,
+                                                                                                        date: value.date,
+                                                                                                    },
+                                                                                                ],
+                                                                                            },
+                                                                                        )
                                                                                         setDialog({
                                                                                             ...dialog,
                                                                                             isOpen: true,
                                                                                         })
-                                                                                    }
+                                                                                    }}
                                                                                 />
                                                                             </Box>
                                                                         </Td>
@@ -235,14 +280,21 @@ const AdminPanel = () => {
                 data={selectedData}
                 selectedRelease={selectedRelease}
                 isOpen={isOpen}
-                onClose={onClose}
+                onClose={handleClose}
             />
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}
                 header="Удалить"
                 body="Вы уверены? Вы не сможете отменить это действие впоследствии."
-                actionBtn={onClose}
+                actionBtn={() => {
+                    deleteIndividualPrice(selectedData?.detail[0].individualPriceId ?? '').then(
+                        (res) => {
+                            console.log(res)
+                        },
+                    )
+                    onClose()
+                }}
                 actionText="Удалить"
             />
         </>

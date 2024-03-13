@@ -17,8 +17,46 @@ import { useNavigate } from 'react-router-dom'
 import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
 import PurchaseModal from '../components/PurchaseModal'
+import { getAllProviders } from '@/utils/services/providers.service'
+import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
+import useSWR, { mutate } from 'swr'
+import { useState } from 'react'
+
+interface FacilityUnit {
+    id: number
+    facilityUnit: string
+}
+
+interface Providers {
+    id: number
+    name: string
+}
 
 const Products = () => {
+    const { data: providersData } = useSWR<Providers[]>('providers', {
+        fetcher: () => getAllProviders(),
+    })
+
+    const { data: facilityUnitsData } = useSWR<FacilityUnit[]>('mixers', {
+        fetcher: () => getAllBakingFacilityUnits(),
+    })
+
+    const [selectedProviderId, setSelectedProviderId] = useState<string>('')
+    const [selectedFacilityUnitId, setSelectedFacilityUnitId] = useState<string>('')
+
+    const handleProviderChange = (event: any) => {
+        setSelectedProviderId(event.target.value)
+    }
+
+    const handleFacilityUnitChange = (event: any) => {
+        setSelectedFacilityUnitId(event.target.value)
+    }
+
+    const handleAddProduct = () => {
+        console.log('mutate')
+        mutate('productPurchase')
+    }
+
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -72,16 +110,32 @@ const Products = () => {
                                     marginBottom={10}
                                 >
                                     <DateRangePicker></DateRangePicker>
-                                    <Select placeholder="Поставщик" width={'fit-content'}>
-                                        <option value="Поставщик">Поставщик</option>
+                                    <Select
+                                        placeholder="Поставщик"
+                                        value={selectedProviderId}
+                                        onChange={handleProviderChange}
+                                        width={'fit-content'}
+                                    >
+                                        {providersData?.map((provider) => (
+                                            <option key={provider.id} value={provider.id}>
+                                                {provider.name}
+                                            </option>
+                                        ))}
                                     </Select>
-                                    <Select placeholder="Цехи" width={'fit-content'}>
-                                        <option value="Лепешечный">Лепешечный</option>
-                                        <option value="Булочный">Булочный</option>
-                                        <option value="Заварной">Заварной</option>
+                                    <Select
+                                        placeholder="Цехи"
+                                        value={selectedFacilityUnitId}
+                                        onChange={handleFacilityUnitChange}
+                                        width={'fit-content'}
+                                    >
+                                        {facilityUnitsData?.map((units) => (
+                                            <option key={units.id} value={units.id}>
+                                                {units.facilityUnit}
+                                            </option>
+                                        ))}
                                     </Select>
                                 </Box>
-                                <ListTable />
+                                <ListTable selectedProviderId={selectedProviderId} />
                             </TabPanel>
                             <TabPanel>
                                 <Box width={'25%'}>
@@ -94,7 +148,7 @@ const Products = () => {
                 </Box>
                 <Box></Box>
             </Box>
-            <PurchaseModal isOpen={isOpen} onClose={onClose} />
+            <PurchaseModal isOpen={isOpen} onClose={onClose} onSuccess={handleAddProduct} />
         </>
     )
 }

@@ -4,22 +4,8 @@ import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
 import { createArrival } from '@/utils/services/finance.service'
 import useSWR from 'swr'
-
-// import { useNotify } from '@/utils/providers/ToastProvider'
-// import { useState, useEffect } from 'react'
 import { getAllClients } from '@/utils/services/client.service'
 import { getAllFinancesCategories } from '@/utils/services/financeCategories.service'
-
-// const categories = [
-//     {
-//         id: 1,
-//         name: 'Категория 1',
-//     },
-//     {
-//         id: 2,
-//         name: 'Категория 2',
-//     },
-// ]
 
 const account = [
     {
@@ -53,16 +39,13 @@ interface Client {
 }
 
 const Arrival = () => {
-    // const { data } = useSWR<Client[]>('client', fetcher)
     const { data: clientsData } = useSWR<Client[]>(['client'], {
-        fetcher: () => getAllClients(),
+        fetcher: () => getAllClients({ name: '', telegrammId: '', status: '' }),
     })
 
     const { data: categoriesData } = useSWR<Category[]>(['financeCategories'], {
         fetcher: () => getAllFinancesCategories(),
     })
-
-    // console.log(categoriesData)
 
     const {
         register,
@@ -83,11 +66,6 @@ const Arrival = () => {
             })
         // mutate()
     }
-
-    // const { success } = useNotify()
-    // console.log(data)
-
-    // success('Отправлено')
 
     return (
         <>
@@ -124,7 +102,12 @@ const Arrival = () => {
                                 getOptionLabel={(option: Account) => option.name}
                                 getOptionValue={(option: Account) => `${option.name}`}
                                 value={account?.filter((option) => String(option.name) == value)}
-                                onChange={(val: Account) => onChange(val?.name)}
+                                // onChange={(val: Account) => onChange(val?.name)}
+                                onChange={(selectedOption: Account | null) => {
+                                    if (selectedOption) {
+                                        onChange(selectedOption.name)
+                                    }
+                                }}
                                 placeholder="Выберите счет *"
                                 isClearable
                                 isSearchable
@@ -135,7 +118,7 @@ const Arrival = () => {
                 <FormErrorMessage>{errors.account?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.category}>
+            <FormControl isInvalid={!!errors.financeCategoryId}>
                 <Controller
                     name="financeCategoryId"
                     control={control}
@@ -150,7 +133,12 @@ const Arrival = () => {
                                 value={categoriesData?.filter(
                                     (option) => String(option.id) == value,
                                 )}
-                                onChange={(val: Category) => onChange(val?.id)}
+                                // onChange={(val: Category) => onChange(val?.id)}
+                                onChange={(selectedOption: Category | null) => {
+                                    if (selectedOption) {
+                                        onChange(selectedOption.id)
+                                    }
+                                }}
                                 placeholder="Категория *"
                                 isClearable
                                 isSearchable
@@ -158,7 +146,7 @@ const Arrival = () => {
                         )
                     }}
                 />
-                <FormErrorMessage>{errors.category?.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.financeCategoryId?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.clientId}>
@@ -173,8 +161,13 @@ const Arrival = () => {
                                 options={clientsData}
                                 getOptionLabel={(option: Client) => option.name}
                                 getOptionValue={(option: Client) => `${option.id}`}
-                                value={clientsData?.filter((option) => String(option.id) == value)}
-                                onChange={(val: Client) => onChange(val?.id)}
+                                value={clientsData?.filter((option) => option.id == value)}
+                                // onChange={(val: Client) => onChange(val?.id)}
+                                onChange={(selectedOption: Client | null) => {
+                                    if (selectedOption) {
+                                        onChange(selectedOption.id)
+                                    }
+                                }}
                                 placeholder="Контрагент *"
                                 isClearable
                                 isSearchable

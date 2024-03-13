@@ -15,52 +15,73 @@ import {
     InputGroup,
 } from '@chakra-ui/react'
 import { Controller, useForm } from 'react-hook-form'
+import useSWR from 'swr'
+import { getAllRawMaterials } from '@/utils/services/rawMaterials.service'
+import { getAllProviders } from '@/utils/services/providers.service'
+import { createPurchase } from '@/utils/services/productPurchase.service'
+import { useState } from 'react'
 import Select from 'react-select'
 
 type PurchaseModalProps = {
     isOpen: boolean
     onClose: () => void
+    onSuccess: () => void
 }
 
-type Purchase = {
+interface Purchase {
+    id: number
+    date: Date
+    providerId: number
+    rawMaterialId: number
+    quantity: number
+    price: number
+    deliverySum: number
+    totalSum: number
+    status?: { value: number; label: string } | string | undefined
     provider: {
-        value: number | null
-        label: string
+        id: number
+        name: string
     }
-    raw: {
-        value: number | null
-        label: string
-    }
-    qty: number | null
-    price: number | null
-    deliverySum: number | null
-    date: string
-    status: {
-        value: number | null
-        label: string
+    rawMaterial: {
+        id: number
+        name: string
     }
 }
 
 const defaultValues = {
-    provider: {
-        value: null,
-        label: '',
-    },
-    raw: {
-        value: null,
-        label: '',
-    },
-    qty: null,
-    price: null,
-    deliverySum: null,
-    date: new Date().toISOString().split('T')[0],
+    quantity: 0,
+    price: 0,
+    deliverySum: 0,
+    date: new Date(),
+    providerId: 0,
+    rawMaterialId: 0,
     status: {
-        value: null,
+        value: 0,
         label: '',
     },
 }
+interface rawMaterials {
+    id: number
+    name: string
+    uom: string
+}
 
-const PurchaseModal = ({ isOpen, onClose }: PurchaseModalProps) => {
+interface Providers {
+    id: number
+    name: string
+}
+
+const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
+    const { data: rawMaterialsData } = useSWR<rawMaterials[]>('rawMaterials', {
+        fetcher: () => getAllRawMaterials(),
+    })
+
+    const { data: providersData } = useSWR<Providers[]>('providers', {
+        fetcher: () => getAllProviders(),
+    })
+
+    const [selectedRawMaterial, setSelectedRawMaterial] = useState<rawMaterials | null>(null)
+
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -69,23 +90,20 @@ const PurchaseModal = ({ isOpen, onClose }: PurchaseModalProps) => {
         reset,
     } = useForm<Purchase>()
 
-    const provider = [
-        { value: 1, label: 'Поставщик' },
-        { value: 2, label: 'Поставщик 2' },
-    ]
-
-    const raw = [
-        { value: 1, label: 'Сырье' },
-        { value: 2, label: 'Сырье 2' },
-    ]
-
     const status = [
         { value: 1, label: 'Оплачено' },
         { value: 2, label: 'Не оплачено' },
     ]
 
     const sendData = (formData: Purchase) => {
-        console.log(formData)
+        createPurchase(formData)
+            .then((res) => {
+                console.log(res)
+                onSuccess()
+            })
+            .catch((error) => {
+                console.error('Error creating sale:', error)
+            })
         reset(defaultValues)
     }
 
@@ -97,22 +115,27 @@ const PurchaseModal = ({ isOpen, onClose }: PurchaseModalProps) => {
                 <ModalCloseButton />
                 <ModalBody>
                     <Box display={'flex'} flexDirection={'column'} gap={3}>
-                        <FormControl isInvalid={!!errors.provider}>
+                        <FormControl isInvalid={!!errors.providerId}>
                             <Controller
-                                name="provider"
+                                name="providerId"
                                 control={control}
                                 rules={{ required: 'Поля является обязательным' }}
                                 render={({ field }) => {
                                     const { onChange, value } = field
                                     return (
                                         <Select
-                                            options={provider}
-                                            onChange={(val) => onChange(val)}
-                                            value={
-                                                provider?.find(
-                                                    (option) => option?.value === value?.value,
-                                                ) || ''
-                                            }
+                                            options={providersData}
+                                            getOptionLabel={(option: Providers) => option.name}
+                                            getOptionValue={(option: Providers) => `${option.id}`}
+                                            value={providersData?.filter(
+                                                (option) => option.id == value,
+                                            )}
+                                            // onChange={(val: Providers) => onChange(val?.id)}
+                                            onChange={(selectedOption: Providers | null) => {
+                                                if (selectedOption) {
+                                                    onChange(selectedOption.id)
+                                                }
+                                            }}
                                             placeholder="Поставщик *"
                                             isClearable
                                             isSearchable
@@ -120,25 +143,37 @@ const PurchaseModal = ({ isOpen, onClose }: PurchaseModalProps) => {
                                     )
                                 }}
                             />
-                            <FormErrorMessage>{errors.provider?.message}</FormErrorMessage>
+                            <FormErrorMessage>{errors.providerId?.message}</FormErrorMessage>
                         </FormControl>
 
-                        <FormControl isInvalid={!!errors.raw}>
+                        <FormControl isInvalid={!!errors.rawMaterialId}>
                             <Controller
-                                name="raw"
+                                name="rawMaterialId"
                                 control={control}
                                 rules={{ required: 'Поля является обязательным' }}
                                 render={({ field }) => {
                                     const { onChange, value } = field
                                     return (
                                         <Select
-                                            options={raw}
-                                            onChange={(val) => onChange(val)}
-                                            value={
-                                                raw?.find(
-                                                    (option) => option?.value === value?.value,
-                                                ) || ''
+                                            options={rawMaterialsData}
+                                            getOptionLabel={(option: rawMaterials) => option.name}
+                                            getOptionValue={(option: rawMaterials) =>
+                                                `${option.id}`
                                             }
+                                            value={rawMaterialsData?.filter(
+                                                (option) => option.id == value,
+                                            )}
+                                            // onChange={(val: rawMaterials) => {
+                                            //     console.log(val)
+                                            //     onChange(val.id)
+                                            //     setSelectedRawMaterial(val)
+                                            // }}
+                                            onChange={(selectedOption: rawMaterials | null) => {
+                                                if (selectedOption) {
+                                                    onChange(selectedOption.id)
+                                                    setSelectedRawMaterial(selectedOption)
+                                                }
+                                            }}
                                             placeholder="Сырье *"
                                             isClearable
                                             isSearchable
@@ -146,20 +181,22 @@ const PurchaseModal = ({ isOpen, onClose }: PurchaseModalProps) => {
                                     )
                                 }}
                             />
-                            <FormErrorMessage>{errors.raw?.message}</FormErrorMessage>
+                            <FormErrorMessage>{errors.rawMaterialId?.message}</FormErrorMessage>
                         </FormControl>
 
-                        <FormControl isInvalid={!!errors.qty}>
+                        <FormControl isInvalid={!!errors.quantity}>
                             <InputGroup>
                                 <Input
-                                    {...register('qty', { required: 'Поле является обязательным' })}
+                                    {...register('quantity', {
+                                        required: 'Поле является обязательным',
+                                    })}
                                     autoComplete="off"
                                     placeholder="Количество *"
                                     type="number"
                                 />
-                                <InputRightAddon>кг</InputRightAddon>
+                                <InputRightAddon>{selectedRawMaterial?.uom}</InputRightAddon>
                             </InputGroup>
-                            <FormErrorMessage>{errors.qty?.message}</FormErrorMessage>
+                            <FormErrorMessage>{errors.quantity?.message}</FormErrorMessage>
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.price}>
@@ -203,16 +240,20 @@ const PurchaseModal = ({ isOpen, onClose }: PurchaseModalProps) => {
                                 control={control}
                                 rules={{ required: 'Поля является обязательным' }}
                                 render={({ field }) => {
-                                    const { onChange, value } = field
+                                    const { onChange } = field
                                     return (
                                         <Select
                                             options={status}
                                             value={
                                                 status?.find(
-                                                    (option) => option?.value == value?.value,
+                                                    (option) =>
+                                                        option?.value ===
+                                                        (typeof field.value === 'object'
+                                                            ? field.value.value
+                                                            : field.value),
                                                 ) || ''
                                             }
-                                            onChange={(val) => onChange(val)}
+                                            onChange={(val: any) => onChange(val)}
                                             placeholder="Статус *"
                                             isClearable
                                             isSearchable

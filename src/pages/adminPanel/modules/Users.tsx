@@ -14,17 +14,22 @@ import {
     Select,
 } from '@chakra-ui/react'
 import UserAddModal from '../components/UserAddModal'
-import { useEffect, useState } from 'react'
-import { getAllUsers } from '../../../utils/services/user.service'
+import { useState, useEffect } from 'react'
 import { EditIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Drawler'
 import { ADMIN_USERS_ROUTE } from '@/utils/constants/routes.consts'
 import { useNavigate } from 'react-router-dom'
 
+import useSWR, { mutate } from 'swr'
+import { getAllUsers } from '../../../utils/services/user.service'
+
 interface Users {
     id: number
     name: string
+    surname: string
+    status: string
     pass: string
+    checkPass: string
     phone: string
     userClass: string
 }
@@ -33,25 +38,28 @@ const AdminPanel = () => {
     const navigate = useNavigate()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Users | undefined>(undefined)
-    const [data, setData] = useState<Users[]>([])
+    const [selectedStatus, setSelectedStatus] = useState<string | undefined>(undefined)
+
+    const { data: usersData } = useSWR<Users[]>(['user', selectedStatus], {
+        fetcher: () => getAllUsers(selectedStatus),
+    })
 
     const handleClose = () => {
         onClose()
         setSelectedData(undefined)
-        //console.log(selectedData)
+    }
+
+    const handledSuccess = () => {
+        mutate(['user', selectedStatus])
+    }
+
+    const applyFilters = (status: string) => {
+        setSelectedStatus(status)
     }
 
     useEffect(() => {
-        getAllUsers().then((responseData) => {
-            setData(responseData)
-        })
-    }, [])
-
-    // const delProduct = (data: ProductList) => {
-    //     deleteProduct(data.id).then((res) => {
-    //         console.log(res)
-    //     })
-    // }
+        mutate(['user', selectedStatus])
+    }, [selectedStatus])
 
     return (
         <>
@@ -76,9 +84,13 @@ const AdminPanel = () => {
             <Box display="flex" flexDirection="column" height="100vh" p={5}>
                 <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        <Select placeholder="Статус" width={'fit-content'}>
-                            <option value="Активен">Активен</option>
-                            <option value="Приостановлен">Приостановлен</option>
+                        <Select
+                            placeholder="Статус"
+                            width={'fit-content'}
+                            onChange={(e) => applyFilters(e.target.value)}
+                        >
+                            <option value="Активный">Активный</option>
+                            <option value="Неактивный">Неактивный</option>
                         </Select>
                     </Box>
 
@@ -100,14 +112,14 @@ const AdminPanel = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {data.map((user, index) => {
+                            {usersData?.map((user, index) => {
                                 return (
                                     <Tr key={index}>
                                         <Td>{user.id}</Td>
                                         <Td>{user.name}</Td>
-                                        <Td>{'Вдлжьывы'}</Td>
+                                        <Td>{user.surname}</Td>
                                         <Td>{user.phone}</Td>
-                                        <Td>{'Активен'}</Td>
+                                        <Td>{user.status}</Td>
                                         <Td>{user.userClass}</Td>
                                         <Td sx={{ width: '5%' }}>
                                             <IconButton
@@ -129,7 +141,12 @@ const AdminPanel = () => {
                         </Tbody>
                     </Table>
                 </TableContainer>
-                <UserAddModal data={selectedData} isOpen={isOpen} onClose={handleClose} />
+                <UserAddModal
+                    data={selectedData}
+                    isOpen={isOpen}
+                    onClose={handleClose}
+                    onSuccess={handledSuccess}
+                />
             </Box>
         </>
     )

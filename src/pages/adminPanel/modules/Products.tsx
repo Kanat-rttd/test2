@@ -19,6 +19,8 @@ import {
     deleteProduct,
     findByFilters,
 } from '../../../utils/services/product.service'
+import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
+import useSWR from 'swr'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Drawler'
 import { useNavigate } from 'react-router-dom'
@@ -37,7 +39,20 @@ interface ProductList {
     }
 }
 
+interface FacilityUnit {
+    id: number
+    facilityUnit: string
+}
+
 const AdminPanel = () => {
+    const { data: facilityUnitsData } = useSWR<FacilityUnit[]>('mixers', {
+        fetcher: () => getAllBakingFacilityUnits(),
+    })
+
+    const { data: productsData } = useSWR<ProductList[]>('product', {
+        fetcher: () => getAllProducts(),
+    })
+
     const navigate = useNavigate()
     const { onOpen, isOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Product>()
@@ -63,7 +78,6 @@ const AdminPanel = () => {
 
     const delProduct = (selectedData: Product | undefined) => {
         if (selectedData) {
-            // console.log(data)
             deleteProduct(selectedData.id).then((res) => {
                 console.log(res)
             })
@@ -84,6 +98,7 @@ const AdminPanel = () => {
     const applyFilters = async () => {
         findByFilters(filters).then((res) => {
             console.log(res)
+            console.log(filters)
             setData(res.data.data)
         })
     }
@@ -127,7 +142,11 @@ const AdminPanel = () => {
                             name="name"
                             onChange={handleSelectChange}
                         >
-                            <option value="Наименование">Домашний</option>
+                            {productsData?.map((product, index) => (
+                                <option key={index} value={product.name}>
+                                    {product.name}
+                                </option>
+                            ))}
                         </Select>
                         <Select
                             placeholder="Цех"
@@ -135,7 +154,11 @@ const AdminPanel = () => {
                             name="bakingFacilityUnitId"
                             onChange={handleSelectChange}
                         >
-                            <option value="Батонный">Батонный</option>
+                            {facilityUnitsData?.map((unit, index) => (
+                                <option key={index} value={unit.id}>
+                                    {unit.facilityUnit}
+                                </option>
+                            ))}
                         </Select>
                         <Select
                             placeholder="Статус"
@@ -215,7 +238,7 @@ const AdminPanel = () => {
                     header="Удалить"
                     body="Вы уверены? Вы не сможете отменить это действие впоследствии."
                     actionBtn={() => {
-                        onClose()
+                        dialog.onClose()
                         delProduct(selectedData)
                     }}
                     actionText="Удалить"

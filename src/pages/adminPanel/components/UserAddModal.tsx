@@ -4,7 +4,6 @@ import {
     ModalHeader,
     ModalCloseButton,
     ModalBody,
-    Stack,
     ModalFooter,
     ModalOverlay,
     Button,
@@ -12,62 +11,109 @@ import {
     Input,
     InputRightElement,
     InputLeftAddon,
-    Select,
+    FormControl,
+    FormErrorMessage,
 } from '@chakra-ui/react'
 
-import { ChangeEvent, useEffect, useState } from 'react'
+import Select from 'react-select'
+import { Controller, useForm } from 'react-hook-form'
+import { useEffect, useState } from 'react'
 import { createUser, updateUser } from '../../../utils/services/user.service'
 
 interface Users {
     id: number
     name: string
+    surname: string
+    status: string
     pass: string
+    checkPass: string
     phone: string
     userClass: string
+}
+
+const defaultValues = {
+    name: '',
+    surname: '',
+    phone: '',
+    pass: '',
+    checkPass: '',
+    userClass: '',
+    status: '',
+}
+
+interface userClass {
+    id: number
+    name: string
+}
+
+interface status {
+    id: number
+    name: string
 }
 
 interface UserAddModalProps {
     data: Users | undefined
     isOpen: boolean
     onClose: () => void
+    onSuccess: () => void
 }
 
-const UserAddModal = ({ data, isOpen, onClose }: UserAddModalProps) => {
-    const [formData, setFormData] = useState({ name: '', pass: '', phone: '', userClass: '' })
+const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) => {
+    console.log(data)
 
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show)
 
-    useEffect(() => {
-        if (data) {
-            setFormData(data)
-        } else {
-            setFormData({ name: '', pass: '', phone: '', userClass: '' })
-        }
-    }, [data])
+    const {
+        register,
+        handleSubmit: handleSubmitForm,
+        control,
+        getValues,
+        setValue,
+        formState: { errors },
+        reset,
+    } = useForm<Users>()
 
-    const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = target
-        setFormData({
-            ...formData,
-            [name]: value,
-        })
-    }
-
-    const addUser = () => {
-        createUser(formData).then((res) => {
-            console.log(res)
-        })
-        onClose()
-    }
-
-    const updUser = () => {
+    const sendData = (formData: Users) => {
+        console.log(formData)
         if (data) {
             updateUser(data.id, formData).then((res) => {
                 console.log(res)
+                onSuccess()
+            })
+        } else {
+            createUser(formData).then((res) => {
+                console.log(res)
+                onSuccess()
             })
         }
+        handleClose()
+        reset(defaultValues)
+    }
+
+    const userClasses = [
+        { id: 1, name: 'Admin' },
+        { id: 2, name: 'Client' },
+    ]
+
+    const status = [
+        { id: 1, name: 'Активный' },
+        { id: 2, name: 'Неактивный' },
+    ]
+
+    useEffect(() => {
+        if (data) {
+            setValue('name', data.name)
+            setValue('surname', data.surname)
+            setValue('userClass', data.userClass)
+            setValue('phone', data.phone)
+            setValue('status', data.status)
+        }
+    }, [data])
+
+    const handleClose = () => {
         onClose()
+        reset(defaultValues)
     }
 
     return (
@@ -77,54 +123,117 @@ const UserAddModal = ({ data, isOpen, onClose }: UserAddModalProps) => {
                 <ModalContent>
                     <ModalHeader>{data ? 'Редактировать' : 'Добавить'} пользователя</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody>
-                        <Stack spacing={4}>
-                            <Input
-                                name="name"
-                                onChange={handleChange}
-                                placeholder="Имя"
-                                value={formData?.name ?? ''}
-                            />
-                            <Input
-                                name="surname"
-                                onChange={handleChange}
-                                placeholder="Фамилия"
-                                value={formData?.name ?? ''}
-                            />
-                            <Input
-                                name="telegram"
-                                onChange={handleChange}
-                                placeholder="Телеграм ID"
-                                value={formData?.name ?? ''}
-                            />
-                            <Select placeholder="Доступ">
-                                <option value={'admin'}>Админ</option>
-                                <option value={'client'}>Клиент</option>
-                            </Select>
-                            <Select placeholder="Статус">
-                                <option value={'active'}>Активен</option>
-                                <option value={'Не активен'}>Не активен</option>
-                            </Select>
+                    <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
+                        <FormControl isInvalid={!!errors.name}>
+                            <InputGroup>
+                                <Input
+                                    {...register('name', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                    autoComplete="off"
+                                    placeholder="Имя *"
+                                    type="text"
+                                />
+                            </InputGroup>
+                            <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+                        </FormControl>
 
-                            <InputGroup size={'lg'}>
+                        <FormControl isInvalid={!!errors.surname}>
+                            <InputGroup>
+                                <Input
+                                    {...register('surname', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                    autoComplete="off"
+                                    placeholder="Фамилия *"
+                                    type="text"
+                                />
+                            </InputGroup>
+                            <FormErrorMessage>{errors.surname?.message}</FormErrorMessage>
+                        </FormControl>
+
+                        <FormControl isInvalid={!!errors.userClass}>
+                            <Controller
+                                name="userClass"
+                                control={control}
+                                rules={{ required: 'Поля является обязательным' }}
+                                render={({ field }) => {
+                                    const { onChange, value } = field
+                                    return (
+                                        <Select
+                                            options={userClasses}
+                                            getOptionLabel={(option: userClass) => option.name}
+                                            getOptionValue={(option: userClass) => `${option.name}`}
+                                            value={userClasses?.filter(
+                                                (option) => String(option.name) == value,
+                                            )}
+                                            onChange={(selectedOption: userClass | null) => {
+                                                if (selectedOption) {
+                                                    onChange(selectedOption.name)
+                                                }
+                                            }}
+                                            placeholder="Доступ *"
+                                            isClearable
+                                            isSearchable
+                                        />
+                                    )
+                                }}
+                            />
+                            <FormErrorMessage>{errors.userClass?.message}</FormErrorMessage>
+                        </FormControl>
+
+                        <FormControl isInvalid={!!errors.phone}>
+                            <InputGroup>
                                 <InputLeftAddon>+7</InputLeftAddon>
                                 <Input
-                                    type="tel"
-                                    name="phone"
-                                    placeholder="(777)-777-77-77"
-                                    value={formData?.phone ?? ''}
-                                    onChange={handleChange}
+                                    {...register('phone', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                    autoComplete="off"
+                                    placeholder="Номер телефона *"
+                                    type="number"
                                 />
                             </InputGroup>
+                            <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
+                        </FormControl>
 
+                        <FormControl isInvalid={!!errors.status}>
+                            <Controller
+                                name="status"
+                                control={control}
+                                rules={{ required: 'Поля является обязательным' }}
+                                render={({ field }) => {
+                                    const { onChange, value } = field
+                                    return (
+                                        <Select
+                                            options={status}
+                                            getOptionLabel={(option: status) => option.name}
+                                            getOptionValue={(option: status) => option.name}
+                                            value={status.find((option) => option.name === value)}
+                                            onChange={(selectedOption: status | null) => {
+                                                if (selectedOption) {
+                                                    onChange(selectedOption.name)
+                                                }
+                                            }}
+                                            placeholder="Статус *"
+                                            isClearable
+                                            isSearchable
+                                        />
+                                    )
+                                }}
+                            />
+                            <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
+                        </FormControl>
+
+                        <FormControl isInvalid={!!errors.pass}>
                             <InputGroup>
                                 <Input
-                                    name="pass"
-                                    pr="4.5rem"
+                                    {...register('pass', {
+                                        required: data ? false : 'Поле является обязательным',
+                                    })}
+                                    autoComplete="off"
+                                    placeholder="Пароль *"
                                     type={show ? 'text' : 'password'}
-                                    placeholder="Пароль"
-                                    value={formData?.pass ?? ''}
-                                    onChange={handleChange}
                                 />
                                 <InputRightElement width="4.5rem">
                                     <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -132,14 +241,21 @@ const UserAddModal = ({ data, isOpen, onClose }: UserAddModalProps) => {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
+                            <FormErrorMessage>{errors.pass?.message}</FormErrorMessage>
+                        </FormControl>
+
+                        <FormControl isInvalid={!!errors.checkPass}>
                             <InputGroup>
                                 <Input
-                                    name="pass"
-                                    pr="4.5rem"
+                                    {...register('checkPass', {
+                                        required: data ? false : 'Поле является обязательным',
+                                        validate: (value) =>
+                                            value === getValues('pass') ||
+                                            'Пароли должны совпадать',
+                                    })}
+                                    autoComplete="off"
+                                    placeholder="Подтвердите пароль *"
                                     type={show ? 'text' : 'password'}
-                                    placeholder="Подвердите пароль"
-                                    value={formData?.pass ?? ''}
-                                    onChange={handleChange}
                                 />
                                 <InputRightElement width="4.5rem">
                                     <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -147,13 +263,14 @@ const UserAddModal = ({ data, isOpen, onClose }: UserAddModalProps) => {
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
-                        </Stack>
+                            <FormErrorMessage>{errors.checkPass?.message}</FormErrorMessage>
+                        </FormControl>
                     </ModalBody>
                     <ModalFooter gap={3}>
-                        <Button onClick={onClose} colorScheme="red">
+                        <Button onClick={handleClose} colorScheme="red">
                             Отмена
                         </Button>
-                        <Button onClick={data ? updUser : addUser} colorScheme="purple">
+                        <Button colorScheme="purple" onClick={handleSubmitForm(sendData)}>
                             {data ? 'Редактировать' : 'Добавить'}
                         </Button>
                     </ModalFooter>

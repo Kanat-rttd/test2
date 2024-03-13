@@ -5,10 +5,15 @@ export const getAllFinances = async (sortOrder = '') => {
     return data
 }
 
+export const getReportData = async () => {
+    const { data } = await $host.get('finance/report')
+    return data
+}
+
 export const createArrival = async (data: {
     account: string
     amount: string
-    category: string
+    financeCategoryId: string
     clientId: number
     comment: string
     date: Date
@@ -20,7 +25,7 @@ export const createArrival = async (data: {
 export const createConsumption = async (data: {
     account: string
     amount: string
-    category: string
+    financeCategoryId: string
     clientId: number
     comment: string
     date: Date

@@ -3,25 +3,45 @@ import styles from '../style.module.css'
 import DateRange from '../../../components/DateRange'
 import { useState } from 'react'
 import Drawler from '@/components/Drawler'
-import { getAllFinances } from '@/utils/services/finance.service'
+import { getReportData } from '@/utils/services/finance.service'
 import useSWR from 'swr'
 
-interface Finance {
-    id: number
-    amount: string
-    date: Date
-    category: string
-    clientId: number
-    account: string
-    comment: string
+interface Report {
+    initial: number
+    defaultData: [
+        {
+            name: string
+            total: number
+        },
+    ]
+    data: {
+        operational: {
+            total: number
+            data: [
+                {
+                    name: string
+                    total: number
+                },
+            ]
+        }
+        financial: {
+            total: number
+            data: [
+                {
+                    name: string
+                    total: number
+                },
+            ]
+        }
+    }
+    balance: number
+    total: number
 }
 
 const Report = () => {
-    const { data: financeData } = useSWR<Finance[]>(['finance'], {
-        fetcher: () => getAllFinances(),
+    const { data } = useSWR<Report>(['finance/report'], {
+        fetcher: () => getReportData(),
     })
-
-    console.log(financeData)
 
     const [selectionRange, setSelectionRange] = useState({
         startDate: new Date(),
@@ -34,31 +54,7 @@ const Report = () => {
         },
     ]
 
-    const data = {
-        initial: 2801106,
-        data: {
-            operational: {
-                total: 0,
-                data: [
-                    {
-                        name: 'Прикол',
-                        total: 0,
-                    },
-                ],
-            },
-            financial: {
-                total: 0,
-                data: [
-                    {
-                        name: 'Не прикол',
-                        total: 0,
-                    },
-                ],
-            },
-        },
-        balance: 0,
-        total: 2801106,
-    }
+    const defaultData = data?.defaultData
 
     const operationalData = data?.data.operational.data
     const operationTotal = data?.data.operational.total
@@ -120,7 +116,7 @@ const Report = () => {
                         }}
                     >
                         <Row label="ОСТАТОК НА НАЧАЛО" value={data?.initial} />
-                        {operationalData?.map((item, index) => (
+                        {defaultData?.map((item, index) => (
                             <Row key={index} label={item.name} value={item.total} />
                         ))}
                         <Row
@@ -128,7 +124,7 @@ const Report = () => {
                             value={operationTotal}
                             isTotal
                         />
-                        {financialData?.map((item, index) => (
+                        {operationalData?.map((item, index) => (
                             <Row key={index} label={item.name} value={item.total} />
                         ))}
                         <Row
@@ -136,6 +132,9 @@ const Report = () => {
                             value={financialTotal}
                             isTotal
                         />
+                        {financialData?.map((item, index) => (
+                            <Row key={index} label={item.name} value={item.total} />
+                        ))}
                         <Row label="Баланс переводов" value={balance} />
                         <Row label="ОСТАТОК НА КОНЕЦ" value={total} />
                     </Box>

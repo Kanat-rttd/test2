@@ -18,7 +18,10 @@ import {
 import { getAllProducts } from '@/utils/services/product.service'
 import { useState, useEffect } from 'react'
 import { getAllClients } from '@/utils/services/client.service'
-import { createIndividualPrice } from '@/utils/services/individualPrices.service'
+import {
+    createIndividualPrice,
+    updateIndividualPrice,
+} from '@/utils/services/individualPrices.service'
 
 interface Client {
     id: string
@@ -45,6 +48,7 @@ export interface UniquePrice {
     clientId: string
     clientName: string
     detail: {
+        individualPriceId: string
         id: string
         name: string
         price: string
@@ -73,27 +77,52 @@ const UniquePriceAddModal = ({ data, selectedRelease, isOpen, onClose }: UniqueP
     }, [])
 
     useEffect(() => {
-        getAllClients().then((responseData) => {
+        getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
             setClientsData(responseData)
             console.log(responseData)
         })
     }, [])
 
     const handleAddOrUpdate = () => {
-        const newData = {
-            clientId: clientsData?.find((client) => client.name == selectedRelease)?.id || '',
-            detail: [
-                {
-                    id: selectedProduct,
-                    name: products.find((product) => product.id == selectedProduct)?.name || '',
-                    price: price,
-                },
-            ],
+        console.log(selectedRelease)
+        console.log(data)
+
+        let newData
+
+        if (data == undefined) {
+            newData = {
+                clientId: clientsData?.find((client) => client.name == selectedRelease)?.id || '',
+                detail: [
+                    {
+                        id: selectedProduct,
+                        name: products.find((product) => product.id == selectedProduct)?.name || '',
+                        price: price,
+                    },
+                ],
+            }
+
+            createIndividualPrice(newData).then((res) => {
+                console.log(res)
+            })
+        } else {
+            newData = {
+                clientId: clientsData?.find((client) => client.name == data.clientName)?.id || '',
+                detail: [
+                    {
+                        id: data.detail[0].id,
+                        name:
+                            products.find((product) => product.id == data.detail[0].id)?.name || '',
+                        price: price,
+                    },
+                ],
+            }
+
+            updateIndividualPrice(newData.clientId, newData).then((res) => {
+                console.log(res)
+            })
         }
 
-        createIndividualPrice(newData).then((res) => {
-            console.log(res)
-        })
+        console.log(newData)
 
         onClose()
     }
@@ -123,7 +152,12 @@ const UniquePriceAddModal = ({ data, selectedRelease, isOpen, onClose }: UniqueP
                                             <Text fontWeight={600}>{data.detail[0].name}</Text>
                                         </Box>
                                         <InputGroup>
-                                            <Input type="number" placeholder="Цена" />
+                                            <Input
+                                                type="number"
+                                                placeholder="Цена"
+                                                value={price}
+                                                onChange={(e) => setPrice(e.target.value)}
+                                            />
                                             <InputRightAddon>₸</InputRightAddon>
                                         </InputGroup>
                                     </>

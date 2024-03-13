@@ -2,7 +2,7 @@ export type ArrivalInputs = {
     amount: string
     date: Date
     account: string
-    category: string
+    financeCategoryId: string
     clientId: number
     comment: string
 }

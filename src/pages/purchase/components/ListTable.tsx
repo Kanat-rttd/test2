@@ -12,35 +12,69 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import EditModal from './EditModal'
+import { getAllPruchases } from '@/utils/services/productPurchase.service'
+import dayjs from 'dayjs'
+import useSWR, { mutate } from 'swr'
 
-export type PurchaseEdit = {
-    provider: string
-    raw: string
-    qty: number
-    price: number
+interface AllPurchases {
+    purchases: Purchase[]
+    totalQuantity: number
     totalSum: number
-    deliverySum: number
-    date: string
-    status: string
+    totalDeliverySum: number
 }
 
-const ListTable = () => {
-    const data = [
-        {
-            id: 1,
-            date: '2024-02-28',
-            provider: 'Поставщик',
-            raw: 'Сырье',
-            qty: 50,
-            price: 5000,
-            deliverySum: 2000,
-            totalSum: 50000,
-            status: 'Оплачено',
-        },
-    ]
+interface Purchase {
+    id: number
+    date: Date
+    providerId: number
+    rawMaterialId: number
+    quantity: number
+    price: number
+    deliverySum: number
+    totalSum: number
+    status: string
+    provider: {
+        id: number
+        name: string
+    }
+    rawMaterial: {
+        id: number
+        name: string
+    }
+}
 
-    const [selectedData, setSelectedData] = useState<PurchaseEdit>()
+type ListTableProps = {
+    selectedProviderId: string
+}
+
+const ListTable = ({ selectedProviderId }: ListTableProps) => {
+    const { data: purchasesData } = useSWR<AllPurchases>('productPurchase', {
+        fetcher: () => getAllPruchases(),
+    })
+
+    console.log(purchasesData)
+
+    const filteredPurchases = purchasesData?.purchases.filter((purchase) => {
+        console.log(purchase.provider.id)
+        if (selectedProviderId && Number(selectedProviderId) !== purchase.provider.id) {
+            return false
+        }
+        return true
+    })
+    console.log(filteredPurchases)
+
+    const [selectedData, setSelectedData] = useState<Purchase>()
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const handleSelected = (data: Purchase) => {
+        setSelectedData(data)
+        onOpen()
+    }
+
+    const handleUpdateProduct = () => {
+        console.log('mutate')
+        mutate('productPurchase')
+    }
 
     return (
         <>
@@ -61,23 +95,24 @@ const ListTable = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {data.map((purchase) => {
+                        {filteredPurchases?.map((purchase) => {
+                            // Здесь используйте filteredPurchases
                             return (
                                 <Tr key={purchase.id}>
                                     <Td>{purchase.id}</Td>
-                                    <Td>{purchase.date}</Td>
-                                    <Td>{purchase.provider}</Td>
-                                    <Td>{purchase.raw}</Td>
-                                    <Td>{purchase.qty}</Td>
+                                    <Td>{dayjs(purchase.date).format('DD.MM.YYYY')}</Td>
+                                    <Td>{purchase.provider.name}</Td>
+                                    <Td>{purchase.rawMaterial.name}</Td>
+                                    <Td>{purchase.quantity}</Td>
                                     <Td>{purchase.price}</Td>
-                                    <Td>{purchase.deliverySum}</Td>
                                     <Td>{purchase.totalSum}</Td>
+                                    <Td>{purchase.deliverySum}</Td>
                                     <Td>{purchase.status}</Td>
                                     <Td>
                                         <EditIcon
                                             onClick={() => {
-                                                setSelectedData(purchase)
-                                                onOpen()
+                                                console.log(purchase)
+                                                handleSelected(purchase)
                                             }}
                                             boxSize={5}
                                             cursor={'pointer'}
@@ -97,14 +132,14 @@ const ListTable = () => {
                             <Th> </Th>
                             <Th> </Th>
                             <Th color={'#000'} fontSize={15}>
-                                50000
+                                {purchasesData?.totalQuantity}
                             </Th>
                             <Th> </Th>
                             <Th color={'#000'} fontSize={15}>
-                                50000
+                                {purchasesData?.totalSum}
                             </Th>
                             <Th color={'#000'} fontSize={15}>
-                                5000
+                                {purchasesData?.totalDeliverySum}
                             </Th>
                             <Th> </Th>
                             <Th> </Th>
@@ -112,7 +147,12 @@ const ListTable = () => {
                     </Tfoot>
                 </Table>
             </TableContainer>
-            <EditModal selectedData={selectedData} isOpen={isOpen} onClose={onClose} />
+            <EditModal
+                selectedData={selectedData}
+                isOpen={isOpen}
+                onClose={onClose}
+                onSuccess={handleUpdateProduct}
+            />
         </>
     )
 }

@@ -1,7 +1,25 @@
 import $host from './axios'
 
-export const getAllClients = async () => {
-    const { data } = await $host.get('client')
+// export const getAllClients = async () => {
+//     const { data } = await $host.get('client')
+//     return data
+// }
+
+export const getAllClients = async (filters: {
+    name: string
+    telegrammId: string
+    status: string
+}) => {
+    const { data } = await $host.get('client', {
+        params: { filters },
+    })
+    return data
+}
+
+export const getAllClientsFilter = async () => {
+    const { data } = await $host.get('client', {
+        params: {},
+    })
     return data
 }
 

@@ -44,7 +44,7 @@ interface Client {
 
 const Arrival = () => {
     const { data: clientsData } = useSWR<Client[]>(['client'], {
-        fetcher: () => getAllClients(),
+        fetcher: () => getAllClients({ name: '', telegrammId: '', status: '' }),
     })
 
     const { data: categoriesData } = useSWR<Category[]>(['financeCategories'], {
@@ -111,7 +111,11 @@ const Arrival = () => {
                                 getOptionLabel={(option: Account) => option.name}
                                 getOptionValue={(option: Account) => `${option.name}`}
                                 value={account?.filter((option) => String(option.name) == value)}
-                                onChange={(val: Account) => onChange(val?.name)}
+                                onChange={(selectedOption: Account | null) => {
+                                    if (selectedOption) {
+                                        onChange(selectedOption.name)
+                                    }
+                                }}
                                 placeholder="Выберите счет *"
                                 isClearable
                                 isSearchable
@@ -122,7 +126,7 @@ const Arrival = () => {
                 <FormErrorMessage>{errors.account?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.category}>
+            <FormControl isInvalid={!!errors.financeCategoryId}>
                 <Controller
                     name="financeCategoryId"
                     control={control}
@@ -137,7 +141,11 @@ const Arrival = () => {
                                 value={categoriesData?.filter(
                                     (option) => String(option.id) == value,
                                 )}
-                                onChange={(val: Category) => onChange(val?.id)}
+                                onChange={(selectedOption: Category | null) => {
+                                    if (selectedOption) {
+                                        onChange(selectedOption.id)
+                                    }
+                                }}
                                 placeholder="Категория *"
                                 isClearable
                                 isSearchable
@@ -145,7 +153,7 @@ const Arrival = () => {
                         )
                     }}
                 />
-                <FormErrorMessage>{errors.category?.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.financeCategoryId?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.clientId}>
@@ -160,8 +168,12 @@ const Arrival = () => {
                                 options={clientsData}
                                 getOptionLabel={(option: Client) => option.name}
                                 getOptionValue={(option: Client) => `${option.id}`}
-                                value={clientsData?.filter((option) => String(option.id) == value)}
-                                onChange={(val: Client) => onChange(val?.id)}
+                                value={clientsData?.filter((option) => option.id == value)}
+                                onChange={(selectedOption: Client | null) => {
+                                    if (selectedOption) {
+                                        onChange(selectedOption.id)
+                                    }
+                                }}
                                 placeholder="Контрагент *"
                                 isClearable
                                 isSearchable

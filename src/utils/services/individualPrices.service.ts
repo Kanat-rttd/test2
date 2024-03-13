@@ -13,6 +13,26 @@ export const createIndividualPrice = async (data: {
     return response
 }
 
+export const updateIndividualPrice = async (
+    id: string,
+    data: {
+        clientId: string
+        detail: {
+            id: string
+            name: string
+            price: string
+        }[]
+    },
+) => {
+    const response = await $host.put(`inPrice/${id}`, data)
+    return response
+}
+
+export const deleteIndividualPrice = async (id: string) => {
+    const response = await $host.delete(`inPrice/${id}`)
+    return response
+}
+
 // export const getSaleById = async (id: number) => {
 //     const { data } = await $host.get(`sales/${id}`)
 //     return data
