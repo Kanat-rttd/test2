@@ -48,7 +48,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose, 
     }, [])
 
     useEffect(() => {
-        getAllClients().then((responseData) => {
+        getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
             setClientsData(responseData)
             console.log(responseData)
         })

@@ -49,7 +49,7 @@ const RequestAddModal = ({ isOpen, onClose }: ClientAddModalProps) => {
     const [transformedData, setTransformedData] = useState<any[]>([])
 
     useEffect(() => {
-        Promise.all([getAllClients(), getAllProducts()])
+        Promise.all([getAllClients({ name: '', telegrammId: '', status: '' }), getAllProducts()])
             .then(([clientsData, productsData]) => {
                 setDataClients(clientsData)
                 setDataProducts(productsData)
