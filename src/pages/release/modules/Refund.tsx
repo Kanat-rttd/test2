@@ -19,6 +19,10 @@ import PivotTable from '../components/PivotTable'
 import DistributionModal from '../components/DistributionModal'
 
 const Refund = () => {
+    const handleSuccess = () => {
+        console.log('1')
+    }
+
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -83,7 +87,13 @@ const Refund = () => {
                     </Tabs>
                 </Box>
             </Box>
-            <DistributionModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} status="1" />
+            <DistributionModal
+                isOpen={isOpen}
+                onClose={onClose}
+                onOpen={onOpen}
+                onSuccess={handleSuccess}
+                status="1"
+            />
         </Box>
     )
 }
