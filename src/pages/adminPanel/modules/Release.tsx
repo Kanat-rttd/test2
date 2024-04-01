@@ -1,5 +1,13 @@
 import Drawler from '@/components/Drawler'
-import { ADMIN_RELEASE_ROUTE, ADMIN_UNIQUEPRICE_ROUTE } from '@/utils/constants/routes.consts'
+import {
+    ADMIN_PRODUCTS_ROUTE,
+    ADMIN_MAGAZINES_ROUTE,
+    ADMIN_OVERPRICE_ROUTE,
+    ADMIN_PROVIDER_ROUTE,
+    ADMIN_RELEASE_ROUTE,
+    ADMIN_UNIQUEPRICE_ROUTE,
+    ADMIN_USERS_ROUTE,
+} from '@/utils/constants/routes.consts'
 import { EditIcon } from '@chakra-ui/icons'
 import {
     Avatar,
@@ -73,18 +81,53 @@ const AdminPanel = () => {
                         <Drawler></Drawler>
                         <Button
                             height={'100%'}
-                            width={'20%'}
+                            onClick={() => navigate(ADMIN_PRODUCTS_ROUTE)}
+                            fontSize={'14px'}
+                        >
+                            Продукты
+                        </Button>
+                        <Button
+                            height={'100%'}
+                            onClick={() => navigate(ADMIN_USERS_ROUTE)}
+                            fontSize={'14px'}
+                        >
+                            Пользователи
+                        </Button>
+                        <Button
+                            height={'100%'}
                             onClick={() => navigate(ADMIN_RELEASE_ROUTE)}
+                            bg={'rgba(217, 217, 217, 1)'}
+                            fontSize={'14px'}
                         >
                             Реализаторы
                         </Button>
                         <Button
-                            bg={'rgba(217, 217, 217, 1)'}
                             height={'100%'}
-                            width={'20%'}
                             onClick={() => navigate(ADMIN_UNIQUEPRICE_ROUTE)}
+                            fontSize={'14px'}
                         >
                             Уникальные цены
+                        </Button>
+                        <Button
+                            height={'100%'}
+                            onClick={() => navigate(ADMIN_PROVIDER_ROUTE)}
+                            fontSize={'14px'}
+                        >
+                            Поставщик_товары
+                        </Button>
+                        <Button
+                            height={'100%'}
+                            onClick={() => navigate(ADMIN_MAGAZINES_ROUTE)}
+                            fontSize={'14px'}
+                        >
+                            Магазины
+                        </Button>
+                        <Button
+                            height={'100%'}
+                            onClick={() => navigate(ADMIN_OVERPRICE_ROUTE)}
+                            fontSize={'14px'}
+                        >
+                            Сверху
                         </Button>
                     </Box>
                     <Avatar size={'md'} bg="teal.500" />

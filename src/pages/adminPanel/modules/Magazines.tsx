@@ -12,15 +12,10 @@ import {
     Avatar,
     Select,
 } from '@chakra-ui/react'
-import ProductAddModal, { Product } from '../components/ProductAddModal'
 import { useState, useEffect } from 'react'
-import {
-    getAllProducts,
-    deleteProduct,
-    findByFilters,
-} from '../../../utils/services/product.service'
-import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
-import useSWR from 'swr'
+import { deleteProduct, findByFilters } from '../../../utils/services/product.service'
+// import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
+// import useSWR from 'swr'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Drawler'
 import { useNavigate } from 'react-router-dom'
@@ -34,56 +29,66 @@ import {
     ADMIN_UNIQUEPRICE_ROUTE,
     ADMIN_USERS_ROUTE,
 } from '@/utils/constants/routes.consts'
-interface ProductList {
+import { useApi } from '@/utils/services/axios'
+import MagazineAddModal from '../components/MagazineAddModal'
+
+// interface FacilityUnit {
+//     id: number
+//     facilityUnit: string
+// }
+
+interface Magazines {
     id: number
     name: string
-    price: number
-    costPrice: number
+    clientId: number
     status: string
-    bakingFacilityUnit: {
+    client: {
         id: number
-        facilityUnit: string
+        name: string
     }
 }
 
-interface FacilityUnit {
-    id: number
-    facilityUnit: string
+interface Client {
+    id: string
+    name: string
+    surname: string
+    contact: string
+    telegrammId: string
+    status: string
 }
 
 const AdminPanel = () => {
-    const { data: facilityUnitsData } = useSWR<FacilityUnit[]>('mixers', {
-        fetcher: () => getAllBakingFacilityUnits(),
-    })
+    const { data: magazinesData } = useApi<Magazines[]>('magazines')
+    const { data: clientsData } = useApi<Client[]>('client')
 
-    const { data: productsData } = useSWR<ProductList[]>('product', {
-        fetcher: () => getAllProducts(),
-    })
+    console.log(magazinesData)
+
+    // const { data: facilityUnitsData } = useSWR<FacilityUnit[]>('mixers', {
+    //     fetcher: () => getAllBakingFacilityUnits(),
+    // })
+
+    // const { data: productsData } = useSWR<ProductList[]>('product', {
+    //     fetcher: () => getAllProducts(),
+    // })
 
     const navigate = useNavigate()
     const { onOpen, isOpen, onClose } = useDisclosure()
-    const [selectedData, setSelectedData] = useState<Product>()
-    const [data, setData] = useState<ProductList[]>([])
+    const [selectedData, setSelectedData] = useState<Magazines>()
+    // const [data, setData] = useState<ProductList[]>([])
     const [filters, setFilters] = useState({ name: '', bakingFacilityUnitId: '', status: '' })
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    useEffect(() => {
-        getAllProducts().then((responseData) => {
-            setData(responseData)
-            console.log(responseData)
-        })
-    }, [])
+    // useEffect(() => {
+    //     getAllProducts().then((responseData) => {
+    //         setData(responseData)
+    //         console.log(responseData)
+    //     })
+    // }, [])
 
-    const handleAddProduct = () => {
-        getAllProducts().then((responseData) => {
-            setData(responseData)
-        })
-    }
-
-    const delProduct = (selectedData: Product | undefined) => {
+    const delProduct = (selectedData: Magazines | undefined) => {
         if (selectedData) {
             deleteProduct(selectedData.id).then((res) => {
                 console.log(res)
@@ -106,7 +111,7 @@ const AdminPanel = () => {
         findByFilters(filters).then((res) => {
             console.log(res)
             console.log(filters)
-            setData(res.data.data)
+            // setData(res.data.data)
         })
     }
 
@@ -131,7 +136,6 @@ const AdminPanel = () => {
                     <Button
                         height={'100%'}
                         onClick={() => navigate(ADMIN_PRODUCTS_ROUTE)}
-                        bg={'rgba(217, 217, 217, 1)'}
                         fontSize={'14px'}
                     >
                         Продукты
@@ -167,6 +171,7 @@ const AdminPanel = () => {
                     <Button
                         height={'100%'}
                         onClick={() => navigate(ADMIN_MAGAZINES_ROUTE)}
+                        bg={'rgba(217, 217, 217, 1)'}
                         fontSize={'14px'}
                     >
                         Магазины
@@ -186,26 +191,26 @@ const AdminPanel = () => {
                 <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <Select
-                            placeholder="Имя"
+                            placeholder="Магазины"
                             width={'fit-content'}
                             name="name"
                             onChange={handleSelectChange}
                         >
-                            {productsData?.map((product, index) => (
+                            {magazinesData?.map((product, index) => (
                                 <option key={index} value={product.name}>
                                     {product.name}
                                 </option>
                             ))}
                         </Select>
                         <Select
-                            placeholder="Цех"
+                            placeholder="Реализатор"
                             width={'fit-content'}
                             name="bakingFacilityUnitId"
                             onChange={handleSelectChange}
                         >
-                            {facilityUnitsData?.map((unit, index) => (
+                            {clientsData?.map((unit, index) => (
                                 <option key={index} value={unit.id}>
-                                    {unit.facilityUnit}
+                                    {unit.name}
                                 </option>
                             ))}
                         </Select>
@@ -229,30 +234,25 @@ const AdminPanel = () => {
                         <Thead>
                             <Tr>
                                 <Th>№</Th>
-                                <Th>Наименование</Th>
-                                <Th>Цех</Th>
+                                <Th>Магазин</Th>
+                                <Th>Реализатор</Th>
                                 <Th>Статус</Th>
-                                <Th>Цена</Th>
-                                <Th>Себестоимость</Th>
-                                <Th>Действия</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {data.map((product, index) => {
+                            {magazinesData?.map((item, index) => {
                                 return (
                                     <Tr key={index}>
-                                        <Td>{product.id}</Td>
-                                        <Td>{product.name}</Td>
-                                        <Td>{product.bakingFacilityUnit.facilityUnit}</Td>
-                                        <Td>{product.status}</Td>
-                                        <Td>{product.price}</Td>
-                                        <Td>{product.costPrice}</Td>
+                                        <Td>{item.id}</Td>
+                                        <Td>{item.name}</Td>
+                                        <Td>{item.client.name}</Td>
+                                        <Td>{item.status}</Td>
                                         <Td>
                                             <EditIcon
                                                 boxSize={'1.5em'}
                                                 cursor={'pointer'}
                                                 onClick={() => {
-                                                    setSelectedData(product)
+                                                    setSelectedData(item)
                                                     onOpen()
                                                 }}
                                             />
@@ -261,7 +261,7 @@ const AdminPanel = () => {
                                                 color={'red'}
                                                 cursor={'pointer'}
                                                 onClick={() => {
-                                                    setSelectedData(product)
+                                                    setSelectedData(item)
                                                     setDialog({
                                                         ...dialog,
                                                         isOpen: true,
@@ -275,12 +275,7 @@ const AdminPanel = () => {
                         </Tbody>
                     </Table>
                 </TableContainer>
-                <ProductAddModal
-                    data={selectedData}
-                    isOpen={isOpen}
-                    onClose={handleClose}
-                    onAddProduct={handleAddProduct}
-                />
+                <MagazineAddModal data={selectedData} isOpen={isOpen} onClose={handleClose} />
                 <Dialog
                     isOpen={dialog.isOpen}
                     onClose={dialog.onClose}

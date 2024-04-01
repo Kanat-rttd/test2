@@ -34,6 +34,7 @@ import {
     ADMIN_UNIQUEPRICE_ROUTE,
     ADMIN_USERS_ROUTE,
 } from '@/utils/constants/routes.consts'
+
 interface ProductList {
     id: number
     name: string
@@ -131,7 +132,6 @@ const AdminPanel = () => {
                     <Button
                         height={'100%'}
                         onClick={() => navigate(ADMIN_PRODUCTS_ROUTE)}
-                        bg={'rgba(217, 217, 217, 1)'}
                         fontSize={'14px'}
                     >
                         Продукты
@@ -174,6 +174,7 @@ const AdminPanel = () => {
                     <Button
                         height={'100%'}
                         onClick={() => navigate(ADMIN_OVERPRICE_ROUTE)}
+                        bg={'rgba(217, 217, 217, 1)'}
                         fontSize={'14px'}
                     >
                         Сверху

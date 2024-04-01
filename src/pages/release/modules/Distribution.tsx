@@ -13,6 +13,7 @@ import {
     Tabs,
     useDisclosure,
 } from '@chakra-ui/react'
+import { mutate } from '@/utils/services/axios'
 import { useNavigate } from 'react-router-dom'
 import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
@@ -21,6 +22,11 @@ import DistributionModal from '../components/DistributionModal'
 const Distribution = () => {
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const handleUpdateProduct = () => {
+        mutate('release')
+        console.log('success Distribution')
+    }
 
     return (
         <Box>
@@ -35,12 +41,12 @@ const Distribution = () => {
                     <Button
                         height={'100%'}
                         width={'20%'}
+                        bg={'rgba(217, 217, 217, 1)'}
                         onClick={() => navigate(RELEASE_DISTRIBUTION_ROUTE)}
                     >
                         Выдача
                     </Button>
                     <Button
-                        bg={'rgba(217, 217, 217, 1)'}
                         height={'100%'}
                         width={'20%'}
                         onClick={() => navigate(RELEASE_REFUND_ROUTE)}
@@ -83,7 +89,13 @@ const Distribution = () => {
                     </Tabs>
                 </Box>
             </Box>
-            <DistributionModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} status="0" />
+            <DistributionModal
+                isOpen={isOpen}
+                onClose={onClose}
+                onOpen={onOpen}
+                onSuccess={handleUpdateProduct}
+                status="0"
+            />
         </Box>
     )
 }

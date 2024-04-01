@@ -1,4 +1,5 @@
 import axios from 'axios'
+import useSWR, { mutate } from 'swr'
 
 const $host = axios.create({
     baseURL: import.meta.env.VITE_REACT_APP_BASE_URL,
@@ -25,5 +26,15 @@ export const fetcher = async (url: string, params?: any) => {
     const response = await $host.get(url, { params })
     return response.data
 }
-
+export function useApi<T>(url: string) {
+    const { data, error, mutate, isLoading } = useSWR<T>(url, fetcher)
+    return {
+        loading: !error && !data,
+        data,
+        isLoading,
+        error,
+        mutate,
+    }
+}
+export { mutate }
 export default $host

@@ -5,6 +5,16 @@ export const getAllFinances = async (sortOrder = '') => {
     return data
 }
 
+export const getFinanceAmountByInvoiceNumber = async (invoiceNumber: number) => {
+    const { data } = await $host.get(`finance/${invoiceNumber}`)
+    return data
+}
+
+export const getAllTotalsWithInvoiceNumbers = async () => {
+    const { data } = await $host.get(`finance/totals`)
+    return data
+}
+
 export const getReportData = async () => {
     const { data } = await $host.get('finance/report')
     return data
@@ -18,7 +28,30 @@ export const createArrival = async (data: {
     comment: string
     date: Date
 }) => {
-    const response = await $host.post('finance/arrival', data)
+    const requestData = {
+        data: data,
+    }
+    const response = await $host.post('finance/arrival', requestData)
+    return response
+}
+
+export const createInvoiceArrival = async (
+    invoiceNumber: number | undefined,
+    data: {
+        account: string
+        amount: string
+        financeCategoryId: string
+        clientId: number
+        comment: string
+        date: Date
+    },
+) => {
+    const requestData = {
+        invoiceNumber: invoiceNumber,
+        data: data,
+    }
+
+    const response = await $host.post('finance/arrival', requestData)
     return response
 }
 
@@ -30,7 +63,10 @@ export const createConsumption = async (data: {
     comment: string
     date: Date
 }) => {
-    const response = await $host.post('finance/consumption', data)
+    const requestData = {
+        data: data,
+    }
+    const response = await $host.post('finance/consumption', requestData)
     return response
 }
 
@@ -41,7 +77,10 @@ export const createTransfer = async (data: {
     comment: string
     amount: string
 }) => {
-    const response = await $host.post('finance/transfer', data)
+    const requestData = {
+        data: data,
+    }
+    const response = await $host.post('finance/transfer', requestData)
     return response
 }
 

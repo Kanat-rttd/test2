@@ -23,6 +23,7 @@ interface DistributionModalProps {
     isOpen: boolean
     onOpen: () => void
     onClose: () => void
+    onSuccess: () => void
     status: string
 }
 
@@ -36,7 +37,12 @@ interface BreadNames {
     bread: string
 }
 
-const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose, status }) => {
+const DistributionModal: React.FC<DistributionModalProps> = ({
+    isOpen,
+    onClose,
+    onSuccess,
+    status,
+}) => {
     const [breadNames, setBreadNames] = useState<BreadNames[]>([])
     const [clientsData, setClientsData] = useState<Client[]>([])
 
@@ -103,6 +109,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({ isOpen, onClose, 
         createDispatch(distributionData)
             .then((res) => {
                 console.log(res)
+                onSuccess()
             })
             .catch((error) => {
                 console.error('Error creating sale:', error)

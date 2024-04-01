@@ -1,53 +1,76 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react'
+import {
+    Table,
+    TableContainer,
+    Tbody,
+    Td,
+    Th,
+    Thead,
+    Tr,
+    useDisclosure,
+    Tfoot,
+} from '@chakra-ui/react'
+import { useState, useEffect } from 'react'
+import { getAllDispatches } from '@/utils/services/dispatch.service'
 import EditModal from './EditModal'
-import { useState } from 'react'
-import dayjs from 'dayjs'
-import { useApi } from '@/utils/services/axios'
 
 interface Dispatch {
     id: number
     clientId: number
-    createdAt: Date
+    createdAt: string
     dispatch: string
-    goodsDispatchDetails: [
-        {
-            id: number
-            productId: number
-            quantity: number
-            product: {
-                name: string
-                price: number
-                bakingFacilityUnit: {
-                    id: number
-                    facilityUnit: string
-                }
+    goodsDispatchDetails: {
+        id: number
+        productId: number
+        quantity: number
+        price: string
+        product: {
+            name: string
+            price: number
+            bakingFacilityUnit: {
+                id: number
+                facilityUnit: string
             }
-        },
-    ]
+        }
+    }[]
     client: {
         id: number
         name: string
     }
 }
 
-// interface ListTableProps {
-//     status: string
-// }
+interface ListTableProps {
+    status: string
+}
 
-export default function ListTable({ status }: any) {
-    console.log(status)
+const ListTable: React.FC<ListTableProps> = ({ status }) => {
+    const [data, setData] = useState<Dispatch[]>([])
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const { data: dispatchesData } = useApi<Dispatch[]>('release')
+    const [selectedRow, setSelectedRow] = useState<Dispatch | null>(null)
 
-    console.log(dispatchesData)
+    useEffect(() => {
+        getAllDispatches().then((res) => {
+            console.log(res.data)
+            setData(res.data.filter((row: Dispatch) => row.dispatch == status))
+        })
+    }, [])
 
     const [modal, setModal] = useState({
         isOpen: false,
         onClose: () => setModal({ ...modal, isOpen: false }),
     })
+
+    const handleEditClick = (row: Dispatch) => {
+        setSelectedRow(row)
+        setModal({ ...modal, isOpen: true })
+    }
+
+    const handleModalClose = () => {
+        setSelectedRow(null)
+        setModal({ ...modal, isOpen: false })
+    }
 
     return (
         <>
@@ -57,14 +80,15 @@ export default function ListTable({ status }: any) {
                         <Tr>
                             <Th>№</Th>
                             <Th>Реализатор</Th>
-                            <Th>Виды хлеба</Th>
+                            <Th>Продукт</Th>
                             <Th>Количество </Th>
-                            <Th>Дата и время</Th>
+                            <Th>Цена</Th>
+                            <Th>Сумма</Th>
                             <Th>Действия</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {dispatchesData?.map((row) => {
+                        {data?.map((row) => {
                             return (
                                 <Tr key={row.id}>
                                     <Td>{row.id}</Td>
@@ -83,13 +107,29 @@ export default function ListTable({ status }: any) {
                                             ))}
                                         </div>
                                     </Td>
-                                    <Td>{dayjs(row.createdAt).format('HH:MM DD.MM.YYYY')}</Td>
+                                    <Td>
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            {row.goodsDispatchDetails.map((details, index) => (
+                                                <span key={index}>{details.price}</span>
+                                            ))}
+                                        </div>
+                                    </Td>
+                                    <Td>
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            {row.goodsDispatchDetails.map((details, index) => (
+                                                <span key={index}>
+                                                    {Number(details.price) *
+                                                        Number(details.quantity)}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </Td>
                                     <Td style={{ display: 'flex', gap: '10px' }}>
                                         {
                                             <EditIcon
                                                 boxSize={'1.5em'}
                                                 cursor={'pointer'}
-                                                onClick={() => setModal({ ...modal, isOpen: true })}
+                                                onClick={() => handleEditClick(row)}
                                             />
                                         }
                                         {
@@ -105,9 +145,16 @@ export default function ListTable({ status }: any) {
                             )
                         })}
                     </Tbody>
+                    <Tfoot>
+                        <Tr>
+                            <Th>To convert</Th>
+                            <Th>into</Th>
+                            <Th isNumeric>multiply by</Th>
+                        </Tr>
+                    </Tfoot>
                 </Table>
             </TableContainer>
-            <EditModal isOpen={modal.isOpen} onClose={modal.onClose} />
+            <EditModal isOpen={modal.isOpen} onClose={handleModalClose} selectedRow={selectedRow} />
             <Dialog
                 isOpen={isOpen}
                 onClose={onClose}
@@ -120,4 +167,4 @@ export default function ListTable({ status }: any) {
     )
 }
 
-// export default ListTable
+export default ListTable

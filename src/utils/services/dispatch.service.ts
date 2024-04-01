@@ -14,6 +14,11 @@ export const createDispatch = async (data: {
     return response
 }
 
+export const getInvoiceData = async () => {
+    const { data } = await $host.get('release/invoice')
+    return data
+}
+
 // export const getSaleById = async (id: number) => {
 //     const { data } = await $host.get(`sales/${id}`)
 //     return data

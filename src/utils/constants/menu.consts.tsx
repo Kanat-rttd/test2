@@ -29,6 +29,13 @@ import {
     INVENTORY_DETAILS_ROUTE,
     ADMIN_PROVIDER_ROUTE,
     INVENTORY_FACT_ROUTE,
+    SELLS_ROUTE,
+    SELLS_JOURNAL_ROUTE,
+    SELLS_INVOICE_ROUTE,
+    SELLS_DEBT_ACCOUNTING_ROUTE,
+    SELLS_DEBT_TRANSFER_ROUTE,
+    ADMIN_MAGAZINES_ROUTE,
+    ADMIN_OVERPRICE_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -89,6 +96,11 @@ export const menuItems: MenuItem[] = [
         label: 'Инвентаризация',
         allowedClasses: ['Admin', 'Client'],
     },
+    {
+        route: SELLS_ROUTE,
+        label: 'Продажи',
+        allowedClasses: ['Admin', 'Client'],
+    },
 ]
 
 export const subMenuItems: MenuItem[] = [
@@ -119,6 +131,18 @@ export const subMenuItems: MenuItem[] = [
     {
         route: ADMIN_PROVIDER_ROUTE,
         label: 'Поставщик-товары',
+        path: ADMIN_ROUTE,
+        allowedClasses: ['Admin'],
+    },
+    {
+        route: ADMIN_MAGAZINES_ROUTE,
+        label: 'Магазины',
+        path: ADMIN_ROUTE,
+        allowedClasses: ['Admin'],
+    },
+    {
+        route: ADMIN_OVERPRICE_ROUTE,
+        label: 'Сверху',
         path: ADMIN_ROUTE,
         allowedClasses: ['Admin'],
     },
@@ -212,6 +236,30 @@ export const subMenuItems: MenuItem[] = [
         route: INVENTORY_DETAILS_ROUTE,
         label: 'Инвентаризация',
         path: INVENTORY_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: SELLS_JOURNAL_ROUTE,
+        label: 'Журнал Продаж',
+        path: SELLS_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: SELLS_INVOICE_ROUTE,
+        label: 'Накладной',
+        path: SELLS_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: SELLS_DEBT_ACCOUNTING_ROUTE,
+        label: 'Учет долгов',
+        path: SELLS_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: SELLS_DEBT_TRANSFER_ROUTE,
+        label: 'Перевод Долга',
+        path: SELLS_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
 ]
