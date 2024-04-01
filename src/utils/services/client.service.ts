@@ -4,7 +4,7 @@ import $host from './axios'
 //     const { data } = await $host.get('client')
 //     return data
 // }
-
+//TODO: Нет смысла обьект
 export const getAllClients = async (filters: {
     name: string
     telegrammId: string

@@ -58,6 +58,7 @@ const modalData = {
 }
 
 const BakingAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
+    //TODO: useForm переписать
     const [formData, setFormData] = useState({
         breadType: '',
         flour: '',

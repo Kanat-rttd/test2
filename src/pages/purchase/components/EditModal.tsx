@@ -75,6 +75,7 @@ type EditModalProps = {
 
 const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps) => {
     console.log(selectedData)
+    //TODO: Избавиться от fetcher'а который ничего не делает
     const { data: rawMaterialsData } = useSWR<rawMaterials[]>('rawMaterials', {
         fetcher: () => getAllRawMaterials(),
     })
@@ -83,6 +84,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
         fetcher: () => getAllProviders(),
     })
 
+    //TODO: Избавиться от не нужных стейтов
     const [selectedRawMaterial, _setSelectedRawMaterial] = useState<rawMaterials | null>(null)
 
     const {

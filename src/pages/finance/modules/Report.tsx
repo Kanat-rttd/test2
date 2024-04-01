@@ -54,6 +54,7 @@ const Report = () => {
         },
     ]
 
+    //TODO: Перепишите бэк если вам на фронте приходится так делать с данными
     const defaultData = data?.defaultData
 
     const operationalData = data?.data.operational.data
