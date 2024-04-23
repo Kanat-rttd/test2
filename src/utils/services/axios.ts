@@ -26,8 +26,25 @@ export const fetcher = async (url: string, params?: any) => {
     const response = await $host.get(url, { params })
     return response.data
 }
-export function useApi<T>(url: string) {
-    const { data, error, mutate, isLoading } = useSWR<T>(url, fetcher)
+// export function useApi<T>(url: string) {
+//     const { data, error, mutate, isLoading } = useSWR<T>(url, fetcher)
+//     return {
+//         loading: !error && !data,
+//         data,
+//         isLoading,
+//         error,
+//         mutate,
+//     }
+// }
+
+export function useApi<T>(url: string, queryParams?: Record<string, string>) {
+    const queryString = queryParams ? new URLSearchParams(queryParams).toString() : ''
+    const fullUrl = queryString ? `${url}?${queryString}` : url
+
+    console.log(url)
+
+    const { data, error, mutate, isLoading } = useSWR<T>(fullUrl, fetcher)
+
     return {
         loading: !error && !data,
         data,
@@ -36,5 +53,6 @@ export function useApi<T>(url: string) {
         mutate,
     }
 }
+
 export { mutate }
 export default $host

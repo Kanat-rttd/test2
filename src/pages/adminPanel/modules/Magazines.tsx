@@ -14,28 +14,13 @@ import {
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import { deleteProduct, findByFilters } from '../../../utils/services/product.service'
-// import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
-// import useSWR from 'swr'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Drawler'
 import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
-import {
-    ADMIN_PRODUCTS_ROUTE,
-    ADMIN_MAGAZINES_ROUTE,
-    ADMIN_OVERPRICE_ROUTE,
-    ADMIN_PROVIDER_ROUTE,
-    ADMIN_RELEASE_ROUTE,
-    ADMIN_UNIQUEPRICE_ROUTE,
-    ADMIN_USERS_ROUTE,
-} from '@/utils/constants/routes.consts'
+import { ADMIN_MAGAZINES_ROUTE } from '@/utils/constants/routes.consts'
 import { useApi } from '@/utils/services/axios'
 import MagazineAddModal from '../components/MagazineAddModal'
-
-// interface FacilityUnit {
-//     id: number
-//     facilityUnit: string
-// }
 
 interface Magazines {
     id: number
@@ -58,10 +43,13 @@ interface Client {
 }
 
 const AdminPanel = () => {
-    const { data: magazinesData } = useApi<Magazines[]>('magazines')
+    const [filters, setFilters] = useState({ name: '', clientId: '', status: '' })
+    // const { data: magazinesData } = useApi<Magazines[]>('magazines')
+
+    const { data: magazinesData } = useApi<Magazines[]>('magazines', filters)
     const { data: clientsData } = useApi<Client[]>('client')
 
-    console.log(magazinesData)
+    console.log(filters)
 
     // const { data: facilityUnitsData } = useSWR<FacilityUnit[]>('mixers', {
     //     fetcher: () => getAllBakingFacilityUnits(),
@@ -75,7 +63,6 @@ const AdminPanel = () => {
     const { onOpen, isOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Magazines>()
     // const [data, setData] = useState<ProductList[]>([])
-    const [filters, setFilters] = useState({ name: '', bakingFacilityUnitId: '', status: '' })
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
@@ -103,18 +90,6 @@ const AdminPanel = () => {
         onClose()
     }
 
-    useEffect(() => {
-        applyFilters()
-    }, [filters])
-
-    const applyFilters = async () => {
-        findByFilters(filters).then((res) => {
-            console.log(res)
-            console.log(filters)
-            // setData(res.data.data)
-        })
-    }
-
     const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = event.target
         setFilters((prevFilters) => ({
@@ -135,53 +110,11 @@ const AdminPanel = () => {
                     <Drawler></Drawler>
                     <Button
                         height={'100%'}
-                        onClick={() => navigate(ADMIN_PRODUCTS_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Продукты
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_USERS_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Пользователи
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_RELEASE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Реализаторы
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_UNIQUEPRICE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Уникальные цены
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_PROVIDER_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Поставщик_товары
-                    </Button>
-                    <Button
-                        height={'100%'}
                         onClick={() => navigate(ADMIN_MAGAZINES_ROUTE)}
                         bg={'rgba(217, 217, 217, 1)'}
                         fontSize={'14px'}
                     >
                         Магазины
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_OVERPRICE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Сверху
                     </Button>
                 </Box>
                 <Avatar bg="teal.500" />
@@ -205,7 +138,7 @@ const AdminPanel = () => {
                         <Select
                             placeholder="Реализатор"
                             width={'fit-content'}
-                            name="bakingFacilityUnitId"
+                            name="clientId"
                             onChange={handleSelectChange}
                         >
                             {clientsData?.map((unit, index) => (
@@ -220,8 +153,8 @@ const AdminPanel = () => {
                             name="status"
                             onChange={handleSelectChange}
                         >
-                            <option value="1">Активен</option>
-                            <option value="0">Приостановлен</option>
+                            <option value="Активный">Активный</option>
+                            <option value="Приостановленный">Приостановленный</option>
                         </Select>
                     </Box>
 

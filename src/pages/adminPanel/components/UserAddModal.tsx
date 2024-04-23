@@ -29,6 +29,7 @@ interface Users {
     checkPass: string
     phone: string
     userClass: string
+    fixSalary: string
 }
 
 const defaultValues = {
@@ -39,6 +40,7 @@ const defaultValues = {
     checkPass: '',
     userClass: '',
     status: '',
+    fixSalary: '',
 }
 
 interface userClass {
@@ -223,6 +225,20 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                 }}
                             />
                             <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
+                        </FormControl>
+
+                        <FormControl isInvalid={!!errors.fixSalary}>
+                            <InputGroup>
+                                <Input
+                                    {...register('fixSalary', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                    autoComplete="off"
+                                    placeholder="Фикс ЗП. *"
+                                    type="string"
+                                />
+                            </InputGroup>
+                            <FormErrorMessage>{errors.fixSalary?.message}</FormErrorMessage>
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.pass}>

@@ -11,6 +11,7 @@ const UniquePrice = lazy(() => import('./modules/UniquePrice'))
 const Magazines = lazy(() => import('./modules/Magazines'))
 const Overprice = lazy(() => import('./modules/Overprice'))
 const Provider = lazy(() => import('./modules/Provider'))
+const DepartPersonal = lazy(() => import('./modules/DepartPersonal'))
 
 type PageType =
     | 'user'
@@ -21,6 +22,7 @@ type PageType =
     | 'magazines'
     | 'overprice'
     | 'provider'
+    | 'departPersonal'
 
 const AdminPanel = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
@@ -36,6 +38,7 @@ const AdminPanel = () => {
         provider: <Provider />,
         magazines: <Magazines />,
         overprice: <Overprice />,
+        departPersonal: <DepartPersonal />,
     }
 
     useEffect(() => {

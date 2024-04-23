@@ -1,17 +1,29 @@
 import { Box, Button, Avatar, Select } from '@chakra-ui/react'
 import Drawler from '@/components/Drawler'
+import { useState, useEffect } from 'react'
 import {
     SELLS_INVOICE_ROUTE,
     SELLS_DEBT_ACCOUNTING_ROUTE,
     SELLS_DEBT_TRANSFER_ROUTE,
 } from '@/utils/constants/routes.consts'
 import ListTable from '../components/ListTable'
-import DateRangePicker from '@/components/DateRangePicker'
+// import DateRangePicker from '@/components/DateRangePicker'
 
 import { useNavigate } from 'react-router-dom'
+import DateRange from '@/components/DateRange'
 
 const JournalPage = () => {
     const navigate = useNavigate()
+
+    const [selectionRange, setSelectionRange] = useState({
+        startDate: new Date(),
+        endDate: new Date(),
+    })
+
+    useEffect(() => {
+        console.log(selectionRange.startDate)
+        console.log(selectionRange.endDate)
+    }, [selectionRange])
 
     return (
         <>
@@ -54,7 +66,11 @@ const JournalPage = () => {
                 <Box width={'100%'} height={'100%'} p={5}>
                     <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                            <DateRangePicker></DateRangePicker>
+                            {/* <DateRangePicker></DateRangePicker> */}
+                            <DateRange
+                                selectionRange={selectionRange}
+                                setSelectionRange={setSelectionRange}
+                            />
                             <Select placeholder="Цехи" width={'fit-content'}>
                                 <option value="Лепешечный">Лепешечный</option>
                                 <option value="Булочный">Булочный</option>

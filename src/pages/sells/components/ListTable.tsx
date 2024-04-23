@@ -52,8 +52,8 @@ const ListTable: React.FC<ListTableProps> = ({ status }) => {
 
     useEffect(() => {
         getAllDispatches().then((res) => {
-            console.log(res.data)
-            setData(res.data.filter((row: Dispatch) => row.dispatch == status))
+            console.log(res)
+            setData(res.filter((row: Dispatch) => row.dispatch == status))
         })
     }, [])
 
@@ -110,7 +110,11 @@ const ListTable: React.FC<ListTableProps> = ({ status }) => {
                                     <Td>
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                                             {row.goodsDispatchDetails.map((details, index) => (
-                                                <span key={index}>{details.price}</span>
+                                                <span key={index}>
+                                                    {details.price !== null
+                                                        ? details.price
+                                                        : details.product.price}
+                                                </span>
                                             ))}
                                         </div>
                                     </Td>
@@ -118,8 +122,11 @@ const ListTable: React.FC<ListTableProps> = ({ status }) => {
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                                             {row.goodsDispatchDetails.map((details, index) => (
                                                 <span key={index}>
-                                                    {Number(details.price) *
-                                                        Number(details.quantity)}
+                                                    {Number(
+                                                        details.price !== null
+                                                            ? details.price
+                                                            : details.product.price,
+                                                    ) * Number(details.quantity)}
                                                 </span>
                                             ))}
                                         </div>

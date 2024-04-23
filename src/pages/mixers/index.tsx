@@ -5,8 +5,18 @@ import Loading from '../../components/Loading'
 
 const Pastry = lazy(() => import('./modules/Pastry'))
 const BakingProducts = lazy(() => import('./modules/BakingProducts'))
+const RemainRawMaterials = lazy(() => import('./modules/RemainRawMaterials'))
+const RemainProducts = lazy(() => import('./modules/RemainProducts'))
+const ShiftAccounting = lazy(() => import('./modules/ShiftAccounting'))
 
-type PageType = 'user' | 'score' | 'bakingProducts' | 'pastry'
+type PageType =
+    | 'user'
+    | 'score'
+    | 'bakingProducts'
+    | 'pastry'
+    | 'remainRawMaterials'
+    | 'remainProducts'
+    | 'shiftAccounting'
 
 const MixersPage = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
@@ -18,6 +28,9 @@ const MixersPage = () => {
         score: <input />,
         bakingProducts: <BakingProducts />,
         pastry: <Pastry />,
+        remainRawMaterials: <RemainRawMaterials />,
+        remainProducts: <RemainProducts />,
+        shiftAccounting: <ShiftAccounting />,
     }
 
     useEffect(() => {

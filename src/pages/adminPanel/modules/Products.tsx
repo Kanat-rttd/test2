@@ -25,15 +25,9 @@ import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Drawler'
 import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
-import {
-    ADMIN_PRODUCTS_ROUTE,
-    ADMIN_MAGAZINES_ROUTE,
-    ADMIN_OVERPRICE_ROUTE,
-    ADMIN_PROVIDER_ROUTE,
-    ADMIN_RELEASE_ROUTE,
-    ADMIN_UNIQUEPRICE_ROUTE,
-    ADMIN_USERS_ROUTE,
-} from '@/utils/constants/routes.consts'
+import { ADMIN_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
+import { useApi } from '@/utils/services/axios'
+
 interface ProductList {
     id: number
     name: string
@@ -52,23 +46,28 @@ interface FacilityUnit {
 }
 
 const AdminPanel = () => {
+    const [filters, setFilters] = useState({ name: '', bakingFacilityUnitId: '', status: '' })
+
     const { data: facilityUnitsData } = useSWR<FacilityUnit[]>('mixers', {
         fetcher: () => getAllBakingFacilityUnits(),
     })
 
-    const { data: productsData } = useSWR<ProductList[]>('product', {
-        fetcher: () => getAllProducts(),
-    })
+    // const { data: productsData } = useSWR<ProductList[]>('product', {
+    //     fetcher: () => getAllProducts(),
+    // })
+
+    const { data: productsData } = useApi<ProductList[]>('product', filters)
 
     const navigate = useNavigate()
     const { onOpen, isOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Product>()
     const [data, setData] = useState<ProductList[]>([])
-    const [filters, setFilters] = useState({ name: '', bakingFacilityUnitId: '', status: '' })
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
+
+    console.log(filters)
 
     useEffect(() => {
         getAllProducts().then((responseData) => {
@@ -132,51 +131,8 @@ const AdminPanel = () => {
                         height={'100%'}
                         onClick={() => navigate(ADMIN_PRODUCTS_ROUTE)}
                         bg={'rgba(217, 217, 217, 1)'}
-                        fontSize={'14px'}
                     >
                         Продукты
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_USERS_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Пользователи
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_RELEASE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Реализаторы
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_UNIQUEPRICE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Уникальные цены
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_PROVIDER_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Поставщик_товары
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_MAGAZINES_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Магазины
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_OVERPRICE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Сверху
                     </Button>
                 </Box>
                 <Avatar bg="teal.500" />
@@ -243,7 +199,7 @@ const AdminPanel = () => {
                                     <Tr key={index}>
                                         <Td>{product.id}</Td>
                                         <Td>{product.name}</Td>
-                                        <Td>{product.bakingFacilityUnit.facilityUnit}</Td>
+                                        <Td>{product.bakingFacilityUnit?.facilityUnit}</Td>
                                         <Td>{product.status}</Td>
                                         <Td>{product.price}</Td>
                                         <Td>{product.costPrice}</Td>

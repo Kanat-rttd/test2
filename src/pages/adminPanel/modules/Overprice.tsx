@@ -12,111 +12,76 @@ import {
     Avatar,
     Select,
 } from '@chakra-ui/react'
-import ProductAddModal, { Product } from '../components/ProductAddModal'
-import { useState, useEffect } from 'react'
-import {
-    getAllProducts,
-    deleteProduct,
-    findByFilters,
-} from '../../../utils/services/product.service'
-import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
-import useSWR from 'swr'
+import OverPriceAddModal from '../components/OverPriceAddModal'
+import { useState } from 'react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Drawler'
 import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
-import {
-    ADMIN_PRODUCTS_ROUTE,
-    ADMIN_MAGAZINES_ROUTE,
-    ADMIN_OVERPRICE_ROUTE,
-    ADMIN_PROVIDER_ROUTE,
-    ADMIN_RELEASE_ROUTE,
-    ADMIN_UNIQUEPRICE_ROUTE,
-    ADMIN_USERS_ROUTE,
-} from '@/utils/constants/routes.consts'
+import { ADMIN_OVERPRICE_ROUTE } from '@/utils/constants/routes.consts'
+import { useApi } from '@/utils/services/axios'
 
-interface ProductList {
-    id: number
+interface Client {
+    id: string
     name: string
-    price: number
-    costPrice: number
+    surname: string
+    contact: string
+    telegrammId: string
     status: string
-    bakingFacilityUnit: {
+}
+
+interface OverPrice {
+    id: number
+    price: string
+    clientId: number
+    month: string
+    year: string
+    isDeleted: number
+    client: {
         id: number
-        facilityUnit: string
+        name: string
     }
 }
 
-interface FacilityUnit {
-    id: number
-    facilityUnit: string
-}
-
 const AdminPanel = () => {
-    const { data: facilityUnitsData } = useSWR<FacilityUnit[]>('mixers', {
-        fetcher: () => getAllBakingFacilityUnits(),
+    // const { data: overPriceData } = useApi<OverPrice[]>('overPrice')
+    const [selectedClient, setSelectedClient] = useState('')
+
+    const { data: overPriceData } = useApi<OverPrice[]>('overPrice', {
+        name: selectedClient,
     })
 
-    const { data: productsData } = useSWR<ProductList[]>('product', {
-        fetcher: () => getAllProducts(),
-    })
+    const { data: clientData } = useApi<Client[]>('client')
+
+    console.log(overPriceData)
 
     const navigate = useNavigate()
     const { onOpen, isOpen, onClose } = useDisclosure()
-    const [selectedData, setSelectedData] = useState<Product>()
-    const [data, setData] = useState<ProductList[]>([])
-    const [filters, setFilters] = useState({ name: '', bakingFacilityUnitId: '', status: '' })
+    const [selectedData, setSelectedData] = useState<OverPrice>()
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    useEffect(() => {
-        getAllProducts().then((responseData) => {
-            setData(responseData)
-            console.log(responseData)
-        })
-    }, [])
-
-    const handleAddProduct = () => {
-        getAllProducts().then((responseData) => {
-            setData(responseData)
-        })
-    }
-
-    const delProduct = (selectedData: Product | undefined) => {
-        if (selectedData) {
-            deleteProduct(selectedData.id).then((res) => {
-                console.log(res)
-            })
-        } else {
-            console.error('No product data available to delete.')
-        }
-    }
+    // const delProduct = (selectedData: Product | undefined) => {
+    //     if (selectedData) {
+    //         deleteProduct(selectedData.id).then((res) => {
+    //             console.log(res)
+    //         })
+    //     } else {
+    //         console.error('No product data available to delete.')
+    //     }
+    // }
 
     const handleClose = () => {
         setSelectedData(undefined)
         onClose()
     }
 
-    useEffect(() => {
-        applyFilters()
-    }, [filters])
-
-    const applyFilters = async () => {
-        findByFilters(filters).then((res) => {
-            console.log(res)
-            console.log(filters)
-            setData(res.data.data)
-        })
-    }
-
     const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = event.target
-        setFilters((prevFilters) => ({
-            ...prevFilters,
-            [name]: value,
-        }))
+        console.log(name, value)
+        setSelectedClient(value)
     }
 
     return (
@@ -131,51 +96,8 @@ const AdminPanel = () => {
                     <Drawler></Drawler>
                     <Button
                         height={'100%'}
-                        onClick={() => navigate(ADMIN_PRODUCTS_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Продукты
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_USERS_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Пользователи
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_RELEASE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Реализаторы
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_UNIQUEPRICE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Уникальные цены
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_PROVIDER_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Поставщик_товары
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_MAGAZINES_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Магазины
-                    </Button>
-                    <Button
-                        height={'100%'}
                         onClick={() => navigate(ADMIN_OVERPRICE_ROUTE)}
                         bg={'rgba(217, 217, 217, 1)'}
-                        fontSize={'14px'}
                     >
                         Сверху
                     </Button>
@@ -192,32 +114,11 @@ const AdminPanel = () => {
                             name="name"
                             onChange={handleSelectChange}
                         >
-                            {productsData?.map((product, index) => (
-                                <option key={index} value={product.name}>
-                                    {product.name}
+                            {clientData?.map((client, index) => (
+                                <option key={index} value={client.name}>
+                                    {client.name}
                                 </option>
                             ))}
-                        </Select>
-                        <Select
-                            placeholder="Цех"
-                            width={'fit-content'}
-                            name="bakingFacilityUnitId"
-                            onChange={handleSelectChange}
-                        >
-                            {facilityUnitsData?.map((unit, index) => (
-                                <option key={index} value={unit.id}>
-                                    {unit.facilityUnit}
-                                </option>
-                            ))}
-                        </Select>
-                        <Select
-                            placeholder="Статус"
-                            width={'fit-content'}
-                            name="status"
-                            onChange={handleSelectChange}
-                        >
-                            <option value="1">Активен</option>
-                            <option value="0">Приостановлен</option>
                         </Select>
                     </Box>
 
@@ -230,30 +131,28 @@ const AdminPanel = () => {
                         <Thead>
                             <Tr>
                                 <Th>№</Th>
-                                <Th>Наименование</Th>
-                                <Th>Цех</Th>
-                                <Th>Статус</Th>
-                                <Th>Цена</Th>
-                                <Th>Себестоимость</Th>
+                                <Th>Реализатор</Th>
+                                <Th>Сверху</Th>
+                                <Th>Месяц</Th>
+                                <Th>Год</Th>
                                 <Th>Действия</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {data.map((product, index) => {
+                            {overPriceData?.map((overData, index) => {
                                 return (
                                     <Tr key={index}>
-                                        <Td>{product.id}</Td>
-                                        <Td>{product.name}</Td>
-                                        <Td>{product.bakingFacilityUnit.facilityUnit}</Td>
-                                        <Td>{product.status}</Td>
-                                        <Td>{product.price}</Td>
-                                        <Td>{product.costPrice}</Td>
+                                        <Td>{overData.id}</Td>
+                                        <Td>{overData.client?.name}</Td>
+                                        <Td>{overData.price}</Td>
+                                        <Td>{overData.month}</Td>
+                                        <Td>{overData.year}</Td>
                                         <Td>
                                             <EditIcon
                                                 boxSize={'1.5em'}
                                                 cursor={'pointer'}
                                                 onClick={() => {
-                                                    setSelectedData(product)
+                                                    setSelectedData(overData)
                                                     onOpen()
                                                 }}
                                             />
@@ -262,7 +161,7 @@ const AdminPanel = () => {
                                                 color={'red'}
                                                 cursor={'pointer'}
                                                 onClick={() => {
-                                                    setSelectedData(product)
+                                                    setSelectedData(overData)
                                                     setDialog({
                                                         ...dialog,
                                                         isOpen: true,
@@ -276,12 +175,7 @@ const AdminPanel = () => {
                         </Tbody>
                     </Table>
                 </TableContainer>
-                <ProductAddModal
-                    data={selectedData}
-                    isOpen={isOpen}
-                    onClose={handleClose}
-                    onAddProduct={handleAddProduct}
-                />
+                <OverPriceAddModal data={selectedData} isOpen={isOpen} onClose={handleClose} />
                 <Dialog
                     isOpen={dialog.isOpen}
                     onClose={dialog.onClose}
@@ -289,7 +183,7 @@ const AdminPanel = () => {
                     body="Вы уверены? Вы не сможете отменить это действие впоследствии."
                     actionBtn={() => {
                         dialog.onClose()
-                        delProduct(selectedData)
+                        // delProduct(selectedData)
                     }}
                     actionText="Удалить"
                 />

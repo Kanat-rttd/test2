@@ -14,6 +14,7 @@ export const createUser = async (data: {
     phone: string
     pass: string
     status: string
+    fixSalary: string
 }) => {
     const response = await $host.post('user', data)
     return response
@@ -28,6 +29,7 @@ export const updateUser = async (
         phone: string
         pass: string
         status: string
+        fixSalary: string
     },
 ) => {
     const response = await $host.put(`user/${id}`, data)

@@ -7,27 +7,154 @@ import {
     ModalBody,
     ModalCloseButton,
     Button,
+    FormControl,
+    FormErrorMessage,
+    Input,
+    InputGroup,
+    Box,
+    Text,
 } from '@chakra-ui/react'
+import { Controller, useForm } from 'react-hook-form'
+import { useEffect } from 'react'
+import { updateDispatch } from '@/utils/services/dispatch.service'
+
+interface Dispatch {
+    id: number
+    clientId: number
+    createdAt: Date
+    dispatch: string
+    goodsDispatchDetails: [
+        {
+            id: number
+            productId: number
+            quantity: number
+            product: {
+                name: string
+                price: number
+                bakingFacilityUnit: {
+                    id: number
+                    facilityUnit: string
+                }
+            }
+        },
+    ]
+    client: {
+        id: number
+        name: string
+    }
+}
+
+interface EditModalInputs {
+    [key: string]: string
+}
 
 interface EditModalProps {
+    data: Dispatch | undefined
     isOpen: boolean
     onClose: () => void
 }
 
-const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose }) => {
+const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
+    console.log(data)
+
+    const sendData = (formData: EditModalInputs) => {
+        const formattedData = {
+            products: data?.goodsDispatchDetails.map((details, index) => ({
+                id: details.id,
+                productId: details.productId,
+                quantity: formData[`quantity_${index}`],
+            })),
+        }
+
+        console.log(formattedData)
+
+        formattedData.products?.forEach((product) => {
+            updateDispatch(product.id, product).then((res) => {
+                console.log(res)
+            })
+        })
+    }
+
+    const {
+        register,
+        handleSubmit: handleSubmitForm,
+        control,
+        formState: { errors },
+        setValue,
+        reset,
+    } = useForm<EditModalInputs>()
+
+    useEffect(() => {
+        if (data) {
+            console.log('conf')
+            setValue('name', data.client.name)
+            data.goodsDispatchDetails.forEach((details, index) => {
+                setValue(`quantity_${index}`, details.quantity.toString())
+            })
+        }
+    }, [data])
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Modal Title</ModalHeader>
+                <ModalHeader>Редактировать</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>{/* <Lorem count={2} /> */}</ModalBody>
+                <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
+                    <FormControl isInvalid={!!errors.name}>
+                        <InputGroup>
+                            <Input
+                                {...register('name', {
+                                    required: 'Поле является обязательным',
+                                })}
+                                autoComplete="off"
+                                placeholder="Имя *"
+                                type="string"
+                            />
+                        </InputGroup>
+                        <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+                    </FormControl>
+
+                    {data &&
+                        data.goodsDispatchDetails.map((details, index) => {
+                            return (
+                                <Box
+                                    display={'flex'}
+                                    flexDirection={'row'}
+                                    alignItems={'center'}
+                                    justifyContent={'space-between'}
+                                    key={index}
+                                >
+                                    <Text>{details.product.name}</Text>
+                                    <FormControl
+                                        width={'70%'}
+                                        key={index}
+                                        isInvalid={!!errors[`quantity_${index}`]}
+                                    >
+                                        <InputGroup>
+                                            <Input
+                                                {...register(`quantity_${index}`)}
+                                                autoComplete="off"
+                                                placeholder={`Количество ${details.product.name} *`}
+                                                type="text"
+                                            />
+                                        </InputGroup>
+                                        <FormErrorMessage>
+                                            {(errors as any)[`quantity_${index}`]?.message}
+                                        </FormErrorMessage>
+                                    </FormControl>
+                                </Box>
+                            )
+                        })}
+                </ModalBody>
 
                 <ModalFooter>
                     <Button colorScheme="blue" mr={3} onClick={onClose}>
                         Закрыть
                     </Button>
-                    <Button colorScheme="purple">Подтвердить</Button>
+                    <Button colorScheme="purple" onClick={handleSubmitForm(sendData)}>
+                        Подтвердить
+                    </Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

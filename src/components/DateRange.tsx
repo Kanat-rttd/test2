@@ -1,10 +1,18 @@
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
 import ru from 'date-fns/locale/ru'
+import { useState } from 'react'
 import { DateRangePicker, RangeKeyDict } from 'react-date-range'
-import { defaultStaticRanges } from '../pages/finance/helpers/defaultDateRange'
-import { Input, Popover, PopoverBody, PopoverContent, PopoverTrigger } from '@chakra-ui/react'
+import {
+    Input,
+    Popover,
+    PopoverBody,
+    PopoverContent,
+    PopoverTrigger,
+    Button,
+} from '@chakra-ui/react'
 import dayjs from 'dayjs'
+import { defaultStaticRanges } from '../pages/finance/helpers/defaultDateRange'
 
 interface DateRangeProps {
     setSelectionRange: (range: { startDate: Date; endDate: Date }) => void
@@ -15,27 +23,42 @@ interface DateRangeProps {
 }
 
 const DateRange = ({ setSelectionRange, selectionRange }: DateRangeProps) => {
+    const [tempSelectionRange, setTempSelectionRange] = useState(selectionRange)
+    const [isOpen, setIsOpen] = useState(false)
+
     const handleSelectDate = (ranges: RangeKeyDict) => {
         console.log('test')
         console.log(ranges)
         if (ranges.range1.startDate && ranges.range1.endDate) {
-            setSelectionRange({
+            setTempSelectionRange({
                 startDate: ranges.range1.startDate,
                 endDate: ranges.range1.endDate,
             })
         }
     }
 
+    const handleConfirmDate = () => {
+        setSelectionRange(tempSelectionRange)
+        setIsOpen(false)
+    }
+
+    const handleCancelDate = () => {
+        setTempSelectionRange(selectionRange)
+        setIsOpen(false)
+    }
+
     return (
-        <Popover>
+        <Popover isOpen={isOpen} onClose={() => setIsOpen(false)}>
             <PopoverTrigger>
                 <Input
+                    width={'25%'}
                     textAlign={'center'}
                     value={
-                        dayjs(selectionRange.startDate).format('DD.MM.YYYY') +
+                        dayjs(tempSelectionRange.startDate).format('DD.MM.YYYY') +
                         ' - ' +
-                        dayjs(selectionRange.endDate).format('DD.MM.YYYY')
+                        dayjs(tempSelectionRange.endDate).format('DD.MM.YYYY')
                     }
+                    onClick={() => setIsOpen(true)}
                 />
             </PopoverTrigger>
             <PopoverContent>
@@ -43,7 +66,7 @@ const DateRange = ({ setSelectionRange, selectionRange }: DateRangeProps) => {
                     <DateRangePicker
                         className="dateRangePicker"
                         onChange={handleSelectDate}
-                        ranges={[selectionRange]}
+                        ranges={[tempSelectionRange]}
                         months={2}
                         direction="horizontal"
                         showMonthAndYearPickers={false}
@@ -56,6 +79,8 @@ const DateRange = ({ setSelectionRange, selectionRange }: DateRangeProps) => {
                         inputRanges={[]}
                         staticRanges={defaultStaticRanges}
                     />
+                    <Button onClick={handleConfirmDate}>Принять</Button>
+                    <Button onClick={handleCancelDate}>Отмена</Button>
                 </PopoverBody>
             </PopoverContent>
         </Popover>

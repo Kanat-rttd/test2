@@ -52,19 +52,17 @@ const Drawler = () => {
                 </Icon>
             </Button>
             <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
-                <DrawerOverlay />
-                <DrawerContent>
+                <DrawerOverlay width={'100%'} />
+                <DrawerContent width={'100%'}>
                     <DrawerCloseButton />
                     <DrawerHeader>Меню</DrawerHeader>
 
                     <DrawerBody display="flex" p={2} gap="0.5rem" flexDirection="column">
                         {filteredMenuItems.map((MenuItem) => (
                             <Fragment key={MenuItem.route}>
-                                <Divider />
+                                <Divider border={'1px solid'} />
                                 <Heading paddingLeft={'0.5rem'} p={2} size="sm">
-                                    <Link onClick={() => navigate(MenuItem.route)}>
-                                        {MenuItem.label}
-                                    </Link>
+                                    {MenuItem.label}
                                 </Heading>
                                 <Box
                                     display={'flex'}
@@ -82,7 +80,6 @@ const Drawler = () => {
                                                     variant="ghost"
                                                     width={'60%'}
                                                     lineHeight={'20px'}
-                                                    fontWeight={600}
                                                     onClick={() => navigate(route)}
                                                 >
                                                     {label}

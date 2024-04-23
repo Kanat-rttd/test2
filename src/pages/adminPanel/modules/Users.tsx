@@ -14,22 +14,16 @@ import {
     Select,
 } from '@chakra-ui/react'
 import UserAddModal from '../components/UserAddModal'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { EditIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Drawler'
-import {
-    ADMIN_PRODUCTS_ROUTE,
-    ADMIN_MAGAZINES_ROUTE,
-    ADMIN_OVERPRICE_ROUTE,
-    ADMIN_PROVIDER_ROUTE,
-    ADMIN_RELEASE_ROUTE,
-    ADMIN_UNIQUEPRICE_ROUTE,
-    ADMIN_USERS_ROUTE,
-} from '@/utils/constants/routes.consts'
+import { ADMIN_USERS_ROUTE, ADMIN_DEPART_PERSONAL_ROUTE } from '@/utils/constants/routes.consts'
 import { useNavigate } from 'react-router-dom'
 
-import useSWR, { mutate } from 'swr'
-import { getAllUsers } from '../../../utils/services/user.service'
+import { useApi } from '@/utils/services/axios'
+import { mutate } from '@/utils/services/axios'
+// import useSWR, { mutate } from 'swr'
+// import { getAllUsers } from '../../../utils/services/user.service'
 
 interface Users {
     id: number
@@ -40,16 +34,21 @@ interface Users {
     checkPass: string
     phone: string
     userClass: string
+    fixSalary: string
 }
 
 const AdminPanel = () => {
     const navigate = useNavigate()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Users | undefined>(undefined)
-    const [selectedStatus, setSelectedStatus] = useState<string | undefined>(undefined)
+    const [selectedStatus, setSelectedStatus] = useState<string>('')
 
-    const { data: usersData } = useSWR<Users[]>(['user', selectedStatus], {
-        fetcher: () => getAllUsers(selectedStatus),
+    // const { data: usersData } = useSWR<Users[]>(['user', selectedStatus], {
+    //     fetcher: () => getAllUsers(selectedStatus),
+    // })
+
+    const { data: usersData } = useApi<Users[]>('user', {
+        status: selectedStatus,
     })
 
     const handleClose = () => {
@@ -65,10 +64,6 @@ const AdminPanel = () => {
         setSelectedStatus(status)
     }
 
-    useEffect(() => {
-        mutate(['user', selectedStatus])
-    }, [selectedStatus])
-
     return (
         <>
             <Box
@@ -81,53 +76,13 @@ const AdminPanel = () => {
                     <Drawler></Drawler>
                     <Button
                         height={'100%'}
-                        onClick={() => navigate(ADMIN_PRODUCTS_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Продукты
-                    </Button>
-                    <Button
-                        height={'100%'}
                         onClick={() => navigate(ADMIN_USERS_ROUTE)}
                         bg={'rgba(217, 217, 217, 1)'}
-                        fontSize={'14px'}
                     >
-                        Пользователи
+                        Адмперсонал
                     </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_RELEASE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Реализаторы
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_UNIQUEPRICE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Уникальные цены
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_PROVIDER_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Поставщик_товары
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_MAGAZINES_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Магазины
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_OVERPRICE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Сверху
+                    <Button height={'100%'} onClick={() => navigate(ADMIN_DEPART_PERSONAL_ROUTE)}>
+                        Цехперсонал
                     </Button>
                 </Box>
                 <Avatar size={'md'} bg="teal.500" />
@@ -159,6 +114,7 @@ const AdminPanel = () => {
                                 <Th>Телефон</Th>
                                 <Th>Статус</Th>
                                 <Th>Должность</Th>
+                                <Th>Фикс Зп.</Th>
                                 <Th>Действия</Th>
                             </Tr>
                         </Thead>
@@ -172,6 +128,7 @@ const AdminPanel = () => {
                                         <Td>{user.phone}</Td>
                                         <Td>{user.status}</Td>
                                         <Td>{user.userClass}</Td>
+                                        <Td>{user.fixSalary}</Td>
                                         <Td sx={{ width: '5%' }}>
                                             <IconButton
                                                 variant="outline"

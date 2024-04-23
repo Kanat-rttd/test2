@@ -1,4 +1,3 @@
-import { ArrivalInputs } from '@/utils/types/finance.types'
 import {
     Box,
     Button,
@@ -9,35 +8,11 @@ import {
     Input,
     Textarea,
 } from '@chakra-ui/react'
+import { useState } from 'react'
 import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
-// import { createInvoiceArrival } from '@/utils/services/finance.service'
-import useSWR from 'swr'
-import { getAllClients } from '@/utils/services/client.service'
-import { getAllFinancesCategories } from '@/utils/services/financeCategories.service'
-// import { useApi } from '@/utils/services/axios'
-
-const account = [
-    {
-        id: 1,
-        name: 'Счёт 1',
-    },
-    {
-        id: 2,
-        name: 'Счёт 2',
-    },
-]
-
-interface Category {
-    id: number
-    name: string
-    type: string
-}
-
-interface Account {
-    id: number
-    name: string
-}
+import { createDebtTransfer } from '@/utils/services/debtTransfer.service'
+import { useApi } from '@/utils/services/axios'
 
 interface Client {
     id: number
@@ -48,44 +23,96 @@ interface Client {
     status: number
 }
 
-// interface ArrivalFormProps {
-//     invoiceNumber: number
-//     totalSumm: number
-// }
+interface DebtTransferInputs {
+    fromProvider: number
+    summa: string
+    toMagazine: number
+    date: Date
+    invoiceNumber: number
+    comment: string
+}
+
+interface Magazines {
+    id: number
+    name: string
+    clientId: number
+    status: string
+    client: {
+        id: number
+        name: string
+    }
+}
+
+interface InvoiceData {
+    createdAt: Date
+    clientId: number
+    clientName: string
+    invoiceNumber: number
+    totalProducts: {
+        id: number
+        name: string
+        price: number
+        quantity: number
+        totalPrice: number
+    }[]
+    totalSum: number
+    dispatches: {
+        id: number
+        clientId: number
+        createdAt: Date
+        dispatch: number
+        goodsDispatchDetails: {
+            id: number
+            productId: number
+            quantity: number
+            price: number | null
+            product: {
+                id: number
+                name: string
+                price: number
+                bakingFacilityUnit: {
+                    id: number
+                    facilityUnit: string
+                }
+            }
+        }[]
+        client: {
+            id: number
+            name: string
+        }
+    }[]
+}
 
 const DebtTransferForm = () => {
-    // const { data: financeData } = useApi<totalAmount>(`finance/${invoiceNumber}`)
+    const [selectedProvider, setSelectedProvider] = useState<string | null>(null)
 
-    const { data: clientsData } = useSWR<Client[]>(['client'], {
-        fetcher: () => getAllClients({ name: '', telegrammId: '', status: '' }),
-    })
+    const { data: debtTransfer } = useApi('debtTransfer')
+    const { data: magazinesData } = useApi<Magazines[]>('magazines')
+    const { data: clientsData } = useApi<Client[]>('client')
+    const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
 
-    const { data: categoriesData } = useSWR<Category[]>(['financeCategories'], {
-        fetcher: () => getAllFinancesCategories(),
-    })
+    console.log(debtTransfer)
+    console.log(magazinesData)
+    console.log(selectedProvider)
 
     const {
         register,
-        // handleSubmit: handleSubmitForm,
+        handleSubmit: handleSubmitForm,
         control,
         formState: { errors },
         // reset,
-    } = useForm<ArrivalInputs>()
+    } = useForm<DebtTransferInputs>()
 
-    // const sendData = (formData: ArrivalInputs) => {
-    //     console.log(invoiceNumber)
-
-    //     createInvoiceArrival(invoiceNumber, formData)
-    //         .then((res) => {
-    //             console.log(res)
-    //             mutate(`finance/${invoiceNumber}`)
-    //             mutate('finance/totals')
-    //             mutate('release/invoice')
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error creating sale:', error)
-    //         })
-    // }
+    const sendData = (formData: DebtTransferInputs) => {
+        console.log(formData)
+        createDebtTransfer(formData)
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((error) => {
+                console.error('Error creating sale:', error)
+            })
+    }
 
     return (
         <>
@@ -104,15 +131,93 @@ const DebtTransferForm = () => {
                         Перевод долга
                     </Heading>
                     <Divider></Divider>
-                    <FormControl isInvalid={!!errors.amount}>
+                    {/* <FormControl isInvalid={!!errors.fromProvider}>
                         <Input
                             maxLength={20}
-                            {...register('amount', { required: 'Поле является обязательным' })}
+                            {...register('fromProvider', {
+                                required: 'Поле является обязательным',
+                            })}
+                            autoComplete="off"
+                            placeholder="От Реализаторов *"
+                            type="string"
+                        />
+                        <FormErrorMessage>{errors.fromProvider?.message}</FormErrorMessage>
+                    </FormControl> */}
+
+                    <FormControl isInvalid={!!errors.fromProvider}>
+                        <Controller
+                            name="fromProvider"
+                            control={control}
+                            rules={{ required: 'Поля является обязательным' }}
+                            render={({ field }) => {
+                                const { onChange, value } = field
+                                return (
+                                    <Select
+                                        options={clientsData}
+                                        getOptionLabel={(option: Client) => option.name}
+                                        getOptionValue={(option: Client) => `${option.id}`}
+                                        value={clientsData?.filter(
+                                            (option) => String(option.id) == String(value),
+                                        )}
+                                        // onChange={(val: Account) => onChange(val?.name)}
+                                        onChange={(selectedOption: Client | null) => {
+                                            if (selectedOption) {
+                                                onChange(selectedOption.id)
+                                                setSelectedProvider(selectedOption.name)
+                                            }
+                                        }}
+                                        placeholder="Реализатор *"
+                                        isClearable
+                                        isSearchable
+                                    />
+                                )
+                            }}
+                        />
+                        <FormErrorMessage>{errors.fromProvider?.message}</FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl isInvalid={!!errors.summa}>
+                        <Input
+                            maxLength={20}
+                            {...register('summa', { required: 'Поле является обязательным' })}
                             autoComplete="off"
                             placeholder="Сумма *"
                             type="number"
                         />
-                        <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
+                        <FormErrorMessage>{errors.summa?.message}</FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl isInvalid={!!errors.toMagazine}>
+                        <Controller
+                            name="toMagazine"
+                            control={control}
+                            rules={{ required: 'Поля является обязательным' }}
+                            render={({ field }) => {
+                                const { onChange, value } = field
+                                const filteredMagazines = magazinesData?.filter(
+                                    (option) => option.client.name == selectedProvider,
+                                )
+                                return (
+                                    <Select
+                                        options={filteredMagazines}
+                                        getOptionLabel={(option: Magazines) => option.name}
+                                        getOptionValue={(option: Magazines) => `${option.id}`}
+                                        value={filteredMagazines?.find(
+                                            (option) => option.id === value,
+                                        )}
+                                        onChange={(selectedOption: Magazines | null) => {
+                                            if (selectedOption) {
+                                                onChange(selectedOption.id)
+                                            }
+                                        }}
+                                        placeholder="К магазинам *"
+                                        isClearable
+                                        isSearchable
+                                    />
+                                )
+                            }}
+                        />
+                        <FormErrorMessage>{errors.toMagazine?.message}</FormErrorMessage>
                     </FormControl>
 
                     <FormControl variant={'floating'} isInvalid={!!errors.date}>
@@ -124,95 +229,40 @@ const DebtTransferForm = () => {
                         />
                     </FormControl>
 
-                    <FormControl isInvalid={!!errors.account}>
+                    <FormControl isInvalid={!!errors.invoiceNumber}>
                         <Controller
-                            name="account"
+                            name="invoiceNumber"
                             control={control}
                             rules={{ required: 'Поля является обязательным' }}
                             render={({ field }) => {
                                 const { onChange, value } = field
                                 return (
                                     <Select
-                                        options={account}
-                                        getOptionLabel={(option: Account) => option.name}
-                                        getOptionValue={(option: Account) => `${option.name}`}
-                                        value={account?.filter(
-                                            (option) => String(option.name) == value,
+                                        options={dispatchesData}
+                                        getOptionLabel={(option: InvoiceData) =>
+                                            String(option.invoiceNumber)
+                                        }
+                                        getOptionValue={(option: InvoiceData) =>
+                                            `${option.invoiceNumber}`
+                                        }
+                                        value={dispatchesData?.filter(
+                                            (option) =>
+                                                String(option.invoiceNumber) == String(value),
                                         )}
                                         // onChange={(val: Account) => onChange(val?.name)}
-                                        onChange={(selectedOption: Account | null) => {
+                                        onChange={(selectedOption: InvoiceData | null) => {
                                             if (selectedOption) {
-                                                onChange(selectedOption.name)
+                                                onChange(selectedOption.invoiceNumber)
                                             }
                                         }}
-                                        placeholder="Выберите счет *"
+                                        placeholder="Номер накладной *"
                                         isClearable
                                         isSearchable
                                     />
                                 )
                             }}
                         />
-                        <FormErrorMessage>{errors.account?.message}</FormErrorMessage>
-                    </FormControl>
-
-                    <FormControl isInvalid={!!errors.financeCategoryId}>
-                        <Controller
-                            name="financeCategoryId"
-                            control={control}
-                            rules={{ required: 'Поля является обязательным' }}
-                            render={({ field }) => {
-                                const { onChange, value } = field
-                                return (
-                                    <Select
-                                        options={categoriesData}
-                                        getOptionLabel={(option: Category) => option.name}
-                                        getOptionValue={(option: Category) => `${option.id}`}
-                                        value={categoriesData?.filter(
-                                            (option) => String(option.id) == value,
-                                        )}
-                                        // onChange={(val: Category) => onChange(val?.id)}
-                                        onChange={(selectedOption: Category | null) => {
-                                            if (selectedOption) {
-                                                onChange(selectedOption.id)
-                                            }
-                                        }}
-                                        placeholder="Категория *"
-                                        isClearable
-                                        isSearchable
-                                    />
-                                )
-                            }}
-                        />
-                        <FormErrorMessage>{errors.financeCategoryId?.message}</FormErrorMessage>
-                    </FormControl>
-
-                    <FormControl isInvalid={!!errors.clientId}>
-                        <Controller
-                            name="clientId"
-                            control={control}
-                            rules={{ required: 'Поля является обязательным' }}
-                            render={({ field }) => {
-                                const { onChange, value } = field
-                                return (
-                                    <Select
-                                        options={clientsData}
-                                        getOptionLabel={(option: Client) => option.name}
-                                        getOptionValue={(option: Client) => `${option.id}`}
-                                        value={clientsData?.filter((option) => option.id == value)}
-                                        // onChange={(val: Client) => onChange(val?.id)}
-                                        onChange={(selectedOption: Client | null) => {
-                                            if (selectedOption) {
-                                                onChange(selectedOption.id)
-                                            }
-                                        }}
-                                        placeholder="Контрагент *"
-                                        isClearable
-                                        isSearchable
-                                    />
-                                )
-                            }}
-                        />
-                        <FormErrorMessage>{errors.clientId?.message}</FormErrorMessage>
+                        <FormErrorMessage>{errors.invoiceNumber?.message}</FormErrorMessage>
                     </FormControl>
 
                     <FormControl>
@@ -230,7 +280,7 @@ const DebtTransferForm = () => {
                         </Button>
                         <Button
                             style={{ background: '#29647C', color: '#fff' }}
-                            // onClick={handleSubmitForm(sendData)}
+                            onClick={handleSubmitForm(sendData)}
                         >
                             Отправить
                         </Button>

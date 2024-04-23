@@ -1,4 +1,15 @@
-import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer, Input } from '@chakra-ui/react'
+import {
+    Table,
+    Thead,
+    Tbody,
+    Tfoot,
+    Tr,
+    Th,
+    Td,
+    TableContainer,
+    Input,
+    Box,
+} from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
 
 type EditInput = {
@@ -34,16 +45,16 @@ const InventoryTable = () => {
 
     return (
         <>
-            <TableContainer>
-                <Table variant="simple">
+            <TableContainer overflowY={'auto'} height={'90%'}>
+                <Table variant="simple" width={'100%'}>
                     <Thead>
-                        <Tr>
-                            <Th>№</Th>
-                            <Th>Товары</Th>
-                            <Th>Единица измерения</Th>
-                            <Th>Количество по учету</Th>
-                            <Th>Количество фактическое</Th>
-                            <Th>Расхождение</Th>
+                        <Tr position={'sticky'} top={0} backgroundColor={'white'}>
+                            <Th width={'15%'}>№</Th>
+                            <Th width={'25%'}>Товары</Th>
+                            <Th width={'15%'}>Единица измерения</Th>
+                            <Th width={'15%'}>Количество по учету</Th>
+                            <Th width={'15%'}>Количество фактическое</Th>
+                            <Th width={'15%'}>Расхождение</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -73,29 +84,31 @@ const InventoryTable = () => {
                             )
                         })}
                     </Tbody>
+                </Table>
+            </TableContainer>
+            <Box bottom={0} position={'absolute'} width={'100%'}>
+                <Table>
                     <Tfoot>
                         <Tr>
-                            <Th fontSize={15} color={'#000'}>
+                            <Th fontSize={15} color={'#000'} width={'15%'}>
                                 ИТОГО
                             </Th>
+                            <Th width={'25%'}> </Th>
                             <Th> </Th>
-                            <Th> </Th>
-                            <Th fontSize={15} color={'#000'}>
+                            <Th width={'15%'} fontSize={15} color={'#000'}>
+                                {' '}
                                 {data.totalRegister}
                             </Th>
-                            <Th fontSize={15} color={'#000'}>
-                                {data.totalFact}
+                            <Th width={'15%'} fontSize={15} color={'#000'}>
+                                {data.totalFact}{' '}
                             </Th>
-                            <Th fontSize={15} color={'#000'}>
-                                {' '}
-                                {data.divergence}
+                            <Th width={'15%'} fontSize={15} color={'#000'}>
+                                {data.divergence}{' '}
                             </Th>
-                            <Th> </Th>
-                            <Th> </Th>
                         </Tr>
                     </Tfoot>
                 </Table>
-            </TableContainer>
+            </Box>
         </>
     )
 }

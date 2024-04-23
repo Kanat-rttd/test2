@@ -18,13 +18,17 @@ import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
 import PurchaseModal from '../components/PurchaseModal'
 import { getAllProviders } from '@/utils/services/providers.service'
-import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
 import useSWR, { mutate } from 'swr'
 import { useState } from 'react'
+import UniversalComponent from '@/components/ui/UniversalComponent'
+import DateRange from '@/components/DateRange'
+import { useEffect } from 'react'
+import { useApi } from '@/utils/services/axios'
 
-interface FacilityUnit {
+interface RawMaterial {
     id: number
-    facilityUnit: string
+    name: string
+    uom: string
 }
 
 interface Providers {
@@ -33,23 +37,36 @@ interface Providers {
 }
 
 const Products = () => {
+    const [selectionRange, setSelectionRange] = useState({
+        startDate: new Date(),
+        endDate: new Date(),
+    })
+
+    useEffect(() => {
+        console.log(selectionRange.startDate)
+        console.log(selectionRange.endDate)
+    }, [selectionRange])
+
+    const { data: rawMaterialData } = useApi<RawMaterial[]>('rawMaterials')
+    console.log(rawMaterialData)
+
     const { data: providersData } = useSWR<Providers[]>('providers', {
         fetcher: () => getAllProviders(),
     })
 
-    const { data: facilityUnitsData } = useSWR<FacilityUnit[]>('mixers', {
-        fetcher: () => getAllBakingFacilityUnits(),
-    })
+    // const { data: facilityUnitsData } = useSWR<FacilityUnit[]>('mixers', {
+    //     fetcher: () => getAllBakingFacilityUnits(),
+    // })
 
     const [selectedProviderId, setSelectedProviderId] = useState<string>('')
-    const [selectedFacilityUnitId, setSelectedFacilityUnitId] = useState<string>('')
+    const [selectedRawMaterial, setRawMaterial] = useState<string>('')
 
     const handleProviderChange = (event: any) => {
         setSelectedProviderId(event.target.value)
     }
 
-    const handleFacilityUnitChange = (event: any) => {
-        setSelectedFacilityUnitId(event.target.value)
+    const handleRawMaterialChange = (event: any) => {
+        setRawMaterial(event.target.value)
     }
 
     const handleAddProduct = () => {
@@ -62,39 +79,40 @@ const Products = () => {
 
     return (
         <>
-            <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(PURCHASE_PRODUCTS_ROUTE)}
-                    >
-                        Закуп
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(PURCHASE_DEBT_ROUTE)}
-                        background={'rgba(217, 217, 217, 1)'}
-                    >
-                        Долги по закупу
-                    </Button>
+            <UniversalComponent>
+                <Box
+                    width={'100%'}
+                    display="flex"
+                    justifyContent={'space-between'}
+                    flexDirection={'row'}
+                    backgroundColor={'rgba(128, 128, 128, 0.1)'}
+                >
+                    <Box width={'100%'} display={'flex'}>
+                        <Drawler></Drawler>
+                        <Button
+                            height={'100%'}
+                            width={'20%'}
+                            onClick={() => navigate(PURCHASE_PRODUCTS_ROUTE)}
+                            background={'rgba(217, 217, 217, 1)'}
+                        >
+                            Закуп
+                        </Button>
+                        <Button
+                            height={'100%'}
+                            width={'20%'}
+                            onClick={() => navigate(PURCHASE_DEBT_ROUTE)}
+                        >
+                            Долги по закупу
+                        </Button>
+                    </Box>
+                    <Avatar bg="teal.500" />
                 </Box>
-                <Avatar bg="teal.500" />
-            </Box>
-            <Box width={'100%'} height={'100%'} p={5}>
-                <Box>
+                <Box width={'100%'} height={'calc(100vh-64px)'} p={5}>
                     <Tabs variant="soft-rounded">
                         <TabList justifyContent={'space-between'}>
                             <Box display={'flex'}>
                                 <Tab>List</Tab>
-                                <Tab>Pivot</Tab>
+                                {/* <Tab>Pivot</Tab> */}
                             </Box>
 
                             <Button colorScheme="purple" onClick={onOpen}>
@@ -103,13 +121,11 @@ const Products = () => {
                         </TabList>
                         <TabPanels>
                             <TabPanel>
-                                <Box
-                                    display={'flex'}
-                                    gap={'15px'}
-                                    width={'fit-content'}
-                                    marginBottom={10}
-                                >
-                                    <DateRangePicker></DateRangePicker>
+                                <Box display={'flex'} gap={'15px'} marginBottom={10}>
+                                    <DateRange
+                                        selectionRange={selectionRange}
+                                        setSelectionRange={setSelectionRange}
+                                    />
                                     <Select
                                         placeholder="Поставщик"
                                         value={selectedProviderId}
@@ -123,19 +139,23 @@ const Products = () => {
                                         ))}
                                     </Select>
                                     <Select
-                                        placeholder="Цехи"
-                                        value={selectedFacilityUnitId}
-                                        onChange={handleFacilityUnitChange}
+                                        placeholder="Материалы"
+                                        value={selectedRawMaterial}
+                                        onChange={handleRawMaterialChange}
                                         width={'fit-content'}
                                     >
-                                        {facilityUnitsData?.map((units) => (
+                                        {rawMaterialData?.map((units) => (
                                             <option key={units.id} value={units.id}>
-                                                {units.facilityUnit}
+                                                {units.name}
                                             </option>
                                         ))}
                                     </Select>
                                 </Box>
-                                <ListTable selectedProviderId={selectedProviderId} />
+                                <ListTable
+                                    selectedProviderId={selectedProviderId}
+                                    selectedRawMaterial={selectedRawMaterial}
+                                    dateRange={selectionRange}
+                                />
                             </TabPanel>
                             <TabPanel>
                                 <Box width={'25%'}>
@@ -146,9 +166,8 @@ const Products = () => {
                         </TabPanels>
                     </Tabs>
                 </Box>
-                <Box></Box>
-            </Box>
-            <PurchaseModal isOpen={isOpen} onClose={onClose} onSuccess={handleAddProduct} />
+                <PurchaseModal isOpen={isOpen} onClose={onClose} onSuccess={handleAddProduct} />
+            </UniversalComponent>
         </>
     )
 }

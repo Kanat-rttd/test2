@@ -32,15 +32,28 @@ interface Dispatch {
     }
 }
 
-// interface ListTableProps {
-//     status: string
-// }
+interface ListTableProps {
+    facilityUnit: string
+    status: string
+    dateRange: {
+        startDate: Date
+        endDate: Date
+    }
+}
 
-export default function ListTable({ status }: any) {
+export default function ListTable({ facilityUnit, dateRange, status }: ListTableProps) {
     console.log(status)
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const { data: dispatchesData } = useApi<Dispatch[]>('release')
+    // const { data: dispatchesData } = useApi<Dispatch[]>('release')
+
+    const [selectedData, setSelectedData] = useState<Dispatch>()
+
+    const { data: dispatchesData } = useApi<Dispatch[]>('release', {
+        startDate: String(dateRange?.startDate),
+        endDate: String(dateRange?.endDate),
+        facilityUnit: facilityUnit,
+    })
 
     console.log(dispatchesData)
 
@@ -51,10 +64,10 @@ export default function ListTable({ status }: any) {
 
     return (
         <>
-            <TableContainer>
-                <Table variant="simple">
+            <TableContainer height={'100%'} overflowY={'auto'}>
+                <Table height={'100%'} variant="simple">
                     <Thead>
-                        <Tr>
+                        <Tr top={0} position={'sticky'} backgroundColor={'white'}>
                             <Th>№</Th>
                             <Th>Реализатор</Th>
                             <Th>Виды хлеба</Th>
@@ -72,7 +85,7 @@ export default function ListTable({ status }: any) {
                                     <Td>
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                                             {row.goodsDispatchDetails.map((details, index) => (
-                                                <span key={index}>{details.product.name}</span>
+                                                <span key={index}>{details.product?.name}</span>
                                             ))}
                                         </div>
                                     </Td>
@@ -89,7 +102,10 @@ export default function ListTable({ status }: any) {
                                             <EditIcon
                                                 boxSize={'1.5em'}
                                                 cursor={'pointer'}
-                                                onClick={() => setModal({ ...modal, isOpen: true })}
+                                                onClick={() => {
+                                                    setSelectedData(row)
+                                                    setModal({ ...modal, isOpen: true })
+                                                }}
                                             />
                                         }
                                         {
@@ -107,7 +123,7 @@ export default function ListTable({ status }: any) {
                     </Tbody>
                 </Table>
             </TableContainer>
-            <EditModal isOpen={modal.isOpen} onClose={modal.onClose} />
+            <EditModal data={selectedData} isOpen={modal.isOpen} onClose={modal.onClose} />
             <Dialog
                 isOpen={isOpen}
                 onClose={onClose}

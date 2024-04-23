@@ -1,4 +1,3 @@
-import DateRangePicker from '@/components/DateRangePicker'
 import Drawler from '@/components/Drawler'
 import { RELEASE_DISTRIBUTION_ROUTE, RELEASE_REFUND_ROUTE } from '@/utils/constants/routes.consts'
 import {
@@ -18,10 +17,37 @@ import { useNavigate } from 'react-router-dom'
 import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
 import DistributionModal from '../components/DistributionModal'
+import DateRange from '@/components/DateRange'
+import { useEffect, useState } from 'react'
+import { useApi } from '@/utils/services/axios'
+import UniversalComponent from '@/components/ui/UniversalComponent'
+
+interface FacilityUnit {
+    id: number
+    facilityUnit: string
+}
 
 const Distribution = () => {
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const [selectionRange, setSelectionRange] = useState({
+        startDate: new Date(),
+        endDate: new Date(),
+    })
+
+    const [selectedFacilityUnit, setSelectedFacilityUnit] = useState('')
+
+    const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
+
+    useEffect(() => {
+        console.log(selectionRange.startDate)
+        console.log(selectionRange.endDate)
+    }, [selectionRange])
+
+    const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedFacilityUnit(event.target.value)
+    }
 
     const handleUpdateProduct = () => {
         mutate('release')
@@ -29,12 +55,13 @@ const Distribution = () => {
     }
 
     return (
-        <Box>
+        <UniversalComponent>
             <Box
                 display="flex"
                 justifyContent={'space-between'}
                 flexDirection={'row'}
                 backgroundColor={'rgba(128, 128, 128, 0.1)'}
+                height={'6%'}
             >
                 <Box width={'100%'}>
                     <Drawler></Drawler>
@@ -57,14 +84,29 @@ const Distribution = () => {
                 <Avatar size={'md'} bg="teal.500" />
             </Box>
 
-            <Box width={'100%'} height={'100%'} p={5}>
-                <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
-                    <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        <DateRangePicker></DateRangePicker>
-                        <Select placeholder="Цехи" width={'fit-content'}>
-                            <option value="Лепешечный">Лепешечный</option>
-                            <option value="Булочный">Булочный</option>
-                            <option value="Заварной">Заварной</option>
+            <Box width={'100%'} height={'94%'} p={5}>
+                <Box
+                    marginBottom={10}
+                    height={'5%'}
+                    display={'flex'}
+                    justifyContent={'space-between'}
+                >
+                    <Box display={'flex'} gap={'15px'} width={'100%'}>
+                        <DateRange
+                            selectionRange={selectionRange}
+                            setSelectionRange={setSelectionRange}
+                        ></DateRange>
+                        <Select
+                            placeholder="Цехи"
+                            width={'fit-content'}
+                            value={selectedFacilityUnit}
+                            onChange={handleClientChange}
+                        >
+                            {facilityUnitsData?.map((unit, index) => (
+                                <option key={index} value={unit.id}>
+                                    {unit.facilityUnit}
+                                </option>
+                            ))}
                         </Select>
                     </Box>
 
@@ -72,15 +114,19 @@ const Distribution = () => {
                         Выдача продукции
                     </Button>
                 </Box>
-                <Box>
-                    <Tabs variant="soft-rounded">
-                        <TabList>
+                <Box height={'calc(95% - 2.5rem)'}>
+                    <Tabs variant="soft-rounded" height={'100%'}>
+                        <TabList height={'5%'}>
                             <Tab>List</Tab>
                             <Tab>Pivot</Tab>
                         </TabList>
-                        <TabPanels>
-                            <TabPanel>
-                                <ListTable status="0" />
+                        <TabPanels height={'95%'}>
+                            <TabPanel height={'100%'}>
+                                <ListTable
+                                    facilityUnit={selectedFacilityUnit}
+                                    dateRange={selectionRange}
+                                    status="0"
+                                />
                             </TabPanel>
                             <TabPanel>
                                 <PivotTable status="0" />
@@ -96,7 +142,7 @@ const Distribution = () => {
                 onSuccess={handleUpdateProduct}
                 status="0"
             />
-        </Box>
+        </UniversalComponent>
     )
 }
 

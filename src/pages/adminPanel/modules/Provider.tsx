@@ -15,40 +15,45 @@ import {
     useDisclosure,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
-import ProviderAddModal, { ProviderInputs } from '../components/ProviderAddModal'
+import ProviderAddModal from '../components/ProviderAddModal'
 import { useState } from 'react'
 import Dialog from '@/components/Dialog'
-import {
-    ADMIN_PRODUCTS_ROUTE,
-    ADMIN_MAGAZINES_ROUTE,
-    ADMIN_OVERPRICE_ROUTE,
-    ADMIN_PROVIDER_ROUTE,
-    ADMIN_RELEASE_ROUTE,
-    ADMIN_UNIQUEPRICE_ROUTE,
-    ADMIN_USERS_ROUTE,
-} from '@/utils/constants/routes.consts'
+import { ADMIN_PROVIDER_ROUTE } from '@/utils/constants/routes.consts'
+import { useApi } from '@/utils/services/axios'
+
+interface ProviderGoods {
+    id: number
+    providerId: number
+    goods: string
+    unitOfMeasure: string
+    place: string
+    status: string
+    provider: {
+        id: number
+        name: string
+    }
+}
 
 const AdminProvider = () => {
+    const [selectedStatus, setSelectedStatus] = useState('')
+
+    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods', {
+        status: selectedStatus,
+    })
+
+    console.log(providerGoodsData)
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [selectedData, setSelectedData] = useState<ProviderInputs>()
-    const data = [
-        {
-            id: 1,
-            provider: 'Рынок',
-            items: 'Мука',
-            unity: 'Кг',
-            bakery: [{ value: 1, label: 'Батонный' }],
-            status: [{ value: 1, label: 'Активный' }],
-        },
-    ]
+    const [selectedData, setSelectedData] = useState<ProviderGoods>()
+
     const [deleteDialog, setDeleteDialog] = useState({
         isOpen: false,
         onClose: () => setDeleteDialog({ ...deleteDialog, isOpen: false }),
     })
 
-    const handleSelectChange = () => {
+    const handleSelectChange = (status: string) => {
         console.log('target')
+        setSelectedStatus(status)
     }
 
     return (
@@ -63,53 +68,10 @@ const AdminProvider = () => {
                     <Drawler></Drawler>
                     <Button
                         height={'100%'}
-                        onClick={() => navigate(ADMIN_PRODUCTS_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Продукты
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_USERS_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Пользователи
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_RELEASE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Реализаторы
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_UNIQUEPRICE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Уникальные цены
-                    </Button>
-                    <Button
-                        height={'100%'}
                         onClick={() => navigate(ADMIN_PROVIDER_ROUTE)}
                         bg={'rgba(217, 217, 217, 1)'}
-                        fontSize={'14px'}
                     >
-                        Поставщик_товары
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_MAGAZINES_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Магазины
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_OVERPRICE_ROUTE)}
-                        fontSize={'14px'}
-                    >
-                        Сверху
+                        Поставщик товары
                     </Button>
                 </Box>
                 <Avatar size={'md'} bg="teal.500" />
@@ -122,10 +84,10 @@ const AdminProvider = () => {
                             name="status"
                             placeholder="Статус"
                             width={'fit-content'}
-                            onChange={handleSelectChange}
+                            onChange={(e) => handleSelectChange(e.target.value)}
                         >
-                            <option value="Активен">Активен</option>
-                            <option value="Неактивен">Неактивен</option>
+                            <option value="Активный">Активный</option>
+                            <option value="Неактивный">Неактивный</option>
                         </Select>
                     </Box>
 
@@ -150,23 +112,20 @@ const AdminProvider = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {data.map((item, index) => {
+                            {providerGoodsData?.map((item, index) => {
                                 return (
                                     <Tr key={index}>
-                                        <Td>{item.id}</Td>
-                                        <Td>{item.provider}</Td>
-                                        <Td>{item.items}</Td>
-                                        <Td>{item.unity}</Td>
-                                        <Td>
+                                        <Td>{index + Number(1)}</Td>
+                                        <Td>{item.provider.name}</Td>
+                                        <Td>{item.goods}</Td>
+                                        <Td>{item.unitOfMeasure}</Td>
+                                        {/* <Td>
                                             {item.bakery.map((type) => {
                                                 return <Box>{type.label}</Box>
                                             })}
-                                        </Td>
-                                        <Td>
-                                            {item.status.map((type) => {
-                                                return <Box>{type.label}</Box>
-                                            })}
-                                        </Td>
+                                        </Td> */}
+                                        <Td>{item.place}</Td>
+                                        <Td>{item.status}</Td>
                                         <Td sx={{ width: '5%' }}>
                                             <EditIcon
                                                 boxSize={5}

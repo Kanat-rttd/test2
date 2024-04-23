@@ -14,7 +14,9 @@ import { useState } from 'react'
 import EditModal from './EditModal'
 import { getAllPruchases } from '@/utils/services/productPurchase.service'
 import dayjs from 'dayjs'
-import useSWR, { mutate } from 'swr'
+// import useSWR, { mutate } from 'swr'
+import { useApi } from '@/utils/services/axios'
+import { mutate } from '@/utils/services/axios'
 
 interface AllPurchases {
     purchases: Purchase[]
@@ -45,11 +47,20 @@ interface Purchase {
 
 type ListTableProps = {
     selectedProviderId: string
+    selectedRawMaterial: string
+    dateRange: { startDate: Date; endDate: Date }
 }
 
-const ListTable = ({ selectedProviderId }: ListTableProps) => {
-    const { data: purchasesData } = useSWR<AllPurchases>('productPurchase', {
-        fetcher: () => getAllPruchases(),
+const ListTable = ({ selectedProviderId, selectedRawMaterial, dateRange }: ListTableProps) => {
+    // const { data: purchasesData } = useSWR<AllPurchases>('productPurchase', {
+    //     fetcher: () => getAllPruchases(),
+    // })
+
+    const { data: purchasesData } = useApi<AllPurchases>('productPurchase', {
+        providerId: selectedProviderId,
+        rawMaterialId: selectedRawMaterial,
+        startDate: String(dateRange?.startDate),
+        endDate: String(dateRange?.endDate),
     })
 
     console.log(purchasesData)
@@ -78,7 +89,7 @@ const ListTable = ({ selectedProviderId }: ListTableProps) => {
 
     return (
         <>
-            <TableContainer>
+            <TableContainer maxHeight={'calc(100vh - 220px)'} overflowY={'auto'}>
                 <Table variant="simple">
                     <Thead>
                         <Tr>
@@ -123,7 +134,7 @@ const ListTable = ({ selectedProviderId }: ListTableProps) => {
                             )
                         })}
                     </Tbody>
-                    <Tfoot marginTop={10}>
+                    <Tfoot marginTop={10} position={'sticky'} bottom={0} backgroundColor={'white'}>
                         <Tr>
                             <Th color={'#000'} fontSize={15}>
                                 ИТОГО

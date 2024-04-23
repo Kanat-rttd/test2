@@ -15,24 +15,44 @@ import {
     Select,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
+import { useApi } from '@/utils/services/axios'
+import { useState } from 'react'
+
+interface Provider {
+    id: number
+    name: string
+}
+
+interface DebtPurchase {
+    totalDebt: string
+    data: [
+        {
+            totalDebt: string
+            providerId: number
+            provider: {
+                id: number
+                name: string
+            }
+        },
+    ]
+}
 
 const Debt = () => {
     const navigate = useNavigate()
+    const [selectedProviderId, setSelectedProviderId] = useState<string>('')
 
-    const data = [
-        {
-            id: 1,
-            provider: 'ИП Калитанова К.М.',
-            debt: 6200,
-        },
-        {
-            id: 2,
-            provider: 'Рынок',
-            debt: 5400,
-        },
-    ]
+    const { data: purchasesData } = useApi<DebtPurchase>('productPurchase/debt', {
+        providerId: selectedProviderId,
+    })
+    const { data: providersData } = useApi<Provider[]>('providers')
 
-    const totalDebt = 11600
+    const handleProviderChange = (event: any) => {
+        setSelectedProviderId(event.target.value)
+    }
+
+    console.log(providersData)
+
+    console.log(purchasesData)
 
     return (
         <>
@@ -64,12 +84,28 @@ const Debt = () => {
             </Box>
 
             <Box padding={10} width={'25%'}>
-                <Select placeholder="Поставщик">
-                    <option>Поставщик</option>
+                <Select
+                    placeholder="Поставщик"
+                    value={selectedProviderId}
+                    onChange={handleProviderChange}
+                    width={'fit-content'}
+                >
+                    {providersData?.map((provider) => (
+                        <option key={provider.id} value={provider.id}>
+                            {provider.name}
+                        </option>
+                    ))}
                 </Select>
             </Box>
             <Box padding={10}>
-                <TableContainer>
+                <TableContainer
+                    height={'100%'}
+                    width={'100%'}
+                    overflowX={'auto'}
+                    overflowY={'auto'}
+                    maxHeight={'80dvh'}
+                    minHeight={'80dvh'}
+                >
                     <Table variant="simple">
                         <Thead>
                             <Tr>
@@ -79,12 +115,12 @@ const Debt = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {data.map((item) => {
+                            {purchasesData?.data.map((item, index) => {
                                 return (
-                                    <Tr key={item.id}>
-                                        <Td>{item.id}</Td>
-                                        <Td>{item.provider}</Td>
-                                        <Td>{item.debt}</Td>
+                                    <Tr key={index + 1}>
+                                        <Td>{index + 1}</Td>
+                                        <Td>{item.provider.name}</Td>
+                                        <Td>{item.totalDebt}</Td>
                                     </Tr>
                                 )
                             })}
@@ -96,7 +132,7 @@ const Debt = () => {
                                 </Th>
                                 <Th> </Th>
                                 <Th color={'#000'} fontSize={15}>
-                                    {totalDebt}
+                                    {purchasesData?.totalDebt}
                                 </Th>
                             </Tr>
                         </Tfoot>

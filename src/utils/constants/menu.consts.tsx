@@ -1,6 +1,5 @@
 import {
     ADMIN_ROUTE,
-    MAIN_ROUTE,
     NOTFOUND_ROUTE,
     REQUEST_ROUTE,
     ADMIN_PRODUCTS_ROUTE,
@@ -13,6 +12,9 @@ import {
     MIXERS_ROUTE,
     MIXERS_PASTRY_ROUTE,
     MIXERS_BAKINGPRODUCTS_ROUTE,
+    MIXERS_REMAIN_PRODUCTS_ROUTE,
+    MIXERS_REMAIN_RAW_MATERIALS_ROUTE,
+    MIXERS_SHIFT_ACCOUNTING_ROUTE,
     RELEASE_ROUTE,
     RELEASE_DISTRIBUTION_ROUTE,
     RELEASE_REFUND_ROUTE,
@@ -36,6 +38,12 @@ import {
     SELLS_DEBT_TRANSFER_ROUTE,
     ADMIN_MAGAZINES_ROUTE,
     ADMIN_OVERPRICE_ROUTE,
+    ADMIN_DEPART_PERSONAL_ROUTE,
+    REPORT_ROUTE,
+    BREAD_REPORT_ROUTE,
+    RELEASE_REPORT_ROUTE,
+    VISIT_REPORT_ROUTE,
+    RECONCILIATION_REPORT_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -46,79 +54,90 @@ type MenuItem = {
 }
 
 export const menuItems: MenuItem[] = [
-    {
-        route: MAIN_ROUTE,
-        label: 'Главная Страница',
-        allowedClasses: ['Admin', 'Client'],
-    },
-    {
-        route: REQUEST_ROUTE,
-        label: 'Заявки',
-        allowedClasses: ['Admin'],
-    },
+    // {
+    //     route: MAIN_ROUTE,
+    //     label: 'Главная Страница',
+    //     allowedClasses: ['Admin', 'Client'],
+    // },
     {
         route: ADMIN_ROUTE,
         label: 'Админ панель',
         allowedClasses: ['Admin'],
     },
     {
-        route: NOTFOUND_ROUTE,
-        label: 'Нотфаунд',
+        route: MIXERS_ROUTE,
+        label: 'Производство',
         allowedClasses: ['Admin', 'Client'],
     },
+    // {
+    //     route: REQUEST_ROUTE,
+    //     label: 'Заявки',
+    //     allowedClasses: ['Admin'],
+    // },
+    // {
+    //     route: NOTFOUND_ROUTE,
+    //     label: 'Нотфаунд',
+    //     allowedClasses: ['Admin', 'Client'],
+    // },
     {
         route: SALES_ROUTE,
         label: 'Продажи',
         allowedClasses: ['Admin', 'Client'],
     },
     {
-        route: MIXERS_ROUTE,
-        label: 'Производство',
+        route: PURCHASE_ROUTE,
+        label: 'Закуп',
         allowedClasses: ['Admin', 'Client'],
     },
-    {
-        route: RELEASE_ROUTE,
-        label: 'Выдача',
-        allowedClasses: ['Admin', 'Client'],
-    },
+    // {
+    //     route: RELEASE_ROUTE,
+    //     label: 'Выдача',
+    //     allowedClasses: ['Admin', 'Client'],
+    // },
     {
         route: FINANCE_ROUTE,
         label: 'Финансы',
         allowedClasses: ['Admin'],
     },
     {
-        route: PURCHASE_ROUTE,
-        label: 'Закуп',
-        allowedClasses: ['Admin', 'Client'],
+        route: REPORT_ROUTE,
+        label: 'Отчеты',
+        allowedClasses: ['Admin'],
     },
     {
         route: INVENTORY_ROUTE,
         label: 'Инвентаризация',
         allowedClasses: ['Admin', 'Client'],
     },
-    {
-        route: SELLS_ROUTE,
-        label: 'Продажи',
-        allowedClasses: ['Admin', 'Client'],
-    },
+    // {
+    //     route: SELLS_ROUTE,
+    //     label: 'Продажи',
+    //     allowedClasses: ['Admin', 'Client'],
+    // },
 ]
 
 export const subMenuItems: MenuItem[] = [
     {
-        route: ADMIN_PRODUCTS_ROUTE,
-        label: 'Продукты',
+        route: ADMIN_USERS_ROUTE,
+        label: 'Адмперсонал',
         path: ADMIN_ROUTE,
         allowedClasses: ['Admin'],
     },
     {
-        route: ADMIN_USERS_ROUTE,
-        label: 'Пользователи',
+        route: ADMIN_DEPART_PERSONAL_ROUTE,
+        label: 'Цехперсонал',
         path: ADMIN_ROUTE,
         allowedClasses: ['Admin'],
     },
     {
         route: ADMIN_RELEASE_ROUTE,
         label: 'Реализаторы',
+        path: ADMIN_ROUTE,
+        allowedClasses: ['Admin'],
+    },
+    {
+        route: ADMIN_PRODUCTS_ROUTE,
+        label: 'Продукты',
         path: ADMIN_ROUTE,
         allowedClasses: ['Admin'],
     },
@@ -135,40 +154,28 @@ export const subMenuItems: MenuItem[] = [
         allowedClasses: ['Admin'],
     },
     {
-        route: ADMIN_MAGAZINES_ROUTE,
-        label: 'Магазины',
-        path: ADMIN_ROUTE,
-        allowedClasses: ['Admin'],
-    },
-    {
         route: ADMIN_OVERPRICE_ROUTE,
         label: 'Сверху',
         path: ADMIN_ROUTE,
         allowedClasses: ['Admin'],
     },
     {
-        route: REQUEST_PROCESSED_ROUTE,
-        label: 'Обработанные',
-        path: REQUEST_ROUTE,
+        route: ADMIN_MAGAZINES_ROUTE,
+        label: 'Магазины',
+        path: ADMIN_ROUTE,
         allowedClasses: ['Admin'],
     },
     {
         route: REQUEST_PROCESSING_ROUTE,
         label: 'Обработка',
-        path: REQUEST_ROUTE,
+        path: MIXERS_ROUTE,
         allowedClasses: ['Admin'],
     },
     {
-        route: SALES_REQUEST_FORM_ROUTE,
-        label: 'Форма заявок',
-        path: SALES_ROUTE,
-        allowedClasses: ['Admin', 'Client'],
-    },
-    {
-        route: SALES_HISTORY_ROUTE,
-        label: 'История заказов',
-        path: SALES_ROUTE,
-        allowedClasses: ['Admin', 'Client'],
+        route: REQUEST_PROCESSED_ROUTE,
+        label: 'Обработанные',
+        path: MIXERS_ROUTE,
+        allowedClasses: ['Admin'],
     },
     {
         route: MIXERS_PASTRY_ROUTE,
@@ -185,16 +192,69 @@ export const subMenuItems: MenuItem[] = [
     {
         route: RELEASE_DISTRIBUTION_ROUTE,
         label: 'Выдача',
-        path: RELEASE_ROUTE,
+        path: MIXERS_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
     {
         route: RELEASE_REFUND_ROUTE,
         label: 'Возврат',
-        path: RELEASE_ROUTE,
+        path: MIXERS_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
-
+    {
+        route: MIXERS_REMAIN_RAW_MATERIALS_ROUTE,
+        label: 'Остаток сырья',
+        path: MIXERS_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: MIXERS_REMAIN_PRODUCTS_ROUTE,
+        label: 'Остаток продукции',
+        path: MIXERS_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: MIXERS_SHIFT_ACCOUNTING_ROUTE,
+        label: 'Учёт смен',
+        path: MIXERS_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: SELLS_JOURNAL_ROUTE,
+        label: 'Журнал Продаж',
+        path: SALES_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: SELLS_INVOICE_ROUTE,
+        label: 'Накладной',
+        path: SALES_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: SELLS_DEBT_ACCOUNTING_ROUTE,
+        label: 'Учет долгов',
+        path: SALES_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: SALES_REQUEST_FORM_ROUTE,
+        label: 'Форма заявок',
+        path: SALES_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: SALES_HISTORY_ROUTE,
+        label: 'История заказов',
+        path: SALES_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: SELLS_DEBT_TRANSFER_ROUTE,
+        label: 'Перевод Долга',
+        path: SALES_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
     {
         route: FINANCE_INPUT_ROUTE,
         label: 'Ввод',
@@ -203,7 +263,7 @@ export const subMenuItems: MenuItem[] = [
     },
     {
         route: FINANCE_HISTORY_ROUTE,
-        label: 'История',
+        label: 'История финансов',
         path: FINANCE_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
@@ -239,27 +299,27 @@ export const subMenuItems: MenuItem[] = [
         allowedClasses: ['Admin', 'Client'],
     },
     {
-        route: SELLS_JOURNAL_ROUTE,
-        label: 'Журнал Продаж',
-        path: SELLS_ROUTE,
+        route: BREAD_REPORT_ROUTE,
+        label: 'Отчет по продукций',
+        path: REPORT_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
     {
-        route: SELLS_INVOICE_ROUTE,
-        label: 'Накладной',
-        path: SELLS_ROUTE,
+        route: RELEASE_REPORT_ROUTE,
+        label: 'Отчет по реализаций',
+        path: REPORT_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
     {
-        route: SELLS_DEBT_ACCOUNTING_ROUTE,
-        label: 'Учет долгов',
-        path: SELLS_ROUTE,
+        route: VISIT_REPORT_ROUTE,
+        label: 'Отчет по посещений',
+        path: REPORT_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
     {
-        route: SELLS_DEBT_TRANSFER_ROUTE,
-        label: 'Перевод Долга',
-        path: SELLS_ROUTE,
+        route: RECONCILIATION_REPORT_ROUTE,
+        label: 'Акт сверки',
+        path: REPORT_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
 ]

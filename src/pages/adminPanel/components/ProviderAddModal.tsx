@@ -14,38 +14,80 @@ import {
 } from '@chakra-ui/react'
 import { Controller, useForm } from 'react-hook-form'
 import Select from 'react-select'
+import { useApi } from '@/utils/services/axios'
+import { useEffect } from 'react'
+import { createProviderGoods } from '@/utils/services/providerGoods.service'
 
 export type ProviderInputs = {
     id: number
-    provider: string
-    items: string
-    unity: string
+    provider: number
+    goods: string
+    unitOfMeasure: string
     bakery: { value: number; label: string }[]
-    status: { value: number; label: string }[]
+    status: string
+}
+
+interface status {
+    id: number
+    name: string
+}
+
+interface ProviderGoods {
+    id: number
+    providerId: number
+    goods: string
+    unitOfMeasure: string
+    place: string
+    status: string
+    provider: {
+        id: number
+        name: string
+    }
+}
+
+interface Providers {
+    id: number
+    name: string
 }
 
 type ModalProps = {
     isOpen: boolean
     onClose: () => void
-    selectedData: ProviderInputs | undefined
+    selectedData: ProviderGoods | undefined
 }
 
 const defaultValues = {
-    provider: '',
-    items: '',
-    unity: '',
+    provider: 0,
+    goods: '',
+    unitOfMeasure: '',
     bakery: [{ value: 0, label: '' }],
-    status: [{ value: 0, label: '' }],
+    status: '',
 }
 
 const ProviderAddModal = ({ isOpen, onClose, selectedData }: ModalProps) => {
+    const { data: providersData } = useApi<Providers[]>('providers')
+    console.log(providersData)
+
     const {
         register,
         handleSubmit: handleSubmitForm,
         control,
         formState: { errors },
+        setValue,
         reset,
     } = useForm<ProviderInputs>()
+
+    useEffect(() => {
+        if (selectedData) {
+            setValue('provider', selectedData.provider.id)
+            setValue('goods', selectedData.goods)
+            setValue('status', selectedData.status)
+            setValue('unitOfMeasure', selectedData.unitOfMeasure)
+
+            const selectedBakery = bakery.find((b) => b.label == selectedData.place)
+            setValue('bakery', selectedBakery ? [selectedBakery] : [])
+        }
+    }, [selectedData])
 
     const bakery = [
         { value: 1, label: 'Батонный' },
@@ -53,12 +95,15 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData }: ModalProps) => {
     ]
 
     const status = [
-        { value: 1, label: 'Активный' },
-        { value: 2, label: 'Неактивный' },
+        { id: 1, name: 'Активный' },
+        { id: 2, name: 'Неактивный' },
     ]
 
     const sendData = (formData: ProviderInputs) => {
         console.log(formData)
+        createProviderGoods(formData).then((res) => {
+            console.log(res)
+        })
     }
 
     // console.log(selectedData)
@@ -74,50 +119,66 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData }: ModalProps) => {
             >
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Modal Title</ModalHeader>
+                    <ModalHeader>Редактировать</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Box display={'flex'} flexDirection={'column'} gap={3}>
                             <FormControl isInvalid={!!errors.provider}>
-                                <Input
-                                    maxLength={20}
-                                    {...register('provider', {
-                                        required: 'Поле является обязательным',
-                                    })}
-                                    autoComplete="off"
-                                    placeholder="Поставщик *"
-                                    type="text"
-                                    defaultValue={selectedData?.provider}
+                                <Controller
+                                    name="provider"
+                                    control={control}
+                                    rules={{ required: 'Поля является обязательным' }}
+                                    render={({ field }) => {
+                                        const { onChange, value } = field
+                                        return (
+                                            <Select
+                                                options={providersData}
+                                                getOptionLabel={(option: Providers) => option.name}
+                                                getOptionValue={(option: Providers) =>
+                                                    `${option.id}`
+                                                }
+                                                value={providersData?.find(
+                                                    (option) => option.id === value,
+                                                )}
+                                                onChange={(selectedOption: Providers | null) => {
+                                                    if (selectedOption) {
+                                                        onChange(selectedOption.id)
+                                                    }
+                                                }}
+                                                placeholder="Поставщик *"
+                                                isClearable
+                                                isSearchable
+                                            />
+                                        )
+                                    }}
                                 />
                                 <FormErrorMessage>{errors.provider?.message}</FormErrorMessage>
                             </FormControl>
 
-                            <FormControl isInvalid={!!errors.items}>
+                            <FormControl isInvalid={!!errors.goods}>
                                 <Input
                                     maxLength={20}
-                                    {...register('items', {
+                                    {...register('goods', {
                                         required: 'Поле является обязательным',
                                     })}
                                     autoComplete="off"
                                     placeholder="Товары *"
                                     type="text"
-                                    defaultValue={selectedData?.items}
                                 />
-                                <FormErrorMessage>{errors.items?.message}</FormErrorMessage>
+                                <FormErrorMessage>{errors.goods?.message}</FormErrorMessage>
                             </FormControl>
 
-                            <FormControl isInvalid={!!errors.unity}>
+                            <FormControl isInvalid={!!errors.unitOfMeasure}>
                                 <Input
                                     maxLength={20}
-                                    {...register('unity', {
+                                    {...register('unitOfMeasure', {
                                         required: 'Поле является обязательным',
                                     })}
                                     autoComplete="off"
                                     placeholder="Единица измерения *"
                                     type="text"
-                                    defaultValue={selectedData?.unity}
                                 />
-                                <FormErrorMessage>{errors.unity?.message}</FormErrorMessage>
+                                <FormErrorMessage>{errors.unitOfMeasure?.message}</FormErrorMessage>
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.bakery}>
@@ -138,7 +199,6 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData }: ModalProps) => {
                                                 placeholder="Место *"
                                                 isClearable
                                                 isSearchable
-                                                defaultValue={selectedData?.bakery}
                                             />
                                         )
                                     }}
@@ -152,16 +212,23 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData }: ModalProps) => {
                                     control={control}
                                     rules={{ required: 'Поля является обязательным' }}
                                     render={({ field }) => {
-                                        const { onChange } = field
+                                        const { onChange, value } = field
                                         return (
                                             <Select
                                                 options={status}
-                                                value={status?.find((option) => option)}
-                                                onChange={(val) => onChange(val)}
+                                                getOptionLabel={(option: status) => option.name}
+                                                getOptionValue={(option: status) => option.name}
+                                                value={status?.find(
+                                                    (option) => option.name === value,
+                                                )}
+                                                onChange={(selectedOption: status | null) => {
+                                                    if (selectedOption) {
+                                                        onChange(selectedOption.name)
+                                                    }
+                                                }}
                                                 placeholder="Статус *"
                                                 isClearable
                                                 isSearchable
-                                                defaultValue={selectedData?.status}
                                             />
                                         )
                                     }}

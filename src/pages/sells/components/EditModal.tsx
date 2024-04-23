@@ -181,7 +181,11 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }) =
                             <FormControl width="25%">
                                 <InputGroup>
                                     <Input
-                                        value={detail.price}
+                                        value={
+                                            detail.price !== null
+                                                ? detail.price
+                                                : detail.product.price
+                                        }
                                         onChange={(e) =>
                                             handleInputChange(index, 'price', e.target.value)
                                         }
