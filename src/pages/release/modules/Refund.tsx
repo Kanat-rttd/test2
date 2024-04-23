@@ -78,7 +78,11 @@ const Refund = () => {
                         </TabList>
                         <TabPanels>
                             <TabPanel>
-                                <ListTable status="1" />
+                                <ListTable
+                                    facilityUnit={'0'}
+                                    dateRange={{ startDate: new Date(), endDate: new Date() }}
+                                    status="0"
+                                />
                             </TabPanel>
                             <TabPanel>
                                 <PivotTable status="1" />

@@ -14,7 +14,7 @@ import {
     Box,
     Text,
 } from '@chakra-ui/react'
-import { Controller, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { updateDispatch } from '@/utils/services/dispatch.service'
 
@@ -78,10 +78,8 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
     const {
         register,
         handleSubmit: handleSubmitForm,
-        control,
         formState: { errors },
         setValue,
-        reset,
     } = useForm<EditModalInputs>()
 
     useEffect(() => {

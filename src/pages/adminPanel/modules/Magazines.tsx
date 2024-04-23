@@ -12,8 +12,8 @@ import {
     Avatar,
     Select,
 } from '@chakra-ui/react'
-import { useState, useEffect } from 'react'
-import { deleteProduct, findByFilters } from '../../../utils/services/product.service'
+import { useState } from 'react'
+import { deleteProduct } from '../../../utils/services/product.service'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Drawler'
 import { useNavigate } from 'react-router-dom'

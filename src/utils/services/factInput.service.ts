@@ -18,7 +18,7 @@ export const createFactInput = async (
 }
 
 export const updateFactInput = async (
-    id: string,
+    id: number | undefined,
     data: {
         name: string
         place: string

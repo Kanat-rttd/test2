@@ -1,7 +1,6 @@
 import DateRangePicker from '@/components/DateRangePicker'
 import Drawler from '@/components/Drawler'
 import { Avatar, Box, Button, Select, useDisclosure } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
 import ListTable from '../components/ListTable'
 import DistributionModal from '../components/DistributionModal'
 
@@ -10,7 +9,6 @@ const shiftAccounting = () => {
         console.log('1')
     }
 
-    const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (

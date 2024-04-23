@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import EditModal from './EditModal'
-import { getAllPruchases } from '@/utils/services/productPurchase.service'
+// import { getAllPruchases } from '@/utils/services/productPurchase.service'
 import dayjs from 'dayjs'
 // import useSWR, { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'

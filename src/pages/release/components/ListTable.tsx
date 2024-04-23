@@ -33,8 +33,8 @@ interface Dispatch {
 }
 
 interface ListTableProps {
-    facilityUnit: string
     status: string
+    facilityUnit: string
     dateRange: {
         startDate: Date
         endDate: Date
@@ -44,8 +44,6 @@ interface ListTableProps {
 export default function ListTable({ facilityUnit, dateRange, status }: ListTableProps) {
     console.log(status)
     const { isOpen, onOpen, onClose } = useDisclosure()
-
-    // const { data: dispatchesData } = useApi<Dispatch[]>('release')
 
     const [selectedData, setSelectedData] = useState<Dispatch>()
 

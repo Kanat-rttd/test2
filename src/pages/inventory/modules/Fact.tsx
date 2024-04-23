@@ -1,17 +1,6 @@
 import Drawler from '@/components/Drawler'
 import { INVENTORY_DETAILS_ROUTE, INVENTORY_FACT_ROUTE } from '@/utils/constants/routes.consts'
-import {
-    Avatar,
-    Box,
-    Button,
-    Input,
-    Select,
-    Table,
-    useDisclosure,
-    Tfoot,
-    Tr,
-    Th,
-} from '@chakra-ui/react'
+import { Avatar, Box, Button, Input, Select, useDisclosure } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import FactTable from '../components/FactTable'
 import FactModal from '../components/AddFactModal'

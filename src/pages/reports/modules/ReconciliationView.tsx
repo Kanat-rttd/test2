@@ -11,7 +11,6 @@ import {
     Button,
     Select,
     TableContainer,
-    Td,
     Th,
     Tr,
     Tbody,
@@ -62,41 +61,6 @@ const ReconciliationView = () => {
     const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedClient(event.target.value)
     }
-
-    const getProductNames = () => {
-        const productNames = new Set<string>()
-        breadViewData?.forEach((entry) => {
-            entry.Products.forEach((product) => {
-                productNames.add(product.productName)
-            })
-        })
-        return [...productNames]
-    }
-
-    const filteredData = breadViewData
-        ?.map((entry) => ({
-            Date: entry.Date,
-            Products: entry.Products.filter(
-                (product) => selectedClient === '' || product.clientName === selectedClient,
-            ),
-        }))
-        .filter((entry) => entry.Products.length > 0)
-
-    const sumProductQuantityForDate = (date: string, productName: string) => {
-        let sum = 0
-        filteredData?.forEach((entry) => {
-            if (entry.Date === date) {
-                entry.Products.forEach((product) => {
-                    if (product.productName === productName) {
-                        sum += product.quantity
-                    }
-                })
-            }
-        })
-        return sum
-    }
-
-    const productNames = getProductNames()
 
     return (
         <Box>

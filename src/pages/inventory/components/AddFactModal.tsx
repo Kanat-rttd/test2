@@ -55,10 +55,7 @@ const FactModal = ({ isOpen, onClose }: FactModalProps) => {
         register,
         handleSubmit: handleSubmitForm,
         control,
-        getValues,
-        setValue,
         formState: { errors },
-        reset,
     } = useForm<AddFactModalInputs>()
 
     const sendData = (formData: AddFactModalInputs) => {

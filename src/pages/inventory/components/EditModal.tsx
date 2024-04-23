@@ -84,11 +84,11 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
     }, [selectedData])
 
     const updateData = (formData: AddFactModalInputs) => {
-        // console.log(formData, selectedData?.id)
-        let name = selectedData?.name
-        let id = selectedData?.id
+        let name = selectedData?.name || ''
+        let id = selectedData?.id || 0
+        let quantity = parseFloat(formData.quantity)
 
-        const sendData = { ...formData, name }
+        const sendData = { ...formData, name, quantity }
         console.log(sendData)
 
         updateFactInput(id, sendData)
@@ -98,7 +98,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                 handleClose()
             })
             .catch((error) => {
-                console.error('Error creating sale:', error)
+                console.error('Error updating data:', error)
             })
     }
 
