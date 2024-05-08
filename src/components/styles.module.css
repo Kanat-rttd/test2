@@ -6,3 +6,19 @@
     min-height: 100dvh;
     position: relative;
 }
+
+.header{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    padding: 0 1rem;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    background-color: rgb(241, 241, 241)
+}
+.logo{
+    display: flex;
+    align-items: center;
+}

@@ -15,13 +15,14 @@ import {
 } from '@chakra-ui/react'
 import DepartPersonalModal from '../components/departPesonalAddModal'
 import { useState } from 'react'
-import { EditIcon } from '@chakra-ui/icons'
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Drawler'
 import { ADMIN_USERS_ROUTE, ADMIN_DEPART_PERSONAL_ROUTE } from '@/utils/constants/routes.consts'
 import { useNavigate } from 'react-router-dom'
 import { useApi } from '@/utils/services/axios'
 import { mutate } from 'swr'
 import UniversalComponent from '@/components/ui/UniversalComponent'
+import Dialog from '@/components/Dialog'
 
 interface DepartPersonal {
     id: number
@@ -37,13 +38,16 @@ const AdminPanel = () => {
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<DepartPersonal | undefined>(undefined)
     const [selectedStatus, setSelectedStatus] = useState<string>('')
+    const [dialog, setDialog] = useState({
+        isOpen: false,
+        onClose: () => setDialog({ ...dialog, isOpen: false }),
+    })
 
     // const { data: departPersonalData } = useApi<DepartPersonal[]>('departPersonal')
     const { data: departPersonalData } = useApi<DepartPersonal[]>('departPersonal', {
         status: selectedStatus,
     })
 
-    console.log(departPersonalData)
 
     const handleClose = () => {
         onClose()
@@ -56,6 +60,16 @@ const AdminPanel = () => {
 
     const applyFilters = (status: string) => {
         setSelectedStatus(status)
+    }
+
+    const deleteUser = (selectedData: DepartPersonal | undefined) => {
+        if (selectedData) {
+            // deleteDepartClient(selectedData.id).then((res) => {
+            //     console.log(res)
+            // })
+        } else {
+            console.error('No user data available to delete.')
+        }
     }
 
     return (
@@ -114,9 +128,10 @@ const AdminPanel = () => {
                             </Thead>
                             <Tbody>
                                 {departPersonalData?.map((user, index) => {
+                                    const count: number = index + 1
                                     return (
                                         <Tr key={index}>
-                                            <Td>{user.id}</Td>
+                                            <Td>{count}</Td>
                                             <Td>{user.name}</Td>
                                             <Td>{user.surname}</Td>
                                             <Td>{user.status}</Td>
@@ -135,6 +150,21 @@ const AdminPanel = () => {
                                                     }}
                                                     icon={<EditIcon />}
                                                 />
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        setSelectedData(user)
+                                                        setDialog({
+                                                            ...dialog,
+                                                            isOpen: true,
+                                                        })
+                                                    }}
+                                                    icon={<DeleteIcon />}
+                                                />
                                             </Td>
                                         </Tr>
                                     )
@@ -148,6 +178,17 @@ const AdminPanel = () => {
                         onClose={handleClose}
                         onSuccess={handledSuccess}
                     />
+                    <Dialog
+                    isOpen={dialog.isOpen}
+                    onClose={dialog.onClose}
+                    header="Удалить"
+                    body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                    actionBtn={() => {
+                        dialog.onClose()
+                        deleteUser(selectedData)
+                    }}
+                    actionText="Удалить"
+                />
                 </Box>
             </UniversalComponent>
         </>

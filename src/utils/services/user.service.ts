@@ -46,7 +46,7 @@ export const auth = async () => {
     return data
 }
 
-// export const deleteClient = async (id: number) => {
-//     const response = await $host.delete(`client/${id}`)
-//     return response
-// }
+export const deleteClient = async (id: number) => {
+    const response = await $host.delete(`client/${id}`)
+    return response
+}
