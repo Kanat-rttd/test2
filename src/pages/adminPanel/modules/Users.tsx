@@ -22,8 +22,8 @@ import { useNavigate } from 'react-router-dom'
 import { useApi, mutate } from '@/utils/services/axios'
 // import Header from '@/components/Header'
 import Dialog from '@/components/Dialog'
-import { deleteClient } from '@/utils/services/user.service'
-import Drawler from '@/components/Drawler'
+import { deleteUser } from '@/utils/services/user.service'
+import Drawler from '@/components/Menu'
 // import useSWR, { mutate } from 'swr'
 // import { getAllUsers } from '../../../utils/services/user.service'
 
@@ -57,6 +57,9 @@ const AdminPanel = () => {
         status: selectedStatus,
     })
 
+    console.log(usersData);
+    
+
     const handleClose = () => {
         setSelectedData(undefined)
         onClose()
@@ -70,9 +73,9 @@ const AdminPanel = () => {
         setSelectedStatus(status)
     }
 
-    const deleteUser = (selectedData: User | undefined) => {
+    const handlerDeleteUser = (selectedData: User | undefined) => {
         if (selectedData) {
-            deleteClient(selectedData.id).then((res) => {
+            deleteUser(selectedData.id).then((res) => {
                 console.log(res)
             })
         } else {
@@ -150,10 +153,10 @@ const AdminPanel = () => {
                         </Thead>
                         <Tbody>
                             {usersData?.map((user, index) => {
-                                const count: number = index + 1
+                                const ordinalNumber: number = index + 1
                                 return (
                                     <Tr key={index}>
-                                        <Td>{count}</Td>
+                                        <Td>{ordinalNumber}</Td>
                                         <Td>{user.name}</Td>
                                         <Td>{user.surname}</Td>
                                         <Td>{user.phone}</Td>
@@ -208,7 +211,7 @@ const AdminPanel = () => {
                     body="Вы уверены? Вы не сможете отменить это действие впоследствии."
                     actionBtn={() => {
                         dialog.onClose()
-                        deleteUser(selectedData)
+                        handlerDeleteUser(selectedData)
                     }}
                     actionText="Удалить"
                 />

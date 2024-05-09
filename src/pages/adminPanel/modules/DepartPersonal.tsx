@@ -13,10 +13,10 @@ import {
     Avatar,
     Select,
 } from '@chakra-ui/react'
-import DepartPersonalModal from '../components/departPesonalAddModal'
+import DepartPersonalModal from '../components/DepartPesonalAddModal'
 import { useState } from 'react'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { ADMIN_USERS_ROUTE, ADMIN_DEPART_PERSONAL_ROUTE } from '@/utils/constants/routes.consts'
 import { useNavigate } from 'react-router-dom'
 import { useApi } from '@/utils/services/axios'

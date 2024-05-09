@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { MIXERS_PASTRY_ROUTE } from '@/utils/constants/routes.consts'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import BakingAddModal from '../components/BakingAddModal'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import UniversalComponent from '@/components/ui/UniversalComponent'

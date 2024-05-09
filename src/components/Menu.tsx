@@ -1,5 +1,4 @@
 import {
-    useDisclosure,
     Button,
     Drawer,
     DrawerOverlay,
@@ -16,19 +15,24 @@ import {
 } from '@chakra-ui/react'
 import { menuItems, subMenuItems } from '../utils/constants/menu.consts'
 import { LOGIN_ROUTE } from '../utils/constants/routes.consts'
-import { useEffect, useRef, Fragment } from 'react'
+import { useRef, Fragment, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import getUserInfo from '@/utils/helpers/getUserInfo'
 
 /**
- * Default Loader which you can use between page or big fetch
+ * Custom navigation menu
+ * We use getUserInfo function where we receive permissions for certain pages
+ * and using this and menuItems from constants rendered correct forms in the menu
  * @returns {JSX}
  */
-//TODO:comment не совпадает с действительностью плюс название компонента по лучше можно
 const Drawler = () => {
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
     const navigate = useNavigate()
-    const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = useRef<HTMLButtonElement | null>(null)
+
+    const toggleDrawer = () => {
+        setIsDrawerOpen((prev: any) => !prev)
+    }
 
     const userInfo = getUserInfo()
 
@@ -38,20 +42,20 @@ const Drawler = () => {
         )
     })
 
-    useEffect(() => {
-        if (isOpen && btnRef.current) {
-            btnRef.current.focus()
-        }
-    }, [isOpen])
+    const handleNavigate = (route: string) => {
+        setIsDrawerOpen(false)
+        navigate(route)
+    }
 
     return (
         <>
-            <Button ref={btnRef} colorScheme="white" onClick={onOpen}>
+            <Button ref={btnRef} colorScheme="white" onClick={toggleDrawer}>
                 <Icon viewBox="0 0 24 24" fill="none" boxSize={6} color="black">
                     <path d="M4 6H20M4 12H20M4 18H20" stroke="#000000" strokeWidth="2"></path>
                 </Icon>
             </Button>
-            <Drawer isOpen={isOpen} placement="left" onClose={onClose} finalFocusRef={btnRef}>
+            {isDrawerOpen && (
+            <Drawer isOpen={isDrawerOpen} placement="left" onClose={() => setIsDrawerOpen(false)} finalFocusRef={btnRef}>
                 <DrawerOverlay width={'100%'} />
                 <DrawerContent width={'100%'}>
                     <DrawerCloseButton />
@@ -80,7 +84,7 @@ const Drawler = () => {
                                                     variant="ghost"
                                                     width={'60%'}
                                                     lineHeight={'20px'}
-                                                    onClick={() => navigate(route)}
+                                                    onClick={() => handleNavigate(route)}
                                                 >
                                                     {label}
                                                 </Link>
@@ -96,6 +100,7 @@ const Drawler = () => {
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
+            )}
         </>
     )
 }

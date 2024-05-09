@@ -1,5 +1,5 @@
 import { Box, Button, Avatar, Tabs, TabList, Tab, TabPanel, TabPanels } from '@chakra-ui/react'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import {
     SELLS_JOURNAL_ROUTE,
     SELLS_INVOICE_ROUTE,

@@ -17,6 +17,9 @@ import {
     FormErrorMessage,
     InputRightElement,
 } from '@chakra-ui/react'
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
+import PasswordInput from '@/components/shared/PasswordInput'
+import PhoneInput from '@/components/shared/PhoneInput'
 
 export interface Releaser {
     id: number
@@ -160,16 +163,19 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.contact}>
-                        <InputGroup>
-                            <Input
-                                {...register('contact', {
-                                    required: 'Поле является обязательным',
-                                })}
-                                autoComplete="off"
-                                placeholder="Контакт *"
-                                type="text"
-                            />
-                        </InputGroup>
+                        <PhoneInput
+                            {...register('contact', {
+                                required: 'Поля является обязательным',
+                                minLength: {
+                                    value: 10,
+                                    message: 'Некорректный номер телефона.',
+                                },
+                                maxLength: {
+                                    value: 10,
+                                    message: 'Некорректный номер телефона.',
+                                },
+                            })}
+                        />
                         <FormErrorMessage>{errors.contact?.message}</FormErrorMessage>
                     </FormControl>
 
@@ -181,7 +187,7 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                                 })}
                                 autoComplete="off"
                                 placeholder="Телеграм ID *"
-                                type="text"
+                                type="number"
                             />
                         </InputGroup>
                         <FormErrorMessage>{errors.telegrammId?.message}</FormErrorMessage>
@@ -203,6 +209,8 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                                         onChange={(selectedOption: status | null) => {
                                             if (selectedOption) {
                                                 onChange(selectedOption.name)
+                                            } else {
+                                                onChange(null)
                                             }
                                         }}
                                         placeholder="Статус *"
@@ -216,7 +224,13 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.password}>
-                        <InputGroup>
+                        <PasswordInput
+                            {...register('password', {
+                                required: data ? false : 'Поля является обязательным',
+                            })}
+                            placeholder="Пароль *"
+                        />
+                        {/* <InputGroup>
                             <Input
                                 {...register('password', {
                                     required: data ? false : 'Поле является обязательным',
@@ -225,12 +239,12 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                                 placeholder="Пароль *"
                                 type={show ? 'text' : 'password'}
                             />
-                            <InputRightElement width="4.5rem">
+                            <InputRightElement width="3.3rem">
                                 <Button h="1.75rem" size="sm" onClick={handleClick}>
-                                    {show ? 'Скрыть' : 'Показать'}
+                                    {show ? <ViewIcon /> : <ViewOffIcon />} 
                                 </Button>
                             </InputRightElement>
-                        </InputGroup>
+                        </InputGroup> */}
                         <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
                     </FormControl>
 
@@ -247,9 +261,9 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                                 placeholder="Подтвердите пароль *"
                                 type={show ? 'text' : 'password'}
                             />
-                            <InputRightElement width="4.5rem">
+                            <InputRightElement width="3.3rem">
                                 <Button h="1.75rem" size="sm" onClick={handleClick}>
-                                    {show ? 'Скрыть' : 'Показать'}
+                                    {show ? <ViewIcon /> : <ViewOffIcon />}
                                 </Button>
                             </InputRightElement>
                         </InputGroup>

@@ -1,6 +1,6 @@
 import { Avatar, Box, BoxProps } from '@chakra-ui/react'
 import classes from './styles.module.css'
-import Drawler from './Drawler'
+import Drawler from './Menu'
 import { Fragment } from 'react'
 
 interface StyledContainerProps extends BoxProps {

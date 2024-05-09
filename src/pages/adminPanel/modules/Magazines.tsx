@@ -15,7 +15,7 @@ import {
 import { useState } from 'react'
 import { deleteProduct } from '../../../utils/services/product.service'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
 import { ADMIN_MAGAZINES_ROUTE } from '@/utils/constants/routes.consts'

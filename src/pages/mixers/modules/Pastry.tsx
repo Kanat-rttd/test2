@@ -1,6 +1,6 @@
 import { Box, Button, Avatar, Select } from '@chakra-ui/react'
 import { useState, useEffect, ChangeEvent } from 'react'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { useNavigate } from 'react-router-dom'
 import { MIXERS_BAKINGPRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'

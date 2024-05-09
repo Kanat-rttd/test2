@@ -10,7 +10,6 @@ import {
     InputGroup,
     Input,
     InputRightElement,
-    InputLeftAddon,
     FormControl,
     FormErrorMessage,
     Box,
@@ -20,6 +19,7 @@ import Select from 'react-select'
 import { Controller, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { createUser, updateUser } from '../../../utils/services/user.service'
+import PhoneInput from '@/components/shared/PhoneInput'
 
 interface User {
     id: number
@@ -112,7 +112,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
             <Modal isCentered isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
                 <ModalContent>
-                    <ModalHeader>{data ? 'Редактировать' : 'Добавить'} пользователя</ModalHeader>
+                    <ModalHeader>{data ? 'Редактировать' : 'Добавить'} адмперсонал</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
                         <form
@@ -151,7 +151,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                 <Controller
                                     name="userClass"
                                     control={control}
-                                    rules={{ required: 'Поля является обязательным' }}
+                                    rules={{ required: 'Поле является обязательным' }}
                                     render={({ field }) => {
                                         const { onChange, value } = field
                                         return (
@@ -167,6 +167,8 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                                 onChange={(selectedOption: userClass | null) => {
                                                     if (selectedOption) {
                                                         onChange(selectedOption.name)
+                                                    } else {
+                                                        onChange(null)
                                                     }
                                                 }}
                                                 placeholder="Доступ *"
@@ -180,21 +182,19 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.phone}>
-                                <InputGroup>
-                                    <InputLeftAddon>+7</InputLeftAddon>
-                                    <Input
-                                        {...register('phone', {
-                                            required: 'Поле является обязательным',
-                                            maxLength: {
-                                                value: 10,
-                                                message: 'Максимальная длина 10 символов',
-                                            },
-                                        })}
-                                        autoComplete="off"
-                                        placeholder="Номер телефона *"
-                                        type="number"
-                                    />
-                                </InputGroup>
+                                <PhoneInput
+                                    {...register('phone', {
+                                        required: 'Поля является обязательным',
+                                        minLength: {
+                                            value: 10,
+                                            message: 'Некорректный номер телефона.',
+                                        },
+                                        maxLength: {
+                                            value: 10,
+                                            message: 'Некорректный номер телефона.',
+                                        },
+                                    })}
+                                />
                                 <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
                             </FormControl>
 
@@ -213,9 +213,11 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                                 value={status.find(
                                                     (option) => option.name === value,
                                                 )}
-                                                onChange={(selectedOption: status | null) => {
+                                                onChange={(selectedOption: userClass | null) => {
                                                     if (selectedOption) {
                                                         onChange(selectedOption.name)
+                                                    } else {
+                                                        onChange(null)
                                                     }
                                                 }}
                                                 placeholder="Статус *"

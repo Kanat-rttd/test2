@@ -1,4 +1,4 @@
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { INVENTORY_DETAILS_ROUTE, INVENTORY_FACT_ROUTE } from '@/utils/constants/routes.consts'
 import { Avatar, Box, Button, Input, Select, useDisclosure } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'

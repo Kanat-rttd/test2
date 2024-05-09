@@ -1,5 +1,5 @@
 import { Box, Button, Avatar, Select, Text, useDisclosure } from '@chakra-ui/react'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { useState } from 'react'
 import {
     SELLS_DEBT_ACCOUNTING_ROUTE,

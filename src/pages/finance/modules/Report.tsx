@@ -2,7 +2,7 @@ import { Avatar, Box, Select, Text } from '@chakra-ui/react'
 import styles from '../style.module.css'
 import DateRange from '../../../components/DateRange'
 import { useState } from 'react'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { getReportData } from '@/utils/services/finance.service'
 import useSWR from 'swr'
 

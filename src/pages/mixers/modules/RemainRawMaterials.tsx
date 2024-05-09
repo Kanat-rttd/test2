@@ -11,7 +11,7 @@ import {
     Select,
     Button,
 } from '@chakra-ui/react'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { useNavigate } from 'react-router-dom'
 import {
     MIXERS_REMAIN_PRODUCTS_ROUTE,

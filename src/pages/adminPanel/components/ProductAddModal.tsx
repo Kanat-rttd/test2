@@ -4,34 +4,21 @@ import {
     ModalHeader,
     ModalCloseButton,
     ModalBody,
-    Stack,
     ModalFooter,
     ModalOverlay,
-    Button,
     Input,
     Select,
+    FormControl,
+    FormErrorMessage,
+    Box,
 } from '@chakra-ui/react'
 
 import { createProduct, updateProduct } from '@/utils/services/product.service'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
+import { useForm } from 'react-hook-form'
+import { FacilityUnit, Product, ProductForSend } from '@/utils/types/product.types'
 
-interface FacilityUnit {
-    id: number
-    facilityUnit: string
-}
-
-export interface Product {
-    id: number
-    name: string
-    price: number
-    costPrice: number
-    status: string
-    bakingFacilityUnit: {
-        id: number
-        facilityUnit: string
-    }
-}
 
 interface ProductAddModalProps {
     data: Product | undefined
@@ -41,37 +28,41 @@ interface ProductAddModalProps {
 }
 
 const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModalProps) => {
-    const [formData, setFormData] = useState<Product>({
-        id: 0,
-        name: '',
-        bakingFacilityUnit: {
-            id: 0,
-            facilityUnit: '',
-        },
-        price: 0,
-        costPrice: 0,
-        status: '',
-    })
-
-    const [facilityUnits, setFacilityUnits] = useState<FacilityUnit[] | undefined>()
+    const {
+        register,
+        handleSubmit: handleSubmitForm,
+        setValue,
+        formState: { errors },
+        reset,
+    } = useForm<ProductForSend>()
 
     useEffect(() => {
         if (data) {
-            setFormData(data)
+            Object.entries(data).forEach(([key, value]) => {
+                setValue(key as keyof ProductForSend, value)
+            })
         } else {
-            setFormData({
-                id: 0,
-                name: '',
-                bakingFacilityUnit: {
-                    id: 0,
-                    facilityUnit: '',
-                },
-                price: 0,
-                costPrice: 0,
-                status: '',
+            reset()
+        }
+    }, [data, isOpen, reset])
+
+    const sendData = (formData: ProductForSend) => {
+        if (data) {
+            updateProduct(data.id, formData).then((res) => {
+                console.log(res)
+                onAddProduct()
+            })
+        } else {
+            createProduct(formData).then((res) => {
+                console.log(res)
+                onAddProduct()
             })
         }
-    }, [data])
+        handleClose()
+        reset()
+    }
+
+    const [facilityUnits, setFacilityUnits] = useState<FacilityUnit[] | undefined>()
 
     useEffect(() => {
         getAllBakingFacilityUnits().then((responseData) => {
@@ -79,30 +70,10 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
         })
     }, [])
 
-    const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const { name, value } = target
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }))
-    }
 
-    const addProduct = () => {
-        console.log(formData)
-        createProduct(formData).then((res) => {
-            console.log(res)
-            onAddProduct()
-        })
+    const handleClose = () => {
         onClose()
-    }
-
-    const updProduct = () => {
-        console.log('upd')
-        updateProduct(formData.id, formData).then((res) => {
-            console.log(res)
-            onAddProduct()
-        })
-        onClose()
+        reset()
     }
 
     return (
@@ -113,56 +84,90 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
                     <ModalHeader>{data ? 'Редактировать' : 'Добавить'} продукт</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Stack spacing={4}>
-                            <Input
-                                name="name"
-                                onChange={handleChange}
-                                placeholder="Наименование"
-                                value={formData.name}
-                            />
-                            <Select
-                                name="bakingFacilityUnitId"
-                                onChange={handleChange}
-                                placeholder="Цех"
-                                value={formData.bakingFacilityUnit.id}
+                        <form
+                            onSubmit={handleSubmitForm(sendData)}
+                            style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
+                        >
+                            <FormControl isInvalid={!!errors.name}>
+                                <Input
+                                    {...register('name', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                    placeholder="Наименование"
+                                />
+                                <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+                            </FormControl>
+                            <FormControl isInvalid={!!errors.bakingFacilityUnitId}>
+                                <Select
+                                    placeholder="Выберите цех"
+                                    defaultValue={data?.bakingFacilityUnit.id}
+                                    {...register('bakingFacilityUnitId', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                >
+                                    {facilityUnits?.map((unit, index) => (
+                                        <option key={index} value={unit.id}>
+                                            {unit.facilityUnit}
+                                        </option>
+                                    ))}
+                                </Select>
+                                <FormErrorMessage>
+                                    {errors.bakingFacilityUnitId?.message}
+                                </FormErrorMessage>
+                            </FormControl>
+                            <FormControl isInvalid={!!errors.price}>
+                                <Input
+                                    {...register('price', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                    type="number"
+                                    name="price"
+                                    placeholder="Цена"
+                                />
+                                <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
+                            </FormControl>
+                            <FormControl isInvalid={!!errors.costPrice}>
+                                <Input
+                                    {...register('costPrice', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                    type="number"
+                                    name="costPrice"
+                                    placeholder="Себестоимость"
+                                />
+                                <FormErrorMessage>{errors.costPrice?.message}</FormErrorMessage>
+                            </FormControl>
+                            <FormControl isInvalid={!!errors.status}>
+                                <Select
+                                    {...register('status', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                    name="status"
+                                >
+                                    <option value={'0'}>Активный</option>
+                                    <option value={'1'}>Неактивный</option>
+                                </Select>
+                                <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
+                            </FormControl>
+                            <Box
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'flex-end',
+                                    marginTop: '10px',
+                                }}
                             >
-                                {facilityUnits?.map((unit, index) => (
-                                    <option key={index} value={unit.id}>
-                                        {unit.facilityUnit}
-                                    </option>
-                                ))}
-                            </Select>
-                            <Input
-                                type="number"
-                                name="price"
-                                onChange={handleChange}
-                                placeholder="Цена"
-                                value={formData.price}
-                            />
-                            <Input
-                                type="number"
-                                name="costPrice"
-                                onChange={handleChange}
-                                placeholder="Себестоимость"
-                                value={formData.costPrice}
-                            />
-                            <Select
-                                name="status"
-                                onChange={handleChange}
-                                placeholder="Статус"
-                                value={formData.status}
-                            >
-                                <option value="">Статус</option>
-                                <option value={'0'}>Неактивный</option>
-                                <option value={'1'}>Активный</option>
-                            </Select>
-                        </Stack>
+                                <Input
+                                    width={'40%'}
+                                    type="submit"
+                                    bg="purple.500"
+                                    color="white"
+                                    cursor="pointer"
+                                    value={data ? 'Редактировать' : 'Добавить'}
+                                />
+                            </Box>
+                        </form>
                     </ModalBody>
                     <ModalFooter gap={3}>
-                        <Button onClick={onClose}>Закрыть</Button>
-                        <Button onClick={data ? updProduct : addProduct}>
-                            {data ? 'Редактировать' : 'Добавить'} продукт
-                        </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

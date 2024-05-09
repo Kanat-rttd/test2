@@ -3,7 +3,7 @@ import { Avatar, Box, Link, Tab, TabList, TabPanel, TabPanels, Tabs } from '@cha
 import Arrival from '../components/Arrival'
 import Consumption from '../components/Consumption'
 import Transfer from '../components/Transfer'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { FINANCE_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
 
 const Input = () => {

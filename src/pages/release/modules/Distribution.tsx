@@ -1,4 +1,4 @@
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { RELEASE_DISTRIBUTION_ROUTE, RELEASE_REFUND_ROUTE } from '@/utils/constants/routes.consts'
 import {
     Avatar,

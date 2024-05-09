@@ -1,5 +1,5 @@
 import { Box, Button, Avatar, Select } from '@chakra-ui/react'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { useState, useEffect, ChangeEvent } from 'react'
 import { REQUEST_PROCESSING_ROUTE } from '@/utils/constants/routes.consts'
 

@@ -11,8 +11,9 @@ import {
     Button,
     Avatar,
     Select,
+    IconButton,
 } from '@chakra-ui/react'
-import ProductAddModal, { Product } from '../components/ProductAddModal'
+import ProductAddModal from '../components/ProductAddModal'
 import { useState, useEffect } from 'react'
 import {
     getAllProducts,
@@ -22,27 +23,16 @@ import {
 import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
 import useSWR from 'swr'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
 import { ADMIN_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import { useApi } from '@/utils/services/axios'
+import { FacilityUnit, Product } from '@/utils/types/product.types'
 
-interface ProductList {
-    id: number
-    name: string
-    price: number
-    costPrice: number
-    status: string
-    bakingFacilityUnit: {
-        id: number
-        facilityUnit: string
-    }
-}
-
-interface FacilityUnit {
-    id: number
-    facilityUnit: string
+enum Status {
+    ACTIVE = 0,
+    INACTIVE = 1
 }
 
 const AdminPanel = () => {
@@ -56,18 +46,21 @@ const AdminPanel = () => {
     //     fetcher: () => getAllProducts(),
     // })
 
-    const { data: productsData } = useApi<ProductList[]>('product', filters)
+    const { data: productsData } = useApi<Product[]>('product', filters)
 
     const navigate = useNavigate()
     const { onOpen, isOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Product>()
-    const [data, setData] = useState<ProductList[]>([])
+    const [data, setData] = useState<Product[]>([])
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    console.log(filters)
+    const productStatus = [
+        { id: 0, label: 'Активный' },
+        { id: 1, label: 'Неактивный' },
+    ]
 
     useEffect(() => {
         getAllProducts().then((responseData) => {
@@ -86,6 +79,7 @@ const AdminPanel = () => {
         if (selectedData) {
             deleteProduct(selectedData.id).then((res) => {
                 console.log(res)
+                handleAddProduct()
             })
         } else {
             console.error('No product data available to delete.')
@@ -171,8 +165,9 @@ const AdminPanel = () => {
                             name="status"
                             onChange={handleSelectChange}
                         >
-                            <option value="1">Активен</option>
-                            <option value="0">Приостановлен</option>
+                            {productStatus.map((item) => {
+                                return <option value={item.id}>{item.label}</option>
+                            })}
                         </Select>
                     </Box>
 
@@ -194,40 +189,54 @@ const AdminPanel = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {data.map((product, index) => {
-                                return (
-                                    <Tr key={index}>
-                                        <Td>{product.id}</Td>
-                                        <Td>{product.name}</Td>
-                                        <Td>{product.bakingFacilityUnit?.facilityUnit}</Td>
-                                        <Td>{product.status}</Td>
-                                        <Td>{product.price}</Td>
-                                        <Td>{product.costPrice}</Td>
-                                        <Td>
-                                            <EditIcon
-                                                boxSize={'1.5em'}
-                                                cursor={'pointer'}
-                                                onClick={() => {
-                                                    setSelectedData(product)
-                                                    onOpen()
-                                                }}
-                                            />
-                                            <DeleteIcon
-                                                boxSize={'1.5em'}
-                                                color={'red'}
-                                                cursor={'pointer'}
-                                                onClick={() => {
-                                                    setSelectedData(product)
-                                                    setDialog({
-                                                        ...dialog,
-                                                        isOpen: true,
-                                                    })
-                                                }}
-                                            />
-                                        </Td>
-                                    </Tr>
-                                )
-                            })}
+                            {data
+                                ?.sort((a, b) => a.id - b.id)
+                                .map((product, index) => {
+                                    const ordinalNumber: number = index + 1
+                                    return (
+                                        <Tr key={index}>
+                                            <Td>{ordinalNumber}</Td>
+                                            <Td>{product.name}</Td>
+                                            <Td>{product.bakingFacilityUnit?.facilityUnit}</Td>
+                                            <Td>
+                                                {Number(product.status) == Status.ACTIVE
+                                                    ? 'Активный'
+                                                    : 'Неактивный'}
+                                            </Td>
+                                            <Td>{product.price}</Td>
+                                            <Td>{product.costPrice}</Td>
+                                            <Td>
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        setSelectedData(product)
+                                                        onOpen()
+                                                    }}
+                                                    icon={<EditIcon />}
+                                                />
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        setSelectedData(product)
+                                                        setDialog({
+                                                            ...dialog,
+                                                            isOpen: true,
+                                                        })
+                                                    }}
+                                                    icon={<DeleteIcon />}
+                                                />
+                                            </Td>
+                                        </Tr>
+                                    )
+                                })}
                         </Tbody>
                     </Table>
                 </TableContainer>

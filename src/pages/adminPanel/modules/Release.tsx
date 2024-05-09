@@ -1,6 +1,6 @@
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { ADMIN_RELEASE_ROUTE, ADMIN_UNIQUEPRICE_ROUTE } from '@/utils/constants/routes.consts'
-import { EditIcon } from '@chakra-ui/icons'
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import {
     Avatar,
     Box,
@@ -22,18 +22,21 @@ import { useState, useEffect } from 'react'
 import { getAllClients } from '@/utils/services/client.service'
 import useSWR, { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'
+import Dialog from '@/components/Dialog'
 
 const AdminPanel = () => {
     const navigate = useNavigate()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Releaser | undefined>(undefined)
-
     const [filters, setFilters] = useState({ name: '', telegrammId: '', status: '' })
-
     const { data: clientsData } = useApi<Releaser[]>('client', filters)
-
     const { data: filtersData } = useSWR<Releaser[]>('clientFilter', {
         fetcher: () => getAllClients({ name: '', telegrammId: '', status: '' }),
+    })
+
+    const [dialog, setDialog] = useState({
+        isOpen: false,
+        onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
     console.log(filters.name)
@@ -59,6 +62,16 @@ const AdminPanel = () => {
 
     const handledSuccess = () => {
         mutate(['client', filters])
+    }
+
+    const deleteUser = (selectedData: Releaser | undefined) => {
+        if (selectedData) {
+            // deleteClient(selectedData.id).then((res) => {
+            //     console.log(res)
+            // })
+        } else {
+            console.error('No releaser data available to delete.')
+        }
     }
 
     return (
@@ -144,12 +157,13 @@ const AdminPanel = () => {
                                 </Thead>
                                 <Tbody>
                                     {clientsData?.map((user, index) => {
+                                        const ordinalNumber: number = index + 1
                                         return (
                                             <Tr key={index}>
-                                                <Td>{user.id}</Td>
+                                                <Td>{ordinalNumber}</Td>
                                                 <Td>{user.name}</Td>
                                                 <Td>{user.surname}</Td>
-                                                <Td>{user.contact}</Td>
+                                                <Td>+7{user.contact}</Td>
                                                 <Td>{user.telegrammId}</Td>
                                                 <Td>{user.status}</Td>
                                                 <Td sx={{ width: '5%' }}>
@@ -164,6 +178,21 @@ const AdminPanel = () => {
                                                             onOpen()
                                                         }}
                                                         icon={<EditIcon />}
+                                                    />
+                                                    <IconButton
+                                                        variant="outline"
+                                                        size={'sm'}
+                                                        colorScheme="teal"
+                                                        aria-label="Send email"
+                                                        marginRight={3}
+                                                        onClick={() => {
+                                                            setSelectedData(user)
+                                                            setDialog({
+                                                                ...dialog,
+                                                                isOpen: true,
+                                                            })
+                                                        }}
+                                                        icon={<DeleteIcon />}
                                                     />
                                                 </Td>
                                             </Tr>
@@ -180,6 +209,17 @@ const AdminPanel = () => {
                 isOpen={isOpen}
                 data={selectedData}
                 onSuccess={handledSuccess}
+            />
+            <Dialog
+                isOpen={dialog.isOpen}
+                onClose={dialog.onClose}
+                header="Удалить"
+                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                actionBtn={() => {
+                    dialog.onClose()
+                    deleteUser(selectedData)
+                }}
+                actionText="Удалить"
             />
         </>
     )

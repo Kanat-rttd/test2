@@ -1,4 +1,4 @@
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { ADMIN_RELEASE_ROUTE, ADMIN_UNIQUEPRICE_ROUTE } from '@/utils/constants/routes.consts'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import dayjs from 'dayjs'
@@ -21,6 +21,7 @@ import {
     Td,
     Tfoot,
     useDisclosure,
+    IconButton,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import UniquePriceAddModal, { UniquePrice } from '../components/UniquePriceAddModal'
@@ -174,13 +175,12 @@ const AdminPanel = () => {
                                                                                 value.date,
                                                                             ).format('DD.MM.YYYY')}
                                                                             <Box>
-                                                                                <EditIcon
-                                                                                    boxSize={
-                                                                                        '1.5em'
-                                                                                    }
-                                                                                    cursor={
-                                                                                        'pointer'
-                                                                                    }
+                                                                                <IconButton
+                                                                                    variant="outline"
+                                                                                    size={'sm'}
+                                                                                    colorScheme="teal"
+                                                                                    aria-label="Send email"
+                                                                                    marginRight={3}
                                                                                     onClick={() => {
                                                                                         setSelectedData(
                                                                                             {
@@ -202,15 +202,16 @@ const AdminPanel = () => {
                                                                                         )
                                                                                         onOpen()
                                                                                     }}
+                                                                                    icon={
+                                                                                        <EditIcon />
+                                                                                    }
                                                                                 />
-                                                                                <DeleteIcon
-                                                                                    boxSize={
-                                                                                        '1.5em'
-                                                                                    }
-                                                                                    color={'red'}
-                                                                                    cursor={
-                                                                                        'pointer'
-                                                                                    }
+                                                                                <IconButton
+                                                                                    variant="outline"
+                                                                                    size={'sm'}
+                                                                                    colorScheme="teal"
+                                                                                    aria-label="Send email"
+                                                                                    marginRight={3}
                                                                                     onClick={() => {
                                                                                         setSelectedData(
                                                                                             {
@@ -235,6 +236,9 @@ const AdminPanel = () => {
                                                                                             isOpen: true,
                                                                                         })
                                                                                     }}
+                                                                                    icon={
+                                                                                        <DeleteIcon />
+                                                                                    }
                                                                                 />
                                                                             </Box>
                                                                         </Td>
@@ -288,7 +292,7 @@ const AdminPanel = () => {
                             console.log(res)
                         },
                     )
-                    onClose()
+                    dialog.onClose()
                 }}
                 actionText="Удалить"
             />

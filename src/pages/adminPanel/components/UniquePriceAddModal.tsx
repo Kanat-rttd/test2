@@ -103,6 +103,8 @@ const UniquePriceAddModal = ({ data, selectedRelease, isOpen, onClose }: UniqueP
 
             createIndividualPrice(newData).then((res) => {
                 console.log(res)
+                setSelectedProduct('')
+                setPrice('')
             })
         } else {
             newData = {

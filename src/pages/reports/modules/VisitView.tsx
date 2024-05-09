@@ -21,7 +21,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '../../../components/DateRange'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import dayjs from 'dayjs'
 
 interface visitViewData {

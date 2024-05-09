@@ -1,5 +1,5 @@
 import { Box, Button, Avatar, Select } from '@chakra-ui/react'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { useState, useEffect } from 'react'
 import {
     SELLS_INVOICE_ROUTE,

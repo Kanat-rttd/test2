@@ -1,5 +1,5 @@
 import Dialog from '@/components/Dialog'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
 import {
     Avatar,

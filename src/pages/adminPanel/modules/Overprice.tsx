@@ -15,7 +15,7 @@ import {
 import OverPriceAddModal from '../components/OverPriceAddModal'
 import { useState } from 'react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
 import { ADMIN_OVERPRICE_ROUTE } from '@/utils/constants/routes.consts'

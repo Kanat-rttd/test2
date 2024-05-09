@@ -1,4 +1,4 @@
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import {
     Avatar,

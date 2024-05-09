@@ -1,5 +1,5 @@
 import DateRangePicker from '@/components/DateRangePicker'
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { Avatar, Box, Button, Select, useDisclosure } from '@chakra-ui/react'
 import ListTable from '../components/ListTable'
 import DistributionModal from '../components/DistributionModal'

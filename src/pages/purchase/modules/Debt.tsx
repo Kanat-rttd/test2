@@ -1,4 +1,4 @@
-import Drawler from '@/components/Drawler'
+import Drawler from '@/components/Menu'
 import { PURCHASE_DEBT_ROUTE, PURCHASE_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import {
     Avatar,
