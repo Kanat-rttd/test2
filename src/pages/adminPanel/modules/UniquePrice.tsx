@@ -25,7 +25,7 @@ import {
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import UniquePriceAddModal, { UniquePrice } from '../components/UniquePriceAddModal'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Dialog from '@/components/Dialog'
 import {
     getAllIndividualPrices,
@@ -33,6 +33,7 @@ import {
 } from '@/utils/services/individualPrices.service'
 
 import { getAllClients } from '@/utils/services/client.service'
+import { useApi } from '@/utils/services/axios'
 
 interface Client {
     id: string
@@ -41,7 +42,7 @@ interface Client {
     contact: string
     telegrammId: string
     status: string
-} 
+}
 
 interface individualPrice {
     clientId: string
@@ -59,6 +60,7 @@ interface individualPrice {
 
 const AdminPanel = () => {
     const navigate = useNavigate()
+    const { data: individualPrices } = useApi<individualPrice[]>('inPrice')
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<UniquePrice | undefined>(undefined)
     const [selectedRelease, setSelectedRelease] = useState<string>('')
@@ -86,6 +88,28 @@ const AdminPanel = () => {
             setInPriceData(responseData)
         })
     }, [])
+
+    const recentUpdatesDates = useMemo(() => {
+        if (!Array.isArray(individualPrices) || individualPrices.length === 0) {
+            return []
+        }
+
+        return individualPrices.map((client) => {
+            const { clientName, detail } = client
+
+            if (!Array.isArray(detail) || !detail.length) {
+                return { name: clientName, recentUpdates: null }
+            }
+
+            const lastUpdate = detail.reduce((prev, current) => {
+                const prevDate = new Date(prev.date)
+                const currentDate = new Date(current.date)
+                return prevDate > currentDate ? prev : current
+            })
+
+            return { name: clientName, recentUpdates: lastUpdate.date }
+        })
+    }, [individualPrices])
 
     return (
         <>
@@ -140,6 +164,21 @@ const AdminPanel = () => {
                                                 >
                                                     {item.clientName}
                                                 </Box>
+                                                {recentUpdatesDates?.map((dateData) => {
+
+                                                    if (dateData.name == item.clientName) {
+                                                        return (
+                                                            <Text mr={'10px'} fontWeight={'600'}>
+                                                                {dateData.recentUpdates
+                                                                    ? dayjs(
+                                                                        dateData.recentUpdates,
+                                                                      ).format('DD.MM.YYYY HH:mm')
+                                                                    : ''}
+                                                            </Text>
+                                                        )
+                                                    }
+                                                })}
+
                                                 <AccordionIcon />
                                             </AccordionButton>
                                         </h2>
@@ -170,7 +209,9 @@ const AdminPanel = () => {
                                                                         >
                                                                             {dayjs(
                                                                                 value.date,
-                                                                            ).format('DD.MM.YYYY')}
+                                                                            ).format(
+                                                                                'DD.MM.YYYY HH:mm',
+                                                                            )}
                                                                             <Box>
                                                                                 <IconButton
                                                                                     variant="outline"

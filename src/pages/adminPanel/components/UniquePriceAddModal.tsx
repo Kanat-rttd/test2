@@ -161,7 +161,7 @@ const UniquePriceAddModal = ({ data, selectedRelease, isOpen, onClose }: UniqueP
             return false
         })
     }, [products, individualPrices, selectedRelease])
-
+    
     return (
         <>
             <Modal isCentered isOpen={isOpen} onClose={onClose}>
