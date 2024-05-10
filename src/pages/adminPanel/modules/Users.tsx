@@ -24,6 +24,7 @@ import { useApi, mutate } from '@/utils/services/axios'
 import Dialog from '@/components/Dialog'
 import { deleteUser } from '@/utils/services/user.service'
 import Drawler from '@/components/Menu'
+import { useNotify } from '@/utils/providers/ToastProvider'
 // import useSWR, { mutate } from 'swr'
 // import { getAllUsers } from '../../../utils/services/user.service'
 
@@ -40,6 +41,7 @@ interface User {
 }
 
 const AdminPanel = () => {
+    const { loading } = useNotify()
     const navigate = useNavigate()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<User | undefined>(undefined)
@@ -57,8 +59,7 @@ const AdminPanel = () => {
         status: selectedStatus,
     })
 
-    console.log(usersData);
-    
+    console.log(usersData)
 
     const handleClose = () => {
         setSelectedData(undefined)
@@ -75,8 +76,13 @@ const AdminPanel = () => {
 
     const handlerDeleteUser = (selectedData: User | undefined) => {
         if (selectedData) {
-            deleteUser(selectedData.id).then((res) => {
-                console.log(res)
+            const responsePromise: Promise<any> = deleteUser(selectedData.id)
+            loading(responsePromise)
+            responsePromise.then(() => {
+                mutate((currentData: User[] | undefined) => {
+                    if (!currentData) return currentData
+                    return currentData.filter((client) => client.id !== selectedData?.id)
+                })
             })
         } else {
             console.error('No user data available to delete.')
@@ -103,6 +109,10 @@ const AdminPanel = () => {
                 justifyContent={'space-between'}
                 flexDirection={'row'}
                 backgroundColor={'rgba(128, 128, 128, 0.1)'}
+                position={'sticky'}
+                top={0}
+                zIndex={1000}
+                p={'0rem 0.5rem'}
             >
                 <Box width={'100%'}>
                     <Drawler></Drawler>
@@ -117,10 +127,10 @@ const AdminPanel = () => {
                         Цехперсонал
                     </Button>
                 </Box>
-                <Avatar size={'md'} bg="teal.500" />
+                <Avatar w={'36px'} h={'36px'} bg="teal.500" m={'0.5rem 0.5rem'} />
             </Box>
 
-            <Box display="flex" flexDirection="column" height="100vh" p={5}>
+            <Box display="flex" flexDirection="column" p={5}>
                 <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <Select

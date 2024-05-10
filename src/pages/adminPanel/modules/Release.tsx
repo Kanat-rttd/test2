@@ -82,6 +82,7 @@ const AdminPanel = () => {
                     justifyContent={'space-between'}
                     flexDirection={'row'}
                     backgroundColor={'rgba(128, 128, 128, 0.1)'}
+                    p={'0rem 0.5rem'}
                 >
                     <Box width={'100%'}>
                         <Drawler></Drawler>
@@ -96,7 +97,7 @@ const AdminPanel = () => {
                             Уникальные цены
                         </Button>
                     </Box>
-                    <Avatar size={'md'} bg="teal.500" />
+                    <Avatar w={'36px'} h={'36px'} bg="teal.500" m={'0.5rem 0.5rem'} />
                 </Box>
 
                 <Box width={'100%'} height={'100%'} p={5}>

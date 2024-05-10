@@ -20,6 +20,7 @@ import {
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import PasswordInput from '@/components/shared/PasswordInput'
 import PhoneInput from '@/components/shared/PhoneInput'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 export interface Releaser {
     id: number
@@ -55,14 +56,14 @@ const defaultValues = {
 }
 
 const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose, onSuccess }) => {
-    console.log(data)
+    const { loading } = useNotify()
+    const [show, setShow] = useState(false)
+    const handleClick = () => setShow(!show)
+
     const status = [
         { id: 1, name: 'Активный' },
         { id: 2, name: 'Неактивный' },
     ]
-
-    const [show, setShow] = useState(false)
-    const handleClick = () => setShow(!show)
 
     const {
         register,
@@ -70,26 +71,30 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
         control,
         setValue,
         getValues,
+        setError,
         formState: { errors },
         reset,
     } = useForm<Releaser>()
 
     const sendData = (formData: Releaser) => {
         console.log(formData)
-        if (data) {
-            console.log('upd')
-            updateClient(data.id, formData).then((res) => {
-                console.log(res)
+        try {
+            const responsePromise: Promise<any> = data
+                ? updateClient(data.id, formData)
+                : createClient(formData)
+            loading(responsePromise)
+
+            responsePromise.then(() => {
+                reset()
                 onSuccess()
+                handleClose()
             })
-        } else {
-            createClient(formData).then((res) => {
-                console.log(res)
-                onSuccess()
+            reset()
+        } catch (error: any) {
+            setError('root', {
+                message: error.response.data.message || 'Ошибка',
             })
         }
-        handleClose()
-        reset(defaultValues)
     }
 
     useEffect(() => {

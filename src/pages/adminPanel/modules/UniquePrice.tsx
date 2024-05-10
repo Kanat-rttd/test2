@@ -41,7 +41,7 @@ interface Client {
     contact: string
     telegrammId: string
     status: string
-}
+} 
 
 interface individualPrice {
     clientId: string
@@ -78,14 +78,12 @@ const AdminPanel = () => {
     useEffect(() => {
         getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
             setClientsData(responseData)
-            console.log(responseData)
         })
     }, [])
 
     useEffect(() => {
         getAllIndividualPrices().then((responseData) => {
             setInPriceData(responseData)
-            console.log(responseData)
         })
     }, [])
 
@@ -97,6 +95,7 @@ const AdminPanel = () => {
                     justifyContent={'space-between'}
                     flexDirection={'row'}
                     backgroundColor={'rgba(128, 128, 128, 0.1)'}
+                    p={'0rem 0.5rem'}
                 >
                     <Box width={'100%'}>
                         <Drawler></Drawler>
@@ -111,7 +110,7 @@ const AdminPanel = () => {
                             Уникальные цены
                         </Button>
                     </Box>
-                    <Avatar size={'md'} bg="teal.500" />
+                    <Avatar w={'36px'} h={'36px'} bg="teal.500" margin={'0.5rem 0.5rem'} />
                 </Box>
 
                 <Box width={'100%'} height={'100%'} p={5}>
@@ -129,7 +128,6 @@ const AdminPanel = () => {
                         </Box>
                         <Accordion>
                             {inPriceData?.map((item, index) => {
-                                console.log(item)
                                 return (
                                     <AccordionItem key={index}>
                                         <h2>
@@ -158,7 +156,6 @@ const AdminPanel = () => {
                                                     <Tbody>
                                                         {item.detail &&
                                                             item.detail.map((value) => {
-                                                                console.log(value)
                                                                 return (
                                                                     <Tr key={value.id}>
                                                                         <Td>{value.name}</Td>

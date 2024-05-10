@@ -36,20 +36,19 @@ enum Status {
 }
 
 const AdminPanel = () => {
+    const navigate = useNavigate()
+    const { onOpen, isOpen, onClose } = useDisclosure()
+
+    const { data: dataForSelect } = useApi<Product[]>('product')
     const [filters, setFilters] = useState({ name: '', bakingFacilityUnitId: '', status: '' })
 
     const { data: facilityUnitsData } = useSWR<FacilityUnit[]>('mixers', {
         fetcher: () => getAllBakingFacilityUnits(),
     })
 
-    // const { data: productsData } = useSWR<ProductList[]>('product', {
-    //     fetcher: () => getAllProducts(),
-    // })
-
     const { data: productsData } = useApi<Product[]>('product', filters)
 
-    const navigate = useNavigate()
-    const { onOpen, isOpen, onClose } = useDisclosure()
+    
     const [selectedData, setSelectedData] = useState<Product>()
     const [data, setData] = useState<Product[]>([])
     const [dialog, setDialog] = useState({
@@ -63,11 +62,8 @@ const AdminPanel = () => {
     ]
 
     useEffect(() => {
-        getAllProducts().then((responseData) => {
-            setData(responseData)
-            console.log(responseData)
-        })
-    }, [])
+        setData(productsData || [])
+    }, [productsData])
 
     const handleAddProduct = () => {
         getAllProducts().then((responseData) => {
@@ -80,6 +76,7 @@ const AdminPanel = () => {
             deleteProduct(selectedData.id).then((res) => {
                 console.log(res)
                 handleAddProduct()
+                setSelectedData(undefined)
             })
         } else {
             console.error('No product data available to delete.')
@@ -118,6 +115,7 @@ const AdminPanel = () => {
                 justifyContent={'space-between'}
                 flexDirection={'row'}
                 backgroundColor={'rgba(128, 128, 128, 0.1)'}
+                p={"0.5rem 1rem"}
             >
                 <Box width={'100%'}>
                     <Drawler></Drawler>
@@ -136,12 +134,12 @@ const AdminPanel = () => {
                 <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <Select
-                            placeholder="Имя"
+                            placeholder="Наименование"
                             width={'fit-content'}
                             name="name"
                             onChange={handleSelectChange}
                         >
-                            {productsData?.map((product, index) => (
+                            {dataForSelect?.map((product, index) => (
                                 <option key={index} value={product.name}>
                                     {product.name}
                                 </option>

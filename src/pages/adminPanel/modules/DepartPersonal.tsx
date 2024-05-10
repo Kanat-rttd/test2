@@ -48,7 +48,6 @@ const AdminPanel = () => {
         status: selectedStatus,
     })
 
-
     const handleClose = () => {
         onClose()
         setSelectedData(undefined)
@@ -80,6 +79,7 @@ const AdminPanel = () => {
                     justifyContent={'space-between'}
                     flexDirection={'row'}
                     backgroundColor={'rgba(128, 128, 128, 0.1)'}
+                    p={'0rem 0.5rem'}
                 >
                     <Box width={'100%'}>
                         <Drawler></Drawler>
@@ -94,7 +94,7 @@ const AdminPanel = () => {
                             Цехперсонал
                         </Button>
                     </Box>
-                    <Avatar size={'md'} bg="teal.500" />
+                    <Avatar w={'36px'} h={'36px'} bg="teal.500" m={'0.5rem 0.5rem'} />
                 </Box>
                 <Box display="flex" flexDirection="column" height="100vh" p={5}>
                     <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
@@ -179,16 +179,16 @@ const AdminPanel = () => {
                         onSuccess={handledSuccess}
                     />
                     <Dialog
-                    isOpen={dialog.isOpen}
-                    onClose={dialog.onClose}
-                    header="Удалить"
-                    body="Вы уверены? Вы не сможете отменить это действие впоследствии."
-                    actionBtn={() => {
-                        dialog.onClose()
-                        deleteUser(selectedData)
-                    }}
-                    actionText="Удалить"
-                />
+                        isOpen={dialog.isOpen}
+                        onClose={dialog.onClose}
+                        header="Удалить"
+                        body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                        actionBtn={() => {
+                            dialog.onClose()
+                            deleteUser(selectedData)
+                        }}
+                        actionText="Удалить"
+                    />
                 </Box>
             </UniversalComponent>
         </>

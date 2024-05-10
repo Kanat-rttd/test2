@@ -20,25 +20,10 @@ import { Controller, useForm } from 'react-hook-form'
 import { useEffect, useState } from 'react'
 import { createUser, updateUser } from '../../../utils/services/user.service'
 import PhoneInput from '@/components/shared/PhoneInput'
+import { useNotify } from '@/utils/providers/ToastProvider'
+import { User, userClass } from '@/utils/types/user.types'
 
-interface User {
-    id: number
-    name: string
-    surname: string
-    status: string
-    pass: string
-    checkPass: string
-    phone: string
-    userClass: string
-    fixSalary: string
-}
-
-interface userClass {
-    id: number
-    name: string
-}
-
-interface status {
+type status = {
     id: number
     name: string
 }
@@ -51,6 +36,7 @@ interface UserAddModalProps {
 }
 
 const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) => {
+    const { loading } = useNotify()
     const [show, setShow] = useState(false)
     const handleClick = () => setShow(!show)
 
@@ -60,6 +46,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
         control,
         getValues,
         setValue,
+        setError,
         formState: { errors },
         reset,
     } = useForm<User>()
@@ -77,19 +64,23 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
 
     const sendData = (formData: User) => {
         console.log(formData)
-        if (data) {
-            updateUser(data.id, formData).then((res) => {
-                console.log(res)
+        try {
+            const responsePromise: Promise<any> = data
+                ? updateUser(data.id, formData)
+                : createUser(formData)
+            loading(responsePromise)
+
+            responsePromise.then(() => {
+                reset()
                 onSuccess()
+                handleClose()
             })
-        } else {
-            createUser(formData).then((res) => {
-                console.log(res)
-                onSuccess()
+            reset()
+        } catch (error: any) {
+            setError('root', {
+                message: error.response.data.message || 'Ошибка',
             })
         }
-        handleClose()
-        reset()
     }
 
     const userClasses = [
