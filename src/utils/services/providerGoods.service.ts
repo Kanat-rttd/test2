@@ -5,7 +5,6 @@ export const createProviderGoods = async (data: {
     unitOfMeasure: string
     providerId: number
     bakery: {
-        value: number
         label: string
     }[]
     status: string
@@ -21,7 +20,6 @@ export const updateProviderGoods = async (
         unitOfMeasure: string
         providerId: number
         bakery: {
-            value: number
             label: string
         }[]
         status: string
