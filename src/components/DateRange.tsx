@@ -51,7 +51,7 @@ const DateRange = ({ setSelectionRange, selectionRange }: DateRangeProps) => {
         <Popover isOpen={isOpen} onClose={() => setIsOpen(false)}>
             <PopoverTrigger>
                 <Input
-                    width={'25%'}
+                    width={'100%'}
                     textAlign={'center'}
                     value={
                         dayjs(tempSelectionRange.startDate).format('DD.MM.YYYY') +

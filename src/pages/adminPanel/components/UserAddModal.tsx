@@ -22,6 +22,7 @@ import { createUser, updateUser } from '../../../utils/services/user.service'
 import PhoneInput from '@/components/shared/PhoneInput'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { User, userClass } from '@/utils/types/user.types'
+import { mutate } from '@/utils/services/axios'
 
 type status = {
     id: number
@@ -70,6 +71,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
             loading(responsePromise)
 
             responsePromise.then(() => {
+                console.log('response')
                 reset()
                 onSuccess()
                 handleClose()

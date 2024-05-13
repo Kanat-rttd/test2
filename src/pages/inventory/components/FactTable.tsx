@@ -1,10 +1,24 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableContainer, Box } from '@chakra-ui/react'
+import {
+    Table,
+    Thead,
+    Tbody,
+    Tfoot,
+    Tr,
+    Th,
+    Td,
+    TableContainer,
+    Box,
+    IconButton,
+} from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
+import { mutate } from '@/utils/services/axios'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import EditModal from './EditModal'
 import { useDisclosure } from '@chakra-ui/react'
+import Dialog from '@/components/Dialog'
+import { deleteFactInput } from '@/utils/services/factInput.service'
 
 interface factInput {
     table: [
@@ -42,6 +56,11 @@ const FactTable = () => {
         onOpen()
     }
 
+    const [dialog, setDialog] = useState({
+        isOpen: false,
+        onClose: () => setDialog({ ...dialog, isOpen: false }),
+    })
+
     const [selectedData, setSelectedData] = useState<
         | {
               id: number
@@ -53,6 +72,25 @@ const FactTable = () => {
           }
         | undefined
     >(undefined)
+
+    const deleteFactHandler = (
+        data:
+            | {
+                  id: number
+                  name: string
+                  place: string
+                  unitOfMeasure: string
+                  quantity: number
+                  updatedAt: string
+              }
+            | undefined,
+    ) => {
+        console.log(data)
+        deleteFactInput(data?.id).then((res) => {
+            console.log(res)
+            mutate('factInput')
+        })
+    }
 
     return (
         <>
@@ -69,20 +107,40 @@ const FactTable = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {factInput?.table.map((item) => (
+                        {factInput?.table.map((item, index) => (
                             <Tr key={item.id}>
-                                <Td>{item.id}</Td>
+                                <Td>{index + 1}</Td>
                                 <Td>{item.name}</Td>
                                 <Td>{item.unitOfMeasure}</Td>
                                 <Td>{item.quantity}</Td>
                                 <Td>{dayjs(item.updatedAt).format('DD.MM.YYYY HH:MM')}</Td>
                                 <Td>
-                                    <EditIcon
-                                        cursor={'pointer'}
-                                        boxSize={5}
-                                        onClick={() => handleSelected(item)}
+                                    <IconButton
+                                        variant="outline"
+                                        size={'sm'}
+                                        colorScheme="teal"
+                                        aria-label="Send email"
+                                        marginRight={3}
+                                        onClick={() => {
+                                            handleSelected(item)
+                                        }}
+                                        icon={<EditIcon />}
                                     />
-                                    <DeleteIcon cursor={'pointer'} boxSize={5} color={'red'} />
+                                    <IconButton
+                                        variant="outline"
+                                        size={'sm'}
+                                        colorScheme="teal"
+                                        aria-label="Send email"
+                                        marginRight={3}
+                                        onClick={() => {
+                                            setSelectedData(item)
+                                            setDialog({
+                                                ...dialog,
+                                                isOpen: true,
+                                            })
+                                        }}
+                                        icon={<DeleteIcon />}
+                                    />
                                 </Td>
                             </Tr>
                         ))}
@@ -112,6 +170,17 @@ const FactTable = () => {
                 isOpen={isOpen}
                 onClose={onClose}
                 onSuccess={handleUpdateProduct}
+            />
+            <Dialog
+                isOpen={dialog.isOpen}
+                onClose={dialog.onClose}
+                header="Удалить"
+                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                actionBtn={() => {
+                    deleteFactHandler(selectedData)
+                    dialog.onClose()
+                }}
+                actionText="Удалить"
             />
         </>
     )

@@ -24,7 +24,7 @@ import { mutate } from 'swr'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
-import { deleteDepartClient } from '@/utils/services/departPersonal.service'
+import { deleteDepartPersonal } from '@/utils/services/departPersonal.service'
 
 interface DepartPersonal {
     id: number
@@ -66,7 +66,7 @@ const AdminPanel = () => {
 
     const deleteUser = (selectedData: DepartPersonal | undefined) => {
         if (selectedData) {
-            const responsePromise: Promise<any> = deleteDepartClient(selectedData.id)
+            const responsePromise: Promise<any> = deleteDepartPersonal(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {
                 mutate((currentData: DepartPersonal[] | undefined) => {

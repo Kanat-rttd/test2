@@ -32,7 +32,7 @@ export const updateDepartPersonal = async (
     return response
 }
 
-export const deleteDepartClient = async (id: number) => {
+export const deleteDepartPersonal = async (id: number) => {
     const response = await $host.delete(`departPersonal/${id}`)
     return response
 }

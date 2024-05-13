@@ -13,13 +13,16 @@ import {
     Select,
 } from '@chakra-ui/react'
 import OverPriceAddModal from '../components/OverPriceAddModal'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Menu'
 import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
 import { ADMIN_OVERPRICE_ROUTE } from '@/utils/constants/routes.consts'
 import { useApi } from '@/utils/services/axios'
+import { mutate } from 'swr'
+import { deleteOverprice } from '@/utils/services/overprice.service'
+import DateRange from '@/components/DateRange'
 
 interface Client {
     id: string
@@ -47,8 +50,20 @@ const AdminPanel = () => {
     // const { data: overPriceData } = useApi<OverPrice[]>('overPrice')
     const [selectedClient, setSelectedClient] = useState('')
 
+    const [selectionRange, setSelectionRange] = useState({
+        startDate: new Date(),
+        endDate: new Date(),
+    })
+
+    useEffect(() => {
+        console.log(selectionRange.startDate)
+        console.log(selectionRange.endDate)
+    }, [selectionRange])
+
     const { data: overPriceData } = useApi<OverPrice[]>('overPrice', {
         name: selectedClient,
+        startDate: String(selectionRange.startDate),
+        endDate: String(selectionRange.endDate),
     })
 
     const { data: clientData } = useApi<Client[]>('client')
@@ -63,15 +78,20 @@ const AdminPanel = () => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    // const delProduct = (selectedData: Product | undefined) => {
-    //     if (selectedData) {
-    //         deleteProduct(selectedData.id).then((res) => {
-    //             console.log(res)
-    //         })
-    //     } else {
-    //         console.error('No product data available to delete.')
-    //     }
-    // }
+    const handleSuccess = () => {
+        mutate(`overPrice?name=${selectedClient}`)
+    }
+
+    const delOverprice = (selectedData: OverPrice | undefined) => {
+        if (selectedData) {
+            deleteOverprice(selectedData.id).then((res) => {
+                console.log(res)
+                handleSuccess()
+            })
+        } else {
+            console.error('No product data available to delete.')
+        }
+    }
 
     const handleClose = () => {
         setSelectedData(undefined)
@@ -120,6 +140,11 @@ const AdminPanel = () => {
                                 </option>
                             ))}
                         </Select>
+
+                        <DateRange
+                            selectionRange={selectionRange}
+                            setSelectionRange={setSelectionRange}
+                        />
                     </Box>
 
                     <Button colorScheme="purple" onClick={onOpen}>
@@ -142,7 +167,7 @@ const AdminPanel = () => {
                             {overPriceData?.map((overData, index) => {
                                 return (
                                     <Tr key={index}>
-                                        <Td>{overData.id}</Td>
+                                        <Td>{index + 1}</Td>
                                         <Td>{overData.client?.name}</Td>
                                         <Td>{overData.price}</Td>
                                         <Td>{overData.month}</Td>
@@ -175,7 +200,12 @@ const AdminPanel = () => {
                         </Tbody>
                     </Table>
                 </TableContainer>
-                <OverPriceAddModal data={selectedData} isOpen={isOpen} onClose={handleClose} />
+                <OverPriceAddModal
+                    data={selectedData}
+                    isOpen={isOpen}
+                    onClose={handleClose}
+                    onSuccess={handleSuccess}
+                />
                 <Dialog
                     isOpen={dialog.isOpen}
                     onClose={dialog.onClose}
@@ -183,7 +213,7 @@ const AdminPanel = () => {
                     body="Вы уверены? Вы не сможете отменить это действие впоследствии."
                     actionBtn={() => {
                         dialog.onClose()
-                        // delProduct(selectedData)
+                        delOverprice(selectedData)
                     }}
                     actionText="Удалить"
                 />

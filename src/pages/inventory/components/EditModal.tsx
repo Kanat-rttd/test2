@@ -19,6 +19,7 @@ import { Controller, useForm } from 'react-hook-form'
 import Select from 'react-select'
 import { useEffect } from 'react'
 import { updateFactInput } from '@/utils/services/factInput.service'
+import { mutate } from 'swr'
 
 const defaultValues = {
     id: 0,
@@ -89,12 +90,13 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
         let quantity = parseFloat(formData.quantity)
 
         const sendData = { ...formData, name, quantity }
-        console.log(sendData)
+        console.log(sendData, id)
 
         updateFactInput(id, sendData)
             .then((res) => {
                 console.log(res)
                 onSuccess()
+                mutate('factInput')
                 handleClose()
             })
             .catch((error) => {
