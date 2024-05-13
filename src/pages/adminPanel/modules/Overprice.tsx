@@ -24,13 +24,12 @@ import { mutate } from 'swr'
 import { deleteOverprice } from '@/utils/services/overprice.service'
 import DateRange from '@/components/DateRange'
 
-interface Client {
-    id: string
-    name: string
-    surname: string
-    contact: string
-    telegrammId: string
-    status: string
+interface ClientsFilter {
+    clientId: number
+    client: {
+        id: number
+        name: string
+    }
 }
 
 interface OverPrice {
@@ -66,9 +65,11 @@ const AdminPanel = () => {
         endDate: String(selectionRange.endDate),
     })
 
-    const { data: clientData } = useApi<Client[]>('client')
+    // const { data: clientData } = useApi<Client[]>('client')
 
-    console.log(overPriceData)
+    const { data: clientData } = useApi<ClientsFilter[]>('overPrice/clientFilter')
+
+    console.log(clientData)
 
     const navigate = useNavigate()
     const { onOpen, isOpen, onClose } = useDisclosure()
@@ -130,13 +131,13 @@ const AdminPanel = () => {
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <Select
                             placeholder="Имя"
-                            width={'fit-content'}
+                            width={'100%'}
                             name="name"
                             onChange={handleSelectChange}
                         >
                             {clientData?.map((client, index) => (
-                                <option key={index} value={client.name}>
-                                    {client.name}
+                                <option key={index} value={client.client.name}>
+                                    {client.client.name}
                                 </option>
                             ))}
                         </Select>
