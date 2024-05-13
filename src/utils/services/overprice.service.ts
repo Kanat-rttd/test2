@@ -25,3 +25,8 @@ export const updateOverprice = async (
     const response = await $host.put(`overPrice/${id}`, data)
     return response
 }
+
+export const deleteOverprice = async (id: number) => {
+    const response = await $host.delete(`overPrice/${id}`)
+    return response
+}

@@ -20,6 +20,8 @@ import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
 import { ADMIN_OVERPRICE_ROUTE } from '@/utils/constants/routes.consts'
 import { useApi } from '@/utils/services/axios'
+import { mutate } from 'swr'
+import { deleteOverprice } from '@/utils/services/overprice.service'
 
 interface Client {
     id: string
@@ -63,15 +65,20 @@ const AdminPanel = () => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    // const delProduct = (selectedData: Product | undefined) => {
-    //     if (selectedData) {
-    //         deleteProduct(selectedData.id).then((res) => {
-    //             console.log(res)
-    //         })
-    //     } else {
-    //         console.error('No product data available to delete.')
-    //     }
-    // }
+    const handleSuccess = () => {
+        mutate(`overPrice?name=${selectedClient}`)
+    }
+
+    const delOverprice = (selectedData: OverPrice | undefined) => {
+        if (selectedData) {
+            deleteOverprice(selectedData.id).then((res) => {
+                console.log(res)
+                handleSuccess()
+            })
+        } else {
+            console.error('No product data available to delete.')
+        }
+    }
 
     const handleClose = () => {
         setSelectedData(undefined)
@@ -175,7 +182,12 @@ const AdminPanel = () => {
                         </Tbody>
                     </Table>
                 </TableContainer>
-                <OverPriceAddModal data={selectedData} isOpen={isOpen} onClose={handleClose} />
+                <OverPriceAddModal
+                    data={selectedData}
+                    isOpen={isOpen}
+                    onClose={handleClose}
+                    onSuccess={handleSuccess}
+                />
                 <Dialog
                     isOpen={dialog.isOpen}
                     onClose={dialog.onClose}
@@ -183,7 +195,7 @@ const AdminPanel = () => {
                     body="Вы уверены? Вы не сможете отменить это действие впоследствии."
                     actionBtn={() => {
                         dialog.onClose()
-                        // delProduct(selectedData)
+                        delOverprice(selectedData)
                     }}
                     actionText="Удалить"
                 />

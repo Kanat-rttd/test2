@@ -25,7 +25,7 @@ import Dialog from '@/components/Dialog'
 import { deleteUser } from '@/utils/services/user.service'
 import Drawler from '@/components/Menu'
 import { useNotify } from '@/utils/providers/ToastProvider'
-// import useSWR, { mutate } from 'swr'
+// import { mutate } from 'swr'
 // import { getAllUsers } from '../../../utils/services/user.service'
 
 interface User {
@@ -67,6 +67,8 @@ const AdminPanel = () => {
     }
 
     const handledSuccess = () => {
+        console.log('another response')
+        // mutate('user')
         mutate(`user?selectedStatus=${selectedStatus}`)
     }
 
@@ -79,11 +81,17 @@ const AdminPanel = () => {
             const responsePromise: Promise<any> = deleteUser(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {
+                // mutate('user?selectedStatus=${selectedStatus}')
                 mutate((currentData: User[] | undefined) => {
                     if (!currentData) return currentData
                     return currentData.filter((client) => client.id !== selectedData?.id)
                 })
             })
+
+            // deleteUser(selectedData.id).then((res) => {
+            //     console.log(res)
+            //     mutate('user')
+            // })
         } else {
             console.error('No user data available to delete.')
         }

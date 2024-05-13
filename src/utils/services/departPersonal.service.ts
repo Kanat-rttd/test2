@@ -31,3 +31,8 @@ export const updateDepartPersonal = async (
     const response = await $host.put(`departPersonal/${id}`, data)
     return response
 }
+
+export const deletePersonal = async (id: number) => {
+    const response = await $host.delete(`departPersonal/${id}`)
+    return response
+}

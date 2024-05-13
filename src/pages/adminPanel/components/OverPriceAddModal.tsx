@@ -18,7 +18,6 @@ import Select from 'react-select'
 import { Controller, useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { useApi } from '@/utils/services/axios'
-import { mutate } from '@/utils/services/axios'
 import { createOverprice, updateOverprice } from '@/utils/services/overprice.service'
 
 interface OverPriceInputs {
@@ -66,9 +65,10 @@ interface OverPriceAddModalProps {
     data: OverPrice | undefined
     isOpen: boolean
     onClose: () => void
+    onSuccess: () => void
 }
 
-const OverPriceAddModal = ({ data, isOpen, onClose }: OverPriceAddModalProps) => {
+const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddModalProps) => {
     console.log(data)
 
     const { data: clientData } = useApi<Client[]>('client')
@@ -87,13 +87,18 @@ const OverPriceAddModal = ({ data, isOpen, onClose }: OverPriceAddModalProps) =>
         if (data) {
             updateOverprice(data.id, formData).then((res) => {
                 console.log(res)
-                mutate('overPrice')
+                onSuccess()
             })
         } else {
-            createOverprice(formData).then((res) => {
-                console.log(res)
-                mutate('overPrice')
-            })
+            createOverprice(formData)
+                .then((res) => {
+                    console.log(res)
+                    onSuccess()
+                })
+                .catch((error) => {
+                    console.error('Error:', error)
+                    // Здесь вы можете выполнить дополнительные действия при ошибке, например, отображение сообщения об ошибке пользователю
+                })
         }
         handleClose()
         // reset(defaultValues)
@@ -133,7 +138,7 @@ const OverPriceAddModal = ({ data, isOpen, onClose }: OverPriceAddModalProps) =>
             <Modal isCentered isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
                 <ModalContent>
-                    <ModalHeader>{data ? 'Редактировать' : 'Добавить'} пользователя</ModalHeader>
+                    <ModalHeader>{data ? 'Редактировать' : 'Добавить'} Сверху</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
                         <FormControl isInvalid={!!errors.clientId}>

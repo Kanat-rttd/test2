@@ -28,3 +28,8 @@ export const updateFactInput = async (
     const response = await $host.put(`factInput/${id}`, data)
     return response
 }
+
+export const deleteFactInput = async (id: number | undefined) => {
+    const response = await $host.delete(`factInput/${id}`)
+    return response
+}

@@ -23,6 +23,7 @@ import { useApi } from '@/utils/services/axios'
 import { mutate } from 'swr'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import Dialog from '@/components/Dialog'
+import { deletePersonal } from '@/utils/services/departPersonal.service'
 
 interface DepartPersonal {
     id: number
@@ -63,9 +64,9 @@ const AdminPanel = () => {
 
     const deleteUser = (selectedData: DepartPersonal | undefined) => {
         if (selectedData) {
-            // deleteDepartClient(selectedData.id).then((res) => {
-            //     console.log(res)
-            // })
+            deletePersonal(selectedData.id).then((res) => {
+                console.log(res)
+            })
         } else {
             console.error('No user data available to delete.')
         }
