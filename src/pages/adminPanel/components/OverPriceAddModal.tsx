@@ -19,6 +19,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { useApi } from '@/utils/services/axios'
 import { createOverprice, updateOverprice } from '@/utils/services/overprice.service'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 interface OverPriceInputs {
     clientId: number
@@ -71,6 +72,9 @@ interface OverPriceAddModalProps {
 const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddModalProps) => {
     console.log(data)
 
+    const { success, error } = useNotify()
+    // console.log(data)
+
     const { data: clientData } = useApi<Client[]>('client')
 
     const {
@@ -88,16 +92,18 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
             updateOverprice(data.id, formData).then((res) => {
                 console.log(res)
                 onSuccess()
+                success('Успешно')
             })
         } else {
             createOverprice(formData)
                 .then((res) => {
                     console.log(res)
                     onSuccess()
+                    success('Успешно')
                 })
-                .catch((error) => {
-                    console.error('Error:', error)
-                    // Здесь вы можете выполнить дополнительные действия при ошибке, например, отображение сообщения об ошибке пользователю
+                .catch((err) => {
+                    console.error('Error:', err)
+                    error(err.response.data.message)
                 })
         }
         handleClose()
@@ -129,13 +135,14 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
     }, [data])
 
     const handleClose = () => {
-        onClose()
+        console.log('123')
         reset(defaultValues)
+        onClose()
     }
 
     return (
         <>
-            <Modal isCentered isOpen={isOpen} onClose={onClose}>
+            <Modal isCentered isOpen={isOpen} onClose={handleClose}>
                 <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
                 <ModalContent>
                     <ModalHeader>{data ? 'Редактировать' : 'Добавить'} Сверху</ModalHeader>
@@ -206,6 +213,14 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                                 <Input
                                     {...register('year', {
                                         required: 'Поле является обязательным',
+                                        minLength: {
+                                            value: 4,
+                                            message: 'Некорректный год.',
+                                        },
+                                        maxLength: {
+                                            value: 4,
+                                            message: 'Некорректный год.',
+                                        },
                                     })}
                                     autoComplete="off"
                                     placeholder="Год *"

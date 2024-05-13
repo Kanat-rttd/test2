@@ -13,7 +13,7 @@ import {
     Select,
 } from '@chakra-ui/react'
 import OverPriceAddModal from '../components/OverPriceAddModal'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Menu'
 import { useNavigate } from 'react-router-dom'
@@ -22,6 +22,7 @@ import { ADMIN_OVERPRICE_ROUTE } from '@/utils/constants/routes.consts'
 import { useApi } from '@/utils/services/axios'
 import { mutate } from 'swr'
 import { deleteOverprice } from '@/utils/services/overprice.service'
+import DateRange from '@/components/DateRange'
 
 interface Client {
     id: string
@@ -49,8 +50,20 @@ const AdminPanel = () => {
     // const { data: overPriceData } = useApi<OverPrice[]>('overPrice')
     const [selectedClient, setSelectedClient] = useState('')
 
+    const [selectionRange, setSelectionRange] = useState({
+        startDate: new Date(),
+        endDate: new Date(),
+    })
+
+    useEffect(() => {
+        console.log(selectionRange.startDate)
+        console.log(selectionRange.endDate)
+    }, [selectionRange])
+
     const { data: overPriceData } = useApi<OverPrice[]>('overPrice', {
         name: selectedClient,
+        startDate: String(selectionRange.startDate),
+        endDate: String(selectionRange.endDate),
     })
 
     const { data: clientData } = useApi<Client[]>('client')
@@ -127,6 +140,11 @@ const AdminPanel = () => {
                                 </option>
                             ))}
                         </Select>
+
+                        <DateRange
+                            selectionRange={selectionRange}
+                            setSelectionRange={setSelectionRange}
+                        />
                     </Box>
 
                     <Button colorScheme="purple" onClick={onOpen}>
@@ -149,7 +167,7 @@ const AdminPanel = () => {
                             {overPriceData?.map((overData, index) => {
                                 return (
                                     <Tr key={index}>
-                                        <Td>{overData.id}</Td>
+                                        <Td>{index + 1}</Td>
                                         <Td>{overData.client?.name}</Td>
                                         <Td>{overData.price}</Td>
                                         <Td>{overData.month}</Td>

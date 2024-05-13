@@ -117,7 +117,7 @@ const ProcessedPage = () => {
                     display={'flex'}
                     justifyContent={'space-between'}
                 >
-                    <Box display={'flex'} gap={'15px'} width={'100%'}>
+                    <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <DateRange
                             selectionRange={selectionRange}
                             setSelectionRange={setSelectionRange}
@@ -128,7 +128,7 @@ const ProcessedPage = () => {
                             placeholder="Тип цеха"
                             name="bakingFacilityUnitId"
                             onChange={handleChange}
-                            width={'20%'}
+                            width={'100%'}
                         >
                             {facilityUnits?.map((unit, index) => {
                                 return (
