@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { createClient, updateClient } from '@/utils/services/client.service'
 import Select from 'react-select'
 import { Controller, useForm } from 'react-hook-form'
@@ -15,9 +15,7 @@ import {
     ModalOverlay,
     FormControl,
     FormErrorMessage,
-    InputRightElement,
 } from '@chakra-ui/react'
-import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import PasswordInput from '@/components/shared/PasswordInput'
 import PhoneInput from '@/components/shared/PhoneInput'
 import { useNotify } from '@/utils/providers/ToastProvider'
@@ -57,8 +55,6 @@ const defaultValues = {
 
 const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose, onSuccess }) => {
     const { loading } = useNotify()
-    const [show, setShow] = useState(false)
-    const handleClick = () => setShow(!show)
 
     const status = [
         { id: 1, name: 'Активный' },
@@ -106,26 +102,6 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
             setValue('status', data.status)
         }
     }, [data])
-
-    // const addClient = () => {
-    //     try {
-    //         createClient(formData).then((res) => {
-    //             console.log(res)
-    //         })
-    //         onClose()
-    //     } catch (error) {
-    //         console.error(error)
-    //     }
-
-    //     onClose()
-    // }
-
-    // const updClient = () => {
-    //     updateClient(formData.id, formData).then((res) => {
-    //         console.log(res)
-    //     })
-    //     onClose()
-    // }
 
     const handleClose = () => {
         onClose()
@@ -202,7 +178,7 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                         <Controller
                             name="status"
                             control={control}
-                            rules={{ required: 'Поля является обязательным' }}
+                            rules={{ required: 'Поле является обязательным' }}
                             render={({ field }) => {
                                 const { onChange, value } = field
                                 return (
@@ -231,47 +207,21 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                     <FormControl isInvalid={!!errors.password}>
                         <PasswordInput
                             {...register('password', {
-                                required: data ? false : 'Поля является обязательным',
+                                required: data ? false : 'Поле является обязательным',
                             })}
                             placeholder="Пароль *"
                         />
-                        {/* <InputGroup>
-                            <Input
-                                {...register('password', {
-                                    required: data ? false : 'Поле является обязательным',
-                                })}
-                                autoComplete="off"
-                                placeholder="Пароль *"
-                                type={show ? 'text' : 'password'}
-                            />
-                            <InputRightElement width="3.3rem">
-                                <Button h="1.75rem" size="sm" onClick={handleClick}>
-                                    {show ? <ViewIcon /> : <ViewOffIcon />} 
-                                </Button>
-                            </InputRightElement>
-                        </InputGroup> */}
                         <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
                     </FormControl>
-
                     <FormControl isInvalid={!!errors.checkPassword}>
-                        <InputGroup>
-                            <Input
-                                {...register('checkPassword', {
-                                    required: data ? false : 'Поле является обязательным',
-                                    validate: (value) =>
-                                        value === getValues('password') ||
-                                        'Пароли должны совпадать',
-                                })}
-                                autoComplete="off"
-                                placeholder="Подтвердите пароль *"
-                                type={show ? 'text' : 'password'}
-                            />
-                            <InputRightElement width="3.3rem">
-                                <Button h="1.75rem" size="sm" onClick={handleClick}>
-                                    {show ? <ViewIcon /> : <ViewOffIcon />}
-                                </Button>
-                            </InputRightElement>
-                        </InputGroup>
+                        <PasswordInput
+                            {...register('checkPassword', {
+                                required: data ? false : 'Поле является обязательным',
+                                validate: (value) =>
+                                    value === getValues('password') || 'Пароли должны совпадать',
+                            })}
+                            placeholder="Подтвердите пароль *"
+                        />
                         <FormErrorMessage>{errors.checkPassword?.message}</FormErrorMessage>
                     </FormControl>
                 </ModalBody>

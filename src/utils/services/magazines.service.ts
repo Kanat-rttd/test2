@@ -20,3 +20,9 @@ export const updateMagazine = async (
     const response = await $host.put(`magazines/${id}`, data)
     return response
 }
+
+export const deleteMagazines = async (id: number) => {
+    const response = await $host.delete(`magazines/${id}`)
+    return response
+}
+

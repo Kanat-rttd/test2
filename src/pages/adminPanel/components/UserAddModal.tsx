@@ -6,10 +6,8 @@ import {
     ModalBody,
     ModalFooter,
     ModalOverlay,
-    Button,
     InputGroup,
     Input,
-    InputRightElement,
     FormControl,
     FormErrorMessage,
     Box,
@@ -17,12 +15,12 @@ import {
 
 import Select from 'react-select'
 import { Controller, useForm } from 'react-hook-form'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { createUser, updateUser } from '../../../utils/services/user.service'
 import PhoneInput from '@/components/shared/PhoneInput'
 import { useNotify } from '@/utils/providers/ToastProvider'
-import { User, userClass } from '@/utils/types/user.types'
-import { mutate } from '@/utils/services/axios'
+import { User } from '@/utils/types/user.types'
+import PasswordInput from '@/components/shared/PasswordInput'
 
 type status = {
     id: number
@@ -38,8 +36,6 @@ interface UserAddModalProps {
 
 const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) => {
     const { loading } = useNotify()
-    const [show, setShow] = useState(false)
-    const handleClick = () => setShow(!show)
 
     const {
         register,
@@ -84,14 +80,14 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
         }
     }
 
-    const userClasses = [
+    const permissions = [
         { id: 1, name: 'Admin' },
         { id: 2, name: 'Client' },
     ]
 
     const status = [
-        { id: 1, name: 'Активный' },
-        { id: 2, name: 'Неактивный' },
+        { id: 0, name: 'Активный' },
+        { id: 1, name: 'Неактивный' },
     ]
 
     const handleClose = () => {
@@ -140,23 +136,46 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.userClass}>
+                                <InputGroup>
+                                    <Input
+                                        {...register('userClass', {
+                                            required: 'Поле является обязательным',
+                                        })}
+                                        autoComplete="off"
+                                        placeholder="Должность *"
+                                        type="text"
+                                    />
+                                </InputGroup>
+                                <FormErrorMessage>{errors.userClass?.message}</FormErrorMessage>
+                            </FormControl>
+
+                            <FormControl isInvalid={!!errors.permission}>
                                 <Controller
-                                    name="userClass"
+                                    name="permission"
                                     control={control}
                                     rules={{ required: 'Поле является обязательным' }}
                                     render={({ field }) => {
                                         const { onChange, value } = field
                                         return (
                                             <Select
-                                                options={userClasses}
-                                                getOptionLabel={(option: userClass) => option.name}
-                                                getOptionValue={(option: userClass) =>
-                                                    `${option.name}`
-                                                }
-                                                value={userClasses?.filter(
+                                                options={permissions}
+                                                getOptionLabel={(option: {
+                                                    id: number
+                                                    name: string
+                                                }) => option.name}
+                                                getOptionValue={(option: {
+                                                    id: number
+                                                    name: string
+                                                }) => `${option.name}`}
+                                                value={permissions?.filter(
                                                     (option) => String(option.name) == value,
                                                 )}
-                                                onChange={(selectedOption: userClass | null) => {
+                                                onChange={(
+                                                    selectedOption: {
+                                                        id: number
+                                                        name: string
+                                                    } | null,
+                                                ) => {
                                                     if (selectedOption) {
                                                         onChange(selectedOption.name)
                                                     } else {
@@ -170,7 +189,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                         )
                                     }}
                                 />
-                                <FormErrorMessage>{errors.userClass?.message}</FormErrorMessage>
+                                <FormErrorMessage>{errors.permission?.message}</FormErrorMessage>
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.phone}>
@@ -205,7 +224,12 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                                 value={status.find(
                                                     (option) => option.name === value,
                                                 )}
-                                                onChange={(selectedOption: userClass | null) => {
+                                                onChange={(
+                                                    selectedOption: {
+                                                        id: number
+                                                        name: string
+                                                    } | null,
+                                                ) => {
                                                     if (selectedOption) {
                                                         onChange(selectedOption.name)
                                                     } else {
@@ -241,43 +265,25 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.pass}>
-                                <InputGroup>
-                                    <Input
-                                        {...register('pass', {
-                                            required: data ? false : 'Поле является обязательным',
-                                        })}
-                                        autoComplete="off"
-                                        placeholder="Пароль *"
-                                        type={show ? 'text' : 'password'}
-                                    />
-                                    <InputRightElement width="4.5rem">
-                                        <Button h="1.75rem" size="sm" onClick={handleClick}>
-                                            {show ? 'Скрыть' : 'Показать'}
-                                        </Button>
-                                    </InputRightElement>
-                                </InputGroup>
+                                <PasswordInput
+                                    {...register('pass', {
+                                        required: data ? false : 'Поле является обязательным',
+                                    })}
+                                    placeholder="Пароль *"
+                                />
                                 <FormErrorMessage>{errors.pass?.message}</FormErrorMessage>
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.checkPass}>
-                                <InputGroup>
-                                    <Input
-                                        {...register('checkPass', {
-                                            required: data ? false : 'Поле является обязательным',
-                                            validate: (value) =>
-                                                value === getValues('pass') ||
-                                                'Пароли должны совпадать',
-                                        })}
-                                        autoComplete="off"
-                                        placeholder="Подтвердите пароль *"
-                                        type={show ? 'text' : 'password'}
-                                    />
-                                    <InputRightElement width="4.5rem">
-                                        <Button h="1.75rem" size="sm" onClick={handleClick}>
-                                            {show ? 'Скрыть' : 'Показать'}
-                                        </Button>
-                                    </InputRightElement>
-                                </InputGroup>
+                                <PasswordInput
+                                    {...register('checkPass', {
+                                        required: data ? false : 'Поле является обязательным',
+                                        validate: (value) =>
+                                            value === getValues('pass') ||
+                                            'Пароли должны совпадать',
+                                    })}
+                                    placeholder="Подтвердите пароль *"
+                                />
                                 <FormErrorMessage>{errors.checkPass?.message}</FormErrorMessage>
                             </FormControl>
                             <Box

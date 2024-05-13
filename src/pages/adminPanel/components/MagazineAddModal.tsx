@@ -7,10 +7,10 @@ import {
     Stack,
     ModalFooter,
     ModalOverlay,
-    Button,
     Input,
     FormControl,
     FormErrorMessage,
+    Box,
 } from '@chakra-ui/react'
 import Select from 'react-select'
 
@@ -18,6 +18,7 @@ import { useEffect } from 'react'
 import { createMagazine, updateMagazine } from '@/utils/services/magazines.service'
 import { useForm, Controller } from 'react-hook-form'
 import { useApi } from '@/utils/services/axios'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 interface Client {
     id: string
@@ -43,6 +44,7 @@ interface ProductAddModalProps {
     data: Magazines | undefined
     isOpen: boolean
     onClose: () => void
+    onSuccess: () => void
 }
 
 interface MagazinesModalInput {
@@ -67,8 +69,9 @@ interface Status {
     name: string
 }
 
-const MagazineAddModal = ({ data, isOpen, onClose }: ProductAddModalProps) => {
+const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalProps) => {
     const { data: clientsData } = useApi<Client[]>('client')
+    const { loading } = useNotify()
 
     console.log(data)
 
@@ -78,32 +81,40 @@ const MagazineAddModal = ({ data, isOpen, onClose }: ProductAddModalProps) => {
         control,
         formState: { errors },
         setValue,
-        // reset,
+        setError,
+        reset,
     } = useForm<MagazinesModalInput>()
 
     useEffect(() => {
+        console.log(data)
         if (data) {
-            setValue('name', data.name)
-            setValue('clientId', data.client.id)
-            setValue('status', data.status)
+            Object.entries(data).forEach(([key, value]) => {
+                setValue(key as keyof MagazinesModalInput, value)
+            })
+        } else {
+            reset()
         }
-    }, [data])
+    }, [data, isOpen, reset])
 
     const sendData = (formData: MagazinesModalInput) => {
         console.log(formData)
 
-        if (!data) {
-            createMagazine(formData)
-                .then((res) => {
-                    console.log(res)
-                })
-                .catch((error) => {
-                    console.error('Error creating sale:', error)
-                })
-        } else {
-            console.log('update')
-            updateMagazine(data.id, formData).then((res) => {
-                console.log(res)
+        try {
+            const responsePromise: Promise<any> = data
+                ? updateMagazine(data.id, formData)
+                : createMagazine(formData)
+            loading(responsePromise)
+
+            responsePromise.then(() => {
+                console.log('response')
+                reset()
+                onSuccess()
+                onClose()
+            })
+            reset()
+        } catch (error: any) {
+            setError('root', {
+                message: error.response.data.message || 'Ошибка',
             })
         }
     }
@@ -117,6 +128,10 @@ const MagazineAddModal = ({ data, isOpen, onClose }: ProductAddModalProps) => {
                     <ModalCloseButton />
                     <ModalBody>
                         <Stack spacing={4}>
+                        <form
+                            onSubmit={handleSubmitForm(sendData)}
+                            style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
+                        >
                             <FormControl isInvalid={!!errors.name}>
                                 <Input
                                     maxLength={20}
@@ -193,13 +208,30 @@ const MagazineAddModal = ({ data, isOpen, onClose }: ProductAddModalProps) => {
                                 />
                                 <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
                             </FormControl>
+                            <Box
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'flex-end',
+                                    marginTop: '10px',
+                                }}
+                            >
+                                <Input
+                                    width={'40%'}
+                                    type="submit"
+                                    bg="purple.500"
+                                    color="white"
+                                    cursor="pointer"
+                                    value={data ? 'Редактировать' : 'Добавить'}
+                                />
+                            </Box>
+                            </form>
                         </Stack>
                     </ModalBody>
                     <ModalFooter gap={3}>
-                        <Button onClick={onClose}>Закрыть</Button>
+                        {/* <Button onClick={onClose}>Закрыть</Button>
                         <Button onClick={handleSubmitForm(sendData)}>
                             {data ? 'Редактировать' : 'Добавить'} продукт
-                        </Button>
+                        </Button> */}
                     </ModalFooter>
                 </ModalContent>
             </Modal>

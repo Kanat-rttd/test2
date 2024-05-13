@@ -11,16 +11,18 @@ import {
     Button,
     Avatar,
     Select,
+    IconButton,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { deleteProduct } from '../../../utils/services/product.service'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Menu'
 import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
 import { ADMIN_MAGAZINES_ROUTE } from '@/utils/constants/routes.consts'
-import { useApi } from '@/utils/services/axios'
+import { mutate, useApi } from '@/utils/services/axios'
 import MagazineAddModal from '../components/MagazineAddModal'
+import { useNotify } from '@/utils/providers/ToastProvider'
+import { deleteMagazines } from '@/utils/services/magazines.service'
 
 interface Magazines {
     id: number
@@ -43,6 +45,7 @@ interface Client {
 }
 
 const AdminPanel = () => {
+    const { loading } = useNotify()
     const [filters, setFilters] = useState({ name: '', clientId: '', status: '' })
     // const { data: magazinesData } = useApi<Magazines[]>('magazines')
 
@@ -75,13 +78,24 @@ const AdminPanel = () => {
     //     })
     // }, [])
 
-    const delProduct = (selectedData: Magazines | undefined) => {
+    const handledSuccess = () => {
+        console.log('another response')
+        // mutate('user')
+        mutate(`magazines`)
+    }
+
+    const deleteMagazine = (selectedData: Magazines | undefined) => {
         if (selectedData) {
-            deleteProduct(selectedData.id).then((res) => {
-                console.log(res)
+            const responsePromise: Promise<any> = deleteMagazines(selectedData.id)
+            loading(responsePromise)
+            responsePromise.then(() => {
+                mutate((currentData: Magazines[] | undefined) => {
+                    if (!currentData) return currentData
+                    return currentData.filter((client) => client.id !== selectedData?.id)
+                })
             })
         } else {
-            console.error('No product data available to delete.')
+            console.error('No user data available to delete.')
         }
     }
 
@@ -181,18 +195,24 @@ const AdminPanel = () => {
                                         <Td>{item.client.name}</Td>
                                         <Td>{item.status}</Td>
                                         <Td>
-                                            <EditIcon
-                                                boxSize={'1.5em'}
-                                                cursor={'pointer'}
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
                                                 onClick={() => {
                                                     setSelectedData(item)
                                                     onOpen()
                                                 }}
+                                                icon={<EditIcon />}
                                             />
-                                            <DeleteIcon
-                                                boxSize={'1.5em'}
-                                                color={'red'}
-                                                cursor={'pointer'}
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
                                                 onClick={() => {
                                                     setSelectedData(item)
                                                     setDialog({
@@ -200,6 +220,7 @@ const AdminPanel = () => {
                                                         isOpen: true,
                                                     })
                                                 }}
+                                                icon={<DeleteIcon />}
                                             />
                                         </Td>
                                     </Tr>
@@ -208,7 +229,12 @@ const AdminPanel = () => {
                         </Tbody>
                     </Table>
                 </TableContainer>
-                <MagazineAddModal data={selectedData} isOpen={isOpen} onClose={handleClose} />
+                <MagazineAddModal
+                    data={selectedData}
+                    isOpen={isOpen}
+                    onClose={handleClose}
+                    onSuccess={handledSuccess}
+                />
                 <Dialog
                     isOpen={dialog.isOpen}
                     onClose={dialog.onClose}
@@ -216,7 +242,7 @@ const AdminPanel = () => {
                     body="Вы уверены? Вы не сможете отменить это действие впоследствии."
                     actionBtn={() => {
                         dialog.onClose()
-                        delProduct(selectedData)
+                        deleteMagazine(selectedData)
                     }}
                     actionText="Удалить"
                 />

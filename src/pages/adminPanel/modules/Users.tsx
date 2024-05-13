@@ -25,20 +25,9 @@ import Dialog from '@/components/Dialog'
 import { deleteUser } from '@/utils/services/user.service'
 import Drawler from '@/components/Menu'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { User } from '@/utils/types/user.types'
 // import { mutate } from 'swr'
 // import { getAllUsers } from '../../../utils/services/user.service'
-
-interface User {
-    id: number
-    name: string
-    surname: string
-    status: string
-    pass: string
-    checkPass: string
-    phone: string
-    userClass: string
-    fixSalary: string
-}
 
 const AdminPanel = () => {
     const { loading } = useNotify()
@@ -87,11 +76,6 @@ const AdminPanel = () => {
                     return currentData.filter((client) => client.id !== selectedData?.id)
                 })
             })
-
-            // deleteUser(selectedData.id).then((res) => {
-            //     console.log(res)
-            //     mutate('user')
-            // })
         } else {
             console.error('No user data available to delete.')
         }

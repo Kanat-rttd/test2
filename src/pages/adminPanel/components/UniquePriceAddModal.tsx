@@ -111,7 +111,7 @@ const UniquePriceAddModal = ({
             setProducts(responseData)
         })
     }, [])
-
+console.log(selectedProduct)
     useEffect(() => {
         console.log(data)
 
@@ -119,10 +119,14 @@ const UniquePriceAddModal = ({
             Object.entries(data).forEach(([key, value]) => {
                 setValue(key as keyof Detail, value)
             })
+            setSelectedProduct(String(data.detail[0].id))
+            setValue('name', String(data.detail[0].id))
+            setValue('price', (data.detail[0].price))
+            
         } else {
             reset()
         }
-    }, [data, isOpen, reset])
+    }, [data])
 
     useEffect(() => {
         getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
@@ -131,8 +135,10 @@ const UniquePriceAddModal = ({
     }, [])
 
     const handleAddOrUpdate = (formData: Detail) => {
+        console.log('test')
         try {
             let newData
+
             if (data == undefined) {
                 newData = {
                     clientId:
@@ -156,7 +162,6 @@ const UniquePriceAddModal = ({
                 })
                 reset()
             } else {
-                
                 newData = {
                     clientId:
                         clientsData?.find((client) => client.name == data.clientName)?.id || '',
@@ -227,78 +232,41 @@ const UniquePriceAddModal = ({
                                         gap: '15px',
                                     }}
                                 >
-                                    {data ? (
-                                        <>
-                                            <Box display={'flex'} gap={'10px'}>
-                                                <Text>Реализатор:</Text>
-                                                <Text fontWeight={600}>{data?.clientName}</Text>
-                                            </Box>
-                                            <Box display={'flex'} gap={'10px'}>
-                                                <Text>Продукт: </Text>
-                                                <Text fontWeight={600}>{data.detail[0].name}</Text>
-                                            </Box>
-                                            <FormControl isInvalid={!!errors.price}>
-                                                <InputGroup>
-                                                    <Input
-                                                        {...register('price', {
-                                                            required: 'Поле является обязательным',
-                                                        })}
-                                                        type="number"
-                                                        defaultValue={data.detail[0].price}
-                                                        placeholder="Цена"
-                                                    />
-                                                    <InputRightAddon>₸</InputRightAddon>
-                                                </InputGroup>
-                                                <FormErrorMessage>
-                                                    {errors.price?.message}
-                                                </FormErrorMessage>
-                                            </FormControl>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Box display={'flex'} gap={'10px'}>
-                                                <Text>Реализатор:</Text>
-                                                <Text fontWeight={600}>{selectedRelease}</Text>
-                                            </Box>
-                                            <FormControl isInvalid={!!errors.name}>
-                                                <Select
-                                                    {...register('name', {
-                                                        required: 'Поле является обязательным',
-                                                    })}
-                                                    variant="filled"
-                                                    placeholder="Продукт"
-                                                    value={selectedProduct}
-                                                    onChange={(e) =>
-                                                        setSelectedProduct(e.target.value)
-                                                    }
-                                                >
-                                                    {filteredProducts.map((product) => (
-                                                        <option key={product.id} value={product.id}>
-                                                            {product.name}
-                                                        </option>
-                                                    ))}
-                                                </Select>
-                                                <FormErrorMessage>
-                                                    {errors.name?.message}
-                                                </FormErrorMessage>
-                                            </FormControl>
-                                            <FormControl isInvalid={!!errors.price}>
-                                                <InputGroup>
-                                                    <Input
-                                                        {...register('price', {
-                                                            required: 'Поле является обязательным',
-                                                        })}
-                                                        type="number"
-                                                        placeholder="Цена"
-                                                    />
-                                                    <InputRightAddon>₸</InputRightAddon>
-                                                </InputGroup>
-                                                <FormErrorMessage>
-                                                    {errors.price?.message}
-                                                </FormErrorMessage>
-                                            </FormControl>
-                                        </>
-                                    )}
+                                    <Box display={'flex'} gap={'10px'}>
+                                        <Text>Реализатор:</Text>
+                                        <Text fontWeight={600}>{selectedRelease}</Text>
+                                    </Box>
+                                    <FormControl isInvalid={!!errors.name}>
+                                        <Select
+                                            {...register('name', {
+                                                required: 'Поле является обязательным',
+                                            })}
+                                            variant="filled"
+                                            placeholder="Продукт"
+                                            isDisabled={!!data}
+                                        >
+                                            {(data ? products : filteredProducts).map((product) => (
+                                                <option key={product.id} value={product.id}>
+                                                    {product.name}
+                                                </option>
+                                            ))}
+                                        </Select>
+                                        <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+                                    </FormControl>
+                                    <FormControl isInvalid={!!errors.price}>
+                                        <InputGroup>
+                                            <Input
+                                                {...register('price', {
+                                                    required: 'Поле является обязательным',
+                                                })}
+                                                type="number"
+                                                placeholder="Цена"
+                                            />
+                                            <InputRightAddon>₸</InputRightAddon>
+                                        </InputGroup>
+                                        <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
+                                    </FormControl>
+
                                     <Box
                                         style={{
                                             display: 'flex',
@@ -312,7 +280,8 @@ const UniquePriceAddModal = ({
                                             bg="purple.500"
                                             color="white"
                                             cursor="pointer"
-                                            value={data ? 'Изменить' : 'Добавить'}
+                                            value={data ? 'Редактировать' : 'Добавить'}
+                                            onSubmit={() => console.log('test')}
                                         />
                                     </Box>
                                 </form>
