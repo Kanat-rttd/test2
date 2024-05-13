@@ -7,13 +7,14 @@ import {
     Stack,
     ModalFooter,
     ModalOverlay,
-    Button,
     Box,
     Text,
     Input,
     InputGroup,
     InputRightAddon,
     Select,
+    FormControl,
+    FormErrorMessage,
 } from '@chakra-ui/react'
 import { getAllProducts } from '@/utils/services/product.service'
 import { useState, useEffect, useMemo } from 'react'
@@ -23,6 +24,8 @@ import {
     updateIndividualPrice,
 } from '@/utils/services/individualPrices.service'
 import { useApi } from '@/utils/services/axios'
+import { useNotify } from '@/utils/providers/ToastProvider'
+import { useForm } from 'react-hook-form'
 
 interface Client {
     id: string
@@ -78,14 +81,30 @@ interface UniquePriceAddModal {
     selectedRelease: string
     isOpen: boolean
     onClose: () => void
+    onSuccess: () => void
 }
 
-const UniquePriceAddModal = ({ data, selectedRelease, isOpen, onClose }: UniquePriceAddModal) => {
+const UniquePriceAddModal = ({
+    data,
+    selectedRelease,
+    isOpen,
+    onClose,
+    onSuccess,
+}: UniquePriceAddModal) => {
+    const { loading } = useNotify()
     const { data: individualPrices } = useApi<individualPrice[]>('inPrice')
     const [products, setProducts] = useState<Product[]>([])
     const [selectedProduct, setSelectedProduct] = useState('')
     const [clientsData, setClientsData] = useState<Client[]>([])
-    const [price, setPrice] = useState('')
+
+    const {
+        register,
+        handleSubmit: handleSubmitForm,
+        setError,
+        setValue,
+        formState: { errors },
+        reset,
+    } = useForm<Detail>()
 
     useEffect(() => {
         getAllProducts().then((responseData) => {
@@ -94,52 +113,80 @@ const UniquePriceAddModal = ({ data, selectedRelease, isOpen, onClose }: UniqueP
     }, [])
 
     useEffect(() => {
+        console.log(data)
+
+        if (data) {
+            Object.entries(data).forEach(([key, value]) => {
+                setValue(key as keyof Detail, value)
+            })
+        } else {
+            reset()
+        }
+    }, [data, isOpen, reset])
+
+    useEffect(() => {
         getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
             setClientsData(responseData)
         })
     }, [])
 
-    const handleAddOrUpdate = () => {
-        let newData
-
-        if (data == undefined) {
-            newData = {
-                clientId: clientsData?.find((client) => client.name == selectedRelease)?.id || '',
-                detail: [
-                    {
-                        id: selectedProduct,
-                        name: products.find((product) => product.id == selectedProduct)?.name || '',
-                        price: price,
-                    },
-                ],
+    const handleAddOrUpdate = (formData: Detail) => {
+        try {
+            let newData
+            if (data == undefined) {
+                newData = {
+                    clientId:
+                        clientsData?.find((client) => client.name == selectedRelease)?.id || '',
+                    detail: [
+                        {
+                            id: selectedProduct,
+                            name:
+                                products.find((product) => product.id == selectedProduct)?.name ||
+                                '',
+                            price: formData.price,
+                        },
+                    ],
+                }
+                const responsePromise: Promise<any> = createIndividualPrice(newData)
+                loading(responsePromise)
+                responsePromise.then(() => {
+                    reset()
+                    handleCancel()
+                    onSuccess()
+                })
+                reset()
+            } else {
+                
+                newData = {
+                    clientId:
+                        clientsData?.find((client) => client.name == data.clientName)?.id || '',
+                    detail: [
+                        {
+                            id: data.detail[0].id,
+                            name:
+                                products.find((product) => product.id == data.detail[0].id)?.name ||
+                                '',
+                            price: formData.price,
+                        },
+                    ],
+                }
+                const responsePromise: Promise<any> = updateIndividualPrice(
+                    newData.clientId,
+                    newData,
+                )
+                loading(responsePromise)
+                responsePromise.then(() => {
+                    reset()
+                    handleCancel()
+                    onSuccess()
+                })
+                reset()
             }
-
-            createIndividualPrice(newData).then((res) => {
-                console.log(res)
-                setSelectedProduct('')
-                setPrice('')
-            })
-        } else {
-            newData = {
-                clientId: clientsData?.find((client) => client.name == data.clientName)?.id || '',
-                detail: [
-                    {
-                        id: data.detail[0].id,
-                        name:
-                            products.find((product) => product.id == data.detail[0].id)?.name || '',
-                        price: price,
-                    },
-                ],
-            }
-
-            updateIndividualPrice(newData.clientId, newData).then((res) => {
-                console.log(res)
+        } catch (error: any) {
+            setError('root', {
+                message: error.response.data.message || 'Ошибка',
             })
         }
-
-        console.log(newData)
-
-        onClose()
     }
 
     const handleCancel = () => {
@@ -161,7 +208,7 @@ const UniquePriceAddModal = ({ data, selectedRelease, isOpen, onClose }: UniqueP
             return false
         })
     }, [products, individualPrices, selectedRelease])
-    
+
     return (
         <>
             <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -172,61 +219,108 @@ const UniquePriceAddModal = ({ data, selectedRelease, isOpen, onClose }: UniqueP
                     <ModalBody>
                         <Stack spacing={4}>
                             <Box display={'flex'} flexDirection={'column'} gap={'15px'}>
-                                {data ? (
-                                    <>
-                                        <Box display={'flex'} gap={'10px'}>
-                                            <Text>Реализатор:</Text>
-                                            <Text fontWeight={600}>{data?.clientName}</Text>
-                                        </Box>
-                                        <Box display={'flex'} gap={'10px'}>
-                                            <Text>Продукт: </Text>
-                                            <Text fontWeight={600}>{data.detail[0].name}</Text>
-                                        </Box>
-                                        <InputGroup>
-                                            <Input
-                                                type="number"
-                                                placeholder="Цена"
-                                                value={price}
-                                                onChange={(e) => setPrice(e.target.value)}
-                                            />
-                                            <InputRightAddon>₸</InputRightAddon>
-                                        </InputGroup>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Box display={'flex'} gap={'10px'}>
-                                            <Text>Реализатор:</Text>
-                                            <Text fontWeight={600}>{selectedRelease}</Text>
-                                        </Box>
-                                        <Select
-                                            variant="filled"
-                                            placeholder="Продукт"
-                                            value={selectedProduct}
-                                            onChange={(e) => setSelectedProduct(e.target.value)}
-                                        >
-                                            {filteredProducts.map((product) => (
-                                                <option key={product.id} value={product.id}>
-                                                    {product.name}
-                                                </option>
-                                            ))}
-                                        </Select>
-
-                                        <InputGroup>
-                                            <Input
-                                                type="number"
-                                                placeholder="Цена"
-                                                value={price}
-                                                onChange={(e) => setPrice(e.target.value)}
-                                            />
-                                            <InputRightAddon>₸</InputRightAddon>
-                                        </InputGroup>
-                                    </>
-                                )}
+                                <form
+                                    onSubmit={handleSubmitForm(handleAddOrUpdate)}
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: '15px',
+                                    }}
+                                >
+                                    {data ? (
+                                        <>
+                                            <Box display={'flex'} gap={'10px'}>
+                                                <Text>Реализатор:</Text>
+                                                <Text fontWeight={600}>{data?.clientName}</Text>
+                                            </Box>
+                                            <Box display={'flex'} gap={'10px'}>
+                                                <Text>Продукт: </Text>
+                                                <Text fontWeight={600}>{data.detail[0].name}</Text>
+                                            </Box>
+                                            <FormControl isInvalid={!!errors.price}>
+                                                <InputGroup>
+                                                    <Input
+                                                        {...register('price', {
+                                                            required: 'Поле является обязательным',
+                                                        })}
+                                                        type="number"
+                                                        defaultValue={data.detail[0].price}
+                                                        placeholder="Цена"
+                                                    />
+                                                    <InputRightAddon>₸</InputRightAddon>
+                                                </InputGroup>
+                                                <FormErrorMessage>
+                                                    {errors.price?.message}
+                                                </FormErrorMessage>
+                                            </FormControl>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Box display={'flex'} gap={'10px'}>
+                                                <Text>Реализатор:</Text>
+                                                <Text fontWeight={600}>{selectedRelease}</Text>
+                                            </Box>
+                                            <FormControl isInvalid={!!errors.name}>
+                                                <Select
+                                                    {...register('name', {
+                                                        required: 'Поле является обязательным',
+                                                    })}
+                                                    variant="filled"
+                                                    placeholder="Продукт"
+                                                    value={selectedProduct}
+                                                    onChange={(e) =>
+                                                        setSelectedProduct(e.target.value)
+                                                    }
+                                                >
+                                                    {filteredProducts.map((product) => (
+                                                        <option key={product.id} value={product.id}>
+                                                            {product.name}
+                                                        </option>
+                                                    ))}
+                                                </Select>
+                                                <FormErrorMessage>
+                                                    {errors.name?.message}
+                                                </FormErrorMessage>
+                                            </FormControl>
+                                            <FormControl isInvalid={!!errors.price}>
+                                                <InputGroup>
+                                                    <Input
+                                                        {...register('price', {
+                                                            required: 'Поле является обязательным',
+                                                        })}
+                                                        type="number"
+                                                        placeholder="Цена"
+                                                    />
+                                                    <InputRightAddon>₸</InputRightAddon>
+                                                </InputGroup>
+                                                <FormErrorMessage>
+                                                    {errors.price?.message}
+                                                </FormErrorMessage>
+                                            </FormControl>
+                                        </>
+                                    )}
+                                    <Box
+                                        style={{
+                                            display: 'flex',
+                                            justifyContent: 'flex-end',
+                                            marginTop: '10px',
+                                        }}
+                                    >
+                                        <Input
+                                            width={'40%'}
+                                            type="submit"
+                                            bg="purple.500"
+                                            color="white"
+                                            cursor="pointer"
+                                            value={data ? 'Изменить' : 'Добавить'}
+                                        />
+                                    </Box>
+                                </form>
                             </Box>
                         </Stack>
                     </ModalBody>
                     <ModalFooter gap={3}>
-                        <Button colorScheme="red" onClick={handleCancel}>
+                        {/* <Button colorScheme="red" onClick={handleCancel}>
                             Закрыть
                         </Button>
                         <Button
@@ -235,7 +329,7 @@ const UniquePriceAddModal = ({ data, selectedRelease, isOpen, onClose }: UniqueP
                             // onClick={data ? updUser : addUser}
                         >
                             {data ? 'Изменить' : 'Добавить'}
-                        </Button>
+                        </Button> */}
                     </ModalFooter>
                 </ModalContent>
             </Modal>

@@ -4,6 +4,7 @@ import {
     Avatar,
     Box,
     Button,
+    IconButton,
     Select,
     Table,
     TableContainer,
@@ -19,7 +20,9 @@ import ProviderAddModal from '../components/ProviderAddModal'
 import { useState } from 'react'
 import Dialog from '@/components/Dialog'
 import { ADMIN_PROVIDER_ROUTE } from '@/utils/constants/routes.consts'
-import { useApi } from '@/utils/services/axios'
+import { mutate, useApi } from '@/utils/services/axios'
+import { deleteProviderGoods } from '@/utils/services/providerGoods.service'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 interface ProviderGoods {
     id: number
@@ -35,25 +38,43 @@ interface ProviderGoods {
 }
 
 const AdminProvider = () => {
+    const { loading } = useNotify()
     const [selectedStatus, setSelectedStatus] = useState('')
+    const [dialog, setDialog] = useState({
+        isOpen: false,
+        onClose: () => setDialog({ ...dialog, isOpen: false }),
+    })
 
     const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods', {
         status: selectedStatus,
     })
 
-    console.log(providerGoodsData)
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<ProviderGoods>()
 
-    const [deleteDialog, setDeleteDialog] = useState({
-        isOpen: false,
-        onClose: () => setDeleteDialog({ ...deleteDialog, isOpen: false }),
-    })
-
     const handleSelectChange = (status: string) => {
         console.log('target')
         setSelectedStatus(status)
+    }
+
+    const handlerDeleteProvider = (selectedData: ProviderGoods | undefined) => {
+        if (selectedData) {
+            const responsePromise: Promise<any> = deleteProviderGoods(selectedData.id)
+            loading(responsePromise)
+            responsePromise.then(() => {
+                mutate((currentData: ProviderGoods[] | undefined) => {
+                    if (!currentData) return currentData
+                    return currentData.filter((item) => item.id !== selectedData?.id)
+                })
+            })
+        } else {
+            console.error('No user data available to delete.')
+        }
+    }
+
+    const handledSuccess = () => {
+        mutate(`providerGoods?status=${selectedStatus}`)
     }
 
     return (
@@ -127,24 +148,32 @@ const AdminProvider = () => {
                                         <Td>{item.place}</Td>
                                         <Td>{item.status}</Td>
                                         <Td sx={{ width: '5%' }}>
-                                            <EditIcon
-                                                boxSize={5}
-                                                cursor={'pointer'}
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
                                                 onClick={() => {
                                                     setSelectedData(item)
                                                     onOpen()
                                                 }}
+                                                icon={<EditIcon />}
                                             />
-                                            <DeleteIcon
-                                                boxSize={5}
-                                                cursor={'pointer'}
-                                                color={'red'}
-                                                onClick={() =>
-                                                    setDeleteDialog({
-                                                        ...deleteDialog,
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
+                                                onClick={() => {
+                                                    setSelectedData(item)
+                                                    setDialog({
+                                                        ...dialog,
                                                         isOpen: true,
                                                     })
-                                                }
+                                                }}
+                                                icon={<DeleteIcon />}
                                             />
                                         </Td>
                                     </Tr>
@@ -155,14 +184,17 @@ const AdminProvider = () => {
                 </TableContainer>
             </Box>
             <Dialog
-                isOpen={deleteDialog.isOpen}
-                onClose={deleteDialog.onClose}
-                header="Удалить запись?"
-                body={<></>}
-                actionBtn={() => console.log('Удалить')}
-                actionText="Удалить"
-            />
-            <ProviderAddModal isOpen={isOpen} onClose={onClose} selectedData={selectedData} />
+                    isOpen={dialog.isOpen}
+                    onClose={dialog.onClose}
+                    header="Удалить"
+                    body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                    actionBtn={() => {
+                        dialog.onClose()
+                        handlerDeleteProvider(selectedData)
+                    }}
+                    actionText="Удалить"
+                />
+            <ProviderAddModal isOpen={isOpen} onClose={onClose} selectedData={selectedData} onSuccess={handledSuccess} />
         </>
     )
 }

@@ -16,7 +16,7 @@ import Select from 'react-select'
 import { Controller, useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { createDepartPersonal, updateDepartPersonal } from '@/utils/services/departPersonal.service'
-import { mutate } from '@/utils/services/axios'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 interface DepartPersonal {
     id: number
@@ -40,11 +40,13 @@ interface DepartPesonalAddModalProps {
 }
 
 const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonalAddModalProps) => {
+    const { loading } = useNotify()
     const {
         register,
         handleSubmit: handleSubmitForm,
         control,
         setValue,
+        setError,
         formState: { errors },
         reset,
     } = useForm<DepartPersonal>()
@@ -61,22 +63,23 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
     }, [data, isOpen, reset])
 
     const sendData = (formData: DepartPersonal) => {
-        console.log(formData)
-        if (data) {
-            updateDepartPersonal(data.id, formData).then((res) => {
-                console.log(res)
-                mutate('departPersonal')
+        try {
+            const responsePromise: Promise<any> = data
+                ? updateDepartPersonal(data.id, formData)
+                : createDepartPersonal(formData)
+            loading(responsePromise)
+
+            responsePromise.then(() => {
+                reset()
                 onSuccess()
+                handleClose()
             })
-        } else {
-            createDepartPersonal(formData).then((res) => {
-                console.log(res)
-                mutate('departPersonal')
-                onSuccess()
+            reset()
+        } catch (error: any) {
+            setError('root', {
+                message: error.response.data.message || 'Ошибка',
             })
         }
-        handleClose()
-        reset()
     }
 
     const status = [

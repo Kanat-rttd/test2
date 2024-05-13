@@ -23,6 +23,8 @@ import { useApi } from '@/utils/services/axios'
 import { mutate } from 'swr'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import Dialog from '@/components/Dialog'
+import { useNotify } from '@/utils/providers/ToastProvider'
+import { deleteDepartClient } from '@/utils/services/departPersonal.service'
 
 interface DepartPersonal {
     id: number
@@ -34,6 +36,7 @@ interface DepartPersonal {
 }
 
 const AdminPanel = () => {
+    const { loading } = useNotify()
     const navigate = useNavigate()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<DepartPersonal | undefined>(undefined)
@@ -63,9 +66,14 @@ const AdminPanel = () => {
 
     const deleteUser = (selectedData: DepartPersonal | undefined) => {
         if (selectedData) {
-            // deleteDepartClient(selectedData.id).then((res) => {
-            //     console.log(res)
-            // })
+            const responsePromise: Promise<any> = deleteDepartClient(selectedData.id)
+            loading(responsePromise)
+            responsePromise.then(() => {
+                mutate((currentData: DepartPersonal[] | undefined) => {
+                    if (!currentData) return currentData
+                    return currentData.filter((client) => client.id !== selectedData?.id)
+                })
+            })
         } else {
             console.error('No user data available to delete.')
         }

@@ -83,10 +83,14 @@ const AdminPanel = () => {
         })
     }, [])
 
-    useEffect(() => {
+    const getIndividualPrices = () => {
         getAllIndividualPrices().then((responseData) => {
             setInPriceData(responseData)
         })
+    }
+
+    useEffect(() => {
+        getIndividualPrices()
     }, [])
 
     const recentUpdatesDates = useMemo(() => {
@@ -165,13 +169,12 @@ const AdminPanel = () => {
                                                     {item.clientName}
                                                 </Box>
                                                 {recentUpdatesDates?.map((dateData) => {
-
                                                     if (dateData.name == item.clientName) {
                                                         return (
                                                             <Text mr={'10px'} fontWeight={'600'}>
                                                                 {dateData.recentUpdates
                                                                     ? dayjs(
-                                                                        dateData.recentUpdates,
+                                                                          dateData.recentUpdates,
                                                                       ).format('DD.MM.YYYY HH:mm')
                                                                     : ''}
                                                             </Text>
@@ -318,6 +321,7 @@ const AdminPanel = () => {
                 selectedRelease={selectedRelease}
                 isOpen={isOpen}
                 onClose={handleClose}
+                onSuccess={getIndividualPrices}
             />
             <Dialog
                 isOpen={dialog.isOpen}

@@ -1,6 +1,5 @@
 import {
     Box,
-    Button,
     FormControl,
     FormErrorMessage,
     Input,
@@ -11,25 +10,22 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
+    Select as ChakraSelect,
 } from '@chakra-ui/react'
 import { Controller, useForm } from 'react-hook-form'
 import Select from 'react-select'
 import { useApi } from '@/utils/services/axios'
 import { useEffect } from 'react'
-import { createProviderGoods } from '@/utils/services/providerGoods.service'
+import { createProviderGoods, updateProviderGoods } from '@/utils/services/providerGoods.service'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 export type ProviderInputs = {
     id: number
-    provider: number
+    providerId: number
     goods: string
     unitOfMeasure: string
     bakery: { value: number; label: string }[]
     status: string
-}
-
-interface status {
-    id: number
-    name: string
 }
 
 interface ProviderGoods {
@@ -54,6 +50,7 @@ type ModalProps = {
     isOpen: boolean
     onClose: () => void
     selectedData: ProviderGoods | undefined
+    onSuccess: () => void
 }
 
 const defaultValues = {
@@ -64,9 +61,9 @@ const defaultValues = {
     status: '',
 }
 
-const ProviderAddModal = ({ isOpen, onClose, selectedData }: ModalProps) => {
+const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps) => {
+    const { loading } = useNotify()
     const { data: providersData } = useApi<Providers[]>('providers')
-    console.log(providersData)
 
     const {
         register,
@@ -74,39 +71,52 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData }: ModalProps) => {
         control,
         formState: { errors },
         setValue,
+        setError,
         reset,
     } = useForm<ProviderInputs>()
 
     useEffect(() => {
         if (selectedData) {
-            setValue('provider', selectedData.provider.id)
-            setValue('goods', selectedData.goods)
-            setValue('status', selectedData.status)
-            setValue('unitOfMeasure', selectedData.unitOfMeasure)
-
-            const selectedBakery = bakery.find((b) => b.label == selectedData.place)
-            setValue('bakery', selectedBakery ? [selectedBakery] : [])
+            Object.entries(selectedData).forEach(([key, value]) => {
+                setValue(key as keyof ProviderInputs, value)
+            })
+        } else {
+            reset()
         }
-    }, [selectedData])
+    }, [selectedData, isOpen, reset])
 
     const bakery = [
         { value: 1, label: 'Батонный' },
         { value: 2, label: 'Заводской' },
     ]
 
-    const status = [
-        { id: 1, name: 'Активный' },
-        { id: 2, name: 'Неактивный' },
-    ]
-
     const sendData = (formData: ProviderInputs) => {
-        console.log(formData)
-        createProviderGoods(formData).then((res) => {
-            console.log(res)
-        })
+        try {
+            console.log(formData);
+            
+            const responsePromise: Promise<any> = selectedData
+                ? updateProviderGoods(selectedData.id, formData)
+                : createProviderGoods(formData)
+            loading(responsePromise)
+
+            responsePromise.then(() => {
+                reset()
+                onSuccess()
+                handleClose()
+            })
+            reset()
+            
+        } catch (error: any) {
+            setError('root', {
+                message: error.response.data.message || 'Ошибка',
+            })
+        }
     }
 
-    // console.log(selectedData)
+    const handleClose = () => {
+        onClose()
+        reset()
+    }
 
     return (
         <>
@@ -119,15 +129,19 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData }: ModalProps) => {
             >
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Редактировать</ModalHeader>
+                    <ModalHeader>{selectedData ? 'Редактировать' : 'Добавить'}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Box display={'flex'} flexDirection={'column'} gap={3}>
-                            <FormControl isInvalid={!!errors.provider}>
+                        <form
+                            onSubmit={handleSubmitForm(sendData)}
+                            style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
+                        >
+                            <FormControl isInvalid={!!errors.providerId}>
                                 <Controller
-                                    name="provider"
+                                    name="providerId"
                                     control={control}
-                                    rules={{ required: 'Поля является обязательным' }}
+                                    rules={{ required: 'Поле является обязательным' }}
                                     render={({ field }) => {
                                         const { onChange, value } = field
                                         return (
@@ -152,7 +166,7 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData }: ModalProps) => {
                                         )
                                     }}
                                 />
-                                <FormErrorMessage>{errors.provider?.message}</FormErrorMessage>
+                                <FormErrorMessage>{errors.providerId?.message}</FormErrorMessage>
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.goods}>
@@ -207,39 +221,39 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData }: ModalProps) => {
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.status}>
-                                <Controller
+                                <ChakraSelect
+                                    {...register('status', {
+                                        required: 'Поле является обязательным',
+                                    })}
                                     name="status"
-                                    control={control}
-                                    rules={{ required: 'Поля является обязательным' }}
-                                    render={({ field }) => {
-                                        const { onChange, value } = field
-                                        return (
-                                            <Select
-                                                options={status}
-                                                getOptionLabel={(option: status) => option.name}
-                                                getOptionValue={(option: status) => option.name}
-                                                value={status?.find(
-                                                    (option) => option.name === value,
-                                                )}
-                                                onChange={(selectedOption: status | null) => {
-                                                    if (selectedOption) {
-                                                        onChange(selectedOption.name)
-                                                    }
-                                                }}
-                                                placeholder="Статус *"
-                                                isClearable
-                                                isSearchable
-                                            />
-                                        )
-                                    }}
-                                />
+                                >
+                                    <option value={'0'}>Активный</option>
+                                    <option value={'1'}>Неактивный</option>
+                                </ChakraSelect>
                                 <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
                             </FormControl>
+                            <Box
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'flex-end',
+                                    marginTop: '10px',
+                                }}
+                            >
+                                <Input
+                                    width={'40%'}
+                                    type="submit"
+                                    bg="purple.500"
+                                    color="white"
+                                    cursor="pointer"
+                                    value={selectedData ? 'Редактировать' : 'Добавить'}
+                                />
+                            </Box>
+                            </form>
                         </Box>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button
+                        {/* <Button
                             colorScheme="red"
                             mr={3}
                             onClick={() => {
@@ -250,8 +264,8 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData }: ModalProps) => {
                             Отмена
                         </Button>
                         <Button colorScheme="purple" onClick={handleSubmitForm(sendData)}>
-                            Добавить
-                        </Button>
+                            {selectedData ? 'Редактировать' : 'Добавить'}
+                        </Button> */}
                     </ModalFooter>
                 </ModalContent>
             </Modal>

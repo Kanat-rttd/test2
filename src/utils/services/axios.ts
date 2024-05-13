@@ -41,8 +41,6 @@ export function useApi<T>(url: string, queryParams?: Record<string, string>) {
     const queryString = queryParams ? new URLSearchParams(queryParams).toString() : ''
     const fullUrl = queryString ? `${url}?${queryString}` : url
 
-    console.log(url)
-
     const { data, error, mutate, isLoading } = useSWR<T>(fullUrl, fetcher)
 
     return {

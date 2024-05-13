@@ -63,7 +63,6 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
     }, [data, isOpen, reset])
 
     const sendData = (formData: User) => {
-        console.log(formData)
         try {
             const responsePromise: Promise<any> = data
                 ? updateUser(data.id, formData)
