@@ -1,16 +1,6 @@
-import {
-    Box,
-    Select,
-    Table,
-    Tr,
-    Td,
-    Thead,
-    Tbody,
-    Th,
-    TableContainer,
-    Tfoot,
-} from '@chakra-ui/react'
+import { Box, Select, Table, Tr, Td, Tbody, Th } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
+import { TableContainer, Tfoot, Thead } from '@/components/ui'
 
 interface calculationsData {
     Data: [
@@ -34,14 +24,14 @@ const ProviderTable = () => {
 
     return (
         <>
-            <Box width={'25%'} marginBottom={10}>
+            <Box width={'25%'} marginBottom={5}>
                 <Select placeholder="Реализатор">
                     <option>Реализатор</option>
                 </Select>
             </Box>
-            <Box>
+            <Box width={'100%'}>
                 <TableContainer>
-                    <Table variant="simple">
+                    <Table variant="simple" width={'100%'}>
                         <Thead>
                             <Tr>
                                 <Th>№</Th>
@@ -60,12 +50,12 @@ const ProviderTable = () => {
                                 )
                             })}
                         </Tbody>
-                        <Tfoot>
+                        <Tfoot width={'97.4%'}>
                             <Tr>
-                                <Th color={'#000'} fontSize={15}>
+                                <Th color={'#000'} width={'10%'} fontSize={15}>
                                     ИТОГО
                                 </Th>
-                                <Th> </Th>
+                                <Th width={'60%'}> </Th>
                                 <Th color={'#000'} fontSize={15}>
                                     {calculationsData?.Total}
                                 </Th>

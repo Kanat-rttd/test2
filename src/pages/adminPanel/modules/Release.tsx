@@ -1,8 +1,6 @@
-import Drawler from '@/components/Menu'
 import { ADMIN_RELEASE_ROUTE, ADMIN_UNIQUEPRICE_ROUTE } from '@/utils/constants/routes.consts'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import {
-    Avatar,
     Box,
     Button,
     IconButton,
@@ -22,7 +20,9 @@ import useSWR, { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'
 import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
-import { Thead,TableContainer } from '@/components/ui'
+import { Thead, TableContainer } from '@/components/ui'
+import Header from '@/components/Header'
+import UniversalComponent from '@/components/ui/UniversalComponent'
 
 const AdminPanel = () => {
     const { loading } = useNotify()
@@ -82,31 +82,22 @@ const AdminPanel = () => {
 
     return (
         <>
-            <Box>
-                <Box
-                    display="flex"
-                    justifyContent={'space-between'}
-                    flexDirection={'row'}
-                    backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                    p={'0rem 0.5rem'}
-                >
-                    <Box width={'100%'}>
-                        <Drawler></Drawler>
-                        <Button
-                            height={'100%'}
-                            onClick={() => navigate(ADMIN_RELEASE_ROUTE)}
-                            bg={'rgba(217, 217, 217, 1)'}
-                        >
-                            Реализаторы
-                        </Button>
-                        <Button height={'100%'} onClick={() => navigate(ADMIN_UNIQUEPRICE_ROUTE)}>
-                            Уникальные цены
-                        </Button>
-                    </Box>
-                    <Avatar w={'36px'} h={'36px'} bg="teal.500" m={'0.5rem 0.5rem'} />
-                </Box>
+            <UniversalComponent>
+                <Header>
+                    
+                    <Button
+                        height={'100%'}
+                        onClick={() => navigate(ADMIN_RELEASE_ROUTE)}
+                        bg={'rgba(217, 217, 217, 1)'}
+                    >
+                        Реализаторы
+                    </Button>
+                    <Button height={'100%'} onClick={() => navigate(ADMIN_UNIQUEPRICE_ROUTE)}>
+                        Уникальные цены
+                    </Button>
+                </Header>
 
-                <Box width={'100%'} height={'100%'} p={5}>
+                <Box display="flex" flexDirection="column" height="100vh" p={5}>
                     <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                             <Select
@@ -152,7 +143,7 @@ const AdminPanel = () => {
                         <TableContainer isLoading={isLoading}>
                             <Table variant="simple">
                                 <Thead>
-                                    <Tr top={0} position={'sticky'} backgroundColor={'white'}>
+                                    <Tr position={'sticky'} backgroundColor={'white'}>
                                         <Th>№</Th>
                                         <Th>Имя</Th>
                                         <Th>Фамилия</Th>
@@ -162,7 +153,7 @@ const AdminPanel = () => {
                                         <Th>Действия</Th>
                                     </Tr>
                                 </Thead>
-                                <Tbody height={'70%'} overflowY={'scroll'}>
+                                <Tbody>
                                     {clientsData?.map((user, index) => {
                                         const ordinalNumber: number = index + 1
                                         return (
@@ -210,7 +201,7 @@ const AdminPanel = () => {
                         </TableContainer>
                     </Box>
                 </Box>
-            </Box>
+            
             <ReleaseAddModal
                 onClose={onCloseModal}
                 isOpen={isOpen}
@@ -228,6 +219,7 @@ const AdminPanel = () => {
                 }}
                 actionText="Удалить"
             />
+            </UniversalComponent>
         </>
     )
 }

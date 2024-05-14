@@ -8,12 +8,10 @@ import {
     IconButton,
     useDisclosure,
     Button,
-    Avatar,
     Select,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import Drawler from '@/components/Menu'
 import { ADMIN_USERS_ROUTE, ADMIN_DEPART_PERSONAL_ROUTE } from '@/utils/constants/routes.consts'
 import { useNavigate } from 'react-router-dom'
 import { useApi } from '@/utils/services/axios'
@@ -24,6 +22,7 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteDepartPersonal } from '@/utils/services/departPersonal.service'
 import { TableContainer, Thead } from '@/components/ui'
 import DepartPersonalModal from '../components/DepartPesonalAddModal'
+import Header from '@/components/Header'
 
 interface DepartPersonal {
     id: number
@@ -81,28 +80,19 @@ const AdminPanel = () => {
     return (
         <>
             <UniversalComponent>
-                <Box
-                    display="flex"
-                    justifyContent={'space-between'}
-                    flexDirection={'row'}
-                    backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                    p={'0rem 0.5rem'}
-                >
-                    <Box width={'100%'}>
-                        <Drawler></Drawler>
-                        <Button height={'100%'} onClick={() => navigate(ADMIN_USERS_ROUTE)}>
-                            Адмперсонал
-                        </Button>
-                        <Button
-                            height={'100%'}
-                            bg={'rgba(217, 217, 217, 1)'}
-                            onClick={() => navigate(ADMIN_DEPART_PERSONAL_ROUTE)}
-                        >
-                            Цехперсонал
-                        </Button>
-                    </Box>
-                    <Avatar w={'36px'} h={'36px'} bg="teal.500" m={'0.5rem 0.5rem'} />
-                </Box>
+                <Header>
+                    <Button height={'100%'} onClick={() => navigate(ADMIN_USERS_ROUTE)}>
+                        Адмперсонал
+                    </Button>
+                    <Button
+                        height={'100%'}
+                        bg={'rgba(217, 217, 217, 1)'}
+                        onClick={() => navigate(ADMIN_DEPART_PERSONAL_ROUTE)}
+                    >
+                        Цехперсонал
+                    </Button>
+                </Header>
+
                 <Box display="flex" flexDirection="column" height="100vh" p={5}>
                     <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>

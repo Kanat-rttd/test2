@@ -1,11 +1,12 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react'
+import { Table, Tbody, Td, Th, Tr, useDisclosure } from '@chakra-ui/react'
 import EditModal from './EditModal'
 import { useState } from 'react'
 import dayjs from 'dayjs'
 import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { TableContainer, Thead } from '@/components/ui'
 
 interface DispatchData {
     id: number

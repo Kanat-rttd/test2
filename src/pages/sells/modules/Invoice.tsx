@@ -6,11 +6,11 @@ import {
     SELLS_DEBT_TRANSFER_ROUTE,
     SELLS_JOURNAL_ROUTE,
 } from '@/utils/constants/routes.consts'
-import DateRangePicker from '@/components/DateRangePicker'
 import { useApi } from '@/utils/services/axios'
 import { useNavigate } from 'react-router-dom'
 import InvoiceModal from '../components/InvoiceModal'
 import dayjs from 'dayjs'
+import DateRange from '@/components/DateRange'
 
 interface financeTotalWithInvoiceNumbers {
     invoiceNumber: number
@@ -110,7 +110,7 @@ const InvoicePage = () => {
                 <Box width={'100%'} height={'100%'} p={5}>
                     <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                            <DateRangePicker></DateRangePicker>
+                            <DateRange />
                             <Select placeholder="Реализатор" width={'fit-content'}>
                                 <option value="Лепешечный">Лепешечный</option>
                                 <option value="Булочный">Булочный</option>

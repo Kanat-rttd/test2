@@ -15,7 +15,7 @@ const DebtAccounting = () => {
 
     return (
         <>
-            <Box>
+            <Box  p={5}>
                 <Box
                     display="flex"
                     justifyContent={'space-between'}
@@ -51,7 +51,7 @@ const DebtAccounting = () => {
                     </Box>
                     <Avatar size={'md'} bg="teal.500" />
                 </Box>
-                <Box width={'100%'} height={'100%'} p={5}>
+                <Box width={'100%'} height={'100%'}>
                     <Tabs variant="soft-rounded" colorScheme="green">
                         <TabList justifyContent={'right'}>
                             <Tab>Реализаторы</Tab>

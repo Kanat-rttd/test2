@@ -1,9 +1,7 @@
-import Drawler from '@/components/Menu'
 import { ADMIN_RELEASE_ROUTE, ADMIN_UNIQUEPRICE_ROUTE } from '@/utils/constants/routes.consts'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import dayjs from 'dayjs'
 import {
-    Avatar,
     Box,
     Button,
     Table,
@@ -34,6 +32,8 @@ import {
 import { getAllClients } from '@/utils/services/client.service'
 import { useApi } from '@/utils/services/axios'
 import { TableContainer } from '@/components/ui'
+import UniversalComponent from '@/components/ui/UniversalComponent'
+import Header from '@/components/Header'
 
 interface Client {
     id: string
@@ -117,31 +117,21 @@ const AdminPanel = () => {
 
     return (
         <>
-            <Box>
-                <Box
-                    display="flex"
-                    justifyContent={'space-between'}
-                    flexDirection={'row'}
-                    backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                    p={'0rem 0.5rem'}
-                >
-                    <Box width={'100%'}>
-                        <Drawler></Drawler>
-                        <Button height={'100%'} onClick={() => navigate(ADMIN_RELEASE_ROUTE)}>
-                            Реализаторы
-                        </Button>
-                        <Button
-                            height={'100%'}
-                            onClick={() => navigate(ADMIN_UNIQUEPRICE_ROUTE)}
-                            bg={'rgba(217, 217, 217, 1)'}
-                        >
-                            Уникальные цены
-                        </Button>
-                    </Box>
-                    <Avatar w={'36px'} h={'36px'} bg="teal.500" margin={'0.5rem 0.5rem'} />
-                </Box>
+            <UniversalComponent>
+                <Header>
+                    <Button height={'100%'} onClick={() => navigate(ADMIN_RELEASE_ROUTE)}>
+                        Реализаторы
+                    </Button>
+                    <Button
+                        height={'100%'}
+                        onClick={() => navigate(ADMIN_UNIQUEPRICE_ROUTE)}
+                        bg={'rgba(217, 217, 217, 1)'}
+                    >
+                        Уникальные цены
+                    </Button>
+                </Header>
 
-                <Box width={'100%'} height={'100%'} p={5}>
+                <Box display="flex" flexDirection="column" height="100vh" p={5}>
                     <Box>
                         <Box
                             display={'flex'}
@@ -324,30 +314,31 @@ const AdminPanel = () => {
                         </Accordion>
                     </Box>
                 </Box>
-            </Box>
-            <UniquePriceAddModal
-                data={selectedData}
-                selectedRelease={selectedRelease}
-                isOpen={isOpen}
-                onClose={handleClose}
-                onSuccess={getIndividualPrices}
-            />
-            <Dialog
-                isOpen={dialog.isOpen}
-                onClose={dialog.onClose}
-                header="Удалить"
-                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
-                actionBtn={() => {
-                    deleteIndividualPrice(selectedData?.detail[0].individualPriceId ?? '').then(
-                        (res) => {
-                            console.log(res)
-                            getIndividualPrices()
-                        },
-                    )
-                    dialog.onClose()
-                }}
-                actionText="Удалить"
-            />
+
+                <UniquePriceAddModal
+                    data={selectedData}
+                    selectedRelease={selectedRelease}
+                    isOpen={isOpen}
+                    onClose={handleClose}
+                    onSuccess={getIndividualPrices}
+                />
+                <Dialog
+                    isOpen={dialog.isOpen}
+                    onClose={dialog.onClose}
+                    header="Удалить"
+                    body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                    actionBtn={() => {
+                        deleteIndividualPrice(selectedData?.detail[0].individualPriceId ?? '').then(
+                            (res) => {
+                                console.log(res)
+                                getIndividualPrices()
+                            },
+                        )
+                        dialog.onClose()
+                    }}
+                    actionText="Удалить"
+                />
+            </UniversalComponent>
         </>
     )
 }

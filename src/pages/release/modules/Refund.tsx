@@ -27,12 +27,16 @@ const Refund = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
-        <Box>
+        <Box position={'relative'}>
             <Box
                 display="flex"
                 justifyContent={'space-between'}
                 flexDirection={'row'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
+                bg={'rgb(240, 240, 240)'}
+                position={'sticky'}
+                top={0}
+                zIndex={1000}
+                p={'0rem 0.5rem'}
             >
                 <Box width={'100%'}>
                     <Drawler></Drawler>
@@ -56,7 +60,7 @@ const Refund = () => {
             </Box>
 
             <Box width={'100%'} height={'100%'} p={5}>
-                <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+                <Box marginBottom={7} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <DateRange />
                         <Select placeholder="Цехи" width={'fit-content'}>
@@ -70,9 +74,9 @@ const Refund = () => {
                         Возврат продукции
                     </Button>
                 </Box>
-                <Box>
-                    <Tabs variant="soft-rounded">
-                        <TabList>
+                <Box height={'calc(95% - 2.5rem)'}>
+                    <Tabs variant="soft-rounded" height={'100%'}>
+                        <TabList height={'22.5px'}>
                             <Tab>List</Tab>
                             <Tab>Pivot</Tab>
                         </TabList>

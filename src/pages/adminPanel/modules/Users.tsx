@@ -9,7 +9,6 @@ import {
     useDisclosure,
     Button,
     Select,
-    Avatar,
 } from '@chakra-ui/react'
 import UserAddModal from '../components/UserAddModal'
 import { useState } from 'react'
@@ -21,10 +20,11 @@ import { useApi, mutate } from '@/utils/services/axios'
 // import Header from '@/components/Header'
 import Dialog from '@/components/Dialog'
 import { deleteUser } from '@/utils/services/user.service'
-import Drawler from '@/components/Menu'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { User } from '@/utils/types/user.types'
 import { TableContainer, Thead } from '@/components/ui'
+import Header from '@/components/Header'
+import UniversalComponent from '@/components/ui/UniversalComponent'
 // import { mutate } from 'swr'
 // import { getAllUsers } from '../../../utils/services/user.service'
 
@@ -82,31 +82,8 @@ const AdminPanel = () => {
 
     return (
         <>
-            {/* <Header>
-                <Button
-                    height={'100%'}
-                    onClick={() => navigate(ADMIN_USERS_ROUTE)}
-                    bg={'rgba(217, 217, 217, 1)'}
-                >
-                    Адмперсонал
-                </Button>
-                <Button height={'100%'} onClick={() => navigate(ADMIN_DEPART_PERSONAL_ROUTE)}>
-                    Цехперсонал
-                </Button>
-            </Header> */}
-
-            <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                position={'sticky'}
-                top={0}
-                zIndex={1000}
-                p={'0rem 0.5rem'}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
+            <UniversalComponent>
+                <Header>
                     <Button
                         height={'100%'}
                         onClick={() => navigate(ADMIN_USERS_ROUTE)}
@@ -117,106 +94,105 @@ const AdminPanel = () => {
                     <Button height={'100%'} onClick={() => navigate(ADMIN_DEPART_PERSONAL_ROUTE)}>
                         Цехперсонал
                     </Button>
-                </Box>
-                <Avatar w={'36px'} h={'36px'} bg="teal.500" m={'0.5rem 0.5rem'} />
-            </Box>
+                </Header>
 
-            <Box display="flex" flexDirection="column" p={5}>
-                <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
-                    <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        <Select
-                            placeholder="Статус"
-                            width={'fit-content'}
-                            onChange={(e) => applyFilters(e.target.value)}
-                        >
-                            <option value="Активный">Активный</option>
-                            <option value="Неактивный">Неактивный</option>
-                        </Select>
+                <Box display="flex" flexDirection="column" p={5}>
+                    <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
+                        <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                            <Select
+                                placeholder="Статус"
+                                width={'fit-content'}
+                                onChange={(e) => applyFilters(e.target.value)}
+                            >
+                                <option value="Активный">Активный</option>
+                                <option value="Неактивный">Неактивный</option>
+                            </Select>
+                        </Box>
+
+                        <Button colorScheme="purple" onClick={onOpen}>
+                            Добавить
+                        </Button>
                     </Box>
-
-                    <Button colorScheme="purple" onClick={onOpen}>
-                        Добавить
-                    </Button>
+                    <TableContainer isLoading={isLoading}>
+                        <Table variant="simple">
+                            <Thead>
+                                <Tr>
+                                    <Th>№</Th>
+                                    <Th>Имя</Th>
+                                    <Th>Фамилия</Th>
+                                    <Th>Телефон</Th>
+                                    <Th>Статус</Th>
+                                    <Th>Должность</Th>
+                                    <Th>Фикс Зп.</Th>
+                                    <Th>Действия</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {usersData?.map((user, index) => {
+                                    const ordinalNumber: number = index + 1
+                                    return (
+                                        <Tr key={index}>
+                                            <Td>{ordinalNumber}</Td>
+                                            <Td>{user.name}</Td>
+                                            <Td>{user.surname}</Td>
+                                            <Td>{user.phone}</Td>
+                                            <Td>{user.status}</Td>
+                                            <Td>{user.userClass}</Td>
+                                            <Td>{user.fixSalary}</Td>
+                                            <Td sx={{ width: '5%' }}>
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        setSelectedData(user)
+                                                        onOpen()
+                                                    }}
+                                                    icon={<EditIcon />}
+                                                />
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        setSelectedData(user)
+                                                        setDialog({
+                                                            ...dialog,
+                                                            isOpen: true,
+                                                        })
+                                                    }}
+                                                    icon={<DeleteIcon />}
+                                                />
+                                            </Td>
+                                        </Tr>
+                                    )
+                                })}
+                            </Tbody>
+                        </Table>
+                    </TableContainer>
+                    <UserAddModal
+                        data={selectedData}
+                        isOpen={isOpen}
+                        onClose={handleClose}
+                        onSuccess={handledSuccess}
+                    />
+                    <Dialog
+                        isOpen={dialog.isOpen}
+                        onClose={dialog.onClose}
+                        header="Удалить"
+                        body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                        actionBtn={() => {
+                            dialog.onClose()
+                            handlerDeleteUser(selectedData)
+                        }}
+                        actionText="Удалить"
+                    />
                 </Box>
-                <TableContainer isLoading={isLoading}>
-                    <Table variant="simple">
-                        <Thead>
-                            <Tr>
-                                <Th>№</Th>
-                                <Th>Имя</Th>
-                                <Th>Фамилия</Th>
-                                <Th>Телефон</Th>
-                                <Th>Статус</Th>
-                                <Th>Должность</Th>
-                                <Th>Фикс Зп.</Th>
-                                <Th>Действия</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {usersData?.map((user, index) => {
-                                const ordinalNumber: number = index + 1
-                                return (
-                                    <Tr key={index}>
-                                        <Td>{ordinalNumber}</Td>
-                                        <Td>{user.name}</Td>
-                                        <Td>{user.surname}</Td>
-                                        <Td>{user.phone}</Td>
-                                        <Td>{user.status}</Td>
-                                        <Td>{user.userClass}</Td>
-                                        <Td>{user.fixSalary}</Td>
-                                        <Td sx={{ width: '5%' }}>
-                                            <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
-                                                marginRight={3}
-                                                onClick={() => {
-                                                    setSelectedData(user)
-                                                    onOpen()
-                                                }}
-                                                icon={<EditIcon />}
-                                            />
-                                            <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
-                                                marginRight={3}
-                                                onClick={() => {
-                                                    setSelectedData(user)
-                                                    setDialog({
-                                                        ...dialog,
-                                                        isOpen: true,
-                                                    })
-                                                }}
-                                                icon={<DeleteIcon />}
-                                            />
-                                        </Td>
-                                    </Tr>
-                                )
-                            })}
-                        </Tbody>
-                    </Table>
-                </TableContainer>
-                <UserAddModal
-                    data={selectedData}
-                    isOpen={isOpen}
-                    onClose={handleClose}
-                    onSuccess={handledSuccess}
-                />
-                <Dialog
-                    isOpen={dialog.isOpen}
-                    onClose={dialog.onClose}
-                    header="Удалить"
-                    body="Вы уверены? Вы не сможете отменить это действие впоследствии."
-                    actionBtn={() => {
-                        dialog.onClose()
-                        handlerDeleteUser(selectedData)
-                    }}
-                    actionText="Удалить"
-                />
-            </Box>
+            </UniversalComponent>
         </>
     )
 }
