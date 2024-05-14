@@ -19,12 +19,14 @@ import {
 import { useNavigate } from 'react-router-dom'
 import ReleaseAddModal, { Releaser } from '../components/ReleaseAddModal'
 import { useState, useEffect } from 'react'
-import { getAllClients } from '@/utils/services/client.service'
+import { deleteClient, getAllClients } from '@/utils/services/client.service'
 import useSWR, { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'
 import Dialog from '@/components/Dialog'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 const AdminPanel = () => {
+    const { loading } = useNotify()
     const navigate = useNavigate()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Releaser | undefined>(undefined)
@@ -66,9 +68,14 @@ const AdminPanel = () => {
 
     const deleteUser = (selectedData: Releaser | undefined) => {
         if (selectedData) {
-            // deleteClient(selectedData.id).then((res) => {
-            //     console.log(res)
-            // })
+            const responsePromise: Promise<any> = deleteClient(selectedData.id)
+            loading(responsePromise)
+            responsePromise.then(() => {
+                mutate((currentData: Releaser[] | undefined) => {
+                    if (!currentData) return currentData
+                    return currentData.filter((client) => client.id !== selectedData?.id)
+                })
+            })
         } else {
             console.error('No releaser data available to delete.')
         }

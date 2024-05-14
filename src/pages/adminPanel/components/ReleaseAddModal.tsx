@@ -165,6 +165,10 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                             <Input
                                 {...register('telegrammId', {
                                     required: 'Поле является обязательным',
+                                    maxLength: {
+                                        value: 20,
+                                        message: 'Некорректный Телеграм ID',
+                                    }
                                 })}
                                 autoComplete="off"
                                 placeholder="Телеграм ID *"

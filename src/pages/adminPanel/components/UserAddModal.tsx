@@ -81,8 +81,13 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
     }
 
     const permissions = [
-        { id: 1, name: 'Admin' },
-        { id: 2, name: 'Client' },
+        { id: 1, name: 'Админ' },
+        { id: 2, name: 'Производство' },
+        { id: 3, name: 'Продажи' },
+        { id: 4, name: 'Закуп' },
+        { id: 5, name: 'Финансы' },
+        { id: 5, name: 'Отчеты' },
+        { id: 5, name: 'Инвентаризация' },
     ]
 
     const status = [
