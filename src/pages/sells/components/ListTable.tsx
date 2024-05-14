@@ -12,6 +12,7 @@ import {
     Tfoot,
     Box,
     IconButton,
+    Center,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import EditModal from './EditModal'
@@ -73,6 +74,7 @@ const ListTable: React.FC<ListTableProps> = ({
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const [selectedRow, setSelectedRow] = useState<Dispatch | null>(null)
+    const [maxProductHeight, setMaxProductHeight] = useState<number>(0)
 
     console.log('facilityUnit', dateRange)
 
@@ -120,12 +122,19 @@ const ListTable: React.FC<ListTableProps> = ({
         }
     }
 
+    const calculateMaxProductHeight = (row: Dispatch) => {
+        const maxProductContentHeight = row.goodsDispatchDetails.length * 36
+        if (maxProductContentHeight > maxProductHeight) {
+            setMaxProductHeight(maxProductContentHeight)
+        }
+    }
+
     return (
         <>
             <TableContainer overflowY={'auto'} height={'90%'}>
                 <Table variant="simple" width={'100%'}>
                     <Thead>
-                        <Tr position={'sticky'} top={0} backgroundColor={'white'}>
+                        <Tr position={'sticky'} top={0} backgroundColor={'white'} zIndex={9}>
                             <Th width={'10%'}>№</Th>
                             <Th width={'20%'}>Реализатор</Th>
                             <Th width={'20%'}>Продукт</Th>
@@ -139,6 +148,7 @@ const ListTable: React.FC<ListTableProps> = ({
                         {dispatchData?.data
                             ?.filter((row: Dispatch) => row.dispatch == status)
                             ?.map((row, index) => {
+                                calculateMaxProductHeight(row)
                                 return (
                                     <Tr key={row.id}>
                                         <Td>{index + 1}</Td>
@@ -189,7 +199,14 @@ const ListTable: React.FC<ListTableProps> = ({
                                                 ))}
                                             </div>
                                         </Td>
-                                        <Td style={{ display: 'flex', gap: '10px' }}>
+                                        <Td
+                                            style={{
+                                                display: 'flex',
+                                                gap: '10px',
+                                                height: maxProductHeight,
+                                                alignItems: 'center',
+                                            }}
+                                        >
                                             <IconButton
                                                 variant="outline"
                                                 size={'sm'}
