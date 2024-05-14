@@ -85,7 +85,7 @@ const ListTable: React.FC<ListTableProps> = ({
         endDate: String(dateRange?.endDate),
     })
 
-    console.log(dispatchData)
+    console.log(dispatchData?.data?.filter((row: Dispatch) => row.dispatch == status))
 
     const [modal, setModal] = useState({
         isOpen: false,
