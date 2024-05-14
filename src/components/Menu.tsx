@@ -55,51 +55,56 @@ const Drawler = () => {
                 </Icon>
             </Button>
             {isDrawerOpen && (
-            <Drawer isOpen={isDrawerOpen} placement="left" onClose={() => setIsDrawerOpen(false)} finalFocusRef={btnRef}>
-                <DrawerOverlay width={'100%'} />
-                <DrawerContent width={'100%'}>
-                    <DrawerCloseButton />
-                    <DrawerHeader>Меню</DrawerHeader>
+                <Drawer
+                    isOpen={isDrawerOpen}
+                    placement="left"
+                    onClose={() => setIsDrawerOpen(false)}
+                    finalFocusRef={btnRef}
+                >
+                    <DrawerOverlay width={'100%'} />
+                    <DrawerContent width={'100%'}>
+                        <DrawerCloseButton />
+                        <DrawerHeader>Меню</DrawerHeader>
 
-                    <DrawerBody display="flex" p={2} gap="0.5rem" flexDirection="column">
-                        {filteredMenuItems.map((MenuItem) => (
-                            <Fragment key={MenuItem.route}>
-                                <Divider border={'1px solid'} />
-                                <Heading paddingLeft={'0.5rem'} p={2} size="sm">
-                                    {MenuItem.label}
-                                </Heading>
-                                <Box
-                                    display={'flex'}
-                                    flexDirection={'column'}
-                                    width={'100%'}
-                                    gap={'1.2rem'}
-                                    textAlign={'start'}
-                                    paddingLeft={'2rem'}
-                                >
-                                    {subMenuItems.map(
-                                        ({ route, label, path }) =>
-                                            path === MenuItem.route && (
-                                                <Link
-                                                    key={route}
-                                                    variant="ghost"
-                                                    width={'60%'}
-                                                    lineHeight={'20px'}
-                                                    onClick={() => handleNavigate(route)}
-                                                >
-                                                    {label}
-                                                </Link>
-                                            ),
-                                    )}
-                                </Box>
-                            </Fragment>
-                        ))}
-                    </DrawerBody>
+                        <DrawerBody display="flex" p={2} gap="0.5rem" flexDirection="column">
+                            {filteredMenuItems.map((MenuItem) => (
+                                <Fragment key={MenuItem.route}>
+                                    <Divider border={'1px solid'} />
+                                    <Heading paddingLeft={'0.5rem'} p={2} size="sm">
+                                        {MenuItem.label}
+                                    </Heading>
+                                    <Box
+                                        display={'flex'}
+                                        flexDirection={'column'}
+                                        width={'100%'}
+                                        gap={'1.2rem'}
+                                        textAlign={'start'}
+                                        paddingLeft={'2rem'}
+                                    >
+                                        {subMenuItems.map(
+                                            ({ route, label, path }) =>
+                                                path === MenuItem.route && (
+                                                    <Link
+                                                        key={route}
+                                                        variant="ghost"
+                                                        width={'60%'}
+                                                        lineHeight={'20px'}
+                                                        onClick={() => handleNavigate(route)}
+                                                    >
+                                                        {label}
+                                                    </Link>
+                                                ),
+                                        )}
+                                    </Box>
+                                </Fragment>
+                            ))}
+                        </DrawerBody>
 
-                    <DrawerFooter>
-                        <Link onClick={() => navigate(LOGIN_ROUTE)}>Выход</Link>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
+                        <DrawerFooter>
+                            <Link onClick={() => navigate(LOGIN_ROUTE)}>Выход</Link>
+                        </DrawerFooter>
+                    </DrawerContent>
+                </Drawer>
             )}
         </>
     )

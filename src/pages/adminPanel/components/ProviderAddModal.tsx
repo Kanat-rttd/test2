@@ -10,9 +10,9 @@ import {
     ModalFooter,
     ModalHeader,
     ModalOverlay,
-    Select as ChakraSelect,
 } from '@chakra-ui/react'
 import { Controller, useForm } from 'react-hook-form'
+import CreatableSelect from 'react-select/creatable'
 import Select from 'react-select'
 import { useApi } from '@/utils/services/axios'
 import { useEffect } from 'react'
@@ -42,8 +42,8 @@ interface ProviderGoods {
 }
 
 interface Providers {
-    id: number
-    name: string
+    label: string
+    value: number
 }
 
 type ModalProps = {
@@ -57,8 +57,13 @@ const defaultValues = {
     provider: 0,
     goods: '',
     unitOfMeasure: '',
-    bakery: [{ label: '' }],
+    bakery: [],
     status: '',
+}
+
+interface status {
+    id: number
+    name: string
 }
 
 const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps) => {
@@ -80,12 +85,18 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
             Object.entries(selectedData).forEach(([key, value]) => {
                 setValue(key as keyof ProviderInputs, value)
             })
+            setValue('bakery', JSON.parse(String(selectedData.place)))
         } else {
             reset()
         }
     }, [selectedData, isOpen, reset])
 
     const bakery = [{ label: 'Батонный' }, { label: 'Заводской' }]
+
+    const status = [
+        { id: 1, name: 'Активный' },
+        { id: 2, name: 'Неактивный' },
+    ]
 
     const sendData = (formData: ProviderInputs) => {
         try {
@@ -141,25 +152,31 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                                         render={({ field }) => {
                                             const { onChange, value } = field
                                             return (
-                                                <Select
+                                                <CreatableSelect
                                                     options={providersData}
                                                     getOptionLabel={(option: Providers) =>
-                                                        option.name
+                                                        option.label
                                                     }
                                                     getOptionValue={(option: Providers) =>
-                                                        `${option.id}`
+                                                        `${option.value}`
                                                     }
                                                     value={providersData?.find(
-                                                        (option) => option.id === value,
+                                                        (option) => option.value === value,
                                                     )}
                                                     onChange={(
                                                         selectedOption: Providers | null,
                                                     ) => {
                                                         if (selectedOption) {
-                                                            onChange(selectedOption.id)
+                                                            console.log(selectedOption.value)
+                                                            onChange(selectedOption.value)
+                                                        } else {
+                                                            onChange('')
                                                         }
                                                     }}
                                                     placeholder="Поставщик *"
+                                                    formatCreateLabel={(inputValue) =>
+                                                        `Добавить "` + inputValue + `"`
+                                                    }
                                                     isClearable
                                                     isSearchable
                                                 />
@@ -209,10 +226,18 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                                             return (
                                                 <Select
                                                     isMulti
-                                                    options={bakery}
-                                                    value={bakery?.find((option) =>
-                                                        value?.includes(option),
-                                                    )}
+                                                    // options={bakery}
+                                                    // value={bakery?.find((option) =>
+                                                    //     value?.includes(option),
+                                                    // )}
+                                                    options={bakery.map((bakeryItem) => ({
+                                                        value: bakeryItem.label,
+                                                        label: bakeryItem.label,
+                                                    }))}
+                                                    value={(value || []).map((val) => ({
+                                                        value: val.label,
+                                                        label: val.label,
+                                                    }))}
                                                     onChange={(val) => onChange(val)}
                                                     placeholder="Место *"
                                                     isClearable
@@ -225,15 +250,34 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                                 </FormControl>
 
                                 <FormControl isInvalid={!!errors.status}>
-                                    <ChakraSelect
-                                        {...register('status', {
-                                            required: 'Поле является обязательным',
-                                        })}
+                                    <Controller
                                         name="status"
-                                    >
-                                        <option value={'0'}>Активный</option>
-                                        <option value={'1'}>Неактивный</option>
-                                    </ChakraSelect>
+                                        control={control}
+                                        rules={{ required: 'Поля является обязательным' }}
+                                        render={({ field }) => {
+                                            const { onChange, value } = field
+                                            return (
+                                                <Select
+                                                    options={status}
+                                                    getOptionLabel={(option: status) => option.name}
+                                                    getOptionValue={(option: status) => option.name}
+                                                    value={status?.find(
+                                                        (option) => option.name === value,
+                                                    )}
+                                                    onChange={(selectedOption: status | null) => {
+                                                        if (selectedOption) {
+                                                            onChange(selectedOption.name)
+                                                        } else {
+                                                            onChange('')
+                                                        }
+                                                    }}
+                                                    placeholder="Статус *"
+                                                    isClearable
+                                                    isSearchable
+                                                />
+                                            )
+                                        }}
+                                    />
                                     <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
                                 </FormControl>
                                 <Box

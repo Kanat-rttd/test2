@@ -20,16 +20,17 @@ import ProviderAddModal from '../components/ProviderAddModal'
 import { useState } from 'react'
 import Dialog from '@/components/Dialog'
 import { ADMIN_PROVIDER_ROUTE } from '@/utils/constants/routes.consts'
-import { mutate, useApi } from '@/utils/services/axios'
+import { useApi } from '@/utils/services/axios'
 import { deleteProviderGoods } from '@/utils/services/providerGoods.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { mutate } from 'swr'
 
 interface ProviderGoods {
     id: number
     providerId: number
     goods: string
     unitOfMeasure: string
-    place: string
+    place: { label: string }[]
     status: string
     provider: {
         id: number
@@ -63,10 +64,11 @@ const AdminProvider = () => {
             const responsePromise: Promise<any> = deleteProviderGoods(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {
-                mutate((currentData: ProviderGoods[] | undefined) => {
-                    if (!currentData) return currentData
-                    return currentData.filter((item) => item.id !== selectedData?.id)
-                })
+                // mutate((currentData: ProviderGoods[] | undefined) => {
+                //     if (!currentData) return currentData
+                //     return currentData.filter((item) => item.id !== selectedData?.id)
+                // })
+                mutate(`providerGoods?status=${selectedStatus}`)
             })
         } else {
             console.error('No user data available to delete.')
@@ -75,6 +77,12 @@ const AdminProvider = () => {
 
     const handledSuccess = () => {
         mutate(`providerGoods?status=${selectedStatus}`)
+        setSelectedData(undefined)
+    }
+
+    const handleClose = () => {
+        setSelectedData(undefined)
+        onClose()
     }
 
     return (
@@ -134,18 +142,19 @@ const AdminProvider = () => {
                         </Thead>
                         <Tbody>
                             {providerGoodsData?.map((item, index) => {
+                                const placesLabels = JSON.parse(String(item.place)).map(
+                                    (place: { label: string }) => place.label,
+                                )
+
+                                const placesString = placesLabels.join(', ')
+
                                 return (
                                     <Tr key={index}>
                                         <Td>{index + Number(1)}</Td>
                                         <Td>{item.provider.name}</Td>
                                         <Td>{item.goods}</Td>
                                         <Td>{item.unitOfMeasure}</Td>
-                                        {/* <Td>
-                                            {item.bakery.map((type) => {
-                                                return <Box>{type.label}</Box>
-                                            })}
-                                        </Td> */}
-                                        <Td>{item.place}</Td>
+                                        <Td>{placesString}</Td>
                                         <Td>{item.status}</Td>
                                         <Td sx={{ width: '5%' }}>
                                             <IconButton
@@ -184,17 +193,22 @@ const AdminProvider = () => {
                 </TableContainer>
             </Box>
             <Dialog
-                    isOpen={dialog.isOpen}
-                    onClose={dialog.onClose}
-                    header="Удалить"
-                    body="Вы уверены? Вы не сможете отменить это действие впоследствии."
-                    actionBtn={() => {
-                        dialog.onClose()
-                        handlerDeleteProvider(selectedData)
-                    }}
-                    actionText="Удалить"
-                />
-            <ProviderAddModal isOpen={isOpen} onClose={onClose} selectedData={selectedData} onSuccess={handledSuccess} />
+                isOpen={dialog.isOpen}
+                onClose={dialog.onClose}
+                header="Удалить"
+                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                actionBtn={() => {
+                    dialog.onClose()
+                    handlerDeleteProvider(selectedData)
+                }}
+                actionText="Удалить"
+            />
+            <ProviderAddModal
+                isOpen={isOpen}
+                onClose={handleClose}
+                selectedData={selectedData}
+                onSuccess={handledSuccess}
+            />
         </>
     )
 }
