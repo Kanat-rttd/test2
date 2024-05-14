@@ -66,7 +66,7 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
         endDate: String(getParam('endDate')),
     })
 
-    console.log(dispatchData)
+    console.log(dispatchData?.data?.filter((row: Dispatch) => row.dispatch == status))
 
     const [modal, setModal] = useState({
         isOpen: false,
@@ -107,7 +107,7 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
             <TableContainer>
                 <Table variant="simple" width={'100%'}>
                     <Thead>
-                        <Tr position={'sticky'} top={0} backgroundColor={'white'}>
+                        <Tr position={'sticky'} top={0} backgroundColor={'white'} zIndex={9}>
                             <Th width={'10%'}>№</Th>
                             <Th width={'20%'}>Реализатор</Th>
                             <Th width={'20%'}>Продукт</Th>
@@ -121,6 +121,7 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
                         {dispatchData?.data
                             ?.filter((row: Dispatch) => row.dispatch == status)
                             ?.map((row, index) => {
+                                // calculateMaxProductHeight(row)
                                 return (
                                     <Tr key={row.id}>
                                         <Td>{index + 1}</Td>
