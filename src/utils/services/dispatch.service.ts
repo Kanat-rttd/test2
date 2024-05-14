@@ -42,6 +42,11 @@ export const updateDispatchPrice = async (
     return response
 }
 
+export const deleteDispatch = async (id: number) => {
+    const response = await $host.put(`release/delete/${id}`)
+    return response
+}
+
 // export const getSaleById = async (id: number) => {
 //     const { data } = await $host.get(`sales/${id}`)
 //     return data

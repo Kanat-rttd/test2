@@ -13,6 +13,8 @@ import { useNavigate } from 'react-router-dom'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 
+import UniversalComponent from '@/components/ui/UniversalComponent'
+
 interface FacilityUnit {
     id: number
     facilityUnit: string
@@ -66,12 +68,13 @@ const JournalPage = () => {
 
     return (
         <>
-            <Box>
+            <UniversalComponent>
                 <Box
                     display="flex"
                     justifyContent={'space-between'}
                     flexDirection={'row'}
                     backgroundColor={'rgba(128, 128, 128, 0.1)'}
+                    p={'0rem 0.5rem'}
                 >
                     <Box width={'100%'}>
                         <Drawler></Drawler>
@@ -100,9 +103,15 @@ const JournalPage = () => {
                             Перевод долга
                         </Button>
                     </Box>
-                    <Avatar size={'md'} bg="teal.500" />
+                    <Avatar w={'36px'} h={'36px'} bg="teal.500" m={'0.5rem 0.5rem'} />
                 </Box>
-                <Box width={'100%'} height={'100%'} p={5}>
+                <Box
+                    display="flex"
+                    flexDirection="column"
+                    maxHeight={'calc(95% - 2.5rem)'}
+                    height="100vh"
+                    p={5}
+                >
                     <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                             {/* <DateRangePicker></DateRangePicker> */}
@@ -145,7 +154,7 @@ const JournalPage = () => {
                             </Select>
                         </Box>
                     </Box>
-                    <Box>
+                    <Box height={'calc(95% - 2.5rem)'} position={'relative'}>
                         <ListTable
                             facilityUnit={selectedFacilityUnit}
                             client={selectedClient}
@@ -156,7 +165,7 @@ const JournalPage = () => {
                     </Box>
                 </Box>
                 {/* <DistributionModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} status="0" /> */}
-            </Box>
+            </UniversalComponent>
         </>
     )
 }

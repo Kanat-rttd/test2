@@ -91,10 +91,11 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
 
             updateDispatchPrice(item.id, updObj).then((res) => {
                 console.log(res)
+                onSuccess()
             })
         })
 
-        onSuccess()
+        onClose()
     }
 
     return (

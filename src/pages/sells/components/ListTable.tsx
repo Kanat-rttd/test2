@@ -10,11 +10,21 @@ import {
     Tr,
     useDisclosure,
     Tfoot,
+    Box,
+    IconButton,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import EditModal from './EditModal'
 import { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'
+import { deleteDispatch } from '@/utils/services/dispatch.service'
+import { useNotify } from '@/utils/providers/ToastProvider'
+
+interface DispatchData {
+    data: Dispatch[]
+    totalPrice: number
+    totalQuantity: number
+}
 
 interface Dispatch {
     id: number
@@ -59,6 +69,7 @@ const ListTable: React.FC<ListTableProps> = ({
     dateRange,
     status,
 }) => {
+    const { loading } = useNotify()
     // const [data, setData] = useState<Dispatch[]>([])
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -66,13 +77,14 @@ const ListTable: React.FC<ListTableProps> = ({
 
     console.log('facilityUnit', dateRange)
 
-    const { data: dispatchData } = useApi<Dispatch[]>('release', {
+    const { data: dispatchData, mutate: mutateDispatchData } = useApi<DispatchData>('release', {
         facilityUnit,
         client,
         product,
         startDate: String(dateRange?.startDate),
         endDate: String(dateRange?.endDate),
     })
+
     console.log(dispatchData)
 
     const [modal, setModal] = useState({
@@ -91,30 +103,41 @@ const ListTable: React.FC<ListTableProps> = ({
     }
 
     const handleSuccess = () => {
-        mutate(
-            `release?facilityUnit=${facilityUnit}&client=${client}&product=${product}&startDate=${String(
-                dateRange?.startDate,
-            )}&endDate=${String(dateRange?.endDate)}`,
-        )
+        console.log('handler')
+        mutateDispatchData()
+    }
+
+    const handlerDeleteUser = () => {
+        console.log(selectedRow)
+        if (selectedRow) {
+            const responsePromise: Promise<any> = deleteDispatch(selectedRow.id)
+            loading(responsePromise)
+            responsePromise.then(() => {
+                mutateDispatchData()
+                onClose()
+            })
+        } else {
+            console.error('No user data available to delete.')
+        }
     }
 
     return (
         <>
-            <TableContainer>
-                <Table variant="simple">
+            <TableContainer overflowY={'auto'} height={'90%'}>
+                <Table variant="simple" width={'100%'}>
                     <Thead>
-                        <Tr>
-                            <Th>№</Th>
-                            <Th>Реализатор</Th>
-                            <Th>Продукт</Th>
-                            <Th>Количество </Th>
-                            <Th>Цена</Th>
-                            <Th>Сумма</Th>
-                            <Th>Действия</Th>
+                        <Tr position={'sticky'} top={0} backgroundColor={'white'}>
+                            <Th width={'10%'}>№</Th>
+                            <Th width={'20%'}>Реализатор</Th>
+                            <Th width={'20%'}>Продукт</Th>
+                            <Th width={'10%'}>Количество </Th>
+                            <Th width={'10%'}>Цена</Th>
+                            <Th width={'10%'}>Сумма</Th>
+                            <Th width={'10%'}>Действия</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {dispatchData
+                        {dispatchData?.data
                             ?.filter((row: Dispatch) => row.dispatch == status)
                             ?.map((row, index) => {
                                 return (
@@ -168,35 +191,57 @@ const ListTable: React.FC<ListTableProps> = ({
                                             </div>
                                         </Td>
                                         <Td style={{ display: 'flex', gap: '10px' }}>
-                                            {
-                                                <EditIcon
-                                                    boxSize={'1.5em'}
-                                                    cursor={'pointer'}
-                                                    onClick={() => handleEditClick(row)}
-                                                />
-                                            }
-                                            {
-                                                <DeleteIcon
-                                                    boxSize={'1.5em'}
-                                                    color={'red'}
-                                                    cursor={'pointer'}
-                                                    onClick={onOpen}
-                                                />
-                                            }
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
+                                                onClick={() => {
+                                                    handleEditClick(row)
+                                                }}
+                                                icon={<EditIcon />}
+                                            />
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
+                                                onClick={() => {
+                                                    setSelectedRow(row)
+                                                    onOpen()
+                                                }}
+                                                icon={<DeleteIcon />}
+                                            />
                                         </Td>
                                     </Tr>
                                 )
                             })}
                     </Tbody>
+                </Table>
+            </TableContainer>
+            <Box bottom={0} position={'absolute'} width={'100%'}>
+                <Table variant="simple" width={'100%'}>
                     <Tfoot>
                         <Tr>
-                            <Th>To convert</Th>
-                            <Th>into</Th>
-                            <Th isNumeric>multiply by</Th>
+                            <Th fontSize={15} color={'#000'} width={'15%'}>
+                                ИТОГО
+                            </Th>
+                            <Th width={'15%'}></Th>
+                            <Th width={'15%'}></Th>
+                            <Th fontSize={15} color={'#000'} width={'10%'}>
+                                {dispatchData?.totalQuantity}
+                            </Th>
+                            <Th width={'10%'}></Th>
+                            <Th fontSize={15} color={'#000'} width={'10%'}>
+                                {dispatchData?.totalPrice}
+                            </Th>
+                            <Th width={'10%'}></Th>
                         </Tr>
                     </Tfoot>
                 </Table>
-            </TableContainer>
+            </Box>
             <EditModal
                 isOpen={modal.isOpen}
                 onClose={handleModalClose}
@@ -208,7 +253,9 @@ const ListTable: React.FC<ListTableProps> = ({
                 onClose={onClose}
                 header="Удалить"
                 body="Вы уверены? Вы не сможете отменить это действие впоследствии."
-                actionBtn={onClose}
+                actionBtn={() => {
+                    handlerDeleteUser()
+                }}
                 actionText="Удалить"
             />
         </>
