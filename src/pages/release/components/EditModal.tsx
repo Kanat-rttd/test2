@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
-import { updateDispatch } from '@/utils/services/dispatch.service'
+import { updateDispatchQuantity } from '@/utils/services/dispatch.service'
 
 interface Dispatch {
     id: number
@@ -69,7 +69,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
         console.log(formattedData)
 
         formattedData.products?.forEach((product) => {
-            updateDispatch(product.id, product).then((res) => {
+            updateDispatchQuantity(product.id, product).then((res) => {
                 console.log(res)
             })
         })

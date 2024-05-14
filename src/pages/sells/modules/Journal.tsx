@@ -11,14 +11,53 @@ import ListTable from '../components/ListTable'
 
 import { useNavigate } from 'react-router-dom'
 import DateRange from '@/components/DateRange'
+import { useApi } from '@/utils/services/axios'
+
+interface FacilityUnit {
+    id: number
+    facilityUnit: string
+}
+
+interface Client {
+    id: number
+    name: string
+    surname: string
+    contact: string
+    telegrammId: string
+    status: string
+}
+
+interface Product {
+    id: number
+    name: string
+    price: number
+    costPrice: number
+    status: number
+    bakingFacilityUnit: {
+        facilityUnit: string
+        id: number
+    }
+}
 
 const JournalPage = () => {
     const navigate = useNavigate()
+
+    const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
+    const { data: clientsData } = useApi<Client[]>('client')
+    const { data: productData } = useApi<Product[]>('product')
+
+    // console.log(facilityUnitsData, clientsData, productData)
 
     const [selectionRange, setSelectionRange] = useState({
         startDate: new Date(),
         endDate: new Date(),
     })
+
+    const [selectedFacilityUnit, setFacilityUnit] = useState('')
+    const [selectedClient, setClient] = useState('')
+    const [selectedProduct, setProduct] = useState('')
+
+    console.log(selectedFacilityUnit, selectedClient, selectedProduct)
 
     useEffect(() => {
         console.log(selectionRange.startDate)
@@ -71,25 +110,49 @@ const JournalPage = () => {
                                 selectionRange={selectionRange}
                                 setSelectionRange={setSelectionRange}
                             />
-                            <Select placeholder="Цехи" width={'fit-content'}>
-                                <option value="Лепешечный">Лепешечный</option>
-                                <option value="Булочный">Булочный</option>
-                                <option value="Заварной">Заварной</option>
+                            <Select
+                                placeholder="Цехи"
+                                width={'90%'}
+                                onChange={(e) => setFacilityUnit(e.target.value)}
+                            >
+                                {facilityUnitsData?.map((unit, index) => (
+                                    <option key={index} value={unit.id}>
+                                        {unit.facilityUnit}
+                                    </option>
+                                ))}
                             </Select>
-                            <Select placeholder="Реализатор" width={'fit-content'}>
-                                <option value="Лепешечный">Лепешечный</option>
-                                <option value="Булочный">Булочный</option>
-                                <option value="Заварной">Заварной</option>
+                            <Select
+                                placeholder="Реализатор"
+                                width={'90%'}
+                                onChange={(e) => setClient(e.target.value)}
+                            >
+                                {clientsData?.map((client, index) => (
+                                    <option key={index} value={client.name}>
+                                        {client.name}
+                                    </option>
+                                ))}
                             </Select>
-                            <Select placeholder="Продукт" width={'fit-content'}>
-                                <option value="Лепешечный">Лепешечный</option>
-                                <option value="Булочный">Булочный</option>
-                                <option value="Заварной">Заварной</option>
+                            <Select
+                                placeholder="Продукт"
+                                width={'90%'}
+                                onChange={(e) => setProduct(e.target.value)}
+                            >
+                                {productData?.map((product, index) => (
+                                    <option key={index} value={product.name}>
+                                        {product.name}
+                                    </option>
+                                ))}
                             </Select>
                         </Box>
                     </Box>
                     <Box>
-                        <ListTable status="0" />
+                        <ListTable
+                            facilityUnit={selectedFacilityUnit}
+                            client={selectedClient}
+                            product={selectedProduct}
+                            dateRange={selectionRange}
+                            status="0"
+                        />
                     </Box>
                 </Box>
                 {/* <DistributionModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} status="0" /> */}
