@@ -332,6 +332,7 @@ const AdminPanel = () => {
                     deleteIndividualPrice(selectedData?.detail[0].individualPriceId ?? '').then(
                         (res) => {
                             console.log(res)
+                            getIndividualPrices()
                         },
                     )
                     dialog.onClose()

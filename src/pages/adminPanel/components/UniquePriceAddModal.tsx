@@ -94,7 +94,7 @@ const UniquePriceAddModal = ({
     const { loading } = useNotify()
     const { data: individualPrices } = useApi<individualPrice[]>('inPrice')
     const [products, setProducts] = useState<Product[]>([])
-    const [selectedProduct, setSelectedProduct] = useState('')
+    // const [selectedProduct, setSelectedProduct] = useState('')
     const [clientsData, setClientsData] = useState<Client[]>([])
 
     const {
@@ -111,7 +111,6 @@ const UniquePriceAddModal = ({
             setProducts(responseData)
         })
     }, [])
-console.log(selectedProduct)
     useEffect(() => {
         console.log(data)
 
@@ -119,10 +118,9 @@ console.log(selectedProduct)
             Object.entries(data).forEach(([key, value]) => {
                 setValue(key as keyof Detail, value)
             })
-            setSelectedProduct(String(data.detail[0].id))
+            // setSelectedProduct(String(data.detail[0].id))
             setValue('name', String(data.detail[0].id))
-            setValue('price', (data.detail[0].price))
-            
+            setValue('price', data.detail[0].price)
         } else {
             reset()
         }
@@ -135,7 +133,6 @@ console.log(selectedProduct)
     }, [])
 
     const handleAddOrUpdate = (formData: Detail) => {
-        console.log('test')
         try {
             let newData
 
@@ -145,14 +142,15 @@ console.log(selectedProduct)
                         clientsData?.find((client) => client.name == selectedRelease)?.id || '',
                     detail: [
                         {
-                            id: selectedProduct,
+                            id: formData.name,
                             name:
-                                products.find((product) => product.id == selectedProduct)?.name ||
-                                '',
+                                products.find((product) => product.id == formData.name)?.name || '',
                             price: formData.price,
                         },
                     ],
                 }
+                console.log(formData.id)
+
                 const responsePromise: Promise<any> = createIndividualPrice(newData)
                 loading(responsePromise)
                 responsePromise.then(() => {
@@ -175,6 +173,7 @@ console.log(selectedProduct)
                         },
                     ],
                 }
+                console.log(newData)
                 const responsePromise: Promise<any> = updateIndividualPrice(
                     newData.clientId,
                     newData,
