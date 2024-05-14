@@ -19,12 +19,23 @@ export const getInvoiceData = async () => {
     return data
 }
 
-export const updateDispatch = async (
+export const updateDispatchQuantity = async (
     id: number,
     data: {
         id: number
         productId: number
         quantity: string
+    },
+) => {
+    const response = await $host.put(`release/${id}`, data)
+    return response
+}
+
+export const updateDispatchPrice = async (
+    id: number,
+    data: {
+        productId: number
+        price: string
     },
 ) => {
     const response = await $host.put(`release/${id}`, data)

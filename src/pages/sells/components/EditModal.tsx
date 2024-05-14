@@ -15,6 +15,8 @@ import {
     Text,
 } from '@chakra-ui/react'
 
+import { updateDispatchPrice } from '@/utils/services/dispatch.service'
+
 interface Dispatch {
     id: number
     clientId: number
@@ -44,9 +46,10 @@ interface EditModalProps {
     isOpen: boolean
     onClose: () => void
     selectedRow: Dispatch | null
+    onSuccess: () => void
 }
 
-const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }) => {
+const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onSuccess }) => {
     const [formData, setFormData] = useState<Dispatch>({
         id: 0,
         clientId: 0,
@@ -79,6 +82,19 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }) =
 
     const updateData = () => {
         console.log(formData)
+
+        formData.goodsDispatchDetails.forEach((item) => {
+            let updObj = {
+                productId: item.productId,
+                price: item.price,
+            }
+
+            updateDispatchPrice(item.id, updObj).then((res) => {
+                console.log(res)
+            })
+        })
+
+        onSuccess()
     }
 
     return (

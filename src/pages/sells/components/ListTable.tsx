@@ -11,9 +11,10 @@ import {
     useDisclosure,
     Tfoot,
 } from '@chakra-ui/react'
-import { useState, useEffect } from 'react'
-import { getAllDispatches } from '@/utils/services/dispatch.service'
+import { useState } from 'react'
 import EditModal from './EditModal'
+import { mutate } from 'swr'
+import { useApi } from '@/utils/services/axios'
 
 interface Dispatch {
     id: number
@@ -41,21 +42,38 @@ interface Dispatch {
 }
 
 interface ListTableProps {
+    facilityUnit: string
+    client: string
+    product: string
+    dateRange: {
+        startDate: Date
+        endDate: Date
+    }
     status: string
 }
 
-const ListTable: React.FC<ListTableProps> = ({ status }) => {
-    const [data, setData] = useState<Dispatch[]>([])
+const ListTable: React.FC<ListTableProps> = ({
+    facilityUnit,
+    client,
+    product,
+    dateRange,
+    status,
+}) => {
+    // const [data, setData] = useState<Dispatch[]>([])
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const [selectedRow, setSelectedRow] = useState<Dispatch | null>(null)
 
-    useEffect(() => {
-        getAllDispatches().then((res) => {
-            console.log(res)
-            setData(res.filter((row: Dispatch) => row.dispatch == status))
-        })
-    }, [])
+    console.log('facilityUnit', dateRange)
+
+    const { data: dispatchData } = useApi<Dispatch[]>('release', {
+        facilityUnit,
+        client,
+        product,
+        startDate: String(dateRange?.startDate),
+        endDate: String(dateRange?.endDate),
+    })
+    console.log(dispatchData)
 
     const [modal, setModal] = useState({
         isOpen: false,
@@ -70,6 +88,14 @@ const ListTable: React.FC<ListTableProps> = ({ status }) => {
     const handleModalClose = () => {
         setSelectedRow(null)
         setModal({ ...modal, isOpen: false })
+    }
+
+    const handleSuccess = () => {
+        mutate(
+            `release?facilityUnit=${facilityUnit}&client=${client}&product=${product}&startDate=${String(
+                dateRange?.startDate,
+            )}&endDate=${String(dateRange?.endDate)}`,
+        )
     }
 
     return (
@@ -88,69 +114,79 @@ const ListTable: React.FC<ListTableProps> = ({ status }) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {data?.map((row) => {
-                            return (
-                                <Tr key={row.id}>
-                                    <Td>{row.id}</Td>
-                                    <Td>{row.client.name}</Td>
-                                    <Td>
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            {row.goodsDispatchDetails.map((details, index) => (
-                                                <span key={index}>{details.product.name}</span>
-                                            ))}
-                                        </div>
-                                    </Td>
-                                    <Td>
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            {row.goodsDispatchDetails.map((details, index) => (
-                                                <span key={index}>{details.quantity}</span>
-                                            ))}
-                                        </div>
-                                    </Td>
-                                    <Td>
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            {row.goodsDispatchDetails.map((details, index) => (
-                                                <span key={index}>
-                                                    {details.price !== null
-                                                        ? details.price
-                                                        : details.product.price}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </Td>
-                                    <Td>
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            {row.goodsDispatchDetails.map((details, index) => (
-                                                <span key={index}>
-                                                    {Number(
-                                                        details.price !== null
+                        {dispatchData
+                            ?.filter((row: Dispatch) => row.dispatch == status)
+                            ?.map((row, index) => {
+                                return (
+                                    <Tr key={row.id}>
+                                        <Td>{index + 1}</Td>
+                                        <Td>{row.client.name}</Td>
+                                        <Td>
+                                            <div
+                                                style={{ display: 'flex', flexDirection: 'column' }}
+                                            >
+                                                {row.goodsDispatchDetails.map((details, index) => (
+                                                    <span key={index}>{details.product.name}</span>
+                                                ))}
+                                            </div>
+                                        </Td>
+                                        <Td>
+                                            <div
+                                                style={{ display: 'flex', flexDirection: 'column' }}
+                                            >
+                                                {row.goodsDispatchDetails.map((details, index) => (
+                                                    <span key={index}>{details.quantity}</span>
+                                                ))}
+                                            </div>
+                                        </Td>
+                                        <Td>
+                                            <div
+                                                style={{ display: 'flex', flexDirection: 'column' }}
+                                            >
+                                                {row.goodsDispatchDetails.map((details, index) => (
+                                                    <span key={index}>
+                                                        {details.price !== null
                                                             ? details.price
-                                                            : details.product.price,
-                                                    ) * Number(details.quantity)}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </Td>
-                                    <Td style={{ display: 'flex', gap: '10px' }}>
-                                        {
-                                            <EditIcon
-                                                boxSize={'1.5em'}
-                                                cursor={'pointer'}
-                                                onClick={() => handleEditClick(row)}
-                                            />
-                                        }
-                                        {
-                                            <DeleteIcon
-                                                boxSize={'1.5em'}
-                                                color={'red'}
-                                                cursor={'pointer'}
-                                                onClick={onOpen}
-                                            />
-                                        }
-                                    </Td>
-                                </Tr>
-                            )
-                        })}
+                                                            : details.product.price}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </Td>
+                                        <Td>
+                                            <div
+                                                style={{ display: 'flex', flexDirection: 'column' }}
+                                            >
+                                                {row.goodsDispatchDetails.map((details, index) => (
+                                                    <span key={index}>
+                                                        {Number(
+                                                            details.price !== null
+                                                                ? details.price
+                                                                : details.product.price,
+                                                        ) * Number(details.quantity)}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </Td>
+                                        <Td style={{ display: 'flex', gap: '10px' }}>
+                                            {
+                                                <EditIcon
+                                                    boxSize={'1.5em'}
+                                                    cursor={'pointer'}
+                                                    onClick={() => handleEditClick(row)}
+                                                />
+                                            }
+                                            {
+                                                <DeleteIcon
+                                                    boxSize={'1.5em'}
+                                                    color={'red'}
+                                                    cursor={'pointer'}
+                                                    onClick={onOpen}
+                                                />
+                                            }
+                                        </Td>
+                                    </Tr>
+                                )
+                            })}
                     </Tbody>
                     <Tfoot>
                         <Tr>
@@ -161,7 +197,12 @@ const ListTable: React.FC<ListTableProps> = ({ status }) => {
                     </Tfoot>
                 </Table>
             </TableContainer>
-            <EditModal isOpen={modal.isOpen} onClose={handleModalClose} selectedRow={selectedRow} />
+            <EditModal
+                isOpen={modal.isOpen}
+                onClose={handleModalClose}
+                selectedRow={selectedRow}
+                onSuccess={handleSuccess}
+            />
             <Dialog
                 isOpen={isOpen}
                 onClose={onClose}

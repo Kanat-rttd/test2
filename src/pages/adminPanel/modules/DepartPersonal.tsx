@@ -13,7 +13,7 @@ import {
     Avatar,
     Select,
 } from '@chakra-ui/react'
-import DepartPersonalModal from '../components/DepartPesonalAddModal'
+import DepartPersonalModal from '../components/departPesonalAddModal'
 import { useState } from 'react'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Menu'
