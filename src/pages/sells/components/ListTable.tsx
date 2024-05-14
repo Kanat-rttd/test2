@@ -194,7 +194,7 @@ const ListTable: React.FC<ListTableProps> = ({
                                             style={{
                                                 display: 'flex',
                                                 gap: '10px',
-                                                height: 56.8 + row.goodsDispatchDetails.length * 8,
+                                                height: 32 + row.goodsDispatchDetails.length * 20,
                                                 alignItems: 'center',
                                             }}
                                         >
