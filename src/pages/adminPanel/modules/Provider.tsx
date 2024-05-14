@@ -45,7 +45,7 @@ const AdminProvider = () => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods', {
+    const { data: providerGoodsData, isLoading } = useApi<ProviderGoods[]>('providerGoods', {
         status: selectedStatus,
     })
 
@@ -124,7 +124,7 @@ const AdminProvider = () => {
                     </Button>
                 </Box>
 
-                <TableContainer>
+                <TableContainer isLoading={isLoading}>
                     <Table variant="simple">
                         <Thead>
                             <Tr>

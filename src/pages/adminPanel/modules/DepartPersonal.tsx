@@ -11,7 +11,6 @@ import {
     Avatar,
     Select,
 } from '@chakra-ui/react'
-import DepartPersonalModal from '../components/departPesonalAddModal'
 import { useState } from 'react'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import Drawler from '@/components/Menu'
@@ -24,6 +23,7 @@ import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteDepartPersonal } from '@/utils/services/departPersonal.service'
 import { TableContainer, Thead } from '@/components/ui'
+import DepartPersonalModal from '../components/DepartPesonalAddModal'
 
 interface DepartPersonal {
     id: number
@@ -46,7 +46,7 @@ const AdminPanel = () => {
     })
 
     // const { data: departPersonalData } = useApi<DepartPersonal[]>('departPersonal')
-    const { data: departPersonalData } = useApi<DepartPersonal[]>('departPersonal', {
+    const { data: departPersonalData, isLoading } = useApi<DepartPersonal[]>('departPersonal', {
         status: selectedStatus,
     })
 
@@ -120,7 +120,7 @@ const AdminPanel = () => {
                             Добавить
                         </Button>
                     </Box>
-                    <TableContainer>
+                    <TableContainer isLoading={isLoading}>
                         <Table variant="simple">
                             <Thead>
                                 <Tr>

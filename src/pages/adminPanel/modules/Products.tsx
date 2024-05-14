@@ -45,7 +45,7 @@ const AdminPanel = () => {
         fetcher: () => getAllBakingFacilityUnits(),
     })
 
-    const { data: productsData } = useApi<Product[]>('product', filters)
+    const { data: productsData, isLoading } = useApi<Product[]>('product', filters)
 
     
     const [selectedData, setSelectedData] = useState<Product>()
@@ -172,7 +172,7 @@ const AdminPanel = () => {
                         Добавить
                     </Button>
                 </Box>
-                <TableContainer maxWidth={'100%'} width={'100%'}>
+                <TableContainer maxWidth={'100%'} width={'100%'} isLoading={isLoading}>
                     <Table variant="simple">
                         <Thead>
                             <Tr>

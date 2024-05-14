@@ -18,14 +18,15 @@ import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { updateDispatchQuantity } from '@/utils/services/dispatch.service'
 
-interface Dispatch {
+interface DispatchData {
     id: number
     clientId: number
     createdAt: Date
-    dispatch: string
+    dispatch: number
     goodsDispatchDetails: [
         {
             id: number
+            price: number
             productId: number
             quantity: number
             product: {
@@ -49,7 +50,7 @@ interface EditModalInputs {
 }
 
 interface EditModalProps {
-    data: Dispatch | undefined
+    data: DispatchData | undefined
     isOpen: boolean
     onClose: () => void
 }

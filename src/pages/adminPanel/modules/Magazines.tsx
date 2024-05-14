@@ -48,7 +48,7 @@ const AdminPanel = () => {
     const [filters, setFilters] = useState({ name: '', clientId: '', status: '' })
     // const { data: magazinesData } = useApi<Magazines[]>('magazines')
 
-    const { data: magazinesData } = useApi<Magazines[]>('magazines', filters)
+    const { data: magazinesData, isLoading } = useApi<Magazines[]>('magazines', filters)
     const { data: clientsData } = useApi<Client[]>('client')
 
     console.log(filters)
@@ -175,7 +175,7 @@ const AdminPanel = () => {
                         Добавить
                     </Button>
                 </Box>
-                <TableContainer maxWidth={'100%'} width={'100%'}>
+                <TableContainer maxWidth={'100%'} width={'100%'} isLoading={isLoading}>
                     <Table variant="simple">
                         <Thead>
                             <Tr>

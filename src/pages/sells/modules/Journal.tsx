@@ -1,6 +1,6 @@
 import { Box, Button, Avatar, Select } from '@chakra-ui/react'
 import Drawler from '@/components/Menu'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
     SELLS_INVOICE_ROUTE,
     SELLS_DEBT_ACCOUNTING_ROUTE,
@@ -14,6 +14,7 @@ import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 
 import UniversalComponent from '@/components/ui/UniversalComponent'
+// import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface FacilityUnit {
     id: number
@@ -42,6 +43,7 @@ interface Product {
 }
 
 const JournalPage = () => {
+    // const {getURLs, getParam} = useURLParameters()
     const navigate = useNavigate()
 
     const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
@@ -50,21 +52,11 @@ const JournalPage = () => {
 
     // console.log(facilityUnitsData, clientsData, productData)
 
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-    })
-
     const [selectedFacilityUnit, setFacilityUnit] = useState('')
     const [selectedClient, setClient] = useState('')
     const [selectedProduct, setProduct] = useState('')
 
     console.log(selectedFacilityUnit, selectedClient, selectedProduct)
-
-    useEffect(() => {
-        console.log(selectionRange.startDate)
-        console.log(selectionRange.endDate)
-    }, [selectionRange])
 
     return (
         <>
@@ -112,13 +104,10 @@ const JournalPage = () => {
                     height="100vh"
                     p={5}
                 >
-                    <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+                    <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                             {/* <DateRangePicker></DateRangePicker> */}
-                            <DateRange
-                                selectionRange={selectionRange}
-                                setSelectionRange={setSelectionRange}
-                            />
+                            <DateRange />
                             <Select
                                 placeholder="Цехи"
                                 width={'90%'}
@@ -154,12 +143,11 @@ const JournalPage = () => {
                             </Select>
                         </Box>
                     </Box>
-                    <Box height={'calc(95% - 2.5rem)'} position={'relative'}>
+                    <Box position={'relative'}>
                         <ListTable
                             facilityUnit={selectedFacilityUnit}
                             client={selectedClient}
                             product={selectedProduct}
-                            dateRange={selectionRange}
                             status="0"
                         />
                     </Box>

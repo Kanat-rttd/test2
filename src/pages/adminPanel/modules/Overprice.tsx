@@ -59,7 +59,7 @@ const AdminPanel = () => {
         console.log(selectionRange.endDate)
     }, [selectionRange])
 
-    const { data: overPriceData } = useApi<OverPrice[]>('overPrice', {
+    const { data: overPriceData, isLoading } = useApi<OverPrice[]>('overPrice', {
         name: selectedClient,
         startDate: String(selectionRange.startDate),
         endDate: String(selectionRange.endDate),
@@ -152,7 +152,7 @@ const AdminPanel = () => {
                         Добавить
                     </Button>
                 </Box>
-                <TableContainer maxWidth={'100%'} width={'100%'}>
+                <TableContainer maxWidth={'100%'} width={'100%'} isLoading={isLoading}>
                     <Table variant="simple">
                         <Thead>
                             <Tr>

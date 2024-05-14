@@ -43,7 +43,7 @@ const AdminPanel = () => {
     //     fetcher: () => getAllUsers(selectedStatus),
     // })
 
-    const { data: usersData } = useApi<User[]>('user', {
+    const { data: usersData, isLoading } = useApi<User[]>('user', {
         status: selectedStatus,
     })
 
@@ -138,7 +138,7 @@ const AdminPanel = () => {
                         Добавить
                     </Button>
                 </Box>
-                <TableContainer>
+                <TableContainer isLoading={isLoading}>
                     <Table variant="simple">
                         <Thead>
                             <Tr>

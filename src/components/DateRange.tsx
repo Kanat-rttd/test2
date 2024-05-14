@@ -1,88 +1,121 @@
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
 import ru from 'date-fns/locale/ru'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { DateRangePicker, RangeKeyDict } from 'react-date-range'
 import {
-    Input,
     Popover,
     PopoverBody,
     PopoverContent,
     PopoverTrigger,
     Button,
+    Text,
+    Box,
+    useDisclosure,
+    Portal,
+    PopoverArrow,
 } from '@chakra-ui/react'
 import dayjs from 'dayjs'
-import { defaultStaticRanges } from '../pages/finance/helpers/defaultDateRange'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { staticRanges } from '@/utils/constants/staticRanges'
 
-interface DateRangeProps {
-    setSelectionRange: (range: { startDate: Date; endDate: Date }) => void
-    selectionRange: {
-        startDate: Date
-        endDate: Date
+const DateRange = () => {
+    const { setParamObject, getParam } = useURLParameters()
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const [selectionRange, setSelectionRange] = useState({
+        startDate: dayjs(getParam('startDate')).isValid()
+            ? dayjs(getParam('startDate')).toDate()
+            : dayjs().startOf('month').toDate(),
+        endDate: dayjs(getParam('endDate')).isValid()
+            ? dayjs(getParam('endDate')).toDate()
+            : dayjs().endOf('month').toDate(),
+    })
+
+    useEffect(() => {
+        setParamObject({
+            startDate: dayjs(selectionRange.startDate).format('YYYY-MM-DD'),
+            endDate: dayjs(selectionRange.endDate).format('YYYY-MM-DD'),
+        })
+    }, [])
+
+    const handleConfirmDate = () => {
+        onClose()
+        setParamObject({
+            startDate: dayjs(selectionRange.startDate).format('YYYY-MM-DD'),
+            endDate: dayjs(selectionRange.endDate).format('YYYY-MM-DD'),
+        })
     }
-}
 
-const DateRange = ({ setSelectionRange, selectionRange }: DateRangeProps) => {
-    const [tempSelectionRange, setTempSelectionRange] = useState(selectionRange)
-    const [isOpen, setIsOpen] = useState(false)
+    const handleCancelDate = () => {
+        onClose()
+    }
 
-    const handleSelectDate = (ranges: RangeKeyDict) => {
-        console.log('test')
-        console.log(ranges)
+    const handleSelect = (ranges: RangeKeyDict) => {
         if (ranges.range1.startDate && ranges.range1.endDate) {
-            setTempSelectionRange({
+            setSelectionRange({
                 startDate: ranges.range1.startDate,
                 endDate: ranges.range1.endDate,
             })
         }
     }
 
-    const handleConfirmDate = () => {
-        setSelectionRange(tempSelectionRange)
-        setIsOpen(false)
-    }
-
-    const handleCancelDate = () => {
-        setTempSelectionRange(selectionRange)
-        setIsOpen(false)
-    }
+    const formattedDate = useMemo(
+        () =>
+            `${dayjs(selectionRange.startDate).format('DD.MM.YYYY')} - ${dayjs(
+                selectionRange.endDate,
+            ).format('DD.MM.YYYY')}`,
+        [selectionRange],
+    )
 
     return (
-        <Popover isOpen={isOpen} onClose={() => setIsOpen(false)}>
+        <Popover isOpen={isOpen} onClose={onClose}>
             <PopoverTrigger>
-                <Input
-                    width={'100%'}
-                    textAlign={'center'}
-                    value={
-                        dayjs(tempSelectionRange.startDate).format('DD.MM.YYYY') +
-                        ' - ' +
-                        dayjs(tempSelectionRange.endDate).format('DD.MM.YYYY')
-                    }
-                    onClick={() => setIsOpen(true)}
-                />
+<Box
+    onClick={onOpen}
+    maxWidth="250px"
+    backgroundColor="white"
+    cursor="pointer"
+    minWidth="fit-content"
+    display="flex"
+    alignItems="center"
+    padding="0.2rem 1.5rem"
+    height={'40px'}
+    borderRadius={5}
+    border="1px solid"
+    borderColor="inherit"
+    justifyContent="center"
+>
+    <Text size="sm">{formattedDate}</Text>
+</Box>
             </PopoverTrigger>
-            <PopoverContent>
-                <PopoverBody>
-                    <DateRangePicker
-                        className="dateRangePicker"
-                        onChange={handleSelectDate}
-                        ranges={[tempSelectionRange]}
-                        months={2}
-                        direction="horizontal"
-                        showMonthAndYearPickers={false}
-                        monthDisplayFormat="LLLL"
-                        weekdayDisplayFormat="EEEEE"
-                        locale={ru}
-                        rangeColors={['#92D3D6']}
-                        showDateDisplay={false}
-                        editableDateInputs={false}
-                        inputRanges={[]}
-                        staticRanges={defaultStaticRanges}
-                    />
-                    <Button onClick={handleConfirmDate}>Принять</Button>
-                    <Button onClick={handleCancelDate}>Отмена</Button>
-                </PopoverBody>
-            </PopoverContent>
+            <Portal>
+                <PopoverContent width="fit-content">
+                    <PopoverArrow />
+                    <PopoverBody>
+                        <DateRangePicker
+                            className="dateRangePicker"
+                            onChange={handleSelect}
+                            ranges={[selectionRange]}
+                            months={1}
+                            direction="vertical"
+                            showMonthAndYearPickers={false}
+                            monthDisplayFormat="LLLL"
+                            weekdayDisplayFormat="EEEEE"
+                            locale={ru}
+                            rangeColors={['#92D3D6']}
+                            showDateDisplay={false}
+                            editableDateInputs={false}
+                            inputRanges={[]}
+                            staticRanges={staticRanges}
+                        />
+                    </PopoverBody>
+                    <Box textAlign={'right'} padding={'5px'}>
+                        <Button onClick={handleConfirmDate} mr={'10px'}>Принять</Button>
+                        <Button onClick={handleCancelDate}>Отмена</Button>
+                    </Box>
+                </PopoverContent>
+            </Portal>
         </Popover>
     )
 }

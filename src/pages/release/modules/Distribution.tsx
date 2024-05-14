@@ -18,7 +18,7 @@ import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
 import DistributionModal from '../components/DistributionModal'
 import DateRange from '@/components/DateRange'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useApi } from '@/utils/services/axios'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 
@@ -31,19 +31,19 @@ const Distribution = () => {
     const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-    })
+    // const [selectionRange, setSelectionRange] = useState({
+    //     startDate: new Date(),
+    //     endDate: new Date(),
+    // })
 
     const [selectedFacilityUnit, setSelectedFacilityUnit] = useState('')
 
     const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
 
-    useEffect(() => {
-        console.log(selectionRange.startDate)
-        console.log(selectionRange.endDate)
-    }, [selectionRange])
+    // useEffect(() => {
+    //     console.log(selectionRange.startDate)
+    //     console.log(selectionRange.endDate)
+    // }, [selectionRange])
 
     const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedFacilityUnit(event.target.value)
@@ -92,10 +92,7 @@ const Distribution = () => {
                     justifyContent={'space-between'}
                 >
                     <Box display={'flex'} gap={'15px'} width={'100%'}>
-                        <DateRange
-                            selectionRange={selectionRange}
-                            setSelectionRange={setSelectionRange}
-                        ></DateRange>
+                        <DateRange />
                         <Select
                             placeholder="Цехи"
                             width={'fit-content'}
@@ -124,7 +121,7 @@ const Distribution = () => {
                             <TabPanel height={'100%'}>
                                 <ListTable
                                     facilityUnit={selectedFacilityUnit}
-                                    dateRange={selectionRange}
+                                    // dateRange={selectionRange}
                                     status="0"
                                 />
                             </TabPanel>

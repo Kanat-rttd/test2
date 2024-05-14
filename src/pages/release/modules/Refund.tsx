@@ -1,4 +1,3 @@
-import DateRangePicker from '@/components/DateRangePicker'
 import Drawler from '@/components/Menu'
 import { RELEASE_DISTRIBUTION_ROUTE, RELEASE_REFUND_ROUTE } from '@/utils/constants/routes.consts'
 import {
@@ -17,6 +16,7 @@ import { useNavigate } from 'react-router-dom'
 import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
 import DistributionModal from '../components/DistributionModal'
+import DateRange from '@/components/DateRange'
 
 const Refund = () => {
     const handleSuccess = () => {
@@ -58,7 +58,7 @@ const Refund = () => {
             <Box width={'100%'} height={'100%'} p={5}>
                 <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        <DateRangePicker></DateRangePicker>
+                        <DateRange />
                         <Select placeholder="Цехи" width={'fit-content'}>
                             <option value="Лепешечный">Лепешечный</option>
                             <option value="Булочный">Булочный</option>
@@ -80,7 +80,7 @@ const Refund = () => {
                             <TabPanel>
                                 <ListTable
                                     facilityUnit={'0'}
-                                    dateRange={{ startDate: new Date(), endDate: new Date() }}
+                                    // dateRange={{ startDate: new Date(), endDate: new Date() }}
                                     status="0"
                                 />
                             </TabPanel>

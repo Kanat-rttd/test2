@@ -5,15 +5,17 @@ import EditModal from './EditModal'
 import { useState } from 'react'
 import dayjs from 'dayjs'
 import { useApi } from '@/utils/services/axios'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
-interface Dispatch {
+interface DispatchData {
     id: number
     clientId: number
     createdAt: Date
-    dispatch: string
+    dispatch: number
     goodsDispatchDetails: [
         {
             id: number
+            price: number
             productId: number
             quantity: number
             product: {
@@ -31,28 +33,37 @@ interface Dispatch {
         name: string
     }
 }
+type Dispatch = {
+    data: DispatchData[]
+    totalPrice: number
+    totalQuantity: number
+}
 
 interface ListTableProps {
     status: string
     facilityUnit: string
-    dateRange: {
-        startDate: Date
-        endDate: Date
-    }
+    // dateRange: {
+    //     startDate: Date
+    //     endDate: Date
+    // }
 }
 
-export default function ListTable({ facilityUnit, dateRange, status }: ListTableProps) {
+export default function ListTable({ facilityUnit, status }: ListTableProps) {
+    const { getURLs } = useURLParameters()
     console.log(status)
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const [selectedData, setSelectedData] = useState<Dispatch>()
+    const [selectedData, setSelectedData] = useState<DispatchData>()
 
-    const { data: dispatchesData } = useApi<Dispatch[]>('release', {
-        startDate: String(dateRange?.startDate),
-        endDate: String(dateRange?.endDate),
-        facilityUnit: facilityUnit,
-    })
+    // const { data: dispatchesData } = useApi<Dispatch[]>('release', {
+    //     startDate: String(dateRange?.startDate),
+    //     endDate: String(dateRange?.endDate),
+    //     facilityUnit: facilityUnit,
+    // })
 
+    const { data: dispatchesData } = useApi<Dispatch>(
+        `release?${getURLs().toString()}&facilityUnit=${facilityUnit}`,
+    )
     console.log(dispatchesData)
 
     const [modal, setModal] = useState({
@@ -75,7 +86,7 @@ export default function ListTable({ facilityUnit, dateRange, status }: ListTable
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {dispatchesData?.map((row) => {
+                        {dispatchesData?.data.map((row) => {
                             return (
                                 <Tr key={row.id}>
                                     <Td>{row.id}</Td>

@@ -1,24 +1,14 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import {
-    Table,
-    TableContainer,
-    Tbody,
-    Td,
-    Th,
-    Thead,
-    Tr,
-    useDisclosure,
-    Tfoot,
-    Box,
-    IconButton,
-} from '@chakra-ui/react'
+import { Table, Tbody, Td, Th, Tr, useDisclosure, IconButton } from '@chakra-ui/react'
 import { useState } from 'react'
 import EditModal from './EditModal'
-import { mutate } from 'swr'
+// import { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'
 import { deleteDispatch } from '@/utils/services/dispatch.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { TableContainer, Tfoot, Thead } from '@/components/ui'
 
 interface DispatchData {
     data: Dispatch[]
@@ -55,34 +45,25 @@ interface ListTableProps {
     facilityUnit: string
     client: string
     product: string
-    dateRange: {
-        startDate: Date
-        endDate: Date
-    }
     status: string
 }
 
-const ListTable: React.FC<ListTableProps> = ({
-    facilityUnit,
-    client,
-    product,
-    dateRange,
-    status,
-}) => {
+const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, status }) => {
+    const { getURLs, getParam } = useURLParameters()
     const { loading } = useNotify()
     // const [data, setData] = useState<Dispatch[]>([])
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const [selectedRow, setSelectedRow] = useState<Dispatch | null>(null)
 
-    console.log('facilityUnit', dateRange)
+    console.log('facilityUnit', getURLs())
 
     const { data: dispatchData, mutate: mutateDispatchData } = useApi<DispatchData>('release', {
         facilityUnit,
         client,
         product,
-        startDate: String(dateRange?.startDate),
-        endDate: String(dateRange?.endDate),
+        startDate: String(getParam('startDate')),
+        endDate: String(getParam('endDate')),
     })
 
     console.log(dispatchData)
@@ -123,7 +104,7 @@ const ListTable: React.FC<ListTableProps> = ({
 
     return (
         <>
-            <TableContainer overflowY={'auto'} height={'90%'}>
+            <TableContainer>
                 <Table variant="simple" width={'100%'}>
                     <Thead>
                         <Tr position={'sticky'} top={0} backgroundColor={'white'}>
@@ -190,7 +171,7 @@ const ListTable: React.FC<ListTableProps> = ({
                                                 ))}
                                             </div>
                                         </Td>
-                                        <Td style={{ display: 'flex', gap: '10px' }}>
+                                        <Td>
                                             <IconButton
                                                 variant="outline"
                                                 size={'sm'}
@@ -219,10 +200,6 @@ const ListTable: React.FC<ListTableProps> = ({
                                 )
                             })}
                     </Tbody>
-                </Table>
-            </TableContainer>
-            <Box bottom={0} position={'absolute'} width={'100%'}>
-                <Table variant="simple" width={'100%'}>
                     <Tfoot>
                         <Tr>
                             <Th fontSize={15} color={'#000'} width={'15%'}>
@@ -241,7 +218,7 @@ const ListTable: React.FC<ListTableProps> = ({
                         </Tr>
                     </Tfoot>
                 </Table>
-            </Box>
+            </TableContainer>
             <EditModal
                 isOpen={modal.isOpen}
                 onClose={handleModalClose}
