@@ -7,11 +7,9 @@ import {
     IconButton,
     Select,
     Table,
-    TableContainer,
     Tbody,
     Td,
     Th,
-    Thead,
     Tr,
     useDisclosure,
 } from '@chakra-ui/react'
@@ -24,6 +22,7 @@ import { useApi } from '@/utils/services/axios'
 import { deleteProviderGoods } from '@/utils/services/providerGoods.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { mutate } from 'swr'
+import { TableContainer, Thead } from '@/components/ui'
 
 interface ProviderGoods {
     id: number
@@ -107,7 +106,7 @@ const AdminProvider = () => {
             </Box>
 
             <Box width={'100%'} height={'100%'} p={5}>
-                <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+                <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <Select
                             name="status"
@@ -124,9 +123,7 @@ const AdminProvider = () => {
                         Добавить
                     </Button>
                 </Box>
-            </Box>
 
-            <Box padding={10}>
                 <TableContainer>
                     <Table variant="simple">
                         <Thead>

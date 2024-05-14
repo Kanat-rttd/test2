@@ -1,7 +1,5 @@
 import {
-    TableContainer,
     Table,
-    Thead,
     Tr,
     Th,
     Tbody,
@@ -29,6 +27,7 @@ import Dialog from '@/components/Dialog'
 import { ADMIN_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import { useApi } from '@/utils/services/axios'
 import { FacilityUnit, Product } from '@/utils/types/product.types'
+import { TableContainer, Thead } from '@/components/ui'
 
 enum Status {
     ACTIVE = 0,
@@ -115,7 +114,7 @@ const AdminPanel = () => {
                 justifyContent={'space-between'}
                 flexDirection={'row'}
                 backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                p={"0.5rem 1rem"}
+                p={"0 1rem"}
             >
                 <Box width={'100%'}>
                     <Drawler></Drawler>
@@ -130,8 +129,8 @@ const AdminPanel = () => {
                 <Avatar bg="teal.500" />
             </Box>
 
-            <Box display="flex" flexDirection="column" height="100vh" p={5}>
-                <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+            <Box display="flex" flexDirection="column" p={5}>
+                <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <Select
                             placeholder="Наименование"

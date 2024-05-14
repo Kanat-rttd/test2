@@ -1,7 +1,5 @@
 import {
-    TableContainer,
     Table,
-    Thead,
     Tr,
     Th,
     Tbody,
@@ -26,6 +24,7 @@ import { deleteUser } from '@/utils/services/user.service'
 import Drawler from '@/components/Menu'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { User } from '@/utils/types/user.types'
+import { TableContainer, Thead } from '@/components/ui'
 // import { mutate } from 'swr'
 // import { getAllUsers } from '../../../utils/services/user.service'
 
@@ -123,7 +122,7 @@ const AdminPanel = () => {
             </Box>
 
             <Box display="flex" flexDirection="column" p={5}>
-                <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+                <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <Select
                             placeholder="Статус"

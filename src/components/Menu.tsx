@@ -101,7 +101,9 @@ const Drawler = () => {
                         </DrawerBody>
 
                         <DrawerFooter>
-                            <Link onClick={() => navigate(LOGIN_ROUTE)}>Выход</Link>
+                            <Link onClick={() => {
+                                window.localStorage.removeItem('authToken')
+                                navigate(LOGIN_ROUTE)}}>Выход</Link>
                         </DrawerFooter>
                     </DrawerContent>
                 </Drawer>

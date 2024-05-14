@@ -155,6 +155,11 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                                     value: 10,
                                     message: 'Некорректный номер телефона.',
                                 },
+                                pattern: {
+                                    value: /^\d+$/,
+                                    message:
+                                        'Некорректный номер телефона. Используйте только цифры',
+                                },
                             })}
                         />
                         <FormErrorMessage>{errors.contact?.message}</FormErrorMessage>
@@ -168,7 +173,12 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                                     maxLength: {
                                         value: 20,
                                         message: 'Некорректный Телеграм ID',
-                                    }
+                                    },
+                                    pattern: {
+                                        value: /^\d+$/,
+                                        message:
+                                            'Некорректный Телеграм ID. Используйте только цифры',
+                                    },
                                 })}
                                 autoComplete="off"
                                 placeholder="Телеграм ID *"

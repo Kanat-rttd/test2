@@ -1,7 +1,5 @@
 import {
-    TableContainer,
     Table,
-    Thead,
     Tr,
     Th,
     Tbody,
@@ -11,6 +9,7 @@ import {
     Button,
     Avatar,
     Select,
+    IconButton,
 } from '@chakra-ui/react'
 import OverPriceAddModal from '../components/OverPriceAddModal'
 import { useState, useEffect } from 'react'
@@ -23,6 +22,7 @@ import { useApi } from '@/utils/services/axios'
 import { mutate } from 'swr'
 import { deleteOverprice } from '@/utils/services/overprice.service'
 import DateRange from '@/components/DateRange'
+import { TableContainer, Thead } from '@/components/ui'
 
 interface ClientsFilter {
     clientId: number
@@ -126,8 +126,8 @@ const AdminPanel = () => {
                 <Avatar bg="teal.500" />
             </Box>
 
-            <Box display="flex" flexDirection="column" height="100vh" p={5}>
-                <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+            <Box display="flex" flexDirection="column" p={5}>
+                <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <Select
                             placeholder="Имя"
@@ -174,18 +174,24 @@ const AdminPanel = () => {
                                         <Td>{overData.month}</Td>
                                         <Td>{overData.year}</Td>
                                         <Td>
-                                            <EditIcon
-                                                boxSize={'1.5em'}
-                                                cursor={'pointer'}
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
                                                 onClick={() => {
                                                     setSelectedData(overData)
                                                     onOpen()
                                                 }}
+                                                icon={<EditIcon />}
                                             />
-                                            <DeleteIcon
-                                                boxSize={'1.5em'}
-                                                color={'red'}
-                                                cursor={'pointer'}
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
                                                 onClick={() => {
                                                     setSelectedData(overData)
                                                     setDialog({
@@ -193,6 +199,7 @@ const AdminPanel = () => {
                                                         isOpen: true,
                                                     })
                                                 }}
+                                                icon={<DeleteIcon />}
                                             />
                                         </Td>
                                     </Tr>

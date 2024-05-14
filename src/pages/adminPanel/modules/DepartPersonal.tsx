@@ -1,7 +1,5 @@
 import {
-    TableContainer,
     Table,
-    Thead,
     Tr,
     Th,
     Tbody,
@@ -25,6 +23,7 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteDepartPersonal } from '@/utils/services/departPersonal.service'
+import { TableContainer, Thead } from '@/components/ui'
 
 interface DepartPersonal {
     id: number
@@ -105,7 +104,7 @@ const AdminPanel = () => {
                     <Avatar w={'36px'} h={'36px'} bg="teal.500" m={'0.5rem 0.5rem'} />
                 </Box>
                 <Box display="flex" flexDirection="column" height="100vh" p={5}>
-                    <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+                    <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                             <Select
                                 placeholder="Статус"

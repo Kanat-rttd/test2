@@ -7,7 +7,6 @@ import {
     Box,
     Button,
     Table,
-    TableContainer,
     Tbody,
     Th,
     Thead,
@@ -34,6 +33,7 @@ import {
 
 import { getAllClients } from '@/utils/services/client.service'
 import { useApi } from '@/utils/services/axios'
+import { TableContainer } from '@/components/ui'
 
 interface Client {
     id: string
@@ -154,7 +154,16 @@ const AdminPanel = () => {
                             <Text>Реализатор</Text>
                             <Text>Время изменения</Text>
                         </Box>
-                        <Accordion>
+                        <Accordion
+                            style={{
+                                height: '100%',
+                                width: '100%',
+                                overflowX: 'auto',
+                                overflowY: 'auto',
+                                maxHeight: '77dvh',
+                                minHeight: '77dvh',
+                            }}
+                        >
                             {inPriceData?.map((item, index) => {
                                 return (
                                     <AccordionItem key={index}>

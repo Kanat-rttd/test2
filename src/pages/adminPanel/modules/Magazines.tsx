@@ -1,7 +1,5 @@
 import {
-    TableContainer,
     Table,
-    Thead,
     Tr,
     Th,
     Tbody,
@@ -23,6 +21,7 @@ import { mutate, useApi } from '@/utils/services/axios'
 import MagazineAddModal from '../components/MagazineAddModal'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteMagazines } from '@/utils/services/magazines.service'
+import { TableContainer, Thead } from '@/components/ui'
 
 interface Magazines {
     id: number
@@ -134,8 +133,8 @@ const AdminPanel = () => {
                 <Avatar bg="teal.500" />
             </Box>
 
-            <Box display="flex" flexDirection="column" height="100vh" p={5}>
-                <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+            <Box display="flex" flexDirection="column" p={5}>
+                <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <Select
                             placeholder="Магазины"
@@ -184,8 +183,9 @@ const AdminPanel = () => {
                                 <Th>Магазин</Th>
                                 <Th>Реализатор</Th>
                                 <Th>Статус</Th>
+                                <Th>Действия</Th>
                             </Tr>
-                        </Thead>
+                        </Thead> 
                         <Tbody>
                             {magazinesData?.map((item, index) => {
                                 return (

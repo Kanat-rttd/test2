@@ -8,11 +8,9 @@ import {
     IconButton,
     Select,
     Table,
-    TableContainer,
     Tbody,
     Td,
     Th,
-    Thead,
     Tr,
     useDisclosure,
 } from '@chakra-ui/react'
@@ -24,6 +22,7 @@ import useSWR, { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'
 import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { Thead,TableContainer } from '@/components/ui'
 
 const AdminPanel = () => {
     const { loading } = useNotify()
@@ -31,7 +30,7 @@ const AdminPanel = () => {
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Releaser | undefined>(undefined)
     const [filters, setFilters] = useState({ name: '', telegrammId: '', status: '' })
-    const { data: clientsData } = useApi<Releaser[]>('client', filters)
+    const { data: clientsData, isLoading } = useApi<Releaser[]>('client', filters)
     const { data: filtersData } = useSWR<Releaser[]>('clientFilter', {
         fetcher: () => getAllClients({ name: '', telegrammId: '', status: '' }),
     })
@@ -108,7 +107,7 @@ const AdminPanel = () => {
                 </Box>
 
                 <Box width={'100%'} height={'100%'} p={5}>
-                    <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+                    <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                             <Select
                                 name="name"
@@ -150,10 +149,10 @@ const AdminPanel = () => {
                         </Button>
                     </Box>
                     <Box>
-                        <TableContainer>
+                        <TableContainer isLoading={isLoading}>
                             <Table variant="simple">
                                 <Thead>
-                                    <Tr>
+                                    <Tr top={0} position={'sticky'} backgroundColor={'white'}>
                                         <Th>№</Th>
                                         <Th>Имя</Th>
                                         <Th>Фамилия</Th>
@@ -163,7 +162,7 @@ const AdminPanel = () => {
                                         <Th>Действия</Th>
                                     </Tr>
                                 </Thead>
-                                <Tbody>
+                                <Tbody height={'70%'} overflowY={'scroll'}>
                                     {clientsData?.map((user, index) => {
                                         const ordinalNumber: number = index + 1
                                         return (
