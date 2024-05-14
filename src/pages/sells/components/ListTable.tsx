@@ -12,7 +12,6 @@ import {
     Tfoot,
     Box,
     IconButton,
-    Center,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import EditModal from './EditModal'
