@@ -73,7 +73,6 @@ const ListTable: React.FC<ListTableProps> = ({
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const [selectedRow, setSelectedRow] = useState<Dispatch | null>(null)
-    const [maxProductHeight, setMaxProductHeight] = useState<number>(0)
 
     console.log('facilityUnit', dateRange)
 
@@ -121,13 +120,6 @@ const ListTable: React.FC<ListTableProps> = ({
         }
     }
 
-    const calculateMaxProductHeight = (row: Dispatch) => {
-        const maxProductContentHeight = row.goodsDispatchDetails.length * 36
-        if (maxProductContentHeight > maxProductHeight) {
-            setMaxProductHeight(maxProductContentHeight)
-        }
-    }
-
     return (
         <>
             <TableContainer overflowY={'auto'} height={'90%'}>
@@ -147,7 +139,7 @@ const ListTable: React.FC<ListTableProps> = ({
                         {dispatchData?.data
                             ?.filter((row: Dispatch) => row.dispatch == status)
                             ?.map((row, index) => {
-                                calculateMaxProductHeight(row)
+                                // calculateMaxProductHeight(row)
                                 return (
                                     <Tr key={row.id}>
                                         <Td>{index + 1}</Td>
@@ -202,7 +194,7 @@ const ListTable: React.FC<ListTableProps> = ({
                                             style={{
                                                 display: 'flex',
                                                 gap: '10px',
-                                                height: maxProductHeight,
+                                                height: 56.8 + row.goodsDispatchDetails.length * 8,
                                                 alignItems: 'center',
                                             }}
                                         >
