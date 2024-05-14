@@ -15,7 +15,6 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import EditModal from './EditModal'
-import { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'
 import { deleteDispatch } from '@/utils/services/dispatch.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
