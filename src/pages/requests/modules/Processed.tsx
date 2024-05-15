@@ -57,11 +57,11 @@ const ProcessedPage = () => {
     useEffect(() => {
         if (salesData) {
             setSalesData(salesData)
-            console.log(salesData);
+            console.log(salesData)
         }
     }, [])
 
-    console.log(getSalesData);
+    console.log(getSalesData)
 
     const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         console.log(target.value)
@@ -78,51 +78,54 @@ const ProcessedPage = () => {
     }
 
     return (
-        <UniversalComponent>
-            <Header>
-                <Button
-                    height={'100%'}
-                    width={'20%'}
-                    onClick={() => navigate(REQUEST_PROCESSING_ROUTE)}
-                >
-                    Обработка
-                </Button>
-                <Button height={'100%'} width={'20%'} bg={'rgba(217, 217, 217, 1)'}>
-                    Обработанные
-                </Button>
-            </Header>
+        <Box overflowY={'hidden'}>
+            <UniversalComponent>
+                <Header>
+                    <Button
+                        height={'100%'}
+                        width={'20%'}
+                        onClick={() => navigate(REQUEST_PROCESSING_ROUTE)}
+                    >
+                        Обработка
+                    </Button>
+                    <Button height={'100%'} width={'20%'} bg={'rgba(217, 217, 217, 1)'}>
+                        Обработанные
+                    </Button>
+                </Header>
 
-            <Box width={'100%'} p={5}>
-                <Box
-                    marginBottom={10}
-                    height={'5%'}
-                    display={'flex'}
-                    justifyContent={'space-between'}
-                >
-                    <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        <DateRange />
-                        <Select
-                            variant="filled"
-                            placeholder="Тип цеха"
-                            name="bakingFacilityUnitId"
-                            onChange={handleChange}
-                            width={'100%'}
-                        >
-                            {facilityUnits?.map((unit, index) => {
-                                return (
-                                    <option key={index} value={unit.id}>
-                                        {unit.facilityUnit}
-                                    </option>
-                                )
-                            })}
-                        </Select>
+                <Box width={'100%'} p={5}>
+                    <Box
+                        marginBottom={6}
+                        height={'5%'}
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                    >
+                        <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                            <DateRange />
+                            <Select
+                                placeholder="Тип цеха"
+                                name="bakingFacilityUnitId"
+                                size={'sm'}
+                                borderRadius={5}
+                                onChange={handleChange}
+                                width={'100%'}
+                            >
+                                {facilityUnits?.map((unit, index) => {
+                                    return (
+                                        <option key={index} value={unit.id}>
+                                            {unit.facilityUnit}
+                                        </option>
+                                    )
+                                })}
+                            </Select>
+                        </Box>
+                    </Box>
+                    <Box height={'calc(95% - 2.5rem)'}>
+                        <TableData data={getSalesData.filter((sale) => sale.done === 1)} />
                     </Box>
                 </Box>
-                <Box height={'calc(95% - 2.5rem)'}>
-                    <TableData data={getSalesData.filter((sale) => sale.done === 1)} />
-                </Box>
-            </Box>
-        </UniversalComponent>
+            </UniversalComponent>
+        </Box>
     )
 }
 

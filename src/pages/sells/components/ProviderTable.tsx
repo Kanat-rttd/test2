@@ -25,7 +25,7 @@ const ProviderTable = () => {
     return (
         <>
             <Box width={'25%'} marginBottom={5}>
-                <Select placeholder="Реализатор">
+                <Select placeholder="Реализатор" size={'sm'} borderRadius={5} width={'80%'}>
                     <option>Реализатор</option>
                 </Select>
             </Box>

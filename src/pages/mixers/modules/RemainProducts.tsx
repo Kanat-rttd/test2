@@ -46,9 +46,9 @@ const RemainProducts = () => {
             </Header>
 
             <Box display="flex" flexDirection="column" p={5}>
-                <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+                <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        <Select placeholder="Название" width={'fit-content'} name="status">
+                        <Select size={'md'} borderRadius={5} placeholder="Название" width={'fit-content'} name="status">
                             <option value="1">Активен</option>
                             <option value="0">Приостановлен</option>
                         </Select>

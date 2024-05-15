@@ -69,12 +69,12 @@ const ProcessingPage = () => {
     return (
         <UniversalComponent>
             <Header>
-                <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'20%'}>
+                <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'15%'}>
                     Обработка
                 </Button>
                 <Button
                     height={'100%'}
-                    width={'20%'}
+                    width={'15%'}
                     onClick={() => navigate(REQUEST_PROCESSED_ROUTE)}
                 >
                     Обработанные
@@ -83,7 +83,7 @@ const ProcessingPage = () => {
 
             <Box width={'100%'} height={'94%'} p={5}>
                 <Box
-                    marginBottom={10}
+                    marginBottom={5}
                     height={'5%'}
                     display={'flex'}
                     justifyContent={'space-between'}
@@ -92,7 +92,7 @@ const ProcessingPage = () => {
                         <DateRange />
                     </Box>
                 </Box>
-                <Box height={'calc(95% - 2.5rem)'}>
+                <Box>
                     {salesData && (
                         <AccordionClients
                             data={salesData.filter((sale) => sale.done === 0)}

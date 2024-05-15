@@ -100,22 +100,41 @@ const InvoicePage = () => {
                 </Header>
 
                 <Box width={'100%'} height={'100%'} p={5}>
-                    <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+                    <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                             <DateRange />
-                            <Select placeholder="Реализатор" width={'fit-content'}>
+                            <Select
+                                placeholder="Реализатор"
+                                width={'fit-content'}
+                                size={'sm'}
+                                borderRadius={5}
+                            >
                                 <option value="Лепешечный">Лепешечный</option>
                                 <option value="Булочный">Булочный</option>
                                 <option value="Заварной">Заварной</option>
                             </Select>
-                            <Select placeholder="Статус" width={'fit-content'}>
+                            <Select
+                                placeholder="Статус"
+                                width={'fit-content'}
+                                size={'sm'}
+                                borderRadius={5}
+                            >
                                 <option value="Лепешечный">Лепешечный</option>
                                 <option value="Булочный">Булочный</option>
                                 <option value="Заварной">Заварной</option>
                             </Select>
                         </Box>
                     </Box>
-                    <Box>
+                    <Box
+                        style={{
+                            height: '100%',
+                            width: '100%',
+                            overflowX: 'auto',
+                            overflowY: 'auto',
+                            maxHeight: '75dvh',
+                            minHeight: '75dvh',
+                        }}
+                    >
                         {dispatchesData?.map((row, index) => {
                             const financeTotal = financeTotals?.find(
                                 (item) => item.invoiceNumber === row.invoiceNumber,

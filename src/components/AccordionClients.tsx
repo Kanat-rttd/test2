@@ -51,7 +51,18 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
     }
 
     return (
-        <Accordion defaultIndex={defaultIndex} allowMultiple>
+        <Accordion
+            defaultIndex={defaultIndex}
+            allowMultiple
+            style={{
+                height: '100%',
+                width: '100%',
+                overflowX: 'auto',
+                overflowY: 'auto',
+                maxHeight: '75dvh',
+                minHeight: '75dvh',
+            }}
+        >
             {data?.map((order, index) => (
                 <AccordionItem key={index}>
                     <h2>

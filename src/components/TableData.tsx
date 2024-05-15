@@ -53,12 +53,10 @@ const TableData = ({ data }: { data: OrderArray[] }) => {
             <Table variant="simple">
                 <Thead>
                     <Tr>
-                        <Th fontSize={'15px'}>Реализаторы</Th>
+                        <Th> Реализаторы</Th>
                         {Array.from(uniqProducts).map((name, index) => (
                             <Th
                                 textAlign={'center'}
-                                fontSize={'15px'}
-                                fontWeight={'bold'}
                                 key={index}
                             >
                                 {name}
@@ -69,14 +67,12 @@ const TableData = ({ data }: { data: OrderArray[] }) => {
                 <Tbody>
                     {data.map((item, index) => (
                         <Tr key={index}>
-                            <Td fontSize={'15px'} fontWeight={'bold'}>
+                            <Td >
                                 {item.user.name}
                             </Td>
                             {Array.from(uniqProducts).map((productName, productIndex) => (
                                 <Td
                                     width={'20%'}
-                                    fontSize={'15px'}
-                                    fontWeight={'bold'}
                                     textAlign={'center'}
                                     key={productIndex}
                                 >
@@ -89,10 +85,10 @@ const TableData = ({ data }: { data: OrderArray[] }) => {
                     ))}
                 </Tbody>
                 <Tfoot>
-                    <Tr>
-                        <Th>Итого</Th>
+                    <Tr display={'flex'} justifyContent={'space-between'}>
+                        <Th fontSize={15} color={'#000'} width={'19%'}>Итого</Th>
                         {Array.from(uniqProducts).map((productName, productIndex) => (
-                            <Th width={'15%'} textAlign={'center'} key={productIndex}>
+                            <Th fontSize={15} color={'#000'} width={'21%'} textAlign={'center'} key={productIndex}>
                                 {getColumnTotal(productName)}
                             </Th>
                         ))}

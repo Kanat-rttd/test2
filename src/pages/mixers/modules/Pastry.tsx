@@ -96,7 +96,7 @@ const MixersPage = () => {
 
             <Box width={'100%'} height={'94%'} p={5}>
                 <Box
-                    marginBottom={10}
+                    marginBottom={5}
                     height={'5%'}
                     display={'flex'}
                     justifyContent={'space-between'}
@@ -105,7 +105,9 @@ const MixersPage = () => {
                         <DateRange />
 
                         <Select
-                            variant="filled"
+                            width={'20%'}
+                            size={'sm'}
+                            borderRadius={5}
                             placeholder="Тип цеха"
                             name="bakingFacilityUnitId"
                             onChange={handleChange}
@@ -121,7 +123,6 @@ const MixersPage = () => {
                     </Box>
                 </Box>
                 <Box height={'calc(95% - 2.5rem)'}>
-                    {/* <TableData data={salesData?.filter((sale) => sale.done === 1)} /> */}
                     {salesData && <TableData data={salesData?.filter((sale) => sale.done === 1)} />}
                 </Box>
             </Box>

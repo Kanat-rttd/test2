@@ -54,7 +54,7 @@ const Distribution = () => {
     }
 
     return (
-        <Box overflow={'hidden'}>
+        <Box>
             <UniversalComponent>
                 <Header>
                     <Button
@@ -76,10 +76,10 @@ const Distribution = () => {
 
                 <Box width={'100%'} height={'100%'} p={5}>
                     <Box
-                        marginBottom={10}
+                        marginBottom={'40.5px'}
                         height={'5%'}
                         display={'flex'}
-                        justifyContent={'space-between'}
+                        justifyContent={'space-between'}    
                     >
                         <Box display={'flex'} gap={'15px'} width={'100%'}>
                             <DateRange />

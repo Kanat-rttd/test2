@@ -1,8 +1,8 @@
-import DateRangePicker from '@/components/DateRangePicker'
 import { Box, Button, Select, useDisclosure } from '@chakra-ui/react'
 import ListTable from '../components/ListTable'
 import DistributionModal from '../components/DistributionModal'
 import Header from '@/components/Header'
+import DateRange from '@/components/DateRange'
 
 const shiftAccounting = () => {
     const handleSuccess = () => {
@@ -20,10 +20,10 @@ const shiftAccounting = () => {
             </Header>
 
             <Box width={'100%'} height={'100%'} p={5}>
-                <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+                <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        <DateRangePicker></DateRangePicker>
-                        <Select placeholder="Цехи" width={'fit-content'}>
+                        <DateRange />
+                        <Select size={'sm'} borderRadius={5} placeholder="Цехи" width={'fit-content'}>
                             <option value="Лепешечный">Лепешечный</option>
                             <option value="Булочный">Булочный</option>
                             <option value="Заварной">Заварной</option>

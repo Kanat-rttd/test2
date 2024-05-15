@@ -101,6 +101,8 @@ const JournalPage = () => {
                             <Select
                                 placeholder="Цехи"
                                 width={'90%'}
+                                size={'sm'}
+                                borderRadius={5}
                                 onChange={(e) => setFacilityUnit(e.target.value)}
                             >
                                 {facilityUnitsData?.map((unit, index) => (
@@ -112,6 +114,8 @@ const JournalPage = () => {
                             <Select
                                 placeholder="Реализатор"
                                 width={'90%'}
+                                size={'sm'}
+                                borderRadius={5}
                                 onChange={(e) => setClient(e.target.value)}
                             >
                                 {clientsData?.map((client, index) => (
@@ -123,6 +127,8 @@ const JournalPage = () => {
                             <Select
                                 placeholder="Продукт"
                                 width={'90%'}
+                                size={'sm'}
+                                borderRadius={5}
                                 onChange={(e) => setProduct(e.target.value)}
                             >
                                 {productData?.map((product, index) => (
