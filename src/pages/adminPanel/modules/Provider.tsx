@@ -1,7 +1,5 @@
-import Drawler from '@/components/Menu'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import {
-    Avatar,
     Box,
     Button,
     IconButton,
@@ -23,6 +21,7 @@ import { deleteProviderGoods } from '@/utils/services/providerGoods.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { mutate } from 'swr'
 import { TableContainer, Thead } from '@/components/ui'
+import Header from '@/components/Header'
 
 interface ProviderGoods {
     id: number
@@ -86,24 +85,15 @@ const AdminProvider = () => {
 
     return (
         <>
-            <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_PROVIDER_ROUTE)}
-                        bg={'rgba(217, 217, 217, 1)'}
-                    >
-                        Поставщик товары
-                    </Button>
-                </Box>
-                <Avatar size={'md'} bg="teal.500" />
-            </Box>
+            <Header>
+                <Button
+                    height={'100%'}
+                    onClick={() => navigate(ADMIN_PROVIDER_ROUTE)}
+                    bg={'rgba(217, 217, 217, 1)'}
+                >
+                    Поставщик товары
+                </Button>
+            </Header>
 
             <Box width={'100%'} height={'100%'} p={5}>
                 <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>

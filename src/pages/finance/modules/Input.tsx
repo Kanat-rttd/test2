@@ -9,11 +9,15 @@ import { FINANCE_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
 const Input = () => {
     return (
         <>
+        
             <Box
                 display="flex"
                 justifyContent={'space-between'}
                 flexDirection={'row'}
+                alignItems={'center'}
                 backgroundColor={'rgba(128, 128, 128, 0.1)'}
+                height={'60px'}
+                p={'0 1rem'}
             >
                 <Box width={'100%'}>
                     <Drawler></Drawler>

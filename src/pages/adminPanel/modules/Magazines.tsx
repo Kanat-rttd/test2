@@ -7,13 +7,11 @@ import {
     Box,
     useDisclosure,
     Button,
-    Avatar,
     Select,
     IconButton,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-import Drawler from '@/components/Menu'
 import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
 import { ADMIN_MAGAZINES_ROUTE } from '@/utils/constants/routes.consts'
@@ -22,6 +20,7 @@ import MagazineAddModal from '../components/MagazineAddModal'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteMagazines } from '@/utils/services/magazines.service'
 import { TableContainer, Thead } from '@/components/ui'
+import Header from '@/components/Header'
 
 interface Magazines {
     id: number
@@ -46,7 +45,7 @@ interface Client {
 const AdminPanel = () => {
     const { loading } = useNotify()
     const [filters, setFilters] = useState({ name: '', clientId: '', status: '' })
-    // const { data: magazinesData } = useApi<Magazines[]>('magazines')
+    const { data: magazinesDataForSelect } = useApi<Magazines[]>('magazines')
 
     const { data: magazinesData, isLoading } = useApi<Magazines[]>('magazines', filters)
     const { data: clientsData } = useApi<Client[]>('client')
@@ -113,25 +112,15 @@ const AdminPanel = () => {
 
     return (
         <>
-            <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_MAGAZINES_ROUTE)}
-                        bg={'rgba(217, 217, 217, 1)'}
-                        fontSize={'14px'}
-                    >
-                        Магазины
-                    </Button>
-                </Box>
-                <Avatar bg="teal.500" />
-            </Box>
+            <Header>
+                <Button
+                    height={'100%'}
+                    onClick={() => navigate(ADMIN_MAGAZINES_ROUTE)}
+                    bg={'rgba(217, 217, 217, 1)'}
+                >
+                    Магазины
+                </Button>
+            </Header>
 
             <Box display="flex" flexDirection="column" p={5}>
                 <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
@@ -142,7 +131,7 @@ const AdminPanel = () => {
                             name="name"
                             onChange={handleSelectChange}
                         >
-                            {magazinesData?.map((product, index) => (
+                            {magazinesDataForSelect?.map((product, index) => (
                                 <option key={index} value={product.name}>
                                     {product.name}
                                 </option>
@@ -185,7 +174,7 @@ const AdminPanel = () => {
                                 <Th>Статус</Th>
                                 <Th>Действия</Th>
                             </Tr>
-                        </Thead> 
+                        </Thead>
                         <Tbody>
                             {magazinesData?.map((item, index) => {
                                 return (

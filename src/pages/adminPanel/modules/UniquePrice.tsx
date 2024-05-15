@@ -131,7 +131,7 @@ const AdminPanel = () => {
                     </Button>
                 </Header>
 
-                <Box display="flex" flexDirection="column" height="100vh" p={5}>
+                <Box display="flex" flexDirection="column" p={5}>
                     <Box>
                         <Box
                             display={'flex'}
@@ -150,8 +150,8 @@ const AdminPanel = () => {
                                 width: '100%',
                                 overflowX: 'auto',
                                 overflowY: 'auto',
-                                maxHeight: '77dvh',
-                                minHeight: '77dvh',
+                                maxHeight: '75dvh',
+                                minHeight: '75dvh',
                             }}
                         >
                             {inPriceData?.map((item, index) => {

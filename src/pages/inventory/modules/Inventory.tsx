@@ -1,10 +1,10 @@
-import Drawler from '@/components/Menu'
 import { INVENTORY_DETAILS_ROUTE, INVENTORY_FACT_ROUTE } from '@/utils/constants/routes.consts'
-import { Avatar, Box, Button, Input, Select, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Input, Select, useDisclosure } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import InventoryTable from '../components/InventoryTable'
 import CorrectModal from '../components/Modal'
 import UniversalComponent from '@/components/ui/UniversalComponent'
+import Header from '@/components/Header'
 
 const Inventory = () => {
     const navigate = useNavigate()
@@ -13,34 +13,24 @@ const Inventory = () => {
     return (
         <>
             <UniversalComponent>
-                <Box
-                    display="flex"
-                    justifyContent={'space-between'}
-                    flexDirection={'row'}
-                    backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                    height={'6%'}
-                >
-                    <Box width={'100%'}>
-                        <Drawler></Drawler>
-                        <Button
-                            height={'100%'}
-                            width={'20%'}
-                            // bg={'rgba(217, 217, 217, 1)'}
-                            onClick={() => navigate(INVENTORY_FACT_ROUTE)}
-                        >
-                            Ввод факт
-                        </Button>
-                        <Button
-                            height={'100%'}
-                            width={'20%'}
-                            bg={'rgba(217, 217, 217, 1)'}
-                            onClick={() => navigate(INVENTORY_DETAILS_ROUTE)}
-                        >
-                            Инвентаризация
-                        </Button>
-                    </Box>
-                    <Avatar size={'md'} bg="teal.500" />
-                </Box>
+                <Header>
+                    <Button
+                        height={'100%'}
+                        width={'20%'}
+                        // bg={'rgba(217, 217, 217, 1)'}
+                        onClick={() => navigate(INVENTORY_FACT_ROUTE)}
+                    >
+                        Ввод факт
+                    </Button>
+                    <Button
+                        height={'100%'}
+                        width={'20%'}
+                        bg={'rgba(217, 217, 217, 1)'}
+                        onClick={() => navigate(INVENTORY_DETAILS_ROUTE)}
+                    >
+                        Инвентаризация
+                    </Button>
+                </Header>
 
                 <Box width={'100%'} height={'94%'} p={5}>
                     <Box

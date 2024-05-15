@@ -7,7 +7,6 @@ import {
     Box,
     useDisclosure,
     Button,
-    Avatar,
     Select,
     IconButton,
 } from '@chakra-ui/react'
@@ -21,17 +20,17 @@ import {
 import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
 import useSWR from 'swr'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-import Drawler from '@/components/Menu'
 import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
 import { ADMIN_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import { useApi } from '@/utils/services/axios'
 import { FacilityUnit, Product } from '@/utils/types/product.types'
 import { TableContainer, Thead } from '@/components/ui'
+import Header from '@/components/Header'
 
 enum Status {
     ACTIVE = 0,
-    INACTIVE = 1
+    INACTIVE = 1,
 }
 
 const AdminPanel = () => {
@@ -47,7 +46,6 @@ const AdminPanel = () => {
 
     const { data: productsData, isLoading } = useApi<Product[]>('product', filters)
 
-    
     const [selectedData, setSelectedData] = useState<Product>()
     const [data, setData] = useState<Product[]>([])
     const [dialog, setDialog] = useState({
@@ -109,26 +107,15 @@ const AdminPanel = () => {
 
     return (
         <>
-            <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                p={"0 1rem"}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_PRODUCTS_ROUTE)}
-                        bg={'rgba(217, 217, 217, 1)'}
-                    >
-                        Продукты
-                    </Button>
-                </Box>
-                <Avatar bg="teal.500" />
-            </Box>
-
+            <Header>
+                <Button
+                    height={'100%'}
+                    onClick={() => navigate(ADMIN_PRODUCTS_ROUTE)}
+                    bg={'rgba(217, 217, 217, 1)'}
+                >
+                    Продукты
+                </Button>
+            </Header>
             <Box display="flex" flexDirection="column" p={5}>
                 <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>

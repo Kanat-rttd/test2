@@ -1,8 +1,6 @@
 import DateRangePicker from '@/components/DateRangePicker'
-import Drawler from '@/components/Menu'
 import { PURCHASE_DEBT_ROUTE, PURCHASE_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import {
-    Avatar,
     Box,
     Button,
     Select,
@@ -24,6 +22,7 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { useEffect } from 'react'
 import { useApi } from '@/utils/services/axios'
+import Header from '@/components/Header'
 
 interface RawMaterial {
     id: number
@@ -80,33 +79,24 @@ const Products = () => {
     return (
         <>
             <UniversalComponent>
-                <Box
-                    width={'100%'}
-                    display="flex"
-                    justifyContent={'space-between'}
-                    flexDirection={'row'}
-                    backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                >
-                    <Box width={'100%'} display={'flex'}>
-                        <Drawler></Drawler>
-                        <Button
-                            height={'100%'}
-                            width={'20%'}
-                            onClick={() => navigate(PURCHASE_PRODUCTS_ROUTE)}
-                            background={'rgba(217, 217, 217, 1)'}
-                        >
-                            Закуп
-                        </Button>
-                        <Button
-                            height={'100%'}
-                            width={'20%'}
-                            onClick={() => navigate(PURCHASE_DEBT_ROUTE)}
-                        >
-                            Долги по закупу
-                        </Button>
-                    </Box>
-                    <Avatar bg="teal.500" />
-                </Box>
+                <Header>
+                    <Button
+                        height={'100%'}
+                        width={'20%'}
+                        onClick={() => navigate(PURCHASE_PRODUCTS_ROUTE)}
+                        background={'rgba(217, 217, 217, 1)'}
+                    >
+                        Закуп
+                    </Button>
+                    <Button
+                        height={'100%'}
+                        width={'20%'}
+                        onClick={() => navigate(PURCHASE_DEBT_ROUTE)}
+                    >
+                        Долги по закупу
+                    </Button>
+                </Header>
+
                 <Box width={'100%'} height={'calc(100vh-64px)'} p={5}>
                     <Tabs variant="soft-rounded">
                         <TabList justifyContent={'space-between'}>

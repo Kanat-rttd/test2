@@ -9,6 +9,7 @@ import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.
 import { useNavigate } from 'react-router-dom'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
+import Header from '@/components/Header'
 
 interface OrderArray {
     id: number
@@ -87,30 +88,20 @@ const ProcessedPage = () => {
 
     return (
         <UniversalComponent>
-            <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                height={'6%'}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(REQUEST_PROCESSING_ROUTE)}
-                    >
-                        Обработка
-                    </Button>
-                    <Button height={'100%'} width={'20%'} bg={'rgba(217, 217, 217, 1)'}>
-                        Обработанные
-                    </Button>
-                </Box>
-                <Avatar size={'md'} bg="teal.500" />
-            </Box>
+            <Header>
+                <Button
+                    height={'100%'}
+                    width={'20%'}
+                    onClick={() => navigate(REQUEST_PROCESSING_ROUTE)}
+                >
+                    Обработка
+                </Button>
+                <Button height={'100%'} width={'20%'} bg={'rgba(217, 217, 217, 1)'}>
+                    Обработанные
+                </Button>
+            </Header>
 
-            <Box width={'100%'} height={'94%'} p={5}>
+            <Box width={'100%'} p={5}>
                 <Box
                     marginBottom={10}
                     height={'5%'}

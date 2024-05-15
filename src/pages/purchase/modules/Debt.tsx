@@ -1,7 +1,5 @@
-import Drawler from '@/components/Menu'
 import { PURCHASE_DEBT_ROUTE, PURCHASE_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import {
-    Avatar,
     Box,
     Button,
     Table,
@@ -17,6 +15,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { useApi } from '@/utils/services/axios'
 import { useState } from 'react'
+import Header from '@/components/Header'
 
 interface Provider {
     id: number
@@ -56,32 +55,23 @@ const Debt = () => {
 
     return (
         <>
-            <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(PURCHASE_PRODUCTS_ROUTE)}
-                    >
-                        Закуп
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(PURCHASE_DEBT_ROUTE)}
-                        background={'rgba(217, 217, 217, 1)'}
-                    >
-                        Долги по закупу
-                    </Button>
-                </Box>
-                <Avatar bg="teal.500" />
-            </Box>
+            <Header>
+                <Button
+                    height={'100%'}
+                    width={'20%'}
+                    onClick={() => navigate(PURCHASE_PRODUCTS_ROUTE)}
+                >
+                    Закуп
+                </Button>
+                <Button
+                    height={'100%'}
+                    width={'20%'}
+                    onClick={() => navigate(PURCHASE_DEBT_ROUTE)}
+                    background={'rgba(217, 217, 217, 1)'}
+                >
+                    Долги по закупу
+                </Button>
+            </Header>
 
             <Box padding={10} width={'25%'}>
                 <Select

@@ -1,6 +1,5 @@
-import { Box, Button, Avatar, Select } from '@chakra-ui/react'
+import { Box, Button, Select } from '@chakra-ui/react'
 import { useState, useEffect, ChangeEvent } from 'react'
-import Drawler from '@/components/Menu'
 import { useNavigate } from 'react-router-dom'
 import { MIXERS_BAKINGPRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
@@ -9,6 +8,7 @@ import TableData from '@/components/TableData'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
+import Header from '@/components/Header'
 
 interface FacilityUnit {
     id: number
@@ -92,28 +92,18 @@ const MixersPage = () => {
     const navigate = useNavigate()
     return (
         <UniversalComponent>
-            <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                height={'6%'}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
-                    <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'20%'}>
-                        Заявки
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(MIXERS_BAKINGPRODUCTS_ROUTE)}
-                    >
-                        Выпечка
-                    </Button>
-                </Box>
-                <Avatar size={'md'} bg="teal.500" />
-            </Box>
+            <Header>
+                <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'20%'}>
+                    Заявки
+                </Button>
+                <Button
+                    height={'100%'}
+                    width={'20%'}
+                    onClick={() => navigate(MIXERS_BAKINGPRODUCTS_ROUTE)}
+                >
+                    Выпечка
+                </Button>
+            </Header>
 
             <Box width={'100%'} height={'94%'} p={5}>
                 <Box

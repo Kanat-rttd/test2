@@ -7,14 +7,12 @@ import {
     Box,
     useDisclosure,
     Button,
-    Avatar,
     Select,
     IconButton,
 } from '@chakra-ui/react'
 import OverPriceAddModal from '../components/OverPriceAddModal'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-import Drawler from '@/components/Menu'
 import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
 import { ADMIN_OVERPRICE_ROUTE } from '@/utils/constants/routes.consts'
@@ -23,6 +21,8 @@ import { mutate } from 'swr'
 import { deleteOverprice } from '@/utils/services/overprice.service'
 import DateRange from '@/components/DateRange'
 import { TableContainer, Thead } from '@/components/ui'
+import Header from '@/components/Header'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface ClientsFilter {
     clientId: number
@@ -46,26 +46,11 @@ interface OverPrice {
 }
 
 const AdminPanel = () => {
-    // const { data: overPriceData } = useApi<OverPrice[]>('overPrice')
-    const [selectedClient, setSelectedClient] = useState('')
+    const { getURLs, setParam, getParam } = useURLParameters()
 
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-    })
-
-    useEffect(() => {
-        console.log(selectionRange.startDate)
-        console.log(selectionRange.endDate)
-    }, [selectionRange])
-
-    const { data: overPriceData, isLoading } = useApi<OverPrice[]>('overPrice', {
-        name: selectedClient,
-        startDate: String(selectionRange.startDate),
-        endDate: String(selectionRange.endDate),
-    })
-
-    // const { data: clientData } = useApi<Client[]>('client')
+    const { data: overPriceData, isLoading } = useApi<OverPrice[]>(
+        `overPrice?${getURLs().toString()}`,
+    )
 
     const { data: clientData } = useApi<ClientsFilter[]>('overPrice/clientFilter')
 
@@ -80,7 +65,7 @@ const AdminPanel = () => {
     })
 
     const handleSuccess = () => {
-        mutate(`overPrice?name=${selectedClient}`)
+        mutate(`overPrice?name=${getParam('name')}`)
     }
 
     const delOverprice = (selectedData: OverPrice | undefined) => {
@@ -102,29 +87,20 @@ const AdminPanel = () => {
     const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = event.target
         console.log(name, value)
-        setSelectedClient(value)
+        setParam('name', value)
     }
 
     return (
         <>
-            <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_OVERPRICE_ROUTE)}
-                        bg={'rgba(217, 217, 217, 1)'}
-                    >
-                        Сверху
-                    </Button>
-                </Box>
-                <Avatar bg="teal.500" />
-            </Box>
+            <Header>
+                <Button
+                    height={'100%'}
+                    onClick={() => navigate(ADMIN_OVERPRICE_ROUTE)}
+                    bg={'rgba(217, 217, 217, 1)'}
+                >
+                    Сверху
+                </Button>
+            </Header>
 
             <Box display="flex" flexDirection="column" p={5}>
                 <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
@@ -142,10 +118,7 @@ const AdminPanel = () => {
                             ))}
                         </Select>
 
-                        <DateRange
-                            selectionRange={selectionRange}
-                            setSelectionRange={setSelectionRange}
-                        />
+                        <DateRange />
                     </Box>
 
                     <Button colorScheme="purple" onClick={onOpen}>

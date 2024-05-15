@@ -10,7 +10,7 @@ interface StyledContainerProps extends BoxProps {
 const Header: React.FC<StyledContainerProps> = ({ children }) => {
     return (
         <Box className={classes.header}>
-            <Box>
+            <Box width={'70%'}>
                 <Drawler />
                 <Fragment>{children}</Fragment>
             </Box>

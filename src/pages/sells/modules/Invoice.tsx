@@ -1,5 +1,4 @@
-import { Box, Button, Avatar, Select, Text, useDisclosure } from '@chakra-ui/react'
-import Drawler from '@/components/Menu'
+import { Box, Button, Select, Text, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
 import {
     SELLS_DEBT_ACCOUNTING_ROUTE,
@@ -11,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import InvoiceModal from '../components/InvoiceModal'
 import dayjs from 'dayjs'
 import DateRange from '@/components/DateRange'
+import Header from '@/components/Header'
 
 interface financeTotalWithInvoiceNumbers {
     invoiceNumber: number
@@ -72,41 +72,33 @@ const InvoicePage = () => {
     return (
         <>
             <Box>
-                <Box
-                    display="flex"
-                    justifyContent={'space-between'}
-                    flexDirection={'row'}
-                    backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                >
-                    <Box width={'100%'}>
-                        <Drawler></Drawler>
-                        <Button
-                            height={'100%'}
-                            width={'20%'}
-                            onClick={() => navigate(SELLS_JOURNAL_ROUTE)}
-                        >
-                            Журнал Продаж
-                        </Button>
-                        <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'20%'}>
-                            Накладной
-                        </Button>
-                        <Button
-                            onClick={() => navigate(SELLS_DEBT_ACCOUNTING_ROUTE)}
-                            height={'100%'}
-                            width={'20%'}
-                        >
-                            Учёт долгов
-                        </Button>
-                        <Button
-                            height={'100%'}
-                            width={'20%'}
-                            onClick={() => navigate(SELLS_DEBT_TRANSFER_ROUTE)}
-                        >
-                            Перевод долга
-                        </Button>
-                    </Box>
-                    <Avatar size={'md'} bg="teal.500" />
-                </Box>
+                <Header>
+                    <Button
+                        height={'100%'}
+                        width={'20%'}
+                        onClick={() => navigate(SELLS_JOURNAL_ROUTE)}
+                    >
+                        Журнал Продаж
+                    </Button>
+                    <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'20%'}>
+                        Накладной
+                    </Button>
+                    <Button
+                        onClick={() => navigate(SELLS_DEBT_ACCOUNTING_ROUTE)}
+                        height={'100%'}
+                        width={'20%'}
+                    >
+                        Учёт долгов
+                    </Button>
+                    <Button
+                        height={'100%'}
+                        width={'20%'}
+                        onClick={() => navigate(SELLS_DEBT_TRANSFER_ROUTE)}
+                    >
+                        Перевод долга
+                    </Button>
+                </Header>
+
                 <Box width={'100%'} height={'100%'} p={5}>
                     <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>

@@ -6,7 +6,6 @@ import {
     RECONCILIATION_REPORT_ROUTE,
 } from '@/utils/constants/routes.consts'
 import {
-    Avatar,
     Box,
     Button,
     Select,
@@ -21,7 +20,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '../../../components/DateRange'
-import Drawler from '@/components/Menu'
+import Header from '@/components/Header'
 
 interface breadViewData {
     Date: string
@@ -100,46 +99,33 @@ const BreadView = () => {
 
     return (
         <Box>
-            <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        bg={'rgba(217, 217, 217, 1)'}
-                        onClick={() => navigate(BREAD_REPORT_ROUTE)}
-                    >
-                        Отчёт по продукции
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(RELEASE_REPORT_ROUTE)}
-                    >
-                        Отчёт по реализаций
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(VISIT_REPORT_ROUTE)}
-                    >
-                        Отчёт по посещений
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(RECONCILIATION_REPORT_ROUTE)}
-                    >
-                        Акт Сверки
-                    </Button>
-                </Box>
-                <Avatar size={'md'} bg="teal.500" />
-            </Box>
+            <Header>
+                <Button
+                    height={'100%'}
+                    width={'25%'}
+                    bg={'rgba(217, 217, 217, 1)'}
+                    onClick={() => navigate(BREAD_REPORT_ROUTE)}
+                >
+                    Отчёт по продукции
+                </Button>
+                <Button
+                    height={'100%'}
+                    width={'25%'}
+                    onClick={() => navigate(RELEASE_REPORT_ROUTE)}
+                >
+                    Отчёт по реализаций
+                </Button>
+                <Button height={'100%'} width={'25%'} onClick={() => navigate(VISIT_REPORT_ROUTE)}>
+                    Отчёт по посещений
+                </Button>
+                <Button
+                    height={'100%'}
+                    width={'15%'}
+                    onClick={() => navigate(RECONCILIATION_REPORT_ROUTE)}
+                >
+                    Акт Сверки
+                </Button>
+            </Header>
 
             <Box width={'100%'} height={'100%'} p={5}>
                 <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>

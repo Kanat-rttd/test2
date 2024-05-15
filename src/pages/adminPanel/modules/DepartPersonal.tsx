@@ -93,7 +93,7 @@ const AdminPanel = () => {
                     </Button>
                 </Header>
 
-                <Box display="flex" flexDirection="column" height="100vh" p={5}>
+                <Box display="flex" flexDirection="column" p={5}>
                     <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                             <Select

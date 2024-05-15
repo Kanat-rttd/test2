@@ -10,19 +10,18 @@ import {
     Td,
     Tfoot,
     Button,
-    Avatar,
     Select,
     useDisclosure,
     IconButton,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { MIXERS_PASTRY_ROUTE } from '@/utils/constants/routes.consts'
-import Drawler from '@/components/Menu'
 import BakingAddModal from '../components/BakingAddModal'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
+import Header from '@/components/Header'
 
 interface Baking {
     bakingData: bakingsData[]
@@ -86,27 +85,19 @@ const BakingPage = () => {
     return (
         <>
             <UniversalComponent>
-                <Box
-                    display="flex"
-                    justifyContent={'space-between'}
-                    flexDirection={'row'}
-                    backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                >
-                    <Box width={'100%'}>
-                        <Drawler></Drawler>
-                        <Button
-                            height={'100%'}
-                            width={'20%'}
-                            onClick={() => navigate(MIXERS_PASTRY_ROUTE)}
-                        >
-                            Заявки
-                        </Button>
-                        <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'20%'}>
-                            Выпечка
-                        </Button>
-                    </Box>
-                    <Avatar size={'md'} bg="teal.500" />
-                </Box>
+                <Header>
+                    <Button
+                        height={'100%'}
+                        width={'20%'}
+                        onClick={() => navigate(MIXERS_PASTRY_ROUTE)}
+                    >
+                        Заявки
+                    </Button>
+                    <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'20%'}>
+                        Выпечка
+                    </Button>
+                </Header>
+
                 <Box width={'100%'} height={'100%'} p={5}>
                     <Box height={'5%'} textAlign={'right'}>
                         <Button

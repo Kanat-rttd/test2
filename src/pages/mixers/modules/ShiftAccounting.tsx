@@ -1,8 +1,8 @@
 import DateRangePicker from '@/components/DateRangePicker'
-import Drawler from '@/components/Menu'
-import { Avatar, Box, Button, Select, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Select, useDisclosure } from '@chakra-ui/react'
 import ListTable from '../components/ListTable'
 import DistributionModal from '../components/DistributionModal'
+import Header from '@/components/Header'
 
 const shiftAccounting = () => {
     const handleSuccess = () => {
@@ -13,20 +13,11 @@ const shiftAccounting = () => {
 
     return (
         <Box>
-            <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
-                    <Button height={'100%'} width={'20%'} bg={'rgba(217, 217, 217, 1)'}>
-                        Учёт смен
-                    </Button>
-                </Box>
-                <Avatar size={'md'} bg="teal.500" />
-            </Box>
+            <Header>
+                <Button height={'100%'} width={'20%'} bg={'rgba(217, 217, 217, 1)'}>
+                    Учёт смен
+                </Button>
+            </Header>
 
             <Box width={'100%'} height={'100%'} p={5}>
                 <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>

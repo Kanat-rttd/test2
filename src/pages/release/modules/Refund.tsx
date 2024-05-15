@@ -1,7 +1,5 @@
-import Drawler from '@/components/Menu'
 import { RELEASE_DISTRIBUTION_ROUTE, RELEASE_REFUND_ROUTE } from '@/utils/constants/routes.consts'
 import {
-    Avatar,
     Box,
     Button,
     Select,
@@ -17,6 +15,7 @@ import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
 import DistributionModal from '../components/DistributionModal'
 import DateRange from '@/components/DateRange'
+import Header from '@/components/Header'
 
 const Refund = () => {
     const handleSuccess = () => {
@@ -28,36 +27,23 @@ const Refund = () => {
 
     return (
         <Box position={'relative'}>
-            <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                bg={'rgb(240, 240, 240)'}
-                position={'sticky'}
-                top={0}
-                zIndex={1000}
-                p={'0rem 0.5rem'}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(RELEASE_DISTRIBUTION_ROUTE)}
-                    >
-                        Выдача
-                    </Button>
-                    <Button
-                        bg={'rgba(217, 217, 217, 1)'}
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(RELEASE_REFUND_ROUTE)}
-                    >
-                        Возврат
-                    </Button>
-                </Box>
-                <Avatar size={'md'} bg="teal.500" />
-            </Box>
+            <Header>
+                <Button
+                    height={'100%'}
+                    width={'20%'}
+                    onClick={() => navigate(RELEASE_DISTRIBUTION_ROUTE)}
+                >
+                    Выдача
+                </Button>
+                <Button
+                    bg={'rgba(217, 217, 217, 1)'}
+                    height={'100%'}
+                    width={'20%'}
+                    onClick={() => navigate(RELEASE_REFUND_ROUTE)}
+                >
+                    Возврат
+                </Button>
+            </Header>
 
             <Box width={'100%'} height={'100%'} p={5}>
                 <Box marginBottom={7} display={'flex'} justifyContent={'space-between'}>
