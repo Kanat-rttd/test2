@@ -74,14 +74,26 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
     const modalContentRef = useRef<HTMLDivElement>(null)
 
     const generatePDF = () => {
-        if (!modalContentRef.current) return
+        const pdfWidth = 210
 
-        html2canvas(modalContentRef.current).then((canvas) => {
+        const contentRef = modalContentRef.current
+
+        if (!contentRef) {
+            console.error('modalContentRef is null')
+            return
+        }
+
+        const contentWidth = contentRef.offsetWidth * 0.4
+        const contentHeight = contentRef.offsetHeight * 0.4
+
+        const pdf = new jsPDF('p', 'mm', 'a4')
+
+        const x = (pdfWidth - contentWidth) / 2
+        const y = 0
+
+        html2canvas(contentRef, { scale: window.devicePixelRatio * 2 }).then((canvas) => {
             const imgData = canvas.toDataURL('image/png')
-            const pdf = new jsPDF()
-            const width = pdf.internal.pageSize.getWidth()
-            const height = pdf.internal.pageSize.getHeight()
-            pdf.addImage(imgData, 'PNG', 0, 0, width, height)
+            pdf.addImage(imgData, 'PNG', x, y, contentWidth, contentHeight)
             pdf.save('invoice.pdf')
         })
     }
@@ -90,7 +102,6 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay overflow={'hidden'} />
             <ModalContent maxWidth={'90%'} height={'90%'} margin={0} alignSelf={'center'}>
-                {/* <ModalHeader textAlign={'center'}>Изменить</ModalHeader> */}
                 <ModalCloseButton />
                 <ModalBody display={'flex'} flexDirection={'row'}>
                     <Box width={'50%'}>
@@ -114,12 +125,7 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                 borderWidth={'2px'}
                                 orientation="horizontal"
                             />
-                            <Box
-                                display={'flex'}
-                                justifyContent={'space-between'}
-                                // marginBottom={'5px'}
-                                p={3}
-                            >
+                            <Box display={'flex'} justifyContent={'space-between'} p={3}>
                                 <Box
                                     display={'flex'}
                                     justifyContent={'space-between'}
