@@ -1,15 +1,5 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import {
-    Table,
-    Thead,
-    Tbody,
-    Tfoot,
-    Tr,
-    Th,
-    Td,
-    TableContainer,
-    useDisclosure,
-} from '@chakra-ui/react'
+import { Table, Tbody, Tr, Th, Td, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
 import EditModal from './EditModal'
 // import { getAllPruchases } from '@/utils/services/productPurchase.service'
@@ -17,6 +7,8 @@ import dayjs from 'dayjs'
 // import useSWR, { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'
 import { mutate } from '@/utils/services/axios'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { TableContainer, Tfoot, Thead } from '@/components/ui'
 
 interface AllPurchases {
     purchases: Purchase[]
@@ -45,29 +37,19 @@ interface Purchase {
     }
 }
 
-type ListTableProps = {
-    selectedProviderId: string
-    selectedRawMaterial: string
-    dateRange: { startDate: Date; endDate: Date }
-}
-
-const ListTable = ({ selectedProviderId, selectedRawMaterial, dateRange }: ListTableProps) => {
+const ListTable = () => {
+    const { getURLs, getParam } = useURLParameters()
     // const { data: purchasesData } = useSWR<AllPurchases>('productPurchase', {
     //     fetcher: () => getAllPruchases(),
     // })
 
-    const { data: purchasesData } = useApi<AllPurchases>('productPurchase', {
-        providerId: selectedProviderId,
-        rawMaterialId: selectedRawMaterial,
-        startDate: String(dateRange?.startDate),
-        endDate: String(dateRange?.endDate),
-    })
+    const { data: purchasesData } = useApi<AllPurchases>(`productPurchase?${getURLs().toString()}`)
 
     console.log(purchasesData)
 
     const filteredPurchases = purchasesData?.purchases.filter((purchase) => {
         console.log(purchase.provider.id)
-        if (selectedProviderId && Number(selectedProviderId) !== purchase.provider.id) {
+        if (getParam('providerId') && Number(getParam('providerId')) !== purchase.provider.id) {
             return false
         }
         return true
@@ -89,7 +71,7 @@ const ListTable = ({ selectedProviderId, selectedRawMaterial, dateRange }: ListT
 
     return (
         <>
-            <TableContainer maxHeight={'calc(100vh - 220px)'} overflowY={'auto'}>
+            <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                 <Table variant="simple">
                     <Thead>
                         <Tr>

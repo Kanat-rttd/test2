@@ -6,6 +6,13 @@ const endOfToday = today.endOf('day')
 
 export const staticRanges = createStaticRanges([
     {
+        label: 'За сегодня',
+        range: () => ({
+            startDate: today.toDate(),
+            endDate: endOfToday.toDate(),
+        }),
+    },
+    {
         label: 'За неделю',
         range: () => ({
             startDate: today.subtract(1, 'week').toDate(),

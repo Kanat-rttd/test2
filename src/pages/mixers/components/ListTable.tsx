@@ -1,10 +1,11 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Table, TableContainer, Tbody, Td, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react'
+import { Table, Tbody, Td, Th, Tr, useDisclosure } from '@chakra-ui/react'
 import EditModal from './EditModal'
 import { useState } from 'react'
 import dayjs from 'dayjs'
 import { useApi } from '@/utils/services/axios'
+import { TableContainer, Thead } from '@/components/ui'
 
 interface Dispatch {
     id: number
@@ -76,7 +77,7 @@ export default function ListTable({ status }: any) {
 
     return (
         <>
-            <TableContainer>
+            <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                 <Table variant="simple">
                     <Thead>
                         <Tr>

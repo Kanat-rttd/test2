@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
     Box,
-    TableContainer,
     Table,
-    Thead,
     Tr,
     Th,
     Tbody,
     Td,
-    Tfoot,
     Button,
     Select,
     useDisclosure,
@@ -22,6 +19,8 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 import Header from '@/components/Header'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { TableContainer, Tfoot, Thead } from '@/components/ui'
 
 interface Baking {
     bakingData: bakingsData[]
@@ -61,24 +60,12 @@ const styles = {
 }
 
 const BakingPage = () => {
+    const { getURLs } = useURLParameters()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const navigate = useNavigate()
     const [selectedBaking, setSelectedBaking] = useState<bakingsData | null>(null)
 
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-    })
-
-    useEffect(() => {
-        console.log(selectionRange.startDate)
-        console.log(selectionRange.endDate)
-    }, [selectionRange])
-
-    const { data: bakingsData } = useApi<Baking>('baking', {
-        startDate: String(selectionRange.startDate),
-        endDate: String(selectionRange.endDate),
-    })
+    const { data: bakingsData } = useApi<Baking>(`baking?${getURLs().toString()}`)
 
     console.log(bakingsData)
 
@@ -117,10 +104,7 @@ const BakingPage = () => {
                         <BakingAddModal data={selectedBaking} isOpen={isOpen} onClose={onClose} />
                     </Box>
                     <Box height={'5%'} marginBottom={10} display={'flex'} justifyContent={'space'}>
-                        <DateRange
-                            selectionRange={selectionRange}
-                            setSelectionRange={setSelectionRange}
-                        />
+                        <DateRange />
                         <Select placeholder="Цехи" width={'20%'} marginLeft={20}>
                             <option value="Лепешечный">Лепешечный</option>
                             <option value="Булочный">Булочный</option>
@@ -133,7 +117,9 @@ const BakingPage = () => {
                         height={'calc(90% - 2.5rem)'}
                         position={'relative'}
                     >
-                        <TableContainer overflowY={'auto'}>
+                        <TableContainer
+                            style={{ width: '100%', height: '100%', overflowY: 'auto' }}
+                        >
                             <Table
                                 size="sm"
                                 variant="unstyled"

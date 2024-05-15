@@ -49,32 +49,33 @@ const Refund = () => {
                 <Box marginBottom={7} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <DateRange />
-                        <Select placeholder="Цехи" width={'fit-content'}>
+                        <Select
+                            placeholder="Цехи"
+                            width={'fit-content'}
+                            size={'sm'}
+                            borderRadius={5}
+                        >
                             <option value="Лепешечный">Лепешечный</option>
                             <option value="Булочный">Булочный</option>
                             <option value="Заварной">Заварной</option>
                         </Select>
                     </Box>
 
-                    <Button colorScheme="purple" onClick={onOpen}>
+                    <Button colorScheme="purple" height={'32px'} onClick={onOpen} p={'0 15px'}>
                         Возврат продукции
                     </Button>
                 </Box>
-                <Box height={'calc(95% - 2.5rem)'}>
-                    <Tabs variant="soft-rounded" height={'100%'}>
-                        <TabList height={'22.5px'}>
+                <Box>
+                    <Tabs variant="soft-rounded" mt={'-10px'}>
+                        <TabList height={'22px'}>
                             <Tab>List</Tab>
                             <Tab>Pivot</Tab>
                         </TabList>
                         <TabPanels>
-                            <TabPanel>
-                                <ListTable
-                                    facilityUnit={'0'}
-                                    // dateRange={{ startDate: new Date(), endDate: new Date() }}
-                                    status="0"
-                                />
+                            <TabPanel p={'10px 0'}>
+                                <ListTable facilityUnit={'0'} status="0" />
                             </TabPanel>
-                            <TabPanel>
+                            <TabPanel p={'10px 0'}>
                                 <PivotTable status="1" />
                             </TabPanel>
                         </TabPanels>

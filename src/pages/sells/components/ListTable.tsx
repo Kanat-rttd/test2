@@ -104,7 +104,7 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
 
     return (
         <>
-            <TableContainer>
+            <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                 <Table variant="simple" width={'100%'}>
                     <Thead>
                         <Tr position={'sticky'} top={0} backgroundColor={'white'} zIndex={9}>

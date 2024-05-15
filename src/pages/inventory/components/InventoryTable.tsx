@@ -1,12 +1,10 @@
+import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import {
     Table,
-    Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
-    TableContainer,
     Input,
     Box,
 } from '@chakra-ui/react'
@@ -45,7 +43,7 @@ const InventoryTable = () => {
 
     return (
         <>
-            <TableContainer overflowY={'auto'} height={'90%'}>
+            <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                 <Table variant="simple" width={'100%'}>
                     <Thead>
                         <Tr position={'sticky'} top={0} backgroundColor={'white'}>

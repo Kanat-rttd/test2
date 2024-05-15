@@ -54,81 +54,85 @@ const Distribution = () => {
     }
 
     return (
-        <UniversalComponent>
-            <Header>
-                <Button
-                    bg={'rgba(217, 217, 217, 1)'}
-                    height={'100%'}
-                    width={'20%'}
-                    onClick={() => navigate(RELEASE_DISTRIBUTION_ROUTE)}
-                >
-                    Выдача
-                </Button>
-                <Button
-                    height={'100%'}
-                    width={'20%'}
-                    onClick={() => navigate(RELEASE_REFUND_ROUTE)}
-                >
-                    Возврат
-                </Button>
-            </Header>
-
-            <Box width={'100%'} height={'100%'} p={5}>
-                <Box
-                    marginBottom={10}
-                    height={'5%'}
-                    display={'flex'}
-                    justifyContent={'space-between'}
-                >
-                    <Box display={'flex'} gap={'15px'} width={'100%'}>
-                        <DateRange />
-                        <Select
-                            placeholder="Цехи"
-                            width={'fit-content'}
-                            value={selectedFacilityUnit}
-                            onChange={handleClientChange}
-                        >
-                            {facilityUnitsData?.map((unit, index) => (
-                                <option key={index} value={unit.id}>
-                                    {unit.facilityUnit}
-                                </option>
-                            ))}
-                        </Select>
-                    </Box>
-
-                    <Button colorScheme="purple" onClick={onOpen}>
-                        Выдача продукции
+        <Box overflow={'hidden'}>
+            <UniversalComponent>
+                <Header>
+                    <Button
+                        bg={'rgba(217, 217, 217, 1)'}
+                        height={'100%'}
+                        width={'20%'}
+                        onClick={() => navigate(RELEASE_DISTRIBUTION_ROUTE)}
+                    >
+                        Выдача
                     </Button>
+                    <Button
+                        height={'100%'}
+                        width={'20%'}
+                        onClick={() => navigate(RELEASE_REFUND_ROUTE)}
+                    >
+                        Возврат
+                    </Button>
+                </Header>
+
+                <Box width={'100%'} height={'100%'} p={5}>
+                    <Box
+                        marginBottom={10}
+                        height={'5%'}
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                    >
+                        <Box display={'flex'} gap={'15px'} width={'100%'}>
+                            <DateRange />
+                            <Select
+                                size={'sm'}
+                                borderRadius={5}
+                                placeholder="Цехи"
+                                width={'fit-content'}
+                                value={selectedFacilityUnit}
+                                onChange={handleClientChange}
+                            >
+                                {facilityUnitsData?.map((unit, index) => (
+                                    <option key={index} value={unit.id}>
+                                        {unit.facilityUnit}
+                                    </option>
+                                ))}
+                            </Select>
+                        </Box>
+
+                        <Button colorScheme="purple" onClick={onOpen} height={'32px'} p={'0 25px'}>
+                            Выдача продукции
+                        </Button>
+                    </Box>
+                    <Box>
+                        <Tabs variant="soft-rounded" height={'100%'} mt={'-15.5px'}>
+                            <TabList height={'22px'}>
+                                <Tab>List</Tab>
+                                <Tab>Pivot</Tab>
+                            </TabList>
+                            <TabPanels height={'95%'}>
+                                <TabPanel height={'100%'} p={'10px 0'}>
+                                    <ListTable
+                                        facilityUnit={selectedFacilityUnit}
+                                        // dateRange={selectionRange}
+                                        status="0"
+                                    />
+                                </TabPanel>
+                                <TabPanel p={'10px 0'}>
+                                    <PivotTable status="0" />
+                                </TabPanel>
+                            </TabPanels>
+                        </Tabs>
+                    </Box>
                 </Box>
-                <Box height={'calc(95% - 2.5rem)'}>
-                    <Tabs variant="soft-rounded" height={'100%'}>
-                        <TabList height={'5%'}>
-                            <Tab>List</Tab>
-                            <Tab>Pivot</Tab>
-                        </TabList>
-                        <TabPanels height={'95%'}>
-                            <TabPanel height={'100%'}>
-                                <ListTable
-                                    facilityUnit={selectedFacilityUnit}
-                                    // dateRange={selectionRange}
-                                    status="0"
-                                />
-                            </TabPanel>
-                            <TabPanel>
-                                <PivotTable status="0" />
-                            </TabPanel>
-                        </TabPanels>
-                    </Tabs>
-                </Box>
-            </Box>
-            <DistributionModal
-                isOpen={isOpen}
-                onClose={onClose}
-                onOpen={onOpen}
-                onSuccess={handleUpdateProduct}
-                status="0"
-            />
-        </UniversalComponent>
+                <DistributionModal
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    onOpen={onOpen}
+                    onSuccess={handleUpdateProduct}
+                    status="0"
+                />
+            </UniversalComponent>
+        </Box>
     )
 }
 

@@ -1,14 +1,12 @@
+import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import {
     Box,
     Select,
     Table,
     Tr,
     Td,
-    Thead,
     Tbody,
     Th,
-    TableContainer,
-    Tfoot,
 } from '@chakra-ui/react'
 
 const MagazineTable = () => {
@@ -36,7 +34,7 @@ const MagazineTable = () => {
                 </Select>
             </Box>
             <Box>
-                <TableContainer>
+                <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant="simple">
                         <Thead>
                             <Tr>

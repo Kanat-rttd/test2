@@ -1,21 +1,10 @@
 import { PURCHASE_DEBT_ROUTE, PURCHASE_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
-import {
-    Box,
-    Button,
-    Table,
-    Thead,
-    Tbody,
-    Tfoot,
-    Tr,
-    Th,
-    Td,
-    TableContainer,
-    Select,
-} from '@chakra-ui/react'
+import { Box, Button, Table, Tbody, Tr, Th, Td, Select } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { useApi } from '@/utils/services/axios'
 import { useState } from 'react'
 import Header from '@/components/Header'
+import { TableContainer, Tfoot, Thead } from '@/components/ui'
 
 interface Provider {
     id: number
@@ -88,14 +77,7 @@ const Debt = () => {
                 </Select>
             </Box>
             <Box padding={10}>
-                <TableContainer
-                    height={'100%'}
-                    width={'100%'}
-                    overflowX={'auto'}
-                    overflowY={'auto'}
-                    maxHeight={'80dvh'}
-                    minHeight={'80dvh'}
-                >
+                <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant="simple">
                         <Thead>
                             <Tr>

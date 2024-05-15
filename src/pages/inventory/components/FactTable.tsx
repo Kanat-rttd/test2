@@ -1,16 +1,5 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import {
-    Table,
-    Thead,
-    Tbody,
-    Tfoot,
-    Tr,
-    Th,
-    Td,
-    TableContainer,
-    Box,
-    IconButton,
-} from '@chakra-ui/react'
+import { Table, Tbody, Tr, Th, Td, Box, IconButton } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import { mutate } from '@/utils/services/axios'
 import dayjs from 'dayjs'
@@ -19,6 +8,7 @@ import EditModal from './EditModal'
 import { useDisclosure } from '@chakra-ui/react'
 import Dialog from '@/components/Dialog'
 import { deleteFactInput } from '@/utils/services/factInput.service'
+import { TableContainer, Tfoot, Thead } from '@/components/ui'
 
 interface factInput {
     table: [
@@ -94,7 +84,7 @@ const FactTable = () => {
 
     return (
         <>
-            <TableContainer overflowY={'auto'} height={'90%'}>
+            <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                 <Table variant="simple" width={'100%'}>
                     <Thead>
                         <Tr position={'sticky'} top={0} backgroundColor={'white'}>

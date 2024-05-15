@@ -1,7 +1,8 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import { Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { getAllDispatches } from '@/utils/services/dispatch.service'
+import { TableContainer, Thead } from '@/components/ui'
 
 interface Dispatch {
     id: number
@@ -57,7 +58,7 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
 
     return (
         <>
-            <TableContainer>
+            <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                 <Table variant="simple">
                     <Thead>
                         <Tr>

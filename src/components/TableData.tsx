@@ -1,4 +1,5 @@
-import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Tfoot } from '@chakra-ui/react'
+import { Table, Tr, Th, Tbody, Td } from '@chakra-ui/react'
+import { TableContainer, Tfoot, Thead } from './ui'
 
 interface OrderArray {
     id: number
@@ -11,14 +12,7 @@ interface OrderArray {
             orderDetailsId: string
             productId: string
             orderedQuantity: string
-            product: {
-                bakingFacilityUnit: {
-                    id: string
-                    facilityUnit: string
-                }
-                name: string
-                price: string
-            }
+            product: ProductType
         },
     ]
     user: {
@@ -27,11 +21,13 @@ interface OrderArray {
     }
 }
 
-const styles = {
-    fontSize: '15px',
-    borderBottom: '1px solid black',
-    textAlign: 'center',
-    fontWeight: 'bold',
+type ProductType = {
+    bakingFacilityUnit: {
+        id: string
+        facilityUnit: string
+    }
+    name: string
+    price: string
 }
 
 const TableData = ({ data }: { data: OrderArray[] }) => {
@@ -43,28 +39,28 @@ const TableData = ({ data }: { data: OrderArray[] }) => {
         })
     })
 
-    // const getColumnTotal = (productName: string) => {
-    //     return data.reduce((total, item) => {
-    //         const product = item.products.find((product) => product.productName === productName)
-    //         return total + (product?.quantity || 0)
-    //     }, 0)
-    // }
+    const getColumnTotal = (productName: string) => {
+        return data.reduce((total, item) => {
+            const product = item.orderDetails.find(
+                (product) => product.product.name === productName,
+            )
+            return total + (Number(product?.orderedQuantity) || 0)
+        }, 0)
+    }
 
     return (
-        <TableContainer>
-            <Table
-                size="sm"
-                variant="unstyled"
-                overflow={'scroll'}
-                style={{ borderCollapse: 'separate', borderSpacing: '0 10px' }}
-            >
+        <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+            <Table variant="simple">
                 <Thead>
                     <Tr>
-                        <Th borderBottom={'1px solid black'} fontSize={'15px'}>
-                            Реализаторы
-                        </Th>
+                        <Th fontSize={'15px'}>Реализаторы</Th>
                         {Array.from(uniqProducts).map((name, index) => (
-                            <Th sx={styles} key={index}>
+                            <Th
+                                textAlign={'center'}
+                                fontSize={'15px'}
+                                fontWeight={'bold'}
+                                key={index}
+                            >
                                 {name}
                             </Th>
                         ))}
@@ -73,16 +69,17 @@ const TableData = ({ data }: { data: OrderArray[] }) => {
                 <Tbody>
                     {data.map((item, index) => (
                         <Tr key={index}>
-                            <Td
-                                width={'80%'}
-                                borderBottom={'1px solid black'}
-                                fontSize={'15px'}
-                                fontWeight={'bold'}
-                            >
+                            <Td fontSize={'15px'} fontWeight={'bold'}>
                                 {item.user.name}
                             </Td>
                             {Array.from(uniqProducts).map((productName, productIndex) => (
-                                <Td sx={styles} key={productIndex}>
+                                <Td
+                                    width={'20%'}
+                                    fontSize={'15px'}
+                                    fontWeight={'bold'}
+                                    textAlign={'center'}
+                                    key={productIndex}
+                                >
                                     {item.orderDetails.find(
                                         (prod) => prod.product.name === productName,
                                     )?.orderedQuantity || ''}
@@ -93,10 +90,12 @@ const TableData = ({ data }: { data: OrderArray[] }) => {
                 </Tbody>
                 <Tfoot>
                     <Tr>
-                        <Td width={'80%'}>Итого</Td>
-                        {/* {Array.from(uniqProducts).map((productName, productIndex) => (
-                            <Td key={productIndex}>{getColumnTotal(productName)}</Td>
-                        ))} */}
+                        <Th>Итого</Th>
+                        {Array.from(uniqProducts).map((productName, productIndex) => (
+                            <Th width={'15%'} textAlign={'center'} key={productIndex}>
+                                {getColumnTotal(productName)}
+                            </Th>
+                        ))}
                     </Tr>
                 </Tfoot>
             </Table>

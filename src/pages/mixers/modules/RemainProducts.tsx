@@ -1,21 +1,11 @@
-import {
-    TableContainer,
-    Table,
-    Thead,
-    Tr,
-    Th,
-    Tbody,
-    Td,
-    Box,
-    Select,
-    Button,
-} from '@chakra-ui/react'
+import { Table, Tr, Th, Tbody, Td, Box, Select, Button } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import {
     MIXERS_REMAIN_PRODUCTS_ROUTE,
     MIXERS_REMAIN_RAW_MATERIALS_ROUTE,
 } from '@/utils/constants/routes.consts'
 import Header from '@/components/Header'
+import { TableContainer, Thead } from '@/components/ui'
 
 const data = [
     {
@@ -64,7 +54,7 @@ const RemainProducts = () => {
                         </Select>
                     </Box>
                 </Box>
-                <TableContainer maxWidth={'100%'} width={'100%'}>
+                <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant="simple">
                         <Thead>
                             <Tr>

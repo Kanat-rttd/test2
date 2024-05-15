@@ -1,15 +1,15 @@
-import { Box, Button, Avatar, Select } from '@chakra-ui/react'
-import Drawler from '@/components/Menu'
+import { Box, Button, Select } from '@chakra-ui/react'
 import { useState, useEffect, ChangeEvent } from 'react'
 import { REQUEST_PROCESSING_ROUTE } from '@/utils/constants/routes.consts'
 
 import TableData from '@/components/TableData'
-import { getAllSales, getByFacilityUnit } from '@/utils/services/sales.service'
-import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
+import { getByFacilityUnit } from '@/utils/services/sales.service'
 import { useNavigate } from 'react-router-dom'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import Header from '@/components/Header'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { useApi } from '@/utils/services/axios'
 
 interface OrderArray {
     id: number
@@ -44,33 +44,24 @@ interface FacilityUnit {
 }
 
 const ProcessedPage = () => {
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-    })
-
-    useEffect(() => {
-        console.log(selectionRange.startDate)
-        console.log(selectionRange.endDate)
-    }, [selectionRange])
+    const { getURLs } = useURLParameters()
 
     const navigate = useNavigate()
     const [getSalesData, setSalesData] = useState<OrderArray[]>([])
-    const [facilityUnits, setFacilityUnits] = useState<FacilityUnit[] | undefined>()
+
+    const { data: salesData } = useApi<OrderArray[]>(`sales?${getURLs().toString()}`)
+    const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(
+        `mixers?${getURLs().toString()}`,
+    )
 
     useEffect(() => {
-        getAllBakingFacilityUnits().then((responseData) => {
-            setFacilityUnits(responseData)
-            console.log(responseData)
-        })
+        if (salesData) {
+            setSalesData(salesData)
+            console.log(salesData);
+        }
     }, [])
 
-    useEffect(() => {
-        getAllSales().then((res) => {
-            console.log(res.data)
-            setSalesData(res)
-        })
-    }, [])
+    console.log(getSalesData);
 
     const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         console.log(target.value)
@@ -109,11 +100,7 @@ const ProcessedPage = () => {
                     justifyContent={'space-between'}
                 >
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        <DateRange
-                            selectionRange={selectionRange}
-                            setSelectionRange={setSelectionRange}
-                        ></DateRange>
-
+                        <DateRange />
                         <Select
                             variant="filled"
                             placeholder="Тип цеха"

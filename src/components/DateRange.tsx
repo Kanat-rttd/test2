@@ -71,23 +71,23 @@ const DateRange = () => {
     return (
         <Popover isOpen={isOpen} onClose={onClose}>
             <PopoverTrigger>
-<Box
-    onClick={onOpen}
-    maxWidth="250px"
-    backgroundColor="white"
-    cursor="pointer"
-    minWidth="fit-content"
-    display="flex"
-    alignItems="center"
-    padding="0.2rem 1.5rem"
-    height={'40px'}
-    borderRadius={5}
-    border="1px solid"
-    borderColor="inherit"
-    justifyContent="center"
->
-    <Text size="sm">{formattedDate}</Text>
-</Box>
+                <Box
+                    onClick={onOpen}
+                    maxWidth="250px"
+                    backgroundColor="white"
+                    cursor="pointer"
+                    minWidth="fit-content"
+                    display="flex"
+                    alignItems="center"
+                    padding="0.2rem 1.5rem"
+                    height={'32px'}
+                    borderRadius={5}
+                    border="1px solid"
+                    borderColor="inherit"
+                    justifyContent="center"
+                >
+                    <Text size="sm">{formattedDate}</Text>
+                </Box>
             </PopoverTrigger>
             <Portal>
                 <PopoverContent width="fit-content">
@@ -111,7 +111,9 @@ const DateRange = () => {
                         />
                     </PopoverBody>
                     <Box textAlign={'right'} padding={'5px'}>
-                        <Button onClick={handleConfirmDate} mr={'10px'}>Принять</Button>
+                        <Button onClick={handleConfirmDate} mr={'10px'}>
+                            Принять
+                        </Button>
                         <Button onClick={handleCancelDate}>Отмена</Button>
                     </Box>
                 </PopoverContent>

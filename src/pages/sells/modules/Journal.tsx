@@ -6,8 +6,6 @@ import {
     SELLS_DEBT_TRANSFER_ROUTE,
 } from '@/utils/constants/routes.consts'
 import ListTable from '../components/ListTable'
-// import DateRangePicker from '@/components/DateRangePicker'
-
 import { useNavigate } from 'react-router-dom'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
@@ -43,6 +41,7 @@ interface Product {
 }
 
 const JournalPage = () => {
+    // Данные выбора даты
     // const {getURLs, getParam} = useURLParameters()
     const navigate = useNavigate()
 

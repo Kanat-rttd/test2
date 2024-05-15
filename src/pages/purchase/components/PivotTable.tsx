@@ -1,4 +1,5 @@
-import { Box, Table, TableContainer, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/react'
+import { TableContainer, Tfoot, Thead } from '@/components/ui'
+import { Box, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 
 const PivotTable = () => {
     const data = [
@@ -20,7 +21,7 @@ const PivotTable = () => {
 
     return (
         <Box width={'100%'}>
-            <TableContainer>
+            <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                 <Table variant="simple">
                     <Thead>
                         <Tr>

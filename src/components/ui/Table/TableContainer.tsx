@@ -5,15 +5,17 @@ import classes from '../styles.module.css'
 interface StyledTableContainerProps extends TableContainerProps {
     isLoading?: boolean
     children?: React.ReactNode
+    style?: any
 }
 
 const StyledTableContainer: React.FC<StyledTableContainerProps> = ({
     children,
     isLoading,
+    style,
     ...props
 }) => {
     return (
-        <TableContainer className={classes.tableContainer} {...props}>
+        <TableContainer className={classes.tableContainer} style={style} {...props}>
             {isLoading ? (
                 <div className={classes.spinnerOverlay}>
                     <Spinner size="lg" color="blue.500" />

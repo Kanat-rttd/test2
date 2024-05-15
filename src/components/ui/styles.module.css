@@ -1,10 +1,10 @@
 .tableContainer {
     height: 100%;
-    width: 100%;
+    width: 100%;    
     overflow-x: auto;
     overflow-y: auto;
-    max-height: 72dvh;
-    min-height: 72dvh;
+    max-height: 74dvh;
+    min-height: 74dvh;
     background-color: white;
     border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;

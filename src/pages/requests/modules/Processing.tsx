@@ -1,8 +1,5 @@
 import { Box, Button } from '@chakra-ui/react'
-import { useState, useEffect } from 'react'
-
 import { REQUEST_PROCESSED_ROUTE } from '@/utils/constants/routes.consts'
-
 import AccordionClients from '@/components/AccordionClients'
 // import { getAllSales } from '@/utils/services/sales.service'
 import { setDoneStatus } from '@/utils/services/sales.service'
@@ -12,6 +9,7 @@ import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import Header from '@/components/Header'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface OrderArray {
     id: number
@@ -37,25 +35,13 @@ interface OrderArray {
 }
 
 const ProcessingPage = () => {
+    const { getURLs } = useURLParameters()
     const navigate = useNavigate()
     // const [getSalesData, setSalesData] = useState<OrderArray[]>([])
 
     // const { data: salesData } = useApi<OrderArray[]>('sales')
 
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-    })
-
-    useEffect(() => {
-        console.log(selectionRange.startDate)
-        console.log(selectionRange.endDate)
-    }, [selectionRange])
-
-    const { data: salesData } = useApi<OrderArray[]>('sales', {
-        startDate: String(selectionRange?.startDate),
-        endDate: String(selectionRange?.endDate),
-    })
+    const { data: salesData } = useApi<OrderArray[]>(`sales?${getURLs().toString()}`)
 
     console.log(salesData)
 
@@ -103,10 +89,7 @@ const ProcessingPage = () => {
                     justifyContent={'space-between'}
                 >
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        <DateRange
-                            selectionRange={selectionRange}
-                            setSelectionRange={setSelectionRange}
-                        ></DateRange>
+                        <DateRange />
                     </Box>
                 </Box>
                 <Box height={'calc(95% - 2.5rem)'}>

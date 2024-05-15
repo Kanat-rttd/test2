@@ -1,26 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
     BREAD_REPORT_ROUTE,
     RELEASE_REPORT_ROUTE,
     VISIT_REPORT_ROUTE,
     RECONCILIATION_REPORT_ROUTE,
 } from '@/utils/constants/routes.consts'
-import {
-    Box,
-    Button,
-    Select,
-    TableContainer,
-    Td,
-    Th,
-    Tr,
-    Tbody,
-    Thead,
-    Table,
-} from '@chakra-ui/react'
+import { Box, Button, Select, Td, Th, Tr, Tbody, Table } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '../../../components/DateRange'
 import Header from '@/components/Header'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { TableContainer, Thead } from '@/components/ui'
 
 interface breadViewData {
     Date: string
@@ -41,22 +32,13 @@ interface Client {
 }
 
 const ReleaseView = () => {
-    const { data: breadViewData } = useApi<breadViewData[]>('reports/bread')
+    const { getURLs } = useURLParameters()
+    const { data: breadViewData } = useApi<breadViewData[]>(`reports/bread?${getURLs().toString()}`)
     const { data: clientsData } = useApi<Client[]>('client')
     console.log(breadViewData)
     const navigate = useNavigate()
 
     const [selectedClient, setSelectedClient] = useState('')
-
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-    })
-
-    useEffect(() => {
-        console.log(selectionRange.startDate)
-        console.log(selectionRange.endDate)
-    }, [selectionRange])
 
     const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedClient(event.target.value)
@@ -126,10 +108,7 @@ const ReleaseView = () => {
             <Box width={'100%'} height={'100%'} p={5}>
                 <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'100%'}>
-                        <DateRange
-                            selectionRange={selectionRange}
-                            setSelectionRange={setSelectionRange}
-                        />
+                        <DateRange />
                         <Select
                             width={'fit-content'}
                             value={selectedClient}
@@ -145,7 +124,7 @@ const ReleaseView = () => {
                     </Box>
                 </Box>
                 <Box>
-                    <TableContainer>
+                    <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                         <Table variant="simple">
                             <Thead>
                                 <Tr>

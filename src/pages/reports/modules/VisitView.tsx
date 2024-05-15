@@ -1,27 +1,17 @@
-import { useState, useEffect } from 'react'
 import {
     BREAD_REPORT_ROUTE,
     RELEASE_REPORT_ROUTE,
     VISIT_REPORT_ROUTE,
     RECONCILIATION_REPORT_ROUTE,
 } from '@/utils/constants/routes.consts'
-import {
-    Box,
-    Button,
-    Select,
-    TableContainer,
-    Td,
-    Th,
-    Tr,
-    Tbody,
-    Thead,
-    Table,
-} from '@chakra-ui/react'
+import { Box, Button, Select, Td, Th, Tr, Tbody, Table } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '../../../components/DateRange'
 import dayjs from 'dayjs'
 import Header from '@/components/Header'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { TableContainer, Thead } from '@/components/ui'
 
 interface visitViewData {
     Date: string
@@ -40,20 +30,10 @@ interface DepartPersonal {
 }
 
 const VisitView = () => {
+    const { getURLs, setParam, getParam } = useURLParameters()
     const navigate = useNavigate()
 
-    const [selectedPersonal, setSelectedPersonal] = useState('')
-
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-    })
-
-    const { data: visitViewData } = useApi<visitViewData[]>('reports/time', {
-        startDate: String(selectionRange.startDate),
-        endDate: String(selectionRange.endDate),
-        personalName: selectedPersonal,
-    })
+    const { data: visitViewData } = useApi<visitViewData[]>(`reports/time?${getURLs().toString()}`)
     const { data: departPersonalData } = useApi<DepartPersonal[]>('departPersonal')
 
     console.log(visitViewData)
@@ -66,13 +46,8 @@ const VisitView = () => {
         return [...personalNames]
     }
 
-    useEffect(() => {
-        console.log(selectionRange.startDate)
-        console.log(selectionRange.endDate)
-    }, [selectionRange])
-
     const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedPersonal(event.target.value)
+        setParam('personalName', event.target.value)
     }
 
     const personalNames = getPersonalNames()
@@ -118,13 +93,10 @@ const VisitView = () => {
             <Box width={'100%'} height={'100%'} p={5}>
                 <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'100%'}>
-                        <DateRange
-                            selectionRange={selectionRange}
-                            setSelectionRange={setSelectionRange}
-                        />
+                        <DateRange />
                         <Select
                             width={'fit-content'}
-                            value={selectedPersonal}
+                            value={getParam('personalName')}
                             onChange={handleClientChange}
                         >
                             <option value="">Все клиенты</option>
@@ -137,7 +109,7 @@ const VisitView = () => {
                     </Box>
                 </Box>
                 <Box>
-                    <TableContainer>
+                    <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                         <Table variant="simple">
                             <Thead>
                                 <Tr>

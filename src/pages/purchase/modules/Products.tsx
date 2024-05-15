@@ -17,12 +17,11 @@ import PivotTable from '../components/PivotTable'
 import PurchaseModal from '../components/PurchaseModal'
 import { getAllProviders } from '@/utils/services/providers.service'
 import useSWR, { mutate } from 'swr'
-import { useState } from 'react'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
-import { useEffect } from 'react'
 import { useApi } from '@/utils/services/axios'
 import Header from '@/components/Header'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface RawMaterial {
     id: number
@@ -36,16 +35,7 @@ interface Providers {
 }
 
 const Products = () => {
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-    })
-
-    useEffect(() => {
-        console.log(selectionRange.startDate)
-        console.log(selectionRange.endDate)
-    }, [selectionRange])
-
+    const { setParam, getParam } = useURLParameters()
     const { data: rawMaterialData } = useApi<RawMaterial[]>('rawMaterials')
     console.log(rawMaterialData)
 
@@ -57,15 +47,13 @@ const Products = () => {
     //     fetcher: () => getAllBakingFacilityUnits(),
     // })
 
-    const [selectedProviderId, setSelectedProviderId] = useState<string>('')
-    const [selectedRawMaterial, setRawMaterial] = useState<string>('')
 
     const handleProviderChange = (event: any) => {
-        setSelectedProviderId(event.target.value)
+        setParam('providerId', event.target.value)
     }
 
     const handleRawMaterialChange = (event: any) => {
-        setRawMaterial(event.target.value)
+        setParam('rawMaterialId', event.target.value)
     }
 
     const handleAddProduct = () => {
@@ -82,7 +70,7 @@ const Products = () => {
                 <Header>
                     <Button
                         height={'100%'}
-                        width={'20%'}
+                        width={'15%'}
                         onClick={() => navigate(PURCHASE_PRODUCTS_ROUTE)}
                         background={'rgba(217, 217, 217, 1)'}
                     >
@@ -90,7 +78,7 @@ const Products = () => {
                     </Button>
                     <Button
                         height={'100%'}
-                        width={'20%'}
+                        width={'25%'}
                         onClick={() => navigate(PURCHASE_DEBT_ROUTE)}
                     >
                         Долги по закупу
@@ -112,13 +100,10 @@ const Products = () => {
                         <TabPanels>
                             <TabPanel>
                                 <Box display={'flex'} gap={'15px'} marginBottom={10}>
-                                    <DateRange
-                                        selectionRange={selectionRange}
-                                        setSelectionRange={setSelectionRange}
-                                    />
+                                    <DateRange />
                                     <Select
                                         placeholder="Поставщик"
-                                        value={selectedProviderId}
+                                        value={getParam('providerId')}
                                         onChange={handleProviderChange}
                                         width={'fit-content'}
                                     >
@@ -130,7 +115,7 @@ const Products = () => {
                                     </Select>
                                     <Select
                                         placeholder="Материалы"
-                                        value={selectedRawMaterial}
+                                        value={getParam('rawMaterialId')}
                                         onChange={handleRawMaterialChange}
                                         width={'fit-content'}
                                     >
@@ -141,11 +126,7 @@ const Products = () => {
                                         ))}
                                     </Select>
                                 </Box>
-                                <ListTable
-                                    selectedProviderId={selectedProviderId}
-                                    selectedRawMaterial={selectedRawMaterial}
-                                    dateRange={selectionRange}
-                                />
+                                <ListTable />
                             </TabPanel>
                             <TabPanel>
                                 <Box width={'25%'}>

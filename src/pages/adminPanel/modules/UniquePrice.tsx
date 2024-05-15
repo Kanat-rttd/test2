@@ -185,7 +185,7 @@ const AdminPanel = () => {
                                             </AccordionButton>
                                         </h2>
                                         <AccordionPanel pb={4}>
-                                            <TableContainer>
+                                            <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                                                 <Table variant="simple">
                                                     <Thead>
                                                         <Tr>

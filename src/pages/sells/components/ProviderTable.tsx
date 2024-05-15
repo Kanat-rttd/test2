@@ -30,7 +30,7 @@ const ProviderTable = () => {
                 </Select>
             </Box>
             <Box width={'100%'}>
-                <TableContainer>
+                <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant="simple" width={'100%'}>
                         <Thead>
                             <Tr>

@@ -1,10 +1,11 @@
 import { Avatar, Box, Select, Text } from '@chakra-ui/react'
 import styles from '../style.module.css'
 import DateRange from '../../../components/DateRange'
-import { useState } from 'react'
 import Drawler from '@/components/Menu'
-import { getReportData } from '@/utils/services/finance.service'
-import useSWR from 'swr'
+// import { getReportData } from '@/utils/services/finance.service'
+// import useSWR from 'swr'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { useApi } from '@/utils/services/axios'
 
 interface Report {
     initial: number
@@ -39,14 +40,13 @@ interface Report {
 }
 
 const Report = () => {
-    const { data } = useSWR<Report>(['finance/report'], {
-        fetcher: () => getReportData(),
-    })
+    const { getURLs } = useURLParameters()
+    
+    // const { data } = useSWR<Report>(['finance/report'], {
+    //     fetcher: () => getReportData(),
+    // })
+    const { data } = useApi<Report>(`finance/report?${getURLs().toString()}`)
 
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-    })
     const score = [
         {
             label: 'Kaspi',
@@ -100,10 +100,7 @@ const Report = () => {
                         </Select>
                     </Box>
                     <Box width={'20%'}>
-                        <DateRange
-                            setSelectionRange={setSelectionRange}
-                            selectionRange={selectionRange}
-                        />
+                        <DateRange />
                     </Box>
                 </Box>
                 <Box w="100%" display="flex" justifyContent="center">

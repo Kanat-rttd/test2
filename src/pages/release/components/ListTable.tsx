@@ -1,41 +1,18 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Table, Tbody, Td, Th, Tr, useDisclosure } from '@chakra-ui/react'
+import { IconButton, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import EditModal from './EditModal'
 import { useState } from 'react'
 import dayjs from 'dayjs'
-import { useApi } from '@/utils/services/axios'
+import { mutate, useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Thead } from '@/components/ui'
+import { useNotify } from '@/utils/providers/ToastProvider'
+import { deleteDispatch } from '@/utils/services/dispatch.service'
+import { DispatchType } from '@/utils/types/dispatch.types'
 
-interface DispatchData {
-    id: number
-    clientId: number
-    createdAt: Date
-    dispatch: number
-    goodsDispatchDetails: [
-        {
-            id: number
-            price: number
-            productId: number
-            quantity: number
-            product: {
-                name: string
-                price: number
-                bakingFacilityUnit: {
-                    id: number
-                    facilityUnit: string
-                }
-            }
-        },
-    ]
-    client: {
-        id: number
-        name: string
-    }
-}
 type Dispatch = {
-    data: DispatchData[]
+    data: DispatchType[]
     totalPrice: number
     totalQuantity: number
 }
@@ -50,11 +27,16 @@ interface ListTableProps {
 }
 
 export default function ListTable({ facilityUnit, status }: ListTableProps) {
+    const { loading } = useNotify()
     const { getURLs } = useURLParameters()
     console.log(status)
-    const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const [selectedData, setSelectedData] = useState<DispatchData>()
+    const [selectedData, setSelectedData] = useState<DispatchType>()
+
+    const [dialog, setDialog] = useState({
+        isOpen: false,
+        onClose: () => setDialog({ ...dialog, isOpen: false }),
+    })
 
     // const { data: dispatchesData } = useApi<Dispatch[]>('release', {
     //     startDate: String(dateRange?.startDate),
@@ -72,12 +54,27 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
         onClose: () => setModal({ ...modal, isOpen: false }),
     })
 
+    const handlerDelete = (selectedData: DispatchType | undefined) => {
+        if (selectedData) {
+            const responsePromise: Promise<any> = deleteDispatch(selectedData.id)
+            loading(responsePromise)
+            responsePromise.then(() => {
+                mutate((currentData: DispatchType[] | undefined) => {
+                    if (!currentData) return currentData
+                    return currentData.filter((item) => item.id !== selectedData?.id)
+                })
+            })
+        } else {
+            console.error('No data available to delete.')
+        }
+    }
+
     return (
         <>
-            <TableContainer height={'100%'} overflowY={'auto'}>
-                <Table height={'100%'} variant="simple">
+            <TableContainer style={{ minHeight: '70dvh', maxHeight: '70dvh', overflowY: 'auto' }}>
+                <Table>
                     <Thead>
-                        <Tr top={0} position={'sticky'} backgroundColor={'white'}>
+                        <Tr>
                             <Th>№</Th>
                             <Th>Реализатор</Th>
                             <Th>Виды хлеба</Th>
@@ -107,25 +104,34 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
                                         </div>
                                     </Td>
                                     <Td>{dayjs(row.createdAt).format('HH:MM DD.MM.YYYY')}</Td>
-                                    <Td style={{ display: 'flex', gap: '10px' }}>
-                                        {
-                                            <EditIcon
-                                                boxSize={'1.5em'}
-                                                cursor={'pointer'}
-                                                onClick={() => {
-                                                    setSelectedData(row)
-                                                    setModal({ ...modal, isOpen: true })
-                                                }}
-                                            />
-                                        }
-                                        {
-                                            <DeleteIcon
-                                                boxSize={'1.5em'}
-                                                color={'red'}
-                                                cursor={'pointer'}
-                                                onClick={onOpen}
-                                            />
-                                        }
+                                    <Td>
+                                        <IconButton
+                                            variant="outline"
+                                            size={'sm'}
+                                            colorScheme="teal"
+                                            aria-label="Send email"
+                                            marginRight={3}
+                                            onClick={() => {
+                                                setSelectedData(row)
+                                                setModal({ ...modal, isOpen: true })
+                                            }}
+                                            icon={<EditIcon />}
+                                        />
+                                        <IconButton
+                                            variant="outline"
+                                            size={'sm'}
+                                            colorScheme="teal"
+                                            aria-label="Send email"
+                                            marginRight={3}
+                                            onClick={() => {
+                                                setSelectedData(row)
+                                                setDialog({
+                                                    ...dialog,
+                                                    isOpen: true,
+                                                })
+                                            }}
+                                            icon={<DeleteIcon />}
+                                        />
                                     </Td>
                                 </Tr>
                             )
@@ -135,11 +141,14 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
             </TableContainer>
             <EditModal data={selectedData} isOpen={modal.isOpen} onClose={modal.onClose} />
             <Dialog
-                isOpen={isOpen}
-                onClose={onClose}
+                isOpen={dialog.isOpen}
+                onClose={dialog.onClose}
                 header="Удалить"
                 body="Вы уверены? Вы не сможете отменить это действие впоследствии."
-                actionBtn={onClose}
+                actionBtn={() => {
+                    dialog.onClose()
+                    handlerDelete(selectedData)
+                }}
                 actionText="Удалить"
             />
         </>

@@ -110,7 +110,7 @@ const AdminPanel = () => {
                             Добавить
                         </Button>
                     </Box>
-                    <TableContainer isLoading={isLoading}>
+                    <TableContainer isLoading={isLoading} style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                         <Table variant="simple">
                             <Thead>
                                 <Tr>

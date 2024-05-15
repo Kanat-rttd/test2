@@ -9,6 +9,7 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 import Header from '@/components/Header'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface FacilityUnit {
     id: number
@@ -43,23 +44,11 @@ interface OrderArray {
 }
 
 const MixersPage = () => {
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-    })
-
-    useEffect(() => {
-        console.log(selectionRange.startDate)
-        console.log(selectionRange.endDate)
-    }, [selectionRange])
-
+    const { getURLs } = useURLParameters()
     const [facilityUnits, setFacilityUnits] = useState<FacilityUnit[] | undefined>()
     // const [getSalesData, setSalesData] = useState<OrderArray[]>([])
 
-    const { data: salesData } = useApi<OrderArray[]>('sales', {
-        startDate: String(selectionRange?.startDate),
-        endDate: String(selectionRange?.endDate),
-    })
+    const { data: salesData } = useApi<OrderArray[]>(`sales?${getURLs().toString()}`)
 
     useEffect(() => {
         getAllBakingFacilityUnits().then((responseData) => {
@@ -113,10 +102,7 @@ const MixersPage = () => {
                     justifyContent={'space-between'}
                 >
                     <Box display={'flex'} gap={'15px'} width={'100%'}>
-                        <DateRange
-                            selectionRange={selectionRange}
-                            setSelectionRange={setSelectionRange}
-                        ></DateRange>
+                        <DateRange />
 
                         <Select
                             variant="filled"

@@ -1,25 +1,16 @@
 import Dialog from '@/components/Dialog'
 import Drawler from '@/components/Menu'
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
-import {
-    Avatar,
-    Box,
-    Table,
-    TableContainer,
-    Tbody,
-    Td,
-    Text,
-    Th,
-    Thead,
-    Tr,
-    useDisclosure,
-} from '@chakra-ui/react'
+import { Avatar, Box, Table, Tbody, Td, Text, Th, Tr, useDisclosure } from '@chakra-ui/react'
 import dayjs from 'dayjs'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import DateRange from '../../../components/DateRange'
 import IsMobile from '@/utils/helpers/isMobile'
-import useSWR from 'swr'
-import { getAllFinances } from '@/utils/services/finance.service'
+// import useSWR from 'swr'
+// import { getAllFinances } from '@/utils/services/finance.service'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { useApi } from '@/utils/services/axios'
+import { TableContainer, Thead } from '@/components/ui'
 
 export type History = {
     date: Date
@@ -39,30 +30,23 @@ interface Finance {
 }
 
 const History = () => {
+    const { getURLs } = useURLParameters()
     const [sortOrder, setSortOrder] = useState('asc')
     const [isHovered, setIsHovered] = useState(false)
 
     // const { data } = useSWR<Finance[]>('finance', fetcher)
     console.log(sortOrder)
 
-    const { data } = useSWR<Finance[]>(['finance', sortOrder], {
-        fetcher: () => getAllFinances(sortOrder),
-    })
+    // const { data } = useSWR<Finance[]>(['finance', sortOrder], {
+    //     fetcher: () => getAllFinances(sortOrder),
+    // })
+
+    const { data } = useApi<Finance[]>(`finance?${getURLs().toString()}`)
 
     console.log(data)
 
     const [selectedData, setSelectedData] = useState<History | null>(null)
     const { isOpen, onOpen, onClose } = useDisclosure()
-
-    const [selectionRange, setSelectionRange] = useState({
-        startDate: new Date(),
-        endDate: new Date(),
-    })
-
-    useEffect(() => {
-        console.log(selectionRange.startDate)
-        console.log(selectionRange.endDate)
-    }, [selectionRange])
 
     const sortData = (order: string) => {
         // const sorted = data.slice().sort((a, b) => {
@@ -97,7 +81,7 @@ const History = () => {
 
     return (
         <>
-           <Box
+            <Box
                 display="flex"
                 justifyContent={'space-between'}
                 flexDirection={'row'}
@@ -113,27 +97,11 @@ const History = () => {
             </Box>
             <Box display="flex" flexDirection="column" gap="1rem" padding={IsMobile() ? 0 : 10}>
                 <Box width={'250px'}>
-                    <DateRange
-                        selectionRange={selectionRange}
-                        setSelectionRange={setSelectionRange}
-                    />
+                    <DateRange />
                 </Box>
-                <TableContainer
-                    maxHeight={700}
-                    overflow={'auto'}
-                    borderRadius={'5px'}
-                    width={'100%'}
-                    background={'#fff'}
-                    boxShadow={'rgba(0, 0, 0, 0.24) 0px 3px 8px'}
-                >
+                <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant="simple">
-                        <Thead
-                            position={'sticky'}
-                            top={0}
-                            background={'#fff'}
-                            zIndex={'1'}
-                            boxShadow={'rgba(0, 0, 0, 0.1) 0px 1px 1px'}
-                        >
+                        <Thead>
                             <Tr>
                                 <Th
                                     onClick={() => sortData(sortOrder === 'asc' ? 'desc' : 'asc')}

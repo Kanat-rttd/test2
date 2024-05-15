@@ -125,7 +125,7 @@ const AdminPanel = () => {
                         Добавить
                     </Button>
                 </Box>
-                <TableContainer maxWidth={'100%'} width={'100%'} isLoading={isLoading}>
+                <TableContainer isLoading={isLoading} style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant="simple">
                         <Thead>
                             <Tr>

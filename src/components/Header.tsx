@@ -15,7 +15,7 @@ const Header: React.FC<StyledContainerProps> = ({ children }) => {
                 <Fragment>{children}</Fragment>
             </Box>
             <Box className={classes.logo}>
-                <Avatar size={'md'} bg="teal.500" mr={2} />
+                <Avatar width={'35px'} height={'35px'} bg="teal.500" mr={2} />
             </Box>
         </Box>
     )
