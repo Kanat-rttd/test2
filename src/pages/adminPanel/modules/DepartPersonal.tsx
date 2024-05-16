@@ -22,7 +22,7 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteDepartPersonal } from '@/utils/services/departPersonal.service'
 import { TableContainer, Thead } from '@/components/ui'
 import DepartPersonalModal from '../components/DepartPesonalAddModal'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 
 interface DepartPersonal {
     id: number

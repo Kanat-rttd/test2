@@ -1,7 +1,7 @@
 import { Box, Button, Select, useDisclosure } from '@chakra-ui/react'
 import ListTable from '../components/ListTable'
 import DistributionModal from '../components/DistributionModal'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 import DateRange from '@/components/DateRange'
 
 const shiftAccounting = () => {

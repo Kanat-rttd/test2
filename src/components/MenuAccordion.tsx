@@ -11,6 +11,7 @@ import {
     DrawerBody,
     DrawerCloseButton,
     DrawerContent,
+    DrawerFooter,
     DrawerHeader,
     DrawerOverlay,
     Icon,
@@ -19,6 +20,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { menuItems, subMenuItems } from '../utils/constants/menu.consts'
 import getUserInfo from '@/utils/helpers/getUserInfo'
+import { LOGIN_ROUTE } from '@/utils/constants/routes.consts'
 
 /**
  * Custom navigation menu
@@ -114,6 +116,16 @@ const MenuAccordion = () => {
                                     ))}
                                 </Accordion>
                             </DrawerBody>
+                            <DrawerFooter>
+                                <Link
+                                    onClick={() => {
+                                        window.localStorage.removeItem('authToken')
+                                        navigate(LOGIN_ROUTE)
+                                    }}
+                                >
+                                    Выход
+                                </Link>
+                            </DrawerFooter>
                         </DrawerContent>
                     </Drawer>
                 </div>

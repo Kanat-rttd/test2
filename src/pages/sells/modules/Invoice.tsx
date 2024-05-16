@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import InvoiceModal from '../components/InvoiceModal'
 import dayjs from 'dayjs'
 import DateRange from '@/components/DateRange'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 
 interface financeTotalWithInvoiceNumbers {
     invoiceNumber: number

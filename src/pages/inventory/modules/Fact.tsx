@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import FactTable from '../components/FactTable'
 import FactModal from '../components/AddFactModal'
 import UniversalComponent from '@/components/ui/UniversalComponent'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 
 const Fact = () => {
     const navigate = useNavigate()

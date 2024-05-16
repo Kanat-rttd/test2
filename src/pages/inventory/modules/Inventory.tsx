@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import InventoryTable from '../components/InventoryTable'
 import CorrectModal from '../components/Modal'
 import UniversalComponent from '@/components/ui/UniversalComponent'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 
 const Inventory = () => {
     const navigate = useNavigate()

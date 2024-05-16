@@ -21,7 +21,7 @@ import { mutate } from 'swr'
 import { deleteOverprice } from '@/utils/services/overprice.service'
 import DateRange from '@/components/DateRange'
 import { TableContainer, Thead } from '@/components/ui'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface ClientsFilter {

@@ -3,7 +3,7 @@ import { Box, Button, Table, Tbody, Tr, Th, Td, Select } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { useApi } from '@/utils/services/axios'
 import { useState } from 'react'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 
 interface Provider {

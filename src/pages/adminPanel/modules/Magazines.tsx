@@ -20,7 +20,7 @@ import MagazineAddModal from '../components/MagazineAddModal'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteMagazines } from '@/utils/services/magazines.service'
 import { TableContainer, Thead } from '@/components/ui'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 
 interface Magazines {
     id: number

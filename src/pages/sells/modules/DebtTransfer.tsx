@@ -7,7 +7,7 @@ import {
 import DebtTransferForm from '../components/DebtTransferForm'
 
 import { useNavigate } from 'react-router-dom'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 
 const DebtTransfer = () => {
     const navigate = useNavigate()

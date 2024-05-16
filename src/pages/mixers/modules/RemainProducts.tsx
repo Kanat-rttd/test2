@@ -4,7 +4,7 @@ import {
     MIXERS_REMAIN_PRODUCTS_ROUTE,
     MIXERS_REMAIN_RAW_MATERIALS_ROUTE,
 } from '@/utils/constants/routes.consts'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 import { TableContainer, Thead } from '@/components/ui'
 
 const data = [

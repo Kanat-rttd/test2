@@ -8,7 +8,7 @@ import TableData from '@/components/TableData'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface FacilityUnit {

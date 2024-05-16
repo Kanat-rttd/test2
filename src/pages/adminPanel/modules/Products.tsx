@@ -26,7 +26,7 @@ import { ADMIN_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import { useApi } from '@/utils/services/axios'
 import { FacilityUnit, Product } from '@/utils/types/product.types'
 import { TableContainer, Thead } from '@/components/ui'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 
 enum Status {
     ACTIVE = 0,

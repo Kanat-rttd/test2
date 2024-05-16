@@ -8,7 +8,7 @@ import MagazineTable from '../components/MagazineTable'
 import ProviderTable from '../components/ProviderTable'
 
 import { useNavigate } from 'react-router-dom'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 
 const DebtAccounting = () => {
     const navigate = useNavigate()

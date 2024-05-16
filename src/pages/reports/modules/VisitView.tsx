@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '../../../components/DateRange'
 import dayjs from 'dayjs'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Thead } from '@/components/ui'
 

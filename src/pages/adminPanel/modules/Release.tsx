@@ -21,7 +21,7 @@ import { useApi } from '@/utils/services/axios'
 import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { Thead, TableContainer } from '@/components/ui'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 
 const AdminPanel = () => {

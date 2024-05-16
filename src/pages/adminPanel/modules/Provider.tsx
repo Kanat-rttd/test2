@@ -21,7 +21,7 @@ import { deleteProviderGoods } from '@/utils/services/providerGoods.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { mutate } from 'swr'
 import { TableContainer, Thead } from '@/components/ui'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 
 interface ProviderGoods {
     id: number

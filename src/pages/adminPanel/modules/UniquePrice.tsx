@@ -33,7 +33,7 @@ import { getAllClients } from '@/utils/services/client.service'
 import { useApi } from '@/utils/services/axios'
 import { TableContainer } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 
 interface Client {
     id: string

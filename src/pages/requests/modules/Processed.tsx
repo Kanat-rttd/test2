@@ -7,7 +7,7 @@ import { getByFacilityUnit } from '@/utils/services/sales.service'
 import { useNavigate } from 'react-router-dom'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
 

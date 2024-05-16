@@ -19,7 +19,7 @@ import DateRange from '@/components/DateRange'
 import { useState } from 'react'
 import { useApi } from '@/utils/services/axios'
 import UniversalComponent from '@/components/ui/UniversalComponent'
-import Header from '@/components/Header'
+import Header from '@/components/layout/Header'
 
 interface FacilityUnit {
     id: number

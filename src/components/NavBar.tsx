@@ -2,6 +2,7 @@ import { Text, Flex, Image } from '@chakra-ui/react'
 import Drawler from './Menu'
 import { useNavigate } from 'react-router-dom'
 import { MAIN_ROUTE } from '@/utils/constants/routes.consts'
+import MenuAccordion from './MenuAccordion'
 
 const TopNavBar = () => {
     const navigate = useNavigate()
@@ -19,7 +20,7 @@ const TopNavBar = () => {
             w="full"
             backgroundColor={'white'}
         >
-            <Drawler></Drawler>
+            <MenuAccordion />
 
             <Image
                 borderRadius="full"
