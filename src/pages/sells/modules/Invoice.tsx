@@ -4,6 +4,8 @@ import { useApi } from '@/utils/services/axios'
 import InvoiceModal from '../components/InvoiceModal'
 import dayjs from 'dayjs'
 import DateRange from '@/components/DateRange'
+// import Header from '@/components/Header'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface financeTotalWithInvoiceNumbers {
     invoiceNumber: number
@@ -50,14 +52,37 @@ interface InvoiceData {
     }[]
 }
 
+interface Client {
+    id: number
+    name: string
+    surname: string
+    contact: string
+    telegrammId: string
+    status: string
+}
+
 const InvoicePage = () => {
+    // const navigate = useNavigate()
+    const { setParam, getURLs } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    console.log(getURLs())
+
     const { data: financeTotals } = useApi<financeTotalWithInvoiceNumbers[]>('finance/totals')
-    const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
+    const { data: clientsData } = useApi<Client[]>('client')
+    const { data: dispatchesData } = useApi<InvoiceData[]>(
+        `release/invoice?${getURLs().toString()}`,
+    )
+
     const [selectedRow, setSelectedRow] = useState<InvoiceData | null>(null)
 
     console.log(financeTotals)
+
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = event.target
+        console.log(name, value)
+        setParam(name, value)
+    }
 
     console.log(dispatchesData)
 
@@ -73,20 +98,25 @@ const InvoicePage = () => {
                                 width={'fit-content'}
                                 size={'sm'}
                                 borderRadius={5}
+                                name="clientId"
+                                onChange={handleSelectChange}
                             >
-                                <option value="Лепешечный">Лепешечный</option>
-                                <option value="Булочный">Булочный</option>
-                                <option value="Заварной">Заварной</option>
+                                {clientsData?.map((client, index) => (
+                                    <option key={index} value={client.id}>
+                                        {client.name}
+                                    </option>
+                                ))}
                             </Select>
                             <Select
                                 placeholder="Статус"
                                 width={'fit-content'}
                                 size={'sm'}
                                 borderRadius={5}
+                                name="status"
+                                onChange={handleSelectChange}
                             >
-                                <option value="Лепешечный">Лепешечный</option>
-                                <option value="Булочный">Булочный</option>
-                                <option value="Заварной">Заварной</option>
+                                <option value="Не оплачено">Не оплачено</option>
+                                <option value="Оплачено">Оплачено</option>
                             </Select>
                         </Box>
                     </Box>
