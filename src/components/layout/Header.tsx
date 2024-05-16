@@ -37,6 +37,7 @@ const Header: React.FC<StyledContainerProps> = ({ buttons }) => {
                             return (
                                 <Button
                                     height={'100%'}
+                                    p={'0 25px'}
                                     onClick={() => navigate(button.puth)}
                                     style={
                                         button.isCurrentPage

@@ -57,8 +57,9 @@ const JournalPage = () => {
                     maxHeight={'calc(95% - 2.5rem)'}
                     height="100vh"
                     p={5}
+                    mt={2}
                 >
-                    <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
+                    <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                             {/* <DateRangePicker></DateRangePicker> */}
                             <DateRange />

@@ -30,9 +30,9 @@ import {
     RELEASE_REPORT_ROUTE,
 
     // FINANCE_ROUTE,
-    // FINANCE_INPUT_ROUTE,
-    // FINANCE_HISTORY_ROUTE,
-    // FINANCE_REPORT_ROUTE,
+    FINANCE_INPUT_ROUTE,
+    FINANCE_HISTORY_ROUTE,
+    FINANCE_REPORT_ROUTE,
 
     // PURCHASE_ROUTE,
     PURCHASE_PRODUCTS_ROUTE,
@@ -552,6 +552,66 @@ export const headerButtons: headerButton[] = [
             {
                 puth: INVENTORY_DETAILS_ROUTE,
                 label: 'Инвентаризация',
+                isCurrentPage: true,
+            },
+        ],
+    },
+    {
+        currentPage: FINANCE_INPUT_ROUTE,
+        buttonsData: [
+            {
+                puth: FINANCE_INPUT_ROUTE,
+                label: 'Ввод',
+                isCurrentPage: true,
+            },
+            {
+                puth: FINANCE_HISTORY_ROUTE,
+                label: 'История финансов',
+                isCurrentPage: false,
+            },
+            {
+                puth: FINANCE_REPORT_ROUTE,
+                label: 'Фин. отчет',
+                isCurrentPage: false,
+            },
+        ],
+    },
+    {
+        currentPage: FINANCE_HISTORY_ROUTE,
+        buttonsData: [
+            {
+                puth: FINANCE_INPUT_ROUTE,
+                label: 'Ввод',
+                isCurrentPage: false,
+            },
+            {
+                puth: FINANCE_HISTORY_ROUTE,
+                label: 'История финансов',
+                isCurrentPage: true,
+            },
+            {
+                puth: FINANCE_REPORT_ROUTE,
+                label: 'Фин. отчет',
+                isCurrentPage: false,
+            },
+        ],
+    },
+    {
+        currentPage: FINANCE_REPORT_ROUTE,
+        buttonsData: [
+            {
+                puth: FINANCE_INPUT_ROUTE,
+                label: 'Ввод',
+                isCurrentPage: false,
+            },
+            {
+                puth: FINANCE_HISTORY_ROUTE,
+                label: 'История финансов',
+                isCurrentPage: false,
+            },
+            {
+                puth: FINANCE_REPORT_ROUTE,
+                label: 'Фин. отчет',
                 isCurrentPage: true,
             },
         ],

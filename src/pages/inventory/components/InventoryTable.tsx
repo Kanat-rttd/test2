@@ -88,19 +88,19 @@ const InventoryTable = () => {
                 <Table>
                     <Tfoot>
                         <Tr>
-                            <Th fontSize={15} color={'#000'} width={'15%'}>
+                            <Th fontSize={15} color={'#000'} width={'9%'}>
                                 ИТОГО
                             </Th>
-                            <Th width={'25%'}> </Th>
-                            <Th> </Th>
-                            <Th width={'15%'} fontSize={15} color={'#000'}>
+                            <Th width={'23%'}> </Th>
+                            <Th width={'24%'}> </Th>
+                            <Th width={'18%'} fontSize={15} color={'#000'}>
                                 {' '}
                                 {data.totalRegister}
                             </Th>
-                            <Th width={'15%'} fontSize={15} color={'#000'}>
+                            <Th width={'19%'} fontSize={15} color={'#000'}>
                                 {data.totalFact}{' '}
                             </Th>
-                            <Th width={'15%'} fontSize={15} color={'#000'}>
+                            <Th width={'19%'} fontSize={15} color={'#000'}>
                                 {data.divergence}{' '}
                             </Th>
                         </Tr>

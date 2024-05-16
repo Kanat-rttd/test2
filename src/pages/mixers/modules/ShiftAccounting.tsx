@@ -11,7 +11,7 @@ const shiftAccounting = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
-        <Box>
+        <Box mt={1}>
             <Box width={'100%'} height={'100%'} p={5}>
                 <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>

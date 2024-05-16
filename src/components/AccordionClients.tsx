@@ -59,8 +59,8 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
                 width: '100%',
                 overflowX: 'auto',
                 overflowY: 'auto',
-                maxHeight: '75dvh',
-                minHeight: '75dvh',
+                maxHeight: '79dvh',
+                minHeight: '79dvh',
             }}
         >
             {data?.map((order, index) => (

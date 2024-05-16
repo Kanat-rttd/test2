@@ -2,9 +2,7 @@ import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { Table, Tbody, Tr, Th, Td, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
 import EditModal from './EditModal'
-// import { getAllPruchases } from '@/utils/services/productPurchase.service'
 import dayjs from 'dayjs'
-// import useSWR, { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'
 import { mutate } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
@@ -39,9 +37,6 @@ interface Purchase {
 
 const ListTable = () => {
     const { getURLs, getParam } = useURLParameters()
-    // const { data: purchasesData } = useSWR<AllPurchases>('productPurchase', {
-    //     fetcher: () => getAllPruchases(),
-    // })
 
     const { data: purchasesData } = useApi<AllPurchases>(`productPurchase?${getURLs().toString()}`)
 
@@ -116,26 +111,18 @@ const ListTable = () => {
                             )
                         })}
                     </Tbody>
-                    <Tfoot marginTop={10} position={'sticky'} bottom={0} backgroundColor={'white'}>
-                        <Tr>
-                            <Th color={'#000'} fontSize={15}>
-                                ИТОГО
-                            </Th>
-                            <Th> </Th>
-                            <Th> </Th>
-                            <Th> </Th>
-                            <Th color={'#000'} fontSize={15}>
-                                {purchasesData?.totalQuantity}
-                            </Th>
-                            <Th> </Th>
-                            <Th color={'#000'} fontSize={15}>
-                                {purchasesData?.totalSum}
-                            </Th>
-                            <Th color={'#000'} fontSize={15}>
-                                {purchasesData?.totalDeliverySum}
-                            </Th>
-                            <Th> </Th>
-                            <Th> </Th>
+                    <Tfoot>
+                        <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>
+                            <Td w={'5%'}>ИТОГО</Td>
+                            <Td w={'5%'}> </Td>
+                            <Td w={'10%'}> </Td>
+                            <Td w={'13%'}> </Td>
+                            <Td w={'9%'}>{purchasesData?.totalQuantity}</Td>
+                            <Td w={'9%'}> </Td>
+                            <Td w={'11%'}>{purchasesData?.totalSum}</Td>
+                            <Td w={'9%'}>{purchasesData?.totalDeliverySum}</Td>
+                            <Td w={'10%'}> </Td>
+                            <Td w={'10%'}> </Td>
                         </Tr>
                     </Tfoot>
                 </Table>

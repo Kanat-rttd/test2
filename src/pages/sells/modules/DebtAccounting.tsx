@@ -7,7 +7,7 @@ const DebtAccounting = () => {
     return (
         <>
             <Box>
-                <Box width={'100%'} height={'100%'}>
+                <Box width={'100%'} height={'100%'} mt={2}>
                     <Tabs variant="soft-rounded" colorScheme="green">
                         <TabList justifyContent={'right'} pt={3} mb={-12}>
                             <Tab>Реализаторы</Tab>

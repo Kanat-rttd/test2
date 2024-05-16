@@ -77,7 +77,7 @@ const AdminPanel = () => {
         <>
             <UniversalComponent>
                 <Box display="flex" flexDirection="column" p={5}>
-                    <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
+                    <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                             <Select
                                 placeholder="Статус"

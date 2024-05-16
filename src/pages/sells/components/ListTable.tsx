@@ -206,12 +206,12 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
                             <Th fontSize={15} color={'#000'} width={'15%'}>
                                 ИТОГО
                             </Th>
-                            <Th width={'24%'}></Th>
                             <Th width={'20%'}></Th>
-                            <Th fontSize={15} color={'#000'} width={'10%'}>
+                            <Th width={'20%'}></Th>
+                            <Th fontSize={15} color={'#000'} width={'6%'}>
                                 {dispatchData?.totalQuantity}
                             </Th>
-                            <Th width={'15%'}></Th>
+                            <Th width={'17%'}></Th>
                             <Th fontSize={15} color={'#000'} width={'10%'}>
                                 {dispatchData?.totalPrice}
                             </Th>

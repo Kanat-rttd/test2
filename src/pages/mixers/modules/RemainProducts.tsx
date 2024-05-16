@@ -25,7 +25,7 @@ const data = [
 const RemainProducts = () => {
     return (
         <>
-            <Box display="flex" flexDirection="column" p={5}>
+            <Box display="flex" flexDirection="column" p={5} mt={1}>
                 <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <Select size={'md'} borderRadius={5} placeholder="Название" width={'fit-content'} name="status">

@@ -80,8 +80,8 @@ const AdminPanel = () => {
         <>
             <UniversalComponent>
                 <Box display="flex" flexDirection="column" p={5}>
-                    <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
-                        <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                    <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
+                        <Box display={'flex'} gap={'15px'} width={'fit-content'} >
                             <Select
                                 name="name"
                                 placeholder="Имя"
@@ -111,6 +111,7 @@ const AdminPanel = () => {
                                 placeholder="Статус"
                                 width={'fit-content'}
                                 onChange={handleSelectChange}
+                                
                             >
                                 <option value="Активный">Активный</option>
                                 <option value="Неактивный">Неактивный</option>

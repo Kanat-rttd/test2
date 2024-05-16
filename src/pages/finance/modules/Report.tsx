@@ -86,6 +86,8 @@ const Report = () => {
                 <Box display="flex" gap="10px">
                     <Box className={styles.scoreSelect}>
                         <Select
+                        size={'sm'}
+                        borderRadius={5}
                             placeholder="Счет"
                             // value={selectedScore}
                             // onChange={handleChangeSelect}

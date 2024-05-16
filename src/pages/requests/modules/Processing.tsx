@@ -64,7 +64,7 @@ const ProcessingPage = () => {
 
     return (
         <UniversalComponent>
-            <Box width={'100%'} height={'94%'} p={5}>
+            <Box width={'100%'} height={'94%'} p={5} mt={1}>
                 <Box
                     marginBottom={5}
                     height={'5%'}

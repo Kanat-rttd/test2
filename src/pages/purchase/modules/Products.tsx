@@ -44,7 +44,6 @@ const Products = () => {
     //     fetcher: () => getAllBakingFacilityUnits(),
     // })
 
-
     const handleProviderChange = (event: any) => {
         setParam('providerId', event.target.value)
     }
@@ -63,47 +62,50 @@ const Products = () => {
     return (
         <>
             <UniversalComponent>
-                <Box width={'100%'} height={'calc(100vh-64px)'} p={5}>
-                    <Tabs variant="soft-rounded">
-                        <TabList justifyContent={'space-between'}>
-                            <Box display={'flex'}>
-                                <Tab>List</Tab>
-                                {/* <Tab>Pivot</Tab> */}
-                            </Box>
-
-                            <Button colorScheme="purple" onClick={onOpen}>
-                                Добавить закупки
-                            </Button>
+                <Box width={'100%'} height={'calc(100vh-64px)'} p={5} pt={4}>
+                    <Box display={'flex'} justifyContent={'space-between'} marginBottom={5}>
+                        <Box display={'flex'} gap={'15px'}>
+                            <DateRange />
+                            <Select
+                                size={'sm'}
+                                borderRadius={4}
+                                placeholder="Поставщик"
+                                value={getParam('providerId')}
+                                onChange={handleProviderChange}
+                                width={'fit-content'}
+                            >
+                                {providersData?.map((provider) => (
+                                    <option key={provider.id} value={provider.id}>
+                                        {provider.name}
+                                    </option>
+                                ))}
+                            </Select>
+                            <Select
+                                size={'sm'}
+                                borderRadius={5}
+                                placeholder="Материалы"
+                                value={getParam('rawMaterialId')}
+                                onChange={handleRawMaterialChange}
+                                width={'fit-content'}
+                            >
+                                {rawMaterialData?.map((units) => (
+                                    <option key={units.id} value={units.id}>
+                                        {units.name}
+                                    </option>
+                                ))}
+                            </Select>
+                        </Box>
+                        <Button colorScheme="purple" onClick={onOpen}>
+                            Добавить закупки
+                        </Button>
+                    </Box>
+                    <Tabs variant="soft-rounded" mt={'-12px'}>
+                        <TabList justifyContent={'space-between'} height={'22px'}>
+                            <Tab>List</Tab>
+                            {/* <Tab>Pivot</Tab> */}
                         </TabList>
                         <TabPanels>
-                            <TabPanel>
-                                <Box display={'flex'} gap={'15px'} marginBottom={10}>
-                                    <DateRange />
-                                    <Select
-                                        placeholder="Поставщик"
-                                        value={getParam('providerId')}
-                                        onChange={handleProviderChange}
-                                        width={'fit-content'}
-                                    >
-                                        {providersData?.map((provider) => (
-                                            <option key={provider.id} value={provider.id}>
-                                                {provider.name}
-                                            </option>
-                                        ))}
-                                    </Select>
-                                    <Select
-                                        placeholder="Материалы"
-                                        value={getParam('rawMaterialId')}
-                                        onChange={handleRawMaterialChange}
-                                        width={'fit-content'}
-                                    >
-                                        {rawMaterialData?.map((units) => (
-                                            <option key={units.id} value={units.id}>
-                                                {units.name}
-                                            </option>
-                                        ))}
-                                    </Select>
-                                </Box>
+                            <TabPanel height={'100%'} p={'10px 0'}>
                                 <ListTable />
                             </TabPanel>
                             <TabPanel>

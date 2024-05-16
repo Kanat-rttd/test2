@@ -40,8 +40,9 @@ const Debt = () => {
 
     return (
         <>
-            <Box padding={10} width={'25%'}>
+            <Box padding={5} width={'25%'}>
                 <Select
+                mb={-4}
                     placeholder="Поставщик"
                     value={selectedProviderId}
                     onChange={handleProviderChange}
@@ -54,7 +55,7 @@ const Debt = () => {
                     ))}
                 </Select>
             </Box>
-            <Box padding={10}>
+            <Box padding={5}>
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant="simple">
                         <Thead>

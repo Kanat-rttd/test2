@@ -97,7 +97,7 @@ const History = () => {
                 <Avatar bg="teal.500" />
             </Box> */}
             {/* <Header/> */}
-            <Box display="flex" flexDirection="column" gap="1rem" padding={IsMobile() ? 0 : 10}>
+            <Box display="flex" flexDirection="column" gap="1rem" padding={IsMobile() ? 0 : 5}>
                 <Box width={'250px'}>
                     <DateRange />
                 </Box>

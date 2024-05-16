@@ -128,13 +128,14 @@ const AdminPanel = () => {
                             <Text>Время изменения</Text>
                         </Box>
                         <Accordion
+                            allowMultiple
                             style={{
                                 height: '100%',
                                 width: '100%',
                                 overflowX: 'auto',
                                 overflowY: 'auto',
-                                maxHeight: '75dvh',
-                                minHeight: '75dvh',
+                                maxHeight: '80dvh',
+                                minHeight: '80dvh',
                             }}
                         >
                             {inPriceData?.map((item, index) => {
@@ -168,13 +169,25 @@ const AdminPanel = () => {
                                             </AccordionButton>
                                         </h2>
                                         <AccordionPanel pb={4}>
-                                            <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+                                            <TableContainer
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    overflowY: 'auto',
+                                                }}
+                                            >
                                                 <Table variant="simple">
                                                     <Thead>
-                                                        <Tr>
-                                                            <Th>Продукты</Th>
-                                                            <Th>Цена</Th>
-                                                            <Th isNumeric></Th>
+                                                        <Tr textAlign={'center'}>
+                                                            <Th w={'20%'}>Продукты</Th>
+                                                            <Th w={'20%'} isNumeric>Цена</Th>
+                                                            <Th></Th>
+                                                            <Th w={'20%'} isNumeric>Время изменения</Th>
+                                                            <Th></Th>
+                                                            
+                                                            <Th w={'10%'} textAlign={'center'}>
+                                                                Действия
+                                                            </Th>
                                                         </Tr>
                                                     </Thead>
                                                     <Tbody>
@@ -182,88 +195,86 @@ const AdminPanel = () => {
                                                             item.detail.map((value) => {
                                                                 return (
                                                                     <Tr key={value.id}>
-                                                                        <Td>{value.name}</Td>
-                                                                        <Td>{value.price}</Td>
-                                                                        <Td
-                                                                            isNumeric
-                                                                            display={'flex'}
-                                                                            gap={'10px'}
-                                                                            justifyContent={
-                                                                                'flex-end'
-                                                                            }
-                                                                        >
+                                                                        <Td w={'20%'}>
+                                                                            {value.name}
+                                                                        </Td>
+                                                                        <Td w={'20%'}  isNumeric>
+                                                                            {value.price}
+                                                                        </Td>
+                                                                        <Td></Td>
+                                                                        <Td w={'20%'}  isNumeric>
                                                                             {dayjs(
                                                                                 value.date,
                                                                             ).format(
                                                                                 'DD.MM.YYYY HH:mm',
                                                                             )}
-                                                                            <Box>
-                                                                                <IconButton
-                                                                                    variant="outline"
-                                                                                    size={'sm'}
-                                                                                    colorScheme="teal"
-                                                                                    aria-label="Send email"
-                                                                                    marginRight={3}
-                                                                                    onClick={() => {
-                                                                                        setSelectedData(
-                                                                                            {
-                                                                                                clientId:
-                                                                                                    item.clientId,
-                                                                                                clientName:
-                                                                                                    item.clientName,
-                                                                                                detail: [
-                                                                                                    {
-                                                                                                        individualPriceId:
-                                                                                                            value.individualPriceId,
-                                                                                                        id: value.id,
-                                                                                                        name: value.name,
-                                                                                                        price: value.price,
-                                                                                                        date: value.date,
-                                                                                                    },
-                                                                                                ],
-                                                                                            },
-                                                                                        )
-                                                                                        onOpen()
-                                                                                    }}
-                                                                                    icon={
-                                                                                        <EditIcon />
-                                                                                    }
-                                                                                />
-                                                                                <IconButton
-                                                                                    variant="outline"
-                                                                                    size={'sm'}
-                                                                                    colorScheme="teal"
-                                                                                    aria-label="Send email"
-                                                                                    marginRight={3}
-                                                                                    onClick={() => {
-                                                                                        setSelectedData(
-                                                                                            {
-                                                                                                clientId:
-                                                                                                    item.clientId,
-                                                                                                clientName:
-                                                                                                    item.clientName,
-                                                                                                detail: [
-                                                                                                    {
-                                                                                                        individualPriceId:
-                                                                                                            value.individualPriceId,
-                                                                                                        id: value.id,
-                                                                                                        name: value.name,
-                                                                                                        price: value.price,
-                                                                                                        date: value.date,
-                                                                                                    },
-                                                                                                ],
-                                                                                            },
-                                                                                        )
-                                                                                        setDialog({
-                                                                                            ...dialog,
-                                                                                            isOpen: true,
-                                                                                        })
-                                                                                    }}
-                                                                                    icon={
-                                                                                        <DeleteIcon />
-                                                                                    }
-                                                                                />
-                                                                            </Box>
+                                                                        </Td>
+                                                                        <Td></Td>
+                                                                        
+                                                                        <Td display={'flex'} justifyContent={'center'}>
+                                                                            <IconButton
+                                                                                variant="outline"
+                                                                                size={'sm'}
+                                                                                colorScheme="teal"
+                                                                                aria-label="Send email"
+                                                                                marginRight={3}
+                                                                                onClick={() => {
+                                                                                    setSelectedData(
+                                                                                        {
+                                                                                            clientId:
+                                                                                                item.clientId,
+                                                                                            clientName:
+                                                                                                item.clientName,
+                                                                                            detail: [
+                                                                                                {
+                                                                                                    individualPriceId:
+                                                                                                        value.individualPriceId,
+                                                                                                    id: value.id,
+                                                                                                    name: value.name,
+                                                                                                    price: value.price,
+                                                                                                    date: value.date,
+                                                                                                },
+                                                                                            ],
+                                                                                        },
+                                                                                    )
+                                                                                    onOpen()
+                                                                                }}
+                                                                                icon={<EditIcon />}
+                                                                            />
+                                                                            <IconButton
+                                                                                variant="outline"
+                                                                                size={'sm'}
+                                                                                colorScheme="teal"
+                                                                                aria-label="Send email"
+                                                                                marginRight={3}
+                                                                                onClick={() => {
+                                                                                    setSelectedData(
+                                                                                        {
+                                                                                            clientId:
+                                                                                                item.clientId,
+                                                                                            clientName:
+                                                                                                item.clientName,
+                                                                                            detail: [
+                                                                                                {
+                                                                                                    individualPriceId:
+                                                                                                        value.individualPriceId,
+                                                                                                    id: value.id,
+                                                                                                    name: value.name,
+                                                                                                    price: value.price,
+                                                                                                    date: value.date,
+                                                                                                },
+                                                                                            ],
+                                                                                        },
+                                                                                    )
+                                                                                    setDialog({
+                                                                                        ...dialog,
+                                                                                        isOpen: true,
+                                                                                    })
+                                                                                }}
+                                                                                icon={
+                                                                                    <DeleteIcon />
+                                                                                }
+                                                                            />
                                                                         </Td>
                                                                     </Tr>
                                                                 )
@@ -273,7 +284,10 @@ const AdminPanel = () => {
                                                         <Tr>
                                                             <Th></Th>
                                                             <Th></Th>
-                                                            <Th isNumeric>
+                                                            <Th></Th>
+                                                            <Th></Th>
+                                                            <Th></Th>
+                                                            <Th display={'flex'} justifyContent={'center'}>
                                                                 <Button
                                                                     colorScheme="purple"
                                                                     onClick={() => {

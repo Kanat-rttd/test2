@@ -88,7 +88,7 @@ const BakingPage = () => {
         <>
             <UniversalComponent>
 
-                <Box p={5}>
+                <Box p={5} mt={1}>
                     <Box display={'flex'} justifyContent={'space-between'}>
                         <Box marginBottom={7} display={'flex'}>
                             <DateRange />
@@ -207,17 +207,17 @@ const BakingPage = () => {
                                     })}
                                 </Tbody>
                                 <Tfoot>
-                                    <Tr fontSize={15} color={'#000'} width={'100%'}>
-                                        <Td fontSize={15} color={'#000'} width={'15%'}>Итого</Td>
-                                        <Td fontSize={15} color={'#000'} width={'5%'}>{bakingsData?.totals?.totalFlour}</Td>
-                                        <Td fontSize={15} color={'#000'} width={'5%'}>{bakingsData?.totals?.totalSalt}</Td>
-                                        <Td fontSize={15} color={'#000'} width={'5%'}>{bakingsData?.totals?.totalYeast}</Td>
-                                        <Td fontSize={15} color={'#000'} width={'5%'}>{bakingsData?.totals?.totalMalt}</Td>
-                                        <Td fontSize={15} color={'#000'} width={'5%'}>{bakingsData?.totals?.totalButter}</Td>
-                                        <Td fontSize={15} color={'#000'} width={'5%'}></Td>
-                                        <Td fontSize={15} color={'#000'} width={'10%'}></Td>
-                                        <Td fontSize={15} color={'#000'} width={'5%'}>{bakingsData?.totals?.totalOutput}</Td>
-                                        <Td fontSize={15} color={'#000'} width={'10%'}></Td>
+                                    <Tr fontSize={15} fontWeight={'bold'} color={'#000'} width={'100%'}>
+                                        <Td width={'15%'}>Итого</Td>
+                                        <Td width={'7%'}>{bakingsData?.totals?.totalFlour}</Td>
+                                        <Td width={'7%'}>{bakingsData?.totals?.totalSalt}</Td>
+                                        <Td width={'7%'}>{bakingsData?.totals?.totalYeast}</Td>
+                                        <Td width={'7%'}>{bakingsData?.totals?.totalMalt}</Td>
+                                        <Td width={'5%'}>{bakingsData?.totals?.totalButter}</Td>
+                                        <Td width={'5%'}></Td>
+                                        <Td width={'10%'}></Td>
+                                        <Td width={'3%'}>{bakingsData?.totals?.totalOutput}</Td>
+                                        <Td width={'10%'}></Td>
                                     </Tr>
                                 </Tfoot>
                             </Table>

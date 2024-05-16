@@ -76,9 +76,9 @@ const ProcessedPage = () => {
     return (
         <Box overflowY={'hidden'}>
             <UniversalComponent>
-                <Box width={'100%'} p={5}>
+                <Box width={'100%'} p={5} mt={1}>
                     <Box
-                        marginBottom={6}
+                        mb={8}
                         height={'5%'}
                         display={'flex'}
                         justifyContent={'space-between'}

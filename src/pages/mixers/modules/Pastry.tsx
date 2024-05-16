@@ -77,9 +77,9 @@ const MixersPage = () => {
 
     return (
         <UniversalComponent>
-            <Box width={'100%'} height={'94%'} p={5}>
+            <Box width={'100%'} height={'94%'} p={5} mt={1}>
                 <Box
-                    marginBottom={5}
+                    marginBottom={'34px'}
                     height={'5%'}
                     display={'flex'}
                     justifyContent={'space-between'}

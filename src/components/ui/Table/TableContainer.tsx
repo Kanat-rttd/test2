@@ -15,7 +15,7 @@ const StyledTableContainer: React.FC<StyledTableContainerProps> = ({
     ...props
 }) => {
     return (
-        <Box position={'relative'} className={classes.tableWrapper}>
+        <Box className={classes.tableWrapper}>
             <TableContainer className={classes.tableContainer} style={style} {...props}>
                 {isLoading ? (
                     <div className={classes.spinnerOverlay}>

@@ -72,11 +72,13 @@ const ReleaseView = () => {
 
     return (
         <Box>
-            <Box width={'100%'} height={'100%'} p={5}>
-                <Box marginBottom={10} display={'flex'} justifyContent={'space-between'}>
+            <Box width={'100%'} height={'100%'} p={5} mt={1}>
+                <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'100%'}>
                         <DateRange />
                         <Select
+                            size={'sm'}
+                            borderRadius={5}
                             width={'fit-content'}
                             value={selectedClient}
                             onChange={handleClientChange}

@@ -18,6 +18,7 @@ import { useState, useEffect } from 'react'
 import { getBreadNames } from '@/utils/services/product.service'
 import { getAllClients } from '@/utils/services/client.service'
 import { createDispatch } from '@/utils/services/dispatch.service'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 interface DistributionModalProps {
     isOpen: boolean
@@ -43,6 +44,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     onSuccess,
     status,
 }) => {
+    const { loading } = useNotify()
     const [breadNames, setBreadNames] = useState<BreadNames[]>([])
     const [clientsData, setClientsData] = useState<Client[]>([])
 
@@ -106,16 +108,18 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
             })),
             dispatch: status,
         }
-        createDispatch(distributionData)
-            .then((res) => {
-                console.log(res)
-                onSuccess()
-            })
-            .catch((error) => {
-                console.error('Error creating sale:', error)
-            })
 
-        onClose()
+        const responsePromise: Promise<any> = createDispatch(distributionData)
+        loading(responsePromise)
+        responsePromise.then(() => {
+            console.log('response')
+            onSuccess()
+            onClose()
+        })
+        .catch((error) => {
+            console.error('Error creating sale:', error)
+        })
+
     }
 
     return (

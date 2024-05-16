@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import Header from './Header'
 import { useLocation } from 'react-router-dom'
-import { headerButtons } from '@/utils/constants/headerButtons'
+import { headerButtons } from '@/utils/constants/headerButtons.consts'
 
 type LayoutProps = {
     children: ReactNode

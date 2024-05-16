@@ -96,8 +96,8 @@ const InvoicePage = () => {
                             width: '100%',
                             overflowX: 'auto',
                             overflowY: 'auto',
-                            maxHeight: '75dvh',
-                            minHeight: '75dvh',
+                            maxHeight: '79dvh',
+                            minHeight: '79dvh',
                         }}
                     >
                         {dispatchesData?.map((row, index) => {
