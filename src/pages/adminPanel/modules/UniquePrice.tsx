@@ -1,4 +1,3 @@
-import { ADMIN_RELEASE_ROUTE, ADMIN_UNIQUEPRICE_ROUTE } from '@/utils/constants/routes.consts'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import dayjs from 'dayjs'
 import {
@@ -20,7 +19,6 @@ import {
     useDisclosure,
     IconButton,
 } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
 import UniquePriceAddModal, { UniquePrice } from '../components/UniquePriceAddModal'
 import { useState, useEffect, useMemo } from 'react'
 import Dialog from '@/components/Dialog'
@@ -33,7 +31,6 @@ import { getAllClients } from '@/utils/services/client.service'
 import { useApi } from '@/utils/services/axios'
 import { TableContainer } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
-import Header from '@/components/layout/Header'
 
 interface Client {
     id: string
@@ -59,7 +56,6 @@ interface individualPrice {
 }
 
 const AdminPanel = () => {
-    const navigate = useNavigate()
     const { data: individualPrices } = useApi<individualPrice[]>('inPrice')
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<UniquePrice | undefined>(undefined)
@@ -118,19 +114,6 @@ const AdminPanel = () => {
     return (
         <>
             <UniversalComponent>
-                <Header>
-                    <Button height={'100%'} onClick={() => navigate(ADMIN_RELEASE_ROUTE)}>
-                        Реализаторы
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_UNIQUEPRICE_ROUTE)}
-                        bg={'rgba(217, 217, 217, 1)'}
-                    >
-                        Уникальные цены
-                    </Button>
-                </Header>
-
                 <Box display="flex" flexDirection="column" p={5}>
                     <Box>
                         <Box

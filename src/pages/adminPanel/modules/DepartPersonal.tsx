@@ -12,8 +12,6 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { ADMIN_USERS_ROUTE, ADMIN_DEPART_PERSONAL_ROUTE } from '@/utils/constants/routes.consts'
-import { useNavigate } from 'react-router-dom'
 import { useApi } from '@/utils/services/axios'
 import { mutate } from 'swr'
 import UniversalComponent from '@/components/ui/UniversalComponent'
@@ -22,7 +20,6 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteDepartPersonal } from '@/utils/services/departPersonal.service'
 import { TableContainer, Thead } from '@/components/ui'
 import DepartPersonalModal from '../components/DepartPesonalAddModal'
-import Header from '@/components/layout/Header'
 
 interface DepartPersonal {
     id: number
@@ -35,7 +32,6 @@ interface DepartPersonal {
 
 const AdminPanel = () => {
     const { loading } = useNotify()
-    const navigate = useNavigate()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<DepartPersonal | undefined>(undefined)
     const [selectedStatus, setSelectedStatus] = useState<string>('')
@@ -80,19 +76,6 @@ const AdminPanel = () => {
     return (
         <>
             <UniversalComponent>
-                <Header>
-                    <Button height={'100%'} onClick={() => navigate(ADMIN_USERS_ROUTE)}>
-                        Адмперсонал
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        bg={'rgba(217, 217, 217, 1)'}
-                        onClick={() => navigate(ADMIN_DEPART_PERSONAL_ROUTE)}
-                    >
-                        Цехперсонал
-                    </Button>
-                </Header>
-
                 <Box display="flex" flexDirection="column" p={5}>
                     <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>

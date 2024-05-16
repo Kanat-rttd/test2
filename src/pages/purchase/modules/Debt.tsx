@@ -1,9 +1,6 @@
-import { PURCHASE_DEBT_ROUTE, PURCHASE_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
-import { Box, Button, Table, Tbody, Tr, Th, Td, Select } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
+import { Box, Table, Tbody, Tr, Th, Td, Select } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import { useState } from 'react'
-import Header from '@/components/layout/Header'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 
 interface Provider {
@@ -26,7 +23,6 @@ interface DebtPurchase {
 }
 
 const Debt = () => {
-    const navigate = useNavigate()
     const [selectedProviderId, setSelectedProviderId] = useState<string>('')
 
     const { data: purchasesData } = useApi<DebtPurchase>('productPurchase/debt', {
@@ -44,24 +40,6 @@ const Debt = () => {
 
     return (
         <>
-            <Header>
-                <Button
-                    height={'100%'}
-                    width={'20%'}
-                    onClick={() => navigate(PURCHASE_PRODUCTS_ROUTE)}
-                >
-                    Закуп
-                </Button>
-                <Button
-                    height={'100%'}
-                    width={'20%'}
-                    onClick={() => navigate(PURCHASE_DEBT_ROUTE)}
-                    background={'rgba(217, 217, 217, 1)'}
-                >
-                    Долги по закупу
-                </Button>
-            </Header>
-
             <Box padding={10} width={'25%'}>
                 <Select
                     placeholder="Поставщик"

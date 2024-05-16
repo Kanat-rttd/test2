@@ -1,17 +1,10 @@
-import { Box, Button, Select } from '@chakra-ui/react'
+import { Box, Select } from '@chakra-ui/react'
 import { useState } from 'react'
-import {
-    SELLS_INVOICE_ROUTE,
-    SELLS_DEBT_ACCOUNTING_ROUTE,
-    SELLS_DEBT_TRANSFER_ROUTE,
-} from '@/utils/constants/routes.consts'
 import ListTable from '../components/ListTable'
-import { useNavigate } from 'react-router-dom'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 
 import UniversalComponent from '@/components/ui/UniversalComponent'
-import Header from '@/components/layout/Header'
 // import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface FacilityUnit {
@@ -43,8 +36,6 @@ interface Product {
 const JournalPage = () => {
     // Данные выбора даты
     // const {getURLs, getParam} = useURLParameters()
-    const navigate = useNavigate()
-
     const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
     const { data: clientsData } = useApi<Client[]>('client')
     const { data: productData } = useApi<Product[]>('product')
@@ -60,33 +51,6 @@ const JournalPage = () => {
     return (
         <>
             <UniversalComponent>
-                <Header>
-                    <Button height={'100%'} width={'20%'} bg={'rgba(217, 217, 217, 1)'}>
-                        Журнал Продаж
-                    </Button>
-                    <Button
-                        onClick={() => navigate(SELLS_INVOICE_ROUTE)}
-                        height={'100%'}
-                        width={'20%'}
-                    >
-                        Накладной
-                    </Button>
-                    <Button
-                        onClick={() => navigate(SELLS_DEBT_ACCOUNTING_ROUTE)}
-                        height={'100%'}
-                        width={'20%'}
-                    >
-                        Учёт долгов
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(SELLS_DEBT_TRANSFER_ROUTE)}
-                    >
-                        Перевод долга
-                    </Button>
-                </Header>
-
                 <Box
                     display="flex"
                     flexDirection="column"

@@ -12,15 +12,12 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
-import { ADMIN_MAGAZINES_ROUTE } from '@/utils/constants/routes.consts'
 import { mutate, useApi } from '@/utils/services/axios'
 import MagazineAddModal from '../components/MagazineAddModal'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteMagazines } from '@/utils/services/magazines.service'
 import { TableContainer, Thead } from '@/components/ui'
-import Header from '@/components/layout/Header'
 
 interface Magazines {
     id: number
@@ -60,7 +57,6 @@ const AdminPanel = () => {
     //     fetcher: () => getAllProducts(),
     // })
 
-    const navigate = useNavigate()
     const { onOpen, isOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Magazines>()
     // const [data, setData] = useState<ProductList[]>([])
@@ -112,16 +108,6 @@ const AdminPanel = () => {
 
     return (
         <>
-            <Header>
-                <Button
-                    height={'100%'}
-                    onClick={() => navigate(ADMIN_MAGAZINES_ROUTE)}
-                    bg={'rgba(217, 217, 217, 1)'}
-                >
-                    Магазины
-                </Button>
-            </Header>
-
             <Box display="flex" flexDirection="column" p={5}>
                 <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>

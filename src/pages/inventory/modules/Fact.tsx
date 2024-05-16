@@ -13,25 +13,6 @@ const Fact = () => {
     return (
         <>
             <UniversalComponent>
-                <Header>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        bg={'rgba(217, 217, 217, 1)'}
-                        onClick={() => navigate(INVENTORY_FACT_ROUTE)}
-                    >
-                        Ввод факт
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        // bg={'rgba(217, 217, 217, 1)'}
-                        onClick={() => navigate(INVENTORY_DETAILS_ROUTE)}
-                    >
-                        Инвентаризация
-                    </Button>
-                </Header>
-
                 <Box width={'100%'} height={'94%'} p={5}>
                     <Box
                         marginBottom={10}

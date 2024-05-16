@@ -1,4 +1,3 @@
-import { RELEASE_DISTRIBUTION_ROUTE, RELEASE_REFUND_ROUTE } from '@/utils/constants/routes.consts'
 import {
     Box,
     Button,
@@ -11,7 +10,6 @@ import {
     useDisclosure,
 } from '@chakra-ui/react'
 import { mutate } from '@/utils/services/axios'
-import { useNavigate } from 'react-router-dom'
 import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
 import DistributionModal from '../components/DistributionModal'
@@ -19,7 +17,6 @@ import DateRange from '@/components/DateRange'
 import { useState } from 'react'
 import { useApi } from '@/utils/services/axios'
 import UniversalComponent from '@/components/ui/UniversalComponent'
-import Header from '@/components/layout/Header'
 
 interface FacilityUnit {
     id: number
@@ -27,7 +24,6 @@ interface FacilityUnit {
 }
 
 const Distribution = () => {
-    const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     // const [selectionRange, setSelectionRange] = useState({
@@ -56,24 +52,6 @@ const Distribution = () => {
     return (
         <Box>
             <UniversalComponent>
-                <Header>
-                    <Button
-                        bg={'rgba(217, 217, 217, 1)'}
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(RELEASE_DISTRIBUTION_ROUTE)}
-                    >
-                        Выдача
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(RELEASE_REFUND_ROUTE)}
-                    >
-                        Возврат
-                    </Button>
-                </Header>
-
                 <Box width={'100%'} height={'100%'} p={5}>
                     <Box
                         marginBottom={'40.5px'}

@@ -11,17 +11,14 @@ import {
     Tr,
     useDisclosure,
 } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
 import ProviderAddModal from '../components/ProviderAddModal'
 import { useState } from 'react'
 import Dialog from '@/components/Dialog'
-import { ADMIN_PROVIDER_ROUTE } from '@/utils/constants/routes.consts'
 import { useApi } from '@/utils/services/axios'
 import { deleteProviderGoods } from '@/utils/services/providerGoods.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { mutate } from 'swr'
 import { TableContainer, Thead } from '@/components/ui'
-import Header from '@/components/layout/Header'
 
 interface ProviderGoods {
     id: number
@@ -48,7 +45,6 @@ const AdminProvider = () => {
         status: selectedStatus,
     })
 
-    const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<ProviderGoods>()
 
@@ -85,16 +81,6 @@ const AdminProvider = () => {
 
     return (
         <>
-            <Header>
-                <Button
-                    height={'100%'}
-                    onClick={() => navigate(ADMIN_PROVIDER_ROUTE)}
-                    bg={'rgba(217, 217, 217, 1)'}
-                >
-                    Поставщик товары
-                </Button>
-            </Header>
-
             <Box width={'100%'} height={'100%'} p={5}>
                 <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>

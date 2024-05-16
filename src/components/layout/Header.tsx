@@ -1,14 +1,26 @@
-import { Avatar, Box, BoxProps, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
+import {
+    Avatar,
+    Box,
+    BoxProps,
+    Button,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    Text,
+} from '@chakra-ui/react'
 import classes from './style.module.css'
 import MenuAccordion from '../MenuAccordion'
 import { useNavigate } from 'react-router-dom'
 import { LOGIN_ROUTE } from '@/utils/constants/routes.consts'
+import { buttonsData } from '@/utils/constants/headerButtons'
 
 interface StyledContainerProps extends BoxProps {
     children?: React.ReactNode
+    buttons?: buttonsData[] | undefined
 }
 
-const Header: React.FC<StyledContainerProps> = ({ children }) => {
+const Header: React.FC<StyledContainerProps> = ({ buttons }) => {
     const navigate = useNavigate()
 
     const handleLogOut = () => {
@@ -19,9 +31,25 @@ const Header: React.FC<StyledContainerProps> = ({ children }) => {
         <Box className={classes.header}>
             <Box width={'100%'} display={'flex'}>
                 <MenuAccordion />
-                <Box w={'100%'} h={'100%'}>
-                    {children}
-                </Box>
+                {buttons && (
+                    <Box w={'100%'} h={'100%'}>
+                        {buttons?.map((button) => {
+                            return (
+                                <Button
+                                    height={'100%'}
+                                    onClick={() => navigate(button.puth)}
+                                    style={
+                                        button.isCurrentPage
+                                            ? { backgroundColor: 'rgba(217, 217, 217, 1)' }
+                                            : {}
+                                    }
+                                >
+                                    {button.label}
+                                </Button>
+                            )
+                        })}
+                    </Box>
+                )}
             </Box>
             <Box className={classes.logo}>
                 <Menu>

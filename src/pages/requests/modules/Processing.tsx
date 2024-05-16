@@ -1,14 +1,11 @@
-import { Box, Button } from '@chakra-ui/react'
-import { REQUEST_PROCESSED_ROUTE } from '@/utils/constants/routes.consts'
+import { Box } from '@chakra-ui/react'
 import AccordionClients from '@/components/AccordionClients'
 // import { getAllSales } from '@/utils/services/sales.service'
 import { setDoneStatus } from '@/utils/services/sales.service'
-import { useNavigate } from 'react-router-dom'
 import DateRange from '@/components/DateRange'
 
 import { useApi } from '@/utils/services/axios'
 import UniversalComponent from '@/components/ui/UniversalComponent'
-import Header from '@/components/layout/Header'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface OrderArray {
@@ -36,7 +33,6 @@ interface OrderArray {
 
 const ProcessingPage = () => {
     const { getURLs } = useURLParameters()
-    const navigate = useNavigate()
     // const [getSalesData, setSalesData] = useState<OrderArray[]>([])
 
     // const { data: salesData } = useApi<OrderArray[]>('sales')
@@ -68,19 +64,6 @@ const ProcessingPage = () => {
 
     return (
         <UniversalComponent>
-            <Header>
-                <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'15%'}>
-                    Обработка
-                </Button>
-                <Button
-                    height={'100%'}
-                    width={'15%'}
-                    onClick={() => navigate(REQUEST_PROCESSED_ROUTE)}
-                >
-                    Обработанные
-                </Button>
-            </Header>
-
             <Box width={'100%'} height={'94%'} p={5}>
                 <Box
                     marginBottom={5}

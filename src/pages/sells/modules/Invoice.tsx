@@ -1,16 +1,9 @@
 import { Box, Button, Select, Text, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
-import {
-    SELLS_DEBT_ACCOUNTING_ROUTE,
-    SELLS_DEBT_TRANSFER_ROUTE,
-    SELLS_JOURNAL_ROUTE,
-} from '@/utils/constants/routes.consts'
 import { useApi } from '@/utils/services/axios'
-import { useNavigate } from 'react-router-dom'
 import InvoiceModal from '../components/InvoiceModal'
 import dayjs from 'dayjs'
 import DateRange from '@/components/DateRange'
-import Header from '@/components/layout/Header'
 
 interface financeTotalWithInvoiceNumbers {
     invoiceNumber: number
@@ -58,7 +51,6 @@ interface InvoiceData {
 }
 
 const InvoicePage = () => {
-    const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const { data: financeTotals } = useApi<financeTotalWithInvoiceNumbers[]>('finance/totals')
@@ -72,33 +64,6 @@ const InvoicePage = () => {
     return (
         <>
             <Box>
-                <Header>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(SELLS_JOURNAL_ROUTE)}
-                    >
-                        Журнал Продаж
-                    </Button>
-                    <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'20%'}>
-                        Накладной
-                    </Button>
-                    <Button
-                        onClick={() => navigate(SELLS_DEBT_ACCOUNTING_ROUTE)}
-                        height={'100%'}
-                        width={'20%'}
-                    >
-                        Учёт долгов
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(SELLS_DEBT_TRANSFER_ROUTE)}
-                    >
-                        Перевод долга
-                    </Button>
-                </Header>
-
                 <Box width={'100%'} height={'100%'} p={5}>
                     <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>

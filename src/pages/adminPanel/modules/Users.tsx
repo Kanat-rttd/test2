@@ -13,8 +13,6 @@ import {
 import UserAddModal from '../components/UserAddModal'
 import { useState } from 'react'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { ADMIN_USERS_ROUTE, ADMIN_DEPART_PERSONAL_ROUTE } from '@/utils/constants/routes.consts'
-import { useNavigate } from 'react-router-dom'
 
 import { useApi, mutate } from '@/utils/services/axios'
 // import Header from '@/components/Header'
@@ -23,14 +21,12 @@ import { deleteUser } from '@/utils/services/user.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { User } from '@/utils/types/user.types'
 import { TableContainer, Thead } from '@/components/ui'
-import Header from '@/components/layout/Header'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 // import { mutate } from 'swr'
 // import { getAllUsers } from '../../../utils/services/user.service'
 
 const AdminPanel = () => {
     const { loading } = useNotify()
-    const navigate = useNavigate()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<User | undefined>(undefined)
     const [selectedStatus, setSelectedStatus] = useState<string>('')
@@ -83,19 +79,6 @@ const AdminPanel = () => {
     return (
         <>
             <UniversalComponent>
-                <Header>
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_USERS_ROUTE)}
-                        bg={'rgba(217, 217, 217, 1)'}
-                    >
-                        Адмперсонал
-                    </Button>
-                    <Button height={'100%'} onClick={() => navigate(ADMIN_DEPART_PERSONAL_ROUTE)}>
-                        Цехперсонал
-                    </Button>
-                </Header>
-
                 <Box display="flex" flexDirection="column" p={5}>
                     <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>

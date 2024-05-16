@@ -45,7 +45,7 @@ const History = () => {
                     <Heading size={'md'}>История</Heading>
                 </Box>
                 <Box>
-                    {getSalesData.map((order, index) => (
+                    {/* {getSalesData.map((order, index) => (
                         <Box
                             key={index}
                             p={5}
@@ -69,7 +69,7 @@ const History = () => {
                                 onClick={() => navigator(`${SALES_HISTORY_ROUTE}/${order.id}`)}
                             />
                         </Box>
-                    ))}
+                    ))} */}
                 </Box>
             </Box>
         </>

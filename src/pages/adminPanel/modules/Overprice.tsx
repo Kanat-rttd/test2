@@ -13,15 +13,12 @@ import {
 import OverPriceAddModal from '../components/OverPriceAddModal'
 import { useState } from 'react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
-import { ADMIN_OVERPRICE_ROUTE } from '@/utils/constants/routes.consts'
 import { useApi } from '@/utils/services/axios'
 import { mutate } from 'swr'
 import { deleteOverprice } from '@/utils/services/overprice.service'
 import DateRange from '@/components/DateRange'
 import { TableContainer, Thead } from '@/components/ui'
-import Header from '@/components/layout/Header'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface ClientsFilter {
@@ -56,7 +53,6 @@ const AdminPanel = () => {
 
     console.log(clientData)
 
-    const navigate = useNavigate()
     const { onOpen, isOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<OverPrice>()
     const [dialog, setDialog] = useState({
@@ -92,16 +88,6 @@ const AdminPanel = () => {
 
     return (
         <>
-            <Header>
-                <Button
-                    height={'100%'}
-                    onClick={() => navigate(ADMIN_OVERPRICE_ROUTE)}
-                    bg={'rgba(217, 217, 217, 1)'}
-                >
-                    Сверху
-                </Button>
-            </Header>
-
             <Box display="flex" flexDirection="column" p={5}>
                 <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>

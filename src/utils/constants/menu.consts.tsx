@@ -300,19 +300,19 @@ export const subMenuItems: MenuItem[] = [
     },
     {
         route: BREAD_REPORT_ROUTE,
-        label: 'Отчет по продукций',
+        label: 'Отчет по продукции',
         path: REPORT_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
     {
         route: RELEASE_REPORT_ROUTE,
-        label: 'Отчет по реализаций',
+        label: 'Отчет по реализации',
         path: REPORT_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
     {
         route: VISIT_REPORT_ROUTE,
-        label: 'Отчет по посещений',
+        label: 'Отчет по посещению',
         path: REPORT_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },

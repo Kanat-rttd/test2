@@ -1,13 +1,10 @@
-import { Box, Button, Select } from '@chakra-ui/react'
+import { Box, Select } from '@chakra-ui/react'
 import { useState, useEffect, ChangeEvent } from 'react'
-import { REQUEST_PROCESSING_ROUTE } from '@/utils/constants/routes.consts'
 
 import TableData from '@/components/TableData'
 import { getByFacilityUnit } from '@/utils/services/sales.service'
-import { useNavigate } from 'react-router-dom'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
-import Header from '@/components/layout/Header'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
 
@@ -46,7 +43,6 @@ interface FacilityUnit {
 const ProcessedPage = () => {
     const { getURLs } = useURLParameters()
 
-    const navigate = useNavigate()
     const [getSalesData, setSalesData] = useState<OrderArray[]>([])
 
     const { data: salesData } = useApi<OrderArray[]>(`sales?${getURLs().toString()}`)
@@ -80,19 +76,6 @@ const ProcessedPage = () => {
     return (
         <Box overflowY={'hidden'}>
             <UniversalComponent>
-                <Header>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(REQUEST_PROCESSING_ROUTE)}
-                    >
-                        Обработка
-                    </Button>
-                    <Button height={'100%'} width={'20%'} bg={'rgba(217, 217, 217, 1)'}>
-                        Обработанные
-                    </Button>
-                </Header>
-
                 <Box width={'100%'} p={5}>
                     <Box
                         marginBottom={6}

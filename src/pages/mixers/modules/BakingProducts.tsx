@@ -11,14 +11,11 @@ import {
     useDisclosure,
     IconButton,
 } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
-import { MIXERS_PASTRY_ROUTE } from '@/utils/constants/routes.consts'
 import BakingAddModal from '../components/BakingAddModal'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { mutate, useApi } from '@/utils/services/axios'
-import Header from '@/components/layout/Header'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import Dialog from '@/components/Dialog'
@@ -64,7 +61,6 @@ const BakingPage = () => {
     const { loading } = useNotify()
     const { getURLs } = useURLParameters()
     const { onOpen, onClose, isOpen } = useDisclosure()
-    const navigate = useNavigate()
     const [selectedBaking, setSelectedBaking] = useState<bakingsData | undefined>(undefined)
     const [dialog, setDialog] = useState({
         isOpen: false,
@@ -91,18 +87,6 @@ const BakingPage = () => {
     return (
         <>
             <UniversalComponent>
-                <Header>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(MIXERS_PASTRY_ROUTE)}
-                    >
-                        Заявки
-                    </Button>
-                    <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'20%'}>
-                        Выпечка
-                    </Button>
-                </Header>
 
                 <Box p={5}>
                     <Box display={'flex'} justifyContent={'space-between'}>

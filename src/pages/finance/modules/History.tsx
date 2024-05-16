@@ -1,7 +1,7 @@
 import Dialog from '@/components/Dialog'
-import Drawler from '@/components/Menu'
+// import Drawler from '@/components/Menu'
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
-import { Avatar, Box, Table, Tbody, Td, Text, Th, Tr, useDisclosure } from '@chakra-ui/react'
+import { Box, Table, Tbody, Td, Text, Th, Tr, useDisclosure } from '@chakra-ui/react'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import DateRange from '../../../components/DateRange'
@@ -11,6 +11,7 @@ import IsMobile from '@/utils/helpers/isMobile'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
 import { TableContainer, Thead } from '@/components/ui'
+// import Header from '@/components/layout/Header'
 
 export type History = {
     date: Date
@@ -81,7 +82,7 @@ const History = () => {
 
     return (
         <>
-            <Box
+            {/* <Box
                 display="flex"
                 justifyContent={'space-between'}
                 flexDirection={'row'}
@@ -94,7 +95,8 @@ const History = () => {
                     <Drawler></Drawler>
                 </Box>
                 <Avatar bg="teal.500" />
-            </Box>
+            </Box> */}
+            {/* <Header/> */}
             <Box display="flex" flexDirection="column" gap="1rem" padding={IsMobile() ? 0 : 10}>
                 <Box width={'250px'}>
                     <DateRange />

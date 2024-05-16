@@ -1,7 +1,6 @@
 import { Box, Button, Select, useDisclosure } from '@chakra-ui/react'
 import ListTable from '../components/ListTable'
 import DistributionModal from '../components/DistributionModal'
-import Header from '@/components/layout/Header'
 import DateRange from '@/components/DateRange'
 
 const shiftAccounting = () => {
@@ -13,12 +12,6 @@ const shiftAccounting = () => {
 
     return (
         <Box>
-            <Header>
-                <Button height={'100%'} width={'20%'} bg={'rgba(217, 217, 217, 1)'}>
-                    Учёт смен
-                </Button>
-            </Header>
-
             <Box width={'100%'} height={'100%'} p={5}>
                 <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>

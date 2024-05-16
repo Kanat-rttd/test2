@@ -1,10 +1,4 @@
-import { Table, Tr, Th, Tbody, Td, Box, Select, Button } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
-import {
-    MIXERS_REMAIN_PRODUCTS_ROUTE,
-    MIXERS_REMAIN_RAW_MATERIALS_ROUTE,
-} from '@/utils/constants/routes.consts'
-import Header from '@/components/layout/Header'
+import { Table, Tr, Th, Tbody, Td, Box, Select } from '@chakra-ui/react'
 import { TableContainer, Thead } from '@/components/ui'
 
 const data = [
@@ -27,22 +21,8 @@ const data = [
 ]
 
 const RemainRawMaterials = () => {
-    const navigate = useNavigate()
     return (
         <>
-            <Header>
-                <Button
-                    height={'100%'}
-                    onClick={() => navigate(MIXERS_REMAIN_RAW_MATERIALS_ROUTE)}
-                    bg={'rgba(217, 217, 217, 1)'}
-                >
-                    Остаток сырья
-                </Button>
-                <Button height={'100%'} onClick={() => navigate(MIXERS_REMAIN_PRODUCTS_ROUTE)}>
-                    Остаток продукции
-                </Button>
-            </Header>
-
             <Box display="flex" flexDirection="column" p={5} minHeight="100vh">
                 <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>

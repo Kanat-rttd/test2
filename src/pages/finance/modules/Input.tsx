@@ -1,16 +1,15 @@
 import IsMobile from '@/utils/helpers/isMobile'
-import { Avatar, Box, Link, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import { Box, Link, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import Arrival from '../components/Arrival'
 import Consumption from '../components/Consumption'
 import Transfer from '../components/Transfer'
-import Drawler from '@/components/Menu'
+// import Drawler from '@/components/Menu'
 import { FINANCE_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
 
 const Input = () => {
     return (
         <>
-        
-            <Box
+            {/* <Box
                 display="flex"
                 justifyContent={'space-between'}
                 flexDirection={'row'}
@@ -23,7 +22,7 @@ const Input = () => {
                     <Drawler></Drawler>
                 </Box>
                 <Avatar bg="teal.500" />
-            </Box>
+            </Box> */}
             <Box display={'flex'} width={'100%'} justifyContent={'center'} marginTop={10}>
                 <Box
                     height={'100%'}

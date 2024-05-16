@@ -1,4 +1,3 @@
-import { RELEASE_DISTRIBUTION_ROUTE, RELEASE_REFUND_ROUTE } from '@/utils/constants/routes.consts'
 import {
     Box,
     Button,
@@ -10,12 +9,10 @@ import {
     Tabs,
     useDisclosure,
 } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
 import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
 import DistributionModal from '../components/DistributionModal'
 import DateRange from '@/components/DateRange'
-import Header from '@/components/layout/Header'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 
 const Refund = () => {
@@ -23,30 +20,11 @@ const Refund = () => {
         console.log('1')
     }
 
-    const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
         <Box>
             <UniversalComponent>
-                <Header>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(RELEASE_DISTRIBUTION_ROUTE)}
-                    >
-                        Выдача
-                    </Button>
-                    <Button
-                        bg={'rgba(217, 217, 217, 1)'}
-                        height={'100%'}
-                        width={'20%'}
-                        onClick={() => navigate(RELEASE_REFUND_ROUTE)}
-                    >
-                        Возврат
-                    </Button>
-                </Header>
-
                 <Box width={'100%'} height={'100%'} p={5}>
                     <Box
                         marginBottom={'35px'}

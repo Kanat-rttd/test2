@@ -1,5 +1,4 @@
 import DateRangePicker from '@/components/DateRangePicker'
-import { PURCHASE_DEBT_ROUTE, PURCHASE_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import {
     Box,
     Button,
@@ -11,7 +10,6 @@ import {
     Tabs,
     useDisclosure,
 } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
 import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
 import PurchaseModal from '../components/PurchaseModal'
@@ -20,7 +18,6 @@ import useSWR, { mutate } from 'swr'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
-import Header from '@/components/layout/Header'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface RawMaterial {
@@ -61,30 +58,11 @@ const Products = () => {
         mutate('productPurchase')
     }
 
-    const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
         <>
             <UniversalComponent>
-                <Header>
-                    <Button
-                        height={'100%'}
-                        width={'15%'}
-                        onClick={() => navigate(PURCHASE_PRODUCTS_ROUTE)}
-                        background={'rgba(217, 217, 217, 1)'}
-                    >
-                        Закуп
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        width={'25%'}
-                        onClick={() => navigate(PURCHASE_DEBT_ROUTE)}
-                    >
-                        Долги по закупу
-                    </Button>
-                </Header>
-
                 <Box width={'100%'} height={'calc(100vh-64px)'} p={5}>
                     <Tabs variant="soft-rounded">
                         <TabList justifyContent={'space-between'}>

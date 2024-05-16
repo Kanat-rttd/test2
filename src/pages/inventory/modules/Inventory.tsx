@@ -1,37 +1,14 @@
-import { INVENTORY_DETAILS_ROUTE, INVENTORY_FACT_ROUTE } from '@/utils/constants/routes.consts'
 import { Box, Button, Input, Select, useDisclosure } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
 import InventoryTable from '../components/InventoryTable'
 import CorrectModal from '../components/Modal'
 import UniversalComponent from '@/components/ui/UniversalComponent'
-import Header from '@/components/layout/Header'
 
 const Inventory = () => {
-    const navigate = useNavigate()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
         <>
             <UniversalComponent>
-                <Header>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        // bg={'rgba(217, 217, 217, 1)'}
-                        onClick={() => navigate(INVENTORY_FACT_ROUTE)}
-                    >
-                        Ввод факт
-                    </Button>
-                    <Button
-                        height={'100%'}
-                        width={'20%'}
-                        bg={'rgba(217, 217, 217, 1)'}
-                        onClick={() => navigate(INVENTORY_DETAILS_ROUTE)}
-                    >
-                        Инвентаризация
-                    </Button>
-                </Header>
-
                 <Box width={'100%'} height={'94%'} p={5}>
                     <Box
                         marginBottom={10}

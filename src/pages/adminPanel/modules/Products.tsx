@@ -20,13 +20,10 @@ import {
 import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
 import useSWR from 'swr'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-import { useNavigate } from 'react-router-dom'
 import Dialog from '@/components/Dialog'
-import { ADMIN_PRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import { useApi } from '@/utils/services/axios'
 import { FacilityUnit, Product } from '@/utils/types/product.types'
 import { TableContainer, Thead } from '@/components/ui'
-import Header from '@/components/layout/Header'
 
 enum Status {
     ACTIVE = 0,
@@ -34,7 +31,6 @@ enum Status {
 }
 
 const AdminPanel = () => {
-    const navigate = useNavigate()
     const { onOpen, isOpen, onClose } = useDisclosure()
 
     const { data: dataForSelect } = useApi<Product[]>('product')
@@ -107,15 +103,6 @@ const AdminPanel = () => {
 
     return (
         <>
-            <Header>
-                <Button
-                    height={'100%'}
-                    onClick={() => navigate(ADMIN_PRODUCTS_ROUTE)}
-                    bg={'rgba(217, 217, 217, 1)'}
-                >
-                    Продукты
-                </Button>
-            </Header>
             <Box display="flex" flexDirection="column" p={5}>
                 <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>

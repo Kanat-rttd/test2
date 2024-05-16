@@ -1,14 +1,11 @@
-import { Box, Button, Select } from '@chakra-ui/react'
+import { Box, Select } from '@chakra-ui/react'
 import { useState, useEffect, ChangeEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { MIXERS_BAKINGPRODUCTS_ROUTE } from '@/utils/constants/routes.consts'
 import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
 import { getByFacilityUnit } from '@/utils/services/sales.service'
 import TableData from '@/components/TableData'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
-import Header from '@/components/layout/Header'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface FacilityUnit {
@@ -78,22 +75,8 @@ const MixersPage = () => {
             })
     }
 
-    const navigate = useNavigate()
     return (
         <UniversalComponent>
-            <Header>
-                <Button bg={'rgba(217, 217, 217, 1)'} height={'100%'} width={'20%'}>
-                    Заявки
-                </Button>
-                <Button
-                    height={'100%'}
-                    width={'20%'}
-                    onClick={() => navigate(MIXERS_BAKINGPRODUCTS_ROUTE)}
-                >
-                    Выпечка
-                </Button>
-            </Header>
-
             <Box width={'100%'} height={'94%'} p={5}>
                 <Box
                     marginBottom={5}

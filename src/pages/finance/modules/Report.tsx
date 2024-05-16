@@ -1,7 +1,7 @@
-import { Avatar, Box, Select, Text } from '@chakra-ui/react'
+import { Box, Select, Text } from '@chakra-ui/react'
 import styles from '../style.module.css'
 import DateRange from '../../../components/DateRange'
-import Drawler from '@/components/Menu'
+// import Drawler from '@/components/Menu'
 // import { getReportData } from '@/utils/services/finance.service'
 // import useSWR from 'swr'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
@@ -68,7 +68,7 @@ const Report = () => {
 
     return (
         <>
-           <Box
+           {/* <Box
                 display="flex"
                 justifyContent={'space-between'}
                 flexDirection={'row'}
@@ -81,7 +81,7 @@ const Report = () => {
                     <Drawler></Drawler>
                 </Box>
                 <Avatar bg="teal.500" />
-            </Box>
+            </Box> */}
             <Box className={styles.container}>
                 <Box display="flex" gap="10px">
                     <Box className={styles.scoreSelect}>

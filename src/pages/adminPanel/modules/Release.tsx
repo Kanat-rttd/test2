@@ -1,4 +1,3 @@
-import { ADMIN_RELEASE_ROUTE, ADMIN_UNIQUEPRICE_ROUTE } from '@/utils/constants/routes.consts'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import {
     Box,
@@ -12,7 +11,6 @@ import {
     Tr,
     useDisclosure,
 } from '@chakra-ui/react'
-import { useNavigate } from 'react-router-dom'
 import ReleaseAddModal, { Releaser } from '../components/ReleaseAddModal'
 import { useState, useEffect } from 'react'
 import { deleteClient, getAllClients } from '@/utils/services/client.service'
@@ -21,12 +19,10 @@ import { useApi } from '@/utils/services/axios'
 import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { Thead, TableContainer } from '@/components/ui'
-import Header from '@/components/layout/Header'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 
 const AdminPanel = () => {
     const { loading } = useNotify()
-    const navigate = useNavigate()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Releaser | undefined>(undefined)
     const [filters, setFilters] = useState({ name: '', telegrammId: '', status: '' })
@@ -83,20 +79,6 @@ const AdminPanel = () => {
     return (
         <>
             <UniversalComponent>
-                <Header>
-                    
-                    <Button
-                        height={'100%'}
-                        onClick={() => navigate(ADMIN_RELEASE_ROUTE)}
-                        bg={'rgba(217, 217, 217, 1)'}
-                    >
-                        Реализаторы
-                    </Button>
-                    <Button height={'100%'} onClick={() => navigate(ADMIN_UNIQUEPRICE_ROUTE)}>
-                        Уникальные цены
-                    </Button>
-                </Header>
-
                 <Box display="flex" flexDirection="column" p={5}>
                     <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
