@@ -1,12 +1,12 @@
-import { Box, Heading, Text, IconButton } from '@chakra-ui/react'
+import { Box, Heading } from '@chakra-ui/react'
 import MobileNavbar from '@/components/MobileNavbar'
 import { getAllSales } from '@/utils/services/sales.service'
 import { useState, useEffect } from 'react'
-import { ChevronRightIcon } from '@chakra-ui/icons'
-import dayjs from 'dayjs'
-import ru from 'dayjs/locale/ru'
-import { useNavigate } from 'react-router-dom'
-import { SALES_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
+// import { ChevronRightIcon } from '@chakra-ui/icons'
+// import dayjs from 'dayjs'
+// import ru from 'dayjs/locale/ru'
+// import { useNavigate } from 'react-router-dom'
+// import { SALES_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
 
 interface SalesOrder {
     id: number
@@ -27,8 +27,10 @@ interface ProductDetails {
 }
 
 const History = () => {
-    const navigator = useNavigate()
+    // const navigator = useNavigate()
     const [getSalesData, setSalesData] = useState<SalesOrder[]>([])
+
+    console.log(getSalesData)
 
     useEffect(() => {
         getAllSales().then((res) => {

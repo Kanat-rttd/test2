@@ -19,7 +19,7 @@ import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteDepartPersonal } from '@/utils/services/departPersonal.service'
 import { TableContainer, Thead } from '@/components/ui'
-import DepartPersonalModal from '../components/DepartPesonalAddModal'
+import DepartPersonalModal from '../components/departPesonalAddModal'
 
 interface DepartPersonal {
     id: number
@@ -93,7 +93,10 @@ const AdminPanel = () => {
                             Добавить
                         </Button>
                     </Box>
-                    <TableContainer isLoading={isLoading} style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+                    <TableContainer
+                        isLoading={isLoading}
+                        style={{ width: '100%', height: '100%', overflowY: 'auto' }}
+                    >
                         <Table variant="simple">
                             <Thead>
                                 <Tr>
