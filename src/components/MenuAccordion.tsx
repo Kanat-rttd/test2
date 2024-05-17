@@ -38,17 +38,17 @@ const MenuAccordion = () => {
         setIsDrawerOpen((prev) => !prev)
     }
 
-    const userInfo = getUserInfo()
+    // const userInfo = getUserInfo()
 
-    const parsedClass = JSON.parse(String(userInfo?.class))
+    // const parsedClass = JSON.parse(String(userInfo?.class))
 
-    const filteredMenuItems = menuItems.filter((item) => {
-        return (
-            parsedClass[0].label &&
-            item.allowedClasses &&
-            item.allowedClasses.includes(parsedClass[0].label)
-        )
-    })
+    // const filteredMenuItems = menuItems.filter((item) => {
+    //     return (
+    //         parsedClass[0].label &&
+    //         item.allowedClasses &&
+    //         item.allowedClasses.includes(parsedClass[0].label)
+    //     )
+    // })
 
     const handleNavigate = (route: string) => {
         setIsDrawerOpen(false)
@@ -77,7 +77,7 @@ const MenuAccordion = () => {
 
                             <DrawerBody display="flex" p={2} gap="0.5rem" flexDirection="column">
                                 <Accordion allowMultiple>
-                                    {filteredMenuItems.map((MenuItem) => (
+                                    {menuItems.map((MenuItem) => (
                                         <Fragment key={MenuItem.route}>
                                             <AccordionItem key={MenuItem.label}>
                                                 <h2>

@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { createClient, updateClient } from '@/utils/services/client.service'
-import Select from 'react-select'
-import { Controller, useForm } from 'react-hook-form'
+// import Select from 'react-select'
+import { useForm } from 'react-hook-form'
 import {
     Button,
     Input,
@@ -19,6 +19,7 @@ import {
 import PasswordInput from '@/components/shared/PasswordInput'
 import PhoneInput from '@/components/shared/PhoneInput'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import StatusSelect from '@/components/shared/StatusSelect'
 
 export interface Releaser {
     id: number
@@ -31,10 +32,10 @@ export interface Releaser {
     checkPassword: string
 }
 
-interface status {
-    id: number
-    name: string
-}
+// interface status {
+//     id: number
+//     name: string
+// }
 
 interface ReleaseAddModalProps {
     data: Releaser | undefined
@@ -43,28 +44,28 @@ interface ReleaseAddModalProps {
     onSuccess: () => void
 }
 
-const defaultValues = {
-    name: '',
-    surname: '',
-    contact: '',
-    telegrammId: '',
-    status: '',
-    password: '',
-    checkPassword: '',
-}
+// const defaultValues = {
+//     name: '',
+//     surname: '',
+//     contact: '',
+//     telegrammId: '',
+//     status: '',
+//     password: '',
+//     checkPassword: '',
+// }
 
 const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose, onSuccess }) => {
     const { loading } = useNotify()
 
-    const status = [
-        { id: 1, name: 'Активный' },
-        { id: 2, name: 'Неактивный' },
-    ]
+    // const status = [
+    //     { id: 1, name: 'Активный' },
+    //     { id: 2, name: 'Неактивный' },
+    // ]
 
     const {
         register,
         handleSubmit: handleSubmitForm,
-        control,
+        // control,
         setValue,
         getValues,
         setError,
@@ -93,19 +94,29 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
         }
     }
 
+    // useEffect(() => {
+    //     if (data) {
+    //         setValue('name', data.name)
+    //         setValue('surname', data.surname)
+    //         setValue('contact', data.contact)
+    //         setValue('telegrammId', data.telegrammId)
+    //         setValue('status', data.status)
+    //     }
+    // }, [data])
+
     useEffect(() => {
         if (data) {
-            setValue('name', data.name)
-            setValue('surname', data.surname)
-            setValue('contact', data.contact)
-            setValue('telegrammId', data.telegrammId)
-            setValue('status', data.status)
+            Object.entries(data).forEach(([key, value]) => {
+                setValue(key as keyof Releaser, value)
+            })
+        } else {
+            reset()
         }
-    }, [data])
+    }, [data, isOpen, reset])
 
     const handleClose = () => {
         onClose()
-        reset(defaultValues)
+        reset()
     }
 
     return (
@@ -189,7 +200,7 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.status}>
-                        <Controller
+                        {/* <Controller
                             name="status"
                             control={control}
                             rules={{ required: 'Поле является обязательным' }}
@@ -214,6 +225,11 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                                     />
                                 )
                             }}
+                        /> */}
+                        <StatusSelect
+                            {...register('status', {
+                                required: 'Поле является обязательным',
+                            })}
                         />
                         <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
                     </FormControl>

@@ -18,7 +18,7 @@ import { useEffect, useState } from 'react'
 import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
 import { useForm } from 'react-hook-form'
 import { FacilityUnit, Product, ProductForSend } from '@/utils/types/product.types'
-
+import StatusSelect from '@/components/shared/StatusSelect'
 
 interface ProductAddModalProps {
     data: Product | undefined
@@ -69,7 +69,6 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
             setFacilityUnits(responseData)
         })
     }, [])
-
 
     const handleClose = () => {
         onClose()
@@ -138,7 +137,7 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
                                 <FormErrorMessage>{errors.costPrice?.message}</FormErrorMessage>
                             </FormControl>
                             <FormControl isInvalid={!!errors.status}>
-                                <Select
+                                {/* <Select
                                     {...register('status', {
                                         required: 'Поле является обязательным',
                                     })}
@@ -146,7 +145,12 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
                                 >
                                     <option value={'0'}>Активный</option>
                                     <option value={'1'}>Неактивный</option>
-                                </Select>
+                                </Select> */}
+                                <StatusSelect
+                                    {...register('status', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                />
                                 <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
                             </FormControl>
                             <Box
@@ -167,8 +171,7 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
                             </Box>
                         </form>
                     </ModalBody>
-                    <ModalFooter gap={3}>
-                    </ModalFooter>
+                    <ModalFooter gap={3}></ModalFooter>
                 </ModalContent>
             </Modal>
         </>

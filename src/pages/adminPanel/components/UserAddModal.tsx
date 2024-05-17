@@ -21,11 +21,12 @@ import PhoneInput from '@/components/shared/PhoneInput'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { User } from '@/utils/types/user.types'
 import PasswordInput from '@/components/shared/PasswordInput'
+import StatusSelect from '@/components/shared/StatusSelect'
 
-type status = {
-    id: number
-    name: string
-}
+// type status = {
+//     id: number
+//     name: string
+// }
 
 interface UserAddModalProps {
     data: User | undefined
@@ -92,10 +93,10 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
         { label: 'Инвентаризация' },
     ]
 
-    const status = [
-        { id: 0, name: 'Активный' },
-        { id: 1, name: 'Неактивный' },
-    ]
+    // const status = [
+    //     { id: 0, name: 'Активный' },
+    //     { id: 1, name: 'Неактивный' },
+    // ]
 
     const handleClose = () => {
         onClose()
@@ -160,7 +161,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                 <Controller
                                     name="permission"
                                     control={control}
-                                    rules={{ required: 'Поля является обязательным' }}
+                                    rules={{ required: 'Поле является обязательным' }}
                                     render={({ field }) => {
                                         const { onChange, value } = field
                                         return (
@@ -184,50 +185,6 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                 />
                                 <FormErrorMessage>{errors.permission?.message}</FormErrorMessage>
                             </FormControl>
-
-                            {/* <FormControl isInvalid={!!errors.permission}>
-                                <Controller
-                                    name="permission"
-                                    control={control}
-                                    rules={{ required: 'Поле является обязательным' }}
-                                    render={({ field }) => {
-                                        const { onChange, value } = field
-                                        return (
-                                            <Select
-                                                options={permissions}
-                                                getOptionLabel={(option: {
-                                                    id: number
-                                                    name: string
-                                                }) => option.name}
-                                                getOptionValue={(option: {
-                                                    id: number
-                                                    name: string
-                                                }) => `${option.name}`}
-                                                value={permissions?.filter(
-                                                    (option) => String(option.name) == value,
-                                                )}
-                                                onChange={(
-                                                    selectedOption: {
-                                                        id: number
-                                                        name: string
-                                                    } | null,
-                                                ) => {
-                                                    if (selectedOption) {
-                                                        onChange(selectedOption.name)
-                                                    } else {
-                                                        onChange(null)
-                                                    }
-                                                }}
-                                                placeholder="Доступ *"
-                                                isClearable
-                                                isSearchable
-                                            />
-                                        )
-                                    }}
-                                />
-                                <FormErrorMessage>{errors.permission?.message}</FormErrorMessage>
-                            </FormControl> */}
-
                             <FormControl isInvalid={!!errors.phone}>
                                 <PhoneInput
                                     {...register('phone', {
@@ -245,8 +202,26 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                 <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
                             </FormControl>
 
+                            <FormControl isInvalid={!!errors.fixSalary}>
+                                <InputGroup>
+                                    <Input
+                                        {...register('fixSalary', {
+                                            required: 'Поле является обязательным',
+                                            maxLength: {
+                                                value: 10,
+                                                message: 'Максимальная длина 10 символов',
+                                            },
+                                        })}
+                                        autoComplete="off"
+                                        placeholder="Фикс ЗП. *"
+                                        type="number"
+                                    />
+                                </InputGroup>
+                                <FormErrorMessage>{errors.fixSalary?.message}</FormErrorMessage>
+                            </FormControl>
+
                             <FormControl isInvalid={!!errors.status}>
-                                <Controller
+                                {/* <Controller
                                     name="status"
                                     control={control}
                                     rules={{ required: 'Поля является обязательным' }}
@@ -278,26 +253,13 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                             />
                                         )
                                     }}
+                                /> */}
+                                <StatusSelect
+                                    {...register('status', {
+                                        required: 'Поле является обязательным',
+                                    })}
                                 />
                                 <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
-                            </FormControl>
-
-                            <FormControl isInvalid={!!errors.fixSalary}>
-                                <InputGroup>
-                                    <Input
-                                        {...register('fixSalary', {
-                                            required: 'Поле является обязательным',
-                                            maxLength: {
-                                                value: 10,
-                                                message: 'Максимальная длина 10 символов',
-                                            },
-                                        })}
-                                        autoComplete="off"
-                                        placeholder="Фикс ЗП. *"
-                                        type="number"
-                                    />
-                                </InputGroup>
-                                <FormErrorMessage>{errors.fixSalary?.message}</FormErrorMessage>
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.pass}>

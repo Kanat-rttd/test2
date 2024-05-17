@@ -12,11 +12,12 @@ import {
     Box,
 } from '@chakra-ui/react'
 
-import Select from 'react-select'
-import { Controller, useForm } from 'react-hook-form'
+// import Select from 'react-select'
+import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { createDepartPersonal, updateDepartPersonal } from '@/utils/services/departPersonal.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import StatusSelect from '@/components/shared/StatusSelect'
 
 interface DepartPersonal {
     id: number
@@ -27,10 +28,10 @@ interface DepartPersonal {
     fixSalary: string
 }
 
-interface status {
-    id: number
-    name: string
-}
+// interface status {
+//     id: number
+//     name: string
+// }
 
 interface DepartPesonalAddModalProps {
     data: DepartPersonal | undefined
@@ -44,7 +45,7 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
     const {
         register,
         handleSubmit: handleSubmitForm,
-        control,
+        // control,
         setValue,
         setError,
         formState: { errors },
@@ -82,10 +83,10 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
         }
     }
 
-    const status = [
-        { id: 1, name: 'Активный' },
-        { id: 2, name: 'Неактивный' },
-    ]
+    // const status = [
+    //     { id: 1, name: 'Активный' },
+    //     { id: 2, name: 'Неактивный' },
+    // ]
 
     const handleClose = () => {
         onClose()
@@ -147,7 +148,7 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.status}>
-                                <Controller
+                                {/* <Controller
                                     name="status"
                                     control={control}
                                     rules={{ required: 'Поля является обязательным' }}
@@ -172,6 +173,11 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
                                             />
                                         )
                                     }}
+                                /> */}
+                                <StatusSelect
+                                    {...register('status', {
+                                        required: 'Поле является обязательным',
+                                    })}
                                 />
                                 <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
                             </FormControl>
