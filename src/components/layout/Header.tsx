@@ -13,7 +13,7 @@ import classes from './style.module.css'
 import MenuAccordion from '../MenuAccordion'
 import { useNavigate } from 'react-router-dom'
 import { LOGIN_ROUTE } from '@/utils/constants/routes.consts'
-import { buttonsData } from '@/utils/constants/headerButtons'
+import { buttonsData } from '@/utils/constants/headerButtons.consts'
 
 interface StyledContainerProps extends BoxProps {
     children?: React.ReactNode
