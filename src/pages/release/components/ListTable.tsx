@@ -19,12 +19,14 @@ type Dispatch = {
 
 interface ListTableProps {
     status: string
+    facilityUnit: string
 }
 
-export default function ListTable({  status }: ListTableProps) {
+export default function ListTable({ facilityUnit, status }: ListTableProps) {
     const { loading } = useNotify()
     const { getURLs } = useURLParameters()
-    console.log(status)
+
+    console.log(status, facilityUnit)
 
     const [selectedData, setSelectedData] = useState<DispatchType>()
 
@@ -33,9 +35,7 @@ export default function ListTable({  status }: ListTableProps) {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const { data: dispatchesData } = useApi<Dispatch>(
-        `release?${getURLs().toString()}`,
-    )
+    const { data: dispatchesData } = useApi<Dispatch>(`release?${getURLs().toString()}`)
     console.log(dispatchesData)
 
     const [modal, setModal] = useState({
