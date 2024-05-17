@@ -54,12 +54,14 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
             Object.entries(data).forEach(([key, value]) => {
                 setValue(key as keyof User, value)
             })
+            setValue('permission', JSON.parse(String(data.permission)))
         } else {
             reset()
         }
     }, [data, isOpen, reset])
 
     const sendData = (formData: User) => {
+        console.log(formData)
         try {
             const responsePromise: Promise<any> = data
                 ? updateUser(data.id, formData)
@@ -81,13 +83,13 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
     }
 
     const permissions = [
-        { id: 1, name: 'Админ' },
-        { id: 2, name: 'Производство' },
-        { id: 3, name: 'Продажи' },
-        { id: 4, name: 'Закуп' },
-        { id: 5, name: 'Финансы' },
-        { id: 5, name: 'Отчеты' },
-        { id: 5, name: 'Инвентаризация' },
+        { label: 'Админ' },
+        { label: 'Производство' },
+        { label: 'Продажи' },
+        { label: 'Закуп' },
+        { label: 'Финансы' },
+        { label: 'Отчеты' },
+        { label: 'Инвентаризация' },
     ]
 
     const status = [
@@ -158,6 +160,35 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                 <Controller
                                     name="permission"
                                     control={control}
+                                    rules={{ required: 'Поля является обязательным' }}
+                                    render={({ field }) => {
+                                        const { onChange, value } = field
+                                        return (
+                                            <Select
+                                                isMulti
+                                                options={permissions.map((permission) => ({
+                                                    value: permission.label,
+                                                    label: permission.label,
+                                                }))}
+                                                value={(value || []).map((val) => ({
+                                                    value: val.label,
+                                                    label: val.label,
+                                                }))}
+                                                onChange={(val) => onChange(val)}
+                                                placeholder="Доступ *"
+                                                isClearable
+                                                isSearchable
+                                            />
+                                        )
+                                    }}
+                                />
+                                <FormErrorMessage>{errors.permission?.message}</FormErrorMessage>
+                            </FormControl>
+
+                            {/* <FormControl isInvalid={!!errors.permission}>
+                                <Controller
+                                    name="permission"
+                                    control={control}
                                     rules={{ required: 'Поле является обязательным' }}
                                     render={({ field }) => {
                                         const { onChange, value } = field
@@ -195,7 +226,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                     }}
                                 />
                                 <FormErrorMessage>{errors.permission?.message}</FormErrorMessage>
-                            </FormControl>
+                            </FormControl> */}
 
                             <FormControl isInvalid={!!errors.phone}>
                                 <PhoneInput

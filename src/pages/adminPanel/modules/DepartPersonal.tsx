@@ -13,7 +13,6 @@ import {
 import { useState } from 'react'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { useApi } from '@/utils/services/axios'
-import { mutate } from 'swr'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
@@ -41,7 +40,11 @@ const AdminPanel = () => {
     })
 
     // const { data: departPersonalData } = useApi<DepartPersonal[]>('departPersonal')
-    const { data: departPersonalData, isLoading } = useApi<DepartPersonal[]>('departPersonal', {
+    const {
+        data: departPersonalData,
+        isLoading,
+        mutate: mutateDepartPersonal,
+    } = useApi<DepartPersonal[]>('departPersonal', {
         status: selectedStatus,
     })
 
@@ -51,7 +54,7 @@ const AdminPanel = () => {
     }
 
     const handledSuccess = () => {
-        mutate(['departPersonal', selectedStatus])
+        mutateDepartPersonal()
     }
 
     const applyFilters = (status: string) => {
@@ -63,10 +66,7 @@ const AdminPanel = () => {
             const responsePromise: Promise<any> = deleteDepartPersonal(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {
-                mutate((currentData: DepartPersonal[] | undefined) => {
-                    if (!currentData) return currentData
-                    return currentData.filter((client) => client.id !== selectedData?.id)
-                })
+                mutateDepartPersonal()
             })
         } else {
             console.error('No user data available to delete.')

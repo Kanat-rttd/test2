@@ -8,11 +8,14 @@ export const getAllUsers = async (selectedStatus: string | undefined) => {
 }
 
 export const createUser = async (data: {
+    phone: string
     name: string
+    pass: string
     userClass: string
     surname: string
-    phone: string
-    pass: string
+    permission: {
+        label: string
+    }[]
     status: string
     fixSalary: string
 }) => {
@@ -30,6 +33,9 @@ export const updateUser = async (
         pass: string
         status: string
         fixSalary: string
+        permission: {
+            label: string
+        }[]
     },
 ) => {
     const response = await $host.put(`user/${id}`, data)

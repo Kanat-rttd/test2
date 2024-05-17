@@ -41,6 +41,10 @@ interface ProviderGoods {
     }
 }
 
+interface Place {
+    label: string
+}
+
 interface Providers {
     label: string
     value: number
@@ -69,6 +73,9 @@ interface status {
 const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps) => {
     const { loading } = useNotify()
     const { data: providersData } = useApi<Providers[]>('providers')
+    const { data: placesData } = useApi<Place[]>('place')
+
+    console.log(placesData)
 
     const {
         register,
@@ -91,7 +98,7 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
         }
     }, [selectedData, isOpen, reset])
 
-    const bakery = [{ label: 'Батонный' }, { label: 'Заводской' }]
+    // const bakery = [{ label: 'Батонный' }, { label: 'Заводской' }]
 
     const status = [
         { id: 1, name: 'Активный' },
@@ -101,7 +108,6 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
     const sendData = (formData: ProviderInputs) => {
         try {
             console.log(formData)
-
             const responsePromise: Promise<any> = selectedData
                 ? updateProviderGoods(selectedData.id, formData)
                 : createProviderGoods(formData)
@@ -226,11 +232,7 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                                             return (
                                                 <Select
                                                     isMulti
-                                                    // options={bakery}
-                                                    // value={bakery?.find((option) =>
-                                                    //     value?.includes(option),
-                                                    // )}
-                                                    options={bakery.map((bakeryItem) => ({
+                                                    options={placesData?.map((bakeryItem) => ({
                                                         value: bakeryItem.label,
                                                         label: bakeryItem.label,
                                                     }))}
