@@ -15,20 +15,17 @@ type LayoutProps = {
  */
 const Layout = ({ children }: LayoutProps) => {
     const { pathname } = useLocation()
-    console.log(pathname);
 
     const buttons = headerButtons.find((item) => {
-        if(item.currentPage == pathname){     
+        if (item.currentPage == pathname) {
             return item
         }
     })
-    
+
     return (
         <Box display="flex" flexDirection="column" overflow="hidden" minH="100dvh">
-            <Header buttons={buttons?.buttonsData} />
-            <Box minH="90dvh">
-                {children}
-            </Box>
+            {buttons?.buttonsData && <Header buttons={buttons?.buttonsData} />}
+            <Box minH="90dvh">{children}</Box>
         </Box>
     )
 }

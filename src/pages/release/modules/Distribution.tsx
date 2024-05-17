@@ -14,9 +14,9 @@ import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
 import DistributionModal from '../components/DistributionModal'
 import DateRange from '@/components/DateRange'
-import { useState } from 'react'
 import { useApi } from '@/utils/services/axios'
 import UniversalComponent from '@/components/ui/UniversalComponent'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface FacilityUnit {
     id: number
@@ -24,24 +24,13 @@ interface FacilityUnit {
 }
 
 const Distribution = () => {
+    const { getParam, setParam } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()
-
-    // const [selectionRange, setSelectionRange] = useState({
-    //     startDate: new Date(),
-    //     endDate: new Date(),
-    // })
-
-    const [selectedFacilityUnit, setSelectedFacilityUnit] = useState('')
 
     const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
 
-    // useEffect(() => {
-    //     console.log(selectionRange.startDate)
-    //     console.log(selectionRange.endDate)
-    // }, [selectionRange])
-
     const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedFacilityUnit(event.target.value)
+        setParam('facilityUnit', event.target.value)
     }
 
     const handleUpdateProduct = () => {
@@ -57,7 +46,7 @@ const Distribution = () => {
                         marginBottom={'40.5px'}
                         height={'5%'}
                         display={'flex'}
-                        justifyContent={'space-between'}    
+                        justifyContent={'space-between'}
                     >
                         <Box display={'flex'} gap={'15px'} width={'100%'}>
                             <DateRange />
@@ -66,7 +55,7 @@ const Distribution = () => {
                                 borderRadius={5}
                                 placeholder="Цехи"
                                 width={'fit-content'}
-                                value={selectedFacilityUnit}
+                                value={getParam('facilityUnit')}
                                 onChange={handleClientChange}
                             >
                                 {facilityUnitsData?.map((unit, index) => (
@@ -89,11 +78,7 @@ const Distribution = () => {
                             </TabList>
                             <TabPanels height={'95%'}>
                                 <TabPanel height={'100%'} p={'10px 0'}>
-                                    <ListTable
-                                        facilityUnit={selectedFacilityUnit}
-                                        // dateRange={selectionRange}
-                                        status="0"
-                                    />
+                                    <ListTable status="0" />
                                 </TabPanel>
                                 <TabPanel p={'10px 0'}>
                                     <PivotTable status="0" />

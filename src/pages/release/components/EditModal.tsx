@@ -18,6 +18,7 @@ import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { updateDispatchQuantity } from '@/utils/services/dispatch.service'
 import { DispatchType } from '@/utils/types/dispatch.types'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 interface EditModalInputs {
     [key: string]: string
@@ -30,7 +31,15 @@ interface EditModalProps {
 }
 
 const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
-    console.log(data)
+    const { loading } = useNotify()
+    const {
+        register,
+        handleSubmit: handleSubmitForm,
+        formState: { errors },
+        setValue,
+        setError,
+        reset,
+    } = useForm<EditModalInputs>()
 
     const sendData = (formData: EditModalInputs) => {
         const formattedData = {
@@ -42,20 +51,26 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
         }
 
         console.log(formattedData)
-
-        formattedData.products?.forEach((product) => {
-            updateDispatchQuantity(product.id, product).then((res) => {
-                console.log(res)
+        try {
+            formattedData.products?.forEach((product) => {
+                const responsePromise: Promise<any> = updateDispatchQuantity(product.id, product)
+                loading(responsePromise)
+                responsePromise
+                    .then(() => {
+                        reset()
+                        onClose()
+                    })
+                    .catch((error: any) => {
+                        console.error('Update dispatch quantity error:', error)
+                        throw error
+                    })
             })
-        })
+        } catch (error: any) {
+            setError('root', {
+                message: error.response.data.message || 'Ошибка',
+            })
+        }
     }
-
-    const {
-        register,
-        handleSubmit: handleSubmitForm,
-        formState: { errors },
-        setValue,
-    } = useForm<EditModalInputs>()
 
     useEffect(() => {
         if (data) {
@@ -106,7 +121,9 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
                                     >
                                         <InputGroup>
                                             <Input
-                                                {...register(`quantity_${index}`)}
+                                                {...register(`quantity_${index}`, {
+                                                    required: 'Поле является обязательным',
+                                                })}
                                                 autoComplete="off"
                                                 placeholder={`Количество ${details.product.name} *`}
                                                 type="text"

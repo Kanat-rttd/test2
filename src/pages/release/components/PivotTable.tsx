@@ -78,47 +78,49 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {data.map((row) => (
-                            <Tr key={row.id}>
-                                <Td>{row.id}</Td>
-                                <Td>{row.client.name}</Td>
-                                {headers.map((header, index) => {
-                                    const quantity = row.goodsDispatchDetails.find(
-                                        (detail) => detail.product.name === header.bread,
-                                    )?.quantity
-                                    return <Td key={index}>{quantity}</Td>
-                                })}
-                                <Td>
-                                    <IconButton
-                                        variant="outline"
-                                        size={'sm'}
-                                        colorScheme="teal"
-                                        aria-label="Send email"
-                                        marginRight={3}
-                                        onClick={() => {
-                                            setSelectedData(row)
-                                            setModal({ ...modal, isOpen: true })
-                                        }}
-                                        icon={<EditIcon />}
-                                    />
-                                    <IconButton
-                                        variant="outline"
-                                        size={'sm'}
-                                        colorScheme="teal"
-                                        aria-label="Send email"
-                                        marginRight={3}
-                                        onClick={() => {
-                                            setSelectedData(row)
-                                            setDialog({
-                                                ...dialog,
-                                                isOpen: true,
-                                            })
-                                        }}
-                                        icon={<DeleteIcon />}
-                                    />
-                                </Td>
-                            </Tr>
-                        ))}
+                        {data
+                            .sort((a, b) => a.id - b.id)
+                            .map((row, index) => (
+                                <Tr key={row.id}>
+                                    <Td>{index+1}</Td>
+                                    <Td>{row.client.name}</Td>
+                                    {headers.map((header, index) => {
+                                        const quantity = row.goodsDispatchDetails.find(
+                                            (detail) => detail.product.name === header.bread,
+                                        )?.quantity
+                                        return <Td key={index}>{quantity}</Td>
+                                    })}
+                                    <Td>
+                                        <IconButton
+                                            variant="outline"
+                                            size={'sm'}
+                                            colorScheme="teal"
+                                            aria-label="Send email"
+                                            marginRight={3}
+                                            onClick={() => {
+                                                setSelectedData(row)
+                                                setModal({ ...modal, isOpen: true })
+                                            }}
+                                            icon={<EditIcon />}
+                                        />
+                                        <IconButton
+                                            variant="outline"
+                                            size={'sm'}
+                                            colorScheme="teal"
+                                            aria-label="Send email"
+                                            marginRight={3}
+                                            onClick={() => {
+                                                setSelectedData(row)
+                                                setDialog({
+                                                    ...dialog,
+                                                    isOpen: true,
+                                                })
+                                            }}
+                                            icon={<DeleteIcon />}
+                                        />
+                                    </Td>
+                                </Tr>
+                            ))}
                     </Tbody>
                 </Table>
             </TableContainer>

@@ -19,14 +19,9 @@ type Dispatch = {
 
 interface ListTableProps {
     status: string
-    facilityUnit: string
-    // dateRange: {
-    //     startDate: Date
-    //     endDate: Date
-    // }
 }
 
-export default function ListTable({ facilityUnit, status }: ListTableProps) {
+export default function ListTable({  status }: ListTableProps) {
     const { loading } = useNotify()
     const { getURLs } = useURLParameters()
     console.log(status)
@@ -38,14 +33,8 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    // const { data: dispatchesData } = useApi<Dispatch[]>('release', {
-    //     startDate: String(dateRange?.startDate),
-    //     endDate: String(dateRange?.endDate),
-    //     facilityUnit: facilityUnit,
-    // })
-
     const { data: dispatchesData } = useApi<Dispatch>(
-        `release?${getURLs().toString()}&facilityUnit=${facilityUnit}`,
+        `release?${getURLs().toString()}`,
     )
     console.log(dispatchesData)
 
@@ -84,58 +73,64 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {dispatchesData?.data.map((row) => {
-                            return (
-                                <Tr key={row.id}>
-                                    <Td>{row.id}</Td>
-                                    <Td>{row.client.name}</Td>
-                                    <Td>
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            {row.goodsDispatchDetails.map((details, index) => (
-                                                <span key={index}>{details.product?.name}</span>
-                                            ))}
-                                        </div>
-                                    </Td>
-                                    <Td>
-                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            {row.goodsDispatchDetails.map((details, index) => (
-                                                <span key={index}>{details.quantity}</span>
-                                            ))}
-                                        </div>
-                                    </Td>
-                                    <Td>{dayjs(row.createdAt).format('HH:MM DD.MM.YYYY')}</Td>
-                                    <Td>
-                                        <IconButton
-                                            variant="outline"
-                                            size={'sm'}
-                                            colorScheme="teal"
-                                            aria-label="Send email"
-                                            marginRight={3}
-                                            onClick={() => {
-                                                setSelectedData(row)
-                                                setModal({ ...modal, isOpen: true })
-                                            }}
-                                            icon={<EditIcon />}
-                                        />
-                                        <IconButton
-                                            variant="outline"
-                                            size={'sm'}
-                                            colorScheme="teal"
-                                            aria-label="Send email"
-                                            marginRight={3}
-                                            onClick={() => {
-                                                setSelectedData(row)
-                                                setDialog({
-                                                    ...dialog,
-                                                    isOpen: true,
-                                                })
-                                            }}
-                                            icon={<DeleteIcon />}
-                                        />
-                                    </Td>
-                                </Tr>
-                            )
-                        })}
+                        {dispatchesData?.data
+                            .sort((a, b) => a.id - b.id)
+                            .map((row, index) => {
+                                return (
+                                    <Tr key={row.id}>
+                                        <Td>{index + 1}</Td>
+                                        <Td>{row.client.name}</Td>
+                                        <Td>
+                                            <div
+                                                style={{ display: 'flex', flexDirection: 'column' }}
+                                            >
+                                                {row.goodsDispatchDetails.map((details, index) => (
+                                                    <span key={index}>{details.product?.name}</span>
+                                                ))}
+                                            </div>
+                                        </Td>
+                                        <Td>
+                                            <div
+                                                style={{ display: 'flex', flexDirection: 'column' }}
+                                            >
+                                                {row.goodsDispatchDetails.map((details, index) => (
+                                                    <span key={index}>{details.quantity}</span>
+                                                ))}
+                                            </div>
+                                        </Td>
+                                        <Td>{dayjs(row.createdAt).format('HH:mm DD.MM.YYYY')}</Td>
+                                        <Td>
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
+                                                onClick={() => {
+                                                    setSelectedData(row)
+                                                    setModal({ ...modal, isOpen: true })
+                                                }}
+                                                icon={<EditIcon />}
+                                            />
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
+                                                onClick={() => {
+                                                    setSelectedData(row)
+                                                    setDialog({
+                                                        ...dialog,
+                                                        isOpen: true,
+                                                    })
+                                                }}
+                                                icon={<DeleteIcon />}
+                                            />
+                                        </Td>
+                                    </Tr>
+                                )
+                            })}
                     </Tbody>
                 </Table>
             </TableContainer>
