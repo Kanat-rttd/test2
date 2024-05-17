@@ -14,7 +14,7 @@ import UserAddModal from '../components/UserAddModal'
 import { useState } from 'react'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 
-import { useApi, mutate } from '@/utils/services/axios'
+import { useApi } from '@/utils/services/axios'
 // import Header from '@/components/Header'
 import Dialog from '@/components/Dialog'
 import { deleteUser } from '@/utils/services/user.service'
@@ -39,7 +39,11 @@ const AdminPanel = () => {
     //     fetcher: () => getAllUsers(selectedStatus),
     // })
 
-    const { data: usersData, isLoading } = useApi<User[]>('user', {
+    const {
+        data: usersData,
+        isLoading,
+        mutate: mutateUserData,
+    } = useApi<User[]>('user', {
         status: selectedStatus,
     })
 
@@ -51,9 +55,7 @@ const AdminPanel = () => {
     }
 
     const handledSuccess = () => {
-        console.log('another response')
-        // mutate('user')
-        mutate(`user?selectedStatus=${selectedStatus}`)
+        mutateUserData()
     }
 
     const applyFilters = (status: string) => {
@@ -65,11 +67,7 @@ const AdminPanel = () => {
             const responsePromise: Promise<any> = deleteUser(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {
-                // mutate('user?selectedStatus=${selectedStatus}')
-                mutate((currentData: User[] | undefined) => {
-                    if (!currentData) return currentData
-                    return currentData.filter((client) => client.id !== selectedData?.id)
-                })
+                mutateUserData()
             })
         } else {
             console.error('No user data available to delete.')

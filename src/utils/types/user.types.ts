@@ -7,6 +7,6 @@ export type User = {
     checkPass: string
     phone: string
     userClass: string
-    permission: string
+    permission: { label: string }[]
     fixSalary: string
 }
