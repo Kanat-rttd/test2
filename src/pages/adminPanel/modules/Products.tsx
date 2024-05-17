@@ -24,6 +24,7 @@ import Dialog from '@/components/Dialog'
 import { useApi } from '@/utils/services/axios'
 import { FacilityUnit, Product } from '@/utils/types/product.types'
 import { TableContainer, Thead } from '@/components/ui'
+import UniversalComponent from '@/components/ui/UniversalComponent'
 
 enum Status {
     ACTIVE = 0,
@@ -103,132 +104,137 @@ const AdminPanel = () => {
 
     return (
         <>
-            <Box display="flex" flexDirection="column" p={5}>
-                <Box mb={6} display={'flex'} justifyContent={'space-between'}>
-                    <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        <Select
-                            placeholder="Наименование"
-                            width={'fit-content'}
-                            name="name"
-                            onChange={handleSelectChange}
-                        >
-                            {dataForSelect?.map((product, index) => (
-                                <option key={index} value={product.name}>
-                                    {product.name}
-                                </option>
-                            ))}
-                        </Select>
-                        <Select
-                            placeholder="Цех"
-                            width={'fit-content'}
-                            name="bakingFacilityUnitId"
-                            onChange={handleSelectChange}
-                        >
-                            {facilityUnitsData?.map((unit, index) => (
-                                <option key={index} value={unit.id}>
-                                    {unit.facilityUnit}
-                                </option>
-                            ))}
-                        </Select>
-                        <Select
-                            placeholder="Статус"
-                            width={'fit-content'}
-                            name="status"
-                            onChange={handleSelectChange}
-                        >
-                            {productStatus.map((item) => {
-                                return <option value={item.id}>{item.label}</option>
-                            })}
-                        </Select>
-                    </Box>
-
-                    <Button colorScheme="purple" onClick={onOpen}>
-                        Добавить
-                    </Button>
-                </Box>
-                <TableContainer isLoading={isLoading} style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                    <Table variant="simple">
-                        <Thead>
-                            <Tr>
-                                <Th>№</Th>
-                                <Th>Наименование</Th>
-                                <Th>Цех</Th>
-                                <Th>Статус</Th>
-                                <Th>Цена</Th>
-                                <Th>Себестоимость</Th>
-                                <Th>Действия</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {data
-                                ?.sort((a, b) => a.id - b.id)
-                                .map((product, index) => {
-                                    const ordinalNumber: number = index + 1
-                                    return (
-                                        <Tr key={index}>
-                                            <Td>{ordinalNumber}</Td>
-                                            <Td>{product.name}</Td>
-                                            <Td>{product.bakingFacilityUnit?.facilityUnit}</Td>
-                                            <Td>
-                                                {Number(product.status) == Status.ACTIVE
-                                                    ? 'Активный'
-                                                    : 'Неактивный'}
-                                            </Td>
-                                            <Td>{product.price}</Td>
-                                            <Td>{product.costPrice}</Td>
-                                            <Td>
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        setSelectedData(product)
-                                                        onOpen()
-                                                    }}
-                                                    icon={<EditIcon />}
-                                                />
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        setSelectedData(product)
-                                                        setDialog({
-                                                            ...dialog,
-                                                            isOpen: true,
-                                                        })
-                                                    }}
-                                                    icon={<DeleteIcon />}
-                                                />
-                                            </Td>
-                                        </Tr>
-                                    )
+            <UniversalComponent>
+                <Box display="flex" flexDirection="column" p={5}>
+                    <Box mb={6} display={'flex'} justifyContent={'space-between'}>
+                        <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                            <Select
+                                placeholder="Наименование"
+                                width={'fit-content'}
+                                name="name"
+                                onChange={handleSelectChange}
+                            >
+                                {dataForSelect?.map((product, index) => (
+                                    <option key={index} value={product.name}>
+                                        {product.name}
+                                    </option>
+                                ))}
+                            </Select>
+                            <Select
+                                placeholder="Цех"
+                                width={'fit-content'}
+                                name="bakingFacilityUnitId"
+                                onChange={handleSelectChange}
+                            >
+                                {facilityUnitsData?.map((unit, index) => (
+                                    <option key={index} value={unit.id}>
+                                        {unit.facilityUnit}
+                                    </option>
+                                ))}
+                            </Select>
+                            <Select
+                                placeholder="Статус"
+                                width={'fit-content'}
+                                name="status"
+                                onChange={handleSelectChange}
+                            >
+                                {productStatus.map((item) => {
+                                    return <option value={item.id}>{item.label}</option>
                                 })}
-                        </Tbody>
-                    </Table>
-                </TableContainer>
-                <ProductAddModal
-                    data={selectedData}
-                    isOpen={isOpen}
-                    onClose={handleClose}
-                    onAddProduct={handleAddProduct}
-                />
-                <Dialog
-                    isOpen={dialog.isOpen}
-                    onClose={dialog.onClose}
-                    header="Удалить"
-                    body="Вы уверены? Вы не сможете отменить это действие впоследствии."
-                    actionBtn={() => {
-                        dialog.onClose()
-                        delProduct(selectedData)
-                    }}
-                    actionText="Удалить"
-                />
-            </Box>
+                            </Select>
+                        </Box>
+
+                        <Button colorScheme="purple" onClick={onOpen}>
+                            Добавить
+                        </Button>
+                    </Box>
+                    <TableContainer
+                        isLoading={isLoading}
+                        style={{ width: '100%', height: '100%', overflowY: 'auto' }}
+                    >
+                        <Table variant="simple">
+                            <Thead>
+                                <Tr position={'sticky'}>
+                                    <Th>№</Th>
+                                    <Th>Наименование</Th>
+                                    <Th>Цех</Th>
+                                    <Th>Статус</Th>
+                                    <Th>Цена</Th>
+                                    <Th>Себестоимость</Th>
+                                    <Th>Действия</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {data
+                                    ?.sort((a, b) => a.id - b.id)
+                                    .map((product, index) => {
+                                        const ordinalNumber: number = index + 1
+                                        return (
+                                            <Tr key={index}>
+                                                <Td>{ordinalNumber}</Td>
+                                                <Td>{product.name}</Td>
+                                                <Td>{product.bakingFacilityUnit?.facilityUnit}</Td>
+                                                <Td>
+                                                    {Number(product.status) == Status.ACTIVE
+                                                        ? 'Активный'
+                                                        : 'Неактивный'}
+                                                </Td>
+                                                <Td>{product.price}</Td>
+                                                <Td>{product.costPrice}</Td>
+                                                <Td>
+                                                    <IconButton
+                                                        variant="outline"
+                                                        size={'sm'}
+                                                        colorScheme="teal"
+                                                        aria-label="Send email"
+                                                        marginRight={3}
+                                                        onClick={() => {
+                                                            setSelectedData(product)
+                                                            onOpen()
+                                                        }}
+                                                        icon={<EditIcon />}
+                                                    />
+                                                    <IconButton
+                                                        variant="outline"
+                                                        size={'sm'}
+                                                        colorScheme="teal"
+                                                        aria-label="Send email"
+                                                        marginRight={3}
+                                                        onClick={() => {
+                                                            setSelectedData(product)
+                                                            setDialog({
+                                                                ...dialog,
+                                                                isOpen: true,
+                                                            })
+                                                        }}
+                                                        icon={<DeleteIcon />}
+                                                    />
+                                                </Td>
+                                            </Tr>
+                                        )
+                                    })}
+                            </Tbody>
+                        </Table>
+                    </TableContainer>
+                    <ProductAddModal
+                        data={selectedData}
+                        isOpen={isOpen}
+                        onClose={handleClose}
+                        onAddProduct={handleAddProduct}
+                    />
+                    <Dialog
+                        isOpen={dialog.isOpen}
+                        onClose={dialog.onClose}
+                        header="Удалить"
+                        body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                        actionBtn={() => {
+                            dialog.onClose()
+                            delProduct(selectedData)
+                        }}
+                        actionText="Удалить"
+                    />
+                </Box>
+            </UniversalComponent>
         </>
     )
 }

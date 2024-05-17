@@ -13,15 +13,22 @@ import {
     InputGroup,
     Box,
     Text,
+    Select,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { updateDispatchQuantity } from '@/utils/services/dispatch.service'
 import { DispatchType } from '@/utils/types/dispatch.types'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { getAllClients } from '@/utils/services/client.service'
 
 interface EditModalInputs {
     [key: string]: string
+}
+
+interface Client {
+    id: number
+    name: string
 }
 
 interface EditModalProps {
@@ -32,6 +39,7 @@ interface EditModalProps {
 
 const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
     const { loading } = useNotify()
+    const [clientsData, setClientsData] = useState<Client[]>([])
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -40,6 +48,13 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
         setError,
         reset,
     } = useForm<EditModalInputs>()
+
+    useEffect(() => {
+        getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
+            setClientsData(responseData)
+            console.log(responseData)
+        })
+    }, [])
 
     const sendData = (formData: EditModalInputs) => {
         const formattedData = {
@@ -90,16 +105,21 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
                 <ModalCloseButton />
                 <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
                     <FormControl isInvalid={!!errors.name}>
-                        <InputGroup>
-                            <Input
-                                {...register('name', {
-                                    required: 'Поле является обязательным',
-                                })}
-                                autoComplete="off"
-                                placeholder="Имя *"
-                                type="string"
-                            />
-                        </InputGroup>
+                        <Select
+                            {...register('clientId', {
+                                required: 'Поле является обязательным',
+                            })}
+                            placeholder="Имя *"
+                            width={'100%'}
+                        >
+                            {clientsData?.map((client, index) => {
+                                return (
+                                    <option key={index} value={client.name}>
+                                        {client.name}
+                                    </option>
+                                )
+                            })}
+                        </Select>
                         <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
                     </FormControl>
 

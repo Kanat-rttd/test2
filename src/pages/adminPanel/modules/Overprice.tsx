@@ -20,6 +20,7 @@ import { deleteOverprice } from '@/utils/services/overprice.service'
 import DateRange from '@/components/DateRange'
 import { TableContainer, Thead } from '@/components/ui'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import UniversalComponent from '@/components/ui/UniversalComponent'
 
 interface ClientsFilter {
     clientId: number
@@ -88,105 +89,110 @@ const AdminPanel = () => {
 
     return (
         <>
-            <Box display="flex" flexDirection="column" p={5}>
-                <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
-                    <Box display={'flex'} gap={'15px'} width={'fit-content'} mt={2}>
-                        <Select
-                        size={'sm'}
-                        borderRadius={5}
-                            placeholder="Имя"
-                            width={'100%'}
-                            name="name"
-                            onChange={handleSelectChange}
-                        >
-                            {clientData?.map((client, index) => (
-                                <option key={index} value={client.client.name}>
-                                    {client.client.name}
-                                </option>
-                            ))}
-                        </Select>
+            <UniversalComponent>
+                <Box display="flex" flexDirection="column" p={5}>
+                    <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
+                        <Box display={'flex'} gap={'15px'} width={'fit-content'} mt={2}>
+                            <Select
+                                size={'sm'}
+                                borderRadius={5}
+                                placeholder="Имя"
+                                width={'100%'}
+                                name="name"
+                                onChange={handleSelectChange}
+                            >
+                                {clientData?.map((client, index) => (
+                                    <option key={index} value={client.client.name}>
+                                        {client.client.name}
+                                    </option>
+                                ))}
+                            </Select>
 
-                        <DateRange />
+                            <DateRange />
+                        </Box>
+
+                        <Button colorScheme="purple" onClick={onOpen}>
+                            Добавить
+                        </Button>
                     </Box>
-
-                    <Button colorScheme="purple" onClick={onOpen}>
-                        Добавить
-                    </Button>
+                    <TableContainer
+                        isLoading={isLoading}
+                        style={{ width: '100%', height: '100%', overflowY: 'auto' }}
+                    >
+                        <Table variant="simple">
+                            <Thead>
+                                <Tr>
+                                    <Th>№</Th>
+                                    <Th>Реализатор</Th>
+                                    <Th>Сверху</Th>
+                                    <Th>Месяц</Th>
+                                    <Th>Год</Th>
+                                    <Th>Действия</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {overPriceData?.map((overData, index) => {
+                                    return (
+                                        <Tr key={index}>
+                                            <Td>{index + 1}</Td>
+                                            <Td>{overData.client?.name}</Td>
+                                            <Td>{overData.price}</Td>
+                                            <Td>{overData.month}</Td>
+                                            <Td>{overData.year}</Td>
+                                            <Td>
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        setSelectedData(overData)
+                                                        onOpen()
+                                                    }}
+                                                    icon={<EditIcon />}
+                                                />
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        setSelectedData(overData)
+                                                        setDialog({
+                                                            ...dialog,
+                                                            isOpen: true,
+                                                        })
+                                                    }}
+                                                    icon={<DeleteIcon />}
+                                                />
+                                            </Td>
+                                        </Tr>
+                                    )
+                                })}
+                            </Tbody>
+                        </Table>
+                    </TableContainer>
+                    <OverPriceAddModal
+                        data={selectedData}
+                        isOpen={isOpen}
+                        onClose={handleClose}
+                        onSuccess={handleSuccess}
+                    />
+                    <Dialog
+                        isOpen={dialog.isOpen}
+                        onClose={dialog.onClose}
+                        header="Удалить"
+                        body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                        actionBtn={() => {
+                            dialog.onClose()
+                            delOverprice(selectedData)
+                        }}
+                        actionText="Удалить"
+                    />
                 </Box>
-                <TableContainer isLoading={isLoading} style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                    <Table variant="simple">
-                        <Thead>
-                            <Tr>
-                                <Th>№</Th>
-                                <Th>Реализатор</Th>
-                                <Th>Сверху</Th>
-                                <Th>Месяц</Th>
-                                <Th>Год</Th>
-                                <Th>Действия</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {overPriceData?.map((overData, index) => {
-                                return (
-                                    <Tr key={index}>
-                                        <Td>{index + 1}</Td>
-                                        <Td>{overData.client?.name}</Td>
-                                        <Td>{overData.price}</Td>
-                                        <Td>{overData.month}</Td>
-                                        <Td>{overData.year}</Td>
-                                        <Td>
-                                            <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
-                                                marginRight={3}
-                                                onClick={() => {
-                                                    setSelectedData(overData)
-                                                    onOpen()
-                                                }}
-                                                icon={<EditIcon />}
-                                            />
-                                            <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
-                                                marginRight={3}
-                                                onClick={() => {
-                                                    setSelectedData(overData)
-                                                    setDialog({
-                                                        ...dialog,
-                                                        isOpen: true,
-                                                    })
-                                                }}
-                                                icon={<DeleteIcon />}
-                                            />
-                                        </Td>
-                                    </Tr>
-                                )
-                            })}
-                        </Tbody>
-                    </Table>
-                </TableContainer>
-                <OverPriceAddModal
-                    data={selectedData}
-                    isOpen={isOpen}
-                    onClose={handleClose}
-                    onSuccess={handleSuccess}
-                />
-                <Dialog
-                    isOpen={dialog.isOpen}
-                    onClose={dialog.onClose}
-                    header="Удалить"
-                    body="Вы уверены? Вы не сможете отменить это действие впоследствии."
-                    actionBtn={() => {
-                        dialog.onClose()
-                        delOverprice(selectedData)
-                    }}
-                    actionText="Удалить"
-                />
-            </Box>
+            </UniversalComponent>
         </>
     )
 }

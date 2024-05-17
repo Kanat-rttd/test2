@@ -126,7 +126,7 @@ const AdminPanel = () => {
                         <TableContainer isLoading={isLoading} style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                             <Table variant="simple">
                                 <Thead>
-                                    <Tr position={'sticky'} backgroundColor={'white'}>
+                                    <Tr position={'sticky'}>
                                         <Th>№</Th>
                                         <Th>Имя</Th>
                                         <Th>Фамилия</Th>
