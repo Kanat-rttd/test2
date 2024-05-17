@@ -78,7 +78,7 @@ const Distribution = () => {
                             </TabList>
                             <TabPanels height={'95%'}>
                                 <TabPanel height={'100%'} p={'10px 0'}>
-                                    <ListTable status="0" />
+                                    <ListTable facilityUnit={'0'} status="0" />
                                 </TabPanel>
                                 <TabPanel p={'10px 0'}>
                                     <PivotTable status="0" />
