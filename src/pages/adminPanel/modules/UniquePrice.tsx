@@ -326,8 +326,7 @@ const AdminPanel = () => {
                     body="Вы уверены? Вы не сможете отменить это действие впоследствии."
                     actionBtn={() => {
                         deleteIndividualPrice(selectedData?.detail[0].individualPriceId ?? '').then(
-                            (res) => {
-                                console.log(res)
+                            () => {
                                 getIndividualPrices()
                             },
                         )

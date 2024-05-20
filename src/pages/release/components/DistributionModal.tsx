@@ -58,14 +58,12 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     useEffect(() => {
         getBreadNames().then((responseData) => {
             setBreadNames(responseData)
-            console.log(responseData)
         })
     }, [])
 
     useEffect(() => {
         getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
             setClientsData(responseData)
-            console.log(responseData)
         })
     }, [])
 

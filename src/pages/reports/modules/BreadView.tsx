@@ -27,7 +27,6 @@ const BreadView = () => {
     const { getURLs } = useURLParameters()
     const { data: breadViewData } = useApi<breadViewData[]>(`reports/bread?${getURLs().toString()}`)
     const { data: clientsData } = useApi<Client[]>('client')
-    console.log(breadViewData)
 
     const [selectedClient, setSelectedClient] = useState('')
 

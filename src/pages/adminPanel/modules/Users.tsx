@@ -47,8 +47,6 @@ const AdminPanel = () => {
         status: selectedStatus,
     })
 
-    console.log(usersData)
-
     const handleClose = () => {
         setSelectedData(undefined)
         onClose()

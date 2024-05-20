@@ -36,8 +36,6 @@ const AdminPanel = () => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    console.log(filters.name)
-
     useEffect(() => {
         mutate(['client', filters])
     }, [filters])
@@ -54,8 +52,6 @@ const AdminPanel = () => {
             [name]: value,
         }))
     }
-
-    console.log(filters)
 
     const handledSuccess = () => {
         mutate(['client', filters])

@@ -49,14 +49,12 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     useEffect(() => {
         getBreadNames().then((responseData) => {
             setBreadNames(responseData)
-            console.log(responseData)
         })
     }, [])
 
     useEffect(() => {
         getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
             setClientsData(responseData)
-            console.log(responseData)
         })
     }, [])
 
@@ -70,16 +68,13 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     }
 
     const handleBreadSelection = (bread: string, id: string) => {
-        console.log('breadSelection')
         if (selectedBreads.find((item) => item.name === bread)) {
-            console.log('if')
             setSelectedBreads(
                 selectedBreads.map((item) =>
                     item.name === bread ? { ...item, quantity: item.quantity + 1 } : item,
                 ),
             )
         } else {
-            console.log('else')
             setSelectedBreads([...selectedBreads, { name: bread, id: id, quantity: 1 }])
         }
     }
@@ -107,8 +102,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
             dispatch: status,
         }
         createDispatch(distributionData)
-            .then((res) => {
-                console.log(res)
+            .then(() => {
                 onSuccess()
             })
             .catch((error) => {

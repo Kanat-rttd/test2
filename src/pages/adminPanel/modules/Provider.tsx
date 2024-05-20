@@ -50,7 +50,6 @@ const AdminProvider = () => {
     const [selectedData, setSelectedData] = useState<ProviderGoods>()
 
     const handleSelectChange = (status: string) => {
-        console.log('target')
         setSelectedStatus(status)
     }
 

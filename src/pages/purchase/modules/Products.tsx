@@ -34,7 +34,6 @@ interface Providers {
 const Products = () => {
     const { setParam, getParam } = useURLParameters()
     const { data: rawMaterialData } = useApi<RawMaterial[]>('rawMaterials')
-    console.log(rawMaterialData)
 
     const { data: providersData } = useSWR<Providers[]>('providers', {
         fetcher: () => getAllProviders(),
@@ -53,7 +52,6 @@ const Products = () => {
     }
 
     const handleAddProduct = () => {
-        console.log('mutate')
         mutate('productPurchase')
     }
 

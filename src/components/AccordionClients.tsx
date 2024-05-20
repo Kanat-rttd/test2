@@ -43,7 +43,6 @@ type accorfionClientType = {
 }
 
 const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => {
-    console.log(data)
     const defaultIndex = Array.from({ length: data.length }, (_, index) => index)
 
     const handleConfirmClick = (clientName: OrderArray) => {

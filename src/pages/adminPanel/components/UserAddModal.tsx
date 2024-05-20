@@ -50,7 +50,6 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
     } = useForm<User>()
 
     useEffect(() => {
-        console.log(data)
         if (data) {
             Object.entries(data).forEach(([key, value]) => {
                 setValue(key as keyof User, value)
@@ -62,7 +61,6 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
     }, [data, isOpen, reset])
 
     const sendData = (formData: User) => {
-        console.log(formData)
         try {
             const responsePromise: Promise<any> = data
                 ? updateUser(data.id, formData)
@@ -70,7 +68,6 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
             loading(responsePromise)
 
             responsePromise.then(() => {
-                console.log('response')
                 reset()
                 onSuccess()
                 handleClose()

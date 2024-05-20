@@ -67,8 +67,7 @@ const AdminPanel = () => {
 
     const delProduct = (selectedData: Product | undefined) => {
         if (selectedData) {
-            deleteProduct(selectedData.id).then((res) => {
-                console.log(res)
+            deleteProduct(selectedData.id).then(() => {
                 handleAddProduct()
                 setSelectedData(undefined)
             })
@@ -88,8 +87,6 @@ const AdminPanel = () => {
 
     const applyFilters = async () => {
         findByFilters(filters).then((res) => {
-            console.log(res)
-            console.log(filters)
             setData(res.data.data)
         })
     }

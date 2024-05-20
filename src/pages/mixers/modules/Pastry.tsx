@@ -50,7 +50,6 @@ const MixersPage = () => {
     useEffect(() => {
         getAllBakingFacilityUnits().then((responseData) => {
             setFacilityUnits(responseData)
-            console.log(responseData)
         })
     }, [])
 
@@ -62,7 +61,6 @@ const MixersPage = () => {
     // }, [])
 
     const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        console.log(target.value)
         const data = { facilityUnitId: target.value }
 
         getByFacilityUnit(data)

@@ -34,7 +34,6 @@ const History = () => {
 
     useEffect(() => {
         getAllSales().then((res) => {
-            console.log(res.data)
             setSalesData(res.data)
         })
     }, [])

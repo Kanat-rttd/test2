@@ -52,8 +52,6 @@ const AdminPanel = () => {
 
     const { data: clientData } = useApi<ClientsFilter[]>('overPrice/clientFilter')
 
-    console.log(clientData)
-
     const { onOpen, isOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<OverPrice>()
     const [dialog, setDialog] = useState({
@@ -67,8 +65,7 @@ const AdminPanel = () => {
 
     const delOverprice = (selectedData: OverPrice | undefined) => {
         if (selectedData) {
-            deleteOverprice(selectedData.id).then((res) => {
-                console.log(res)
+            deleteOverprice(selectedData.id).then(() => {
                 handleSuccess()
             })
         } else {

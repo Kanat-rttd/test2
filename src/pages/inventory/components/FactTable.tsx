@@ -26,7 +26,6 @@ interface factInput {
 
 const FactTable = () => {
     const { data: factInput } = useApi<factInput>('factInput')
-    console.log(factInput)
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -75,9 +74,7 @@ const FactTable = () => {
               }
             | undefined,
     ) => {
-        console.log(data)
-        deleteFactInput(data?.id).then((res) => {
-            console.log(res)
+        deleteFactInput(data?.id).then(() => {
             mutate('factInput')
         })
     }

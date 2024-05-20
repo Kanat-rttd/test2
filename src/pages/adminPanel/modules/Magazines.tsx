@@ -48,8 +48,6 @@ const AdminPanel = () => {
     const { data: magazinesData, isLoading } = useApi<Magazines[]>('magazines', filters)
     const { data: clientsData } = useApi<Client[]>('client')
 
-    console.log(filters)
-
     // const { data: facilityUnitsData } = useSWR<FacilityUnit[]>('mixers', {
     //     fetcher: () => getAllBakingFacilityUnits(),
     // })
@@ -69,13 +67,10 @@ const AdminPanel = () => {
     // useEffect(() => {
     //     getAllProducts().then((responseData) => {
     //         setData(responseData)
-    //         console.log(responseData)
     //     })
     // }, [])
 
     const handledSuccess = () => {
-        console.log('another response')
-        // mutate('user')
         mutate(`magazines`)
     }
 

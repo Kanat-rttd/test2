@@ -40,13 +40,10 @@ const JournalPage = () => {
     const { data: clientsData } = useApi<Client[]>('client')
     const { data: productData } = useApi<Product[]>('product')
 
-    // console.log(facilityUnitsData, clientsData, productData)
 
     const [selectedFacilityUnit, setFacilityUnit] = useState('')
     const [selectedClient, setClient] = useState('')
     const [selectedProduct, setProduct] = useState('')
-
-    console.log(selectedFacilityUnit, selectedClient, selectedProduct)
 
     return (
         <>

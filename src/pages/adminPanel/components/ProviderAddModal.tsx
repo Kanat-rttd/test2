@@ -75,8 +75,6 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
     const { data: providersData } = useApi<Providers[]>('providers')
     const { data: placesData } = useApi<Place[]>('place')
 
-    console.log(placesData)
-
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -107,7 +105,6 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
 
     const sendData = (formData: ProviderInputs) => {
         try {
-            console.log(formData)
             const responsePromise: Promise<any> = selectedData
                 ? updateProviderGoods(selectedData.id, formData)
                 : createProviderGoods(formData)
@@ -173,7 +170,6 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                                                         selectedOption: Providers | null,
                                                     ) => {
                                                         if (selectedOption) {
-                                                            console.log(selectedOption.value)
                                                             onChange(selectedOption.value)
                                                         } else {
                                                             onChange('')

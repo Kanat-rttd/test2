@@ -53,7 +53,6 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
     } = useForm<DepartPersonal>()
 
     useEffect(() => {
-        console.log(data)
         if (data) {
             Object.entries(data).forEach(([key, value]) => {
                 setValue(key as keyof DepartPersonal, value)

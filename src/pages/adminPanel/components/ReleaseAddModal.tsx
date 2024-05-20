@@ -74,7 +74,6 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
     } = useForm<Releaser>()
 
     const sendData = (formData: Releaser) => {
-        console.log(formData)
         try {
             const responsePromise: Promise<any> = data
                 ? updateClient(data.id, formData)

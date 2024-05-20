@@ -20,7 +20,6 @@ interface calculationsData {
 
 const ProviderTable = () => {
     const { data: calculationsData } = useApi<calculationsData>('debtTransfer/calculations')
-    console.log(calculationsData)
 
     return (
         <>

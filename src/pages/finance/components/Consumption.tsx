@@ -60,7 +60,6 @@ const Arrival = () => {
     } = useForm<ArrivalInputs>()
 
     const sendData = (formData: ArrivalInputs) => {
-        console.log(formData)
         createConsumption(formData)
             .then((res) => {
                 console.log(res)
@@ -70,11 +69,6 @@ const Arrival = () => {
             })
         // mutate()
     }
-
-    // const { success } = useNotify()
-    // console.log(data)
-
-    // success('Отправлено')
 
     return (
         <>

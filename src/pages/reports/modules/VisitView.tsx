@@ -27,7 +27,6 @@ const VisitView = () => {
     const { data: visitViewData } = useApi<visitViewData[]>(`reports/time?${getURLs().toString()}`)
     const { data: departPersonalData } = useApi<DepartPersonal[]>('departPersonal')
 
-    console.log(visitViewData)
 
     const getPersonalNames = () => {
         const personalNames = new Set<string>()

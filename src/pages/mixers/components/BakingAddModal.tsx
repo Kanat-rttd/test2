@@ -76,7 +76,6 @@ const BakingAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
     })
 
     useEffect(() => {
-        console.log(data)
         if (data) {
             setFormData((prevFormData) => ({
                 ...prevFormData,
@@ -100,7 +99,6 @@ const BakingAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
         Promise.all([getAllProducts()])
             .then(([products]) => {
                 setProducts(products)
-                console.log(products)
             })
             .catch((error) => {
                 console.error('Error fetching data:', error)
@@ -114,7 +112,6 @@ const BakingAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
             [name]: value,
         })
 
-        console.log(formData)
     }
 
     const addBaking = () => {

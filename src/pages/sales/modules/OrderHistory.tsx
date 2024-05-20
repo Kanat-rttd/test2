@@ -30,7 +30,6 @@ interface OrderDetail {
 
 const OrderHistory = () => {
     const { id } = useParams<{ id?: string }>()
-    console.log(id)
     const navigator = useNavigate()
 
     const [orderData, setOrderData] = useState<Order | null>(null)
@@ -43,7 +42,6 @@ const OrderHistory = () => {
         if (orderId !== undefined) {
             getSaleById(orderId)
                 .then((res) => {
-                    console.log(res.data)
                     setOrderData(res.data)
                     setSelectedProducts(res.data.orderDetails)
                 })
@@ -89,7 +87,6 @@ const OrderHistory = () => {
     }
 
     const handleSaveChanges = () => {
-        // console.log(selectedProducts)
         console.log(removedOrderData)
         // saveOrderChanges(orderData.id, selectedProducts)
         //     .then(() => {

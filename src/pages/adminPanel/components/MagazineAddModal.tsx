@@ -73,8 +73,6 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
     const { data: clientsData } = useApi<Client[]>('client')
     const { loading } = useNotify()
 
-    console.log(data)
-
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -86,7 +84,6 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
     } = useForm<MagazinesModalInput>()
 
     useEffect(() => {
-        console.log(data)
         if (data) {
             Object.entries(data).forEach(([key, value]) => {
                 setValue(key as keyof MagazinesModalInput, value)
@@ -97,8 +94,6 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
     }, [data, isOpen, reset])
 
     const sendData = (formData: MagazinesModalInput) => {
-        console.log(formData)
-
         try {
             const responsePromise: Promise<any> = data
                 ? updateMagazine(data.id, formData)
@@ -106,7 +101,6 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
             loading(responsePromise)
 
             responsePromise.then(() => {
-                console.log('response')
                 reset()
                 onSuccess()
                 onClose()

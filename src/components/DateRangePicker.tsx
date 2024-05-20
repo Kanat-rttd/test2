@@ -19,7 +19,6 @@ const DateRangePicker = () => {
     const [isOpen, setIsOpen] = useState(false)
 
     const handleApply = () => {
-        console.log('Selected Date Range:', startDate, endDate)
         setIsOpen(false)
     }
 

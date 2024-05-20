@@ -15,7 +15,6 @@ interface PivotTableProps {
 
 const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
     const { loading } = useNotify()
-    console.log(status)
     const [data, setData] = useState<DispatchType[]>([])
     const [headers, setHeaders] = useState<any[]>([])
     const [selectedData, setSelectedData] = useState<DispatchType>()
@@ -31,7 +30,6 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
 
     useEffect(() => {
         getAllDispatches().then((res) => {
-            console.log(res.data)
             const uniqueProductNames = [
                 ...new Set(
                     res.data

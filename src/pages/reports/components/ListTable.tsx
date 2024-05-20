@@ -43,8 +43,6 @@ export default function ListTable({ status }: any) {
 
     const { data: dispatchesData } = useApi<Dispatch[]>('release')
 
-    console.log(dispatchesData)
-
     const [modal, setModal] = useState({
         isOpen: false,
         onClose: () => setModal({ ...modal, isOpen: false }),

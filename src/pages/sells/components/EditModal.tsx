@@ -81,16 +81,14 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
     }
 
     const updateData = () => {
-        console.log(formData)
 
         formData.goodsDispatchDetails.forEach((item) => {
-            let updObj = {
+            const updObj = {
                 productId: item.productId,
                 price: item.price,
             }
 
-            updateDispatchPrice(item.id, updObj).then((res) => {
-                console.log(res)
+            updateDispatchPrice(item.id, updObj).then(() => {
                 onSuccess()
             })
         })

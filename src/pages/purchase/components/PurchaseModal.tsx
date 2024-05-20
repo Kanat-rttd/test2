@@ -97,8 +97,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
 
     const sendData = (formData: Purchase) => {
         createPurchase(formData)
-            .then((res) => {
-                console.log(res)
+            .then(() => {
                 onSuccess()
             })
             .catch((error) => {
@@ -164,7 +163,6 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                                 (option) => option.id == value,
                                             )}
                                             // onChange={(val: rawMaterials) => {
-                                            //     console.log(val)
                                             //     onChange(val.id)
                                             //     setSelectedRawMaterial(val)
                                             // }}

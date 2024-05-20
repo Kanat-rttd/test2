@@ -36,7 +36,6 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
     })
 
     const { data: dispatchesData } = useApi<Dispatch>(`release?${getURLs().toString()}`)
-    console.log(dispatchesData)
 
     const [modal, setModal] = useState({
         isOpen: false,

@@ -66,8 +66,6 @@ const places = [
 ]
 
 const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps) => {
-    console.log(selectedData)
-
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -90,11 +88,9 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
         let quantity = parseFloat(formData.quantity)
 
         const sendData = { ...formData, name, quantity }
-        console.log(sendData, id)
 
         updateFactInput(id, sendData)
-            .then((res) => {
-                console.log(res)
+            .then(() => {
                 onSuccess()
                 mutate('factInput')
                 handleClose()

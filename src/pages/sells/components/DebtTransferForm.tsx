@@ -86,14 +86,10 @@ interface InvoiceData {
 const DebtTransferForm = () => {
     const [selectedProvider, setSelectedProvider] = useState<string | null>(null)
 
-    const { data: debtTransfer } = useApi('debtTransfer')
+    // const { data: debtTransfer } = useApi('debtTransfer')
     const { data: magazinesData } = useApi<Magazines[]>('magazines')
     const { data: clientsData } = useApi<Client[]>('client')
     const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
-
-    console.log(debtTransfer)
-    console.log(magazinesData)
-    console.log(selectedProvider)
 
     const {
         register,
@@ -104,7 +100,6 @@ const DebtTransferForm = () => {
     } = useForm<DebtTransferInputs>()
 
     const sendData = (formData: DebtTransferInputs) => {
-        console.log(formData)
         createDebtTransfer(formData)
             .then((res) => {
                 console.log(res)

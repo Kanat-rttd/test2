@@ -6,12 +6,10 @@ const SuccessPage = () => {
     const navigator = useNavigate()
 
     const redirectToSalesForm = () => {
-        console.log('Navigating to sales form...')
         navigator(SALES_REQUEST_FORM_ROUTE)
     }
 
     const redirectToMain = () => {
-        console.log('Navigating to main page...')
         navigator(MAIN_ROUTE)
     }
 

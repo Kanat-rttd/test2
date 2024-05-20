@@ -34,10 +34,6 @@ const Debt = () => {
         setSelectedProviderId(event.target.value)
     }
 
-    console.log(providersData)
-
-    console.log(purchasesData)
-
     return (
         <>
             <Box padding={5} width={'25%'}>

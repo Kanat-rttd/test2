@@ -74,7 +74,6 @@ type EditModalProps = {
 }
 
 const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps) => {
-    console.log(selectedData)
     //TODO: Избавиться от fetcher'а который ничего не делает
     const { data: rawMaterialsData } = useSWR<rawMaterials[]>('rawMaterials', {
         fetcher: () => getAllRawMaterials(),
@@ -114,12 +113,9 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
     ]
 
     const updateData = (formData: Purchase) => {
-        console.log(selectedData?.id)
-        console.log(formData)
         const purchaseId = selectedData?.id?.toString() ?? ''
         updatePurchase(purchaseId, formData)
-            .then((res) => {
-                console.log(res)
+            .then(() => {
                 onSuccess()
                 handleClose()
             })

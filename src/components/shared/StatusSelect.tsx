@@ -7,8 +7,8 @@ import { forwardRef, LegacyRef } from 'react'
 const StatusSelect = forwardRef((props, ref: LegacyRef<HTMLSelectElement>) => {
     return (
         <Select ref={ref} name="status" {...props}>
-            <option value={'0'}>Активный</option>
-            <option value={'1'}>Неактивный</option>
+            <option value={'Активный'}>Активный</option>
+            <option value={'Неактивный'}>Неактивный</option>
         </Select>
     )
 })

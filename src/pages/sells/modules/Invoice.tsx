@@ -66,8 +66,6 @@ const InvoicePage = () => {
     const { setParam, getURLs } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    console.log(getURLs())
-
     const { data: financeTotals } = useApi<financeTotalWithInvoiceNumbers[]>('finance/totals')
     const { data: clientsData } = useApi<Client[]>('client')
     const { data: dispatchesData } = useApi<InvoiceData[]>(
@@ -76,15 +74,10 @@ const InvoicePage = () => {
 
     const [selectedRow, setSelectedRow] = useState<InvoiceData | null>(null)
 
-    console.log(financeTotals)
-
     const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = event.target
-        console.log(name, value)
         setParam(name, value)
     }
-
-    console.log(dispatchesData)
 
     return (
         <>

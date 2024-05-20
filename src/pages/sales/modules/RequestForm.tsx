@@ -27,8 +27,6 @@ const RequestForm = () => {
 
     const userInfo = getUserInfo()
 
-    console.log(selectedProducts)
-
     const handleAddProduct = (product: Product): void => {
         setSelectedProducts([...selectedProducts, { ...product, quantity: 0 }])
         onClose()
@@ -59,7 +57,6 @@ const RequestForm = () => {
             comment: comment,
             clientId: clientId,
         }
-        console.log(requestData)
         if (requestData.products.length === 0) {
             toast({
                 title: 'Ошибка.',
@@ -79,7 +76,6 @@ const RequestForm = () => {
         } else {
             createSale(requestData)
                 .then((res) => {
-                    console.log(res)
                     if (res.status === 200) {
                         setIsSuccess(true)
                     } else {

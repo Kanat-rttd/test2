@@ -53,19 +53,15 @@ const ProcessedPage = () => {
     useEffect(() => {
         if (salesData) {
             setSalesData(salesData)
-            console.log(salesData)
         }
     }, [])
 
-    console.log(getSalesData)
 
     const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        console.log(target.value)
         const data = { facilityUnitId: target.value }
 
         getByFacilityUnit(data)
             .then((res) => {
-                console.log(res.data.data)
                 setSalesData(res.data.data)
             })
             .catch((error) => {

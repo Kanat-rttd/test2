@@ -49,14 +49,12 @@ interface ListTableProps {
 }
 
 const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, status }) => {
-    const { getURLs, getParam } = useURLParameters()
+    const { getParam } = useURLParameters()
     const { loading } = useNotify()
     // const [data, setData] = useState<Dispatch[]>([])
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const [selectedRow, setSelectedRow] = useState<Dispatch | null>(null)
-
-    console.log('facilityUnit', getURLs())
 
     const { data: dispatchData, mutate: mutateDispatchData } = useApi<DispatchData>('release', {
         facilityUnit,
@@ -65,8 +63,6 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
         startDate: String(getParam('startDate')),
         endDate: String(getParam('endDate')),
     })
-
-    console.log(dispatchData?.data?.filter((row: Dispatch) => row.dispatch == status))
 
     const [modal, setModal] = useState({
         isOpen: false,
@@ -84,12 +80,10 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
     }
 
     const handleSuccess = () => {
-        console.log('handler')
         mutateDispatchData()
     }
 
     const handlerDeleteUser = () => {
-        console.log(selectedRow)
         if (selectedRow) {
             const responsePromise: Promise<any> = deleteDispatch(selectedRow.id)
             loading(responsePromise)

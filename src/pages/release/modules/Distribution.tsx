@@ -35,7 +35,6 @@ const Distribution = () => {
 
     const handleUpdateProduct = () => {
         mutate('release')
-        console.log('success Distribution')
     }
 
     return (

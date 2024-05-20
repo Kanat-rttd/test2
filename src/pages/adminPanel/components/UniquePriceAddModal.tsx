@@ -112,8 +112,6 @@ const UniquePriceAddModal = ({
         })
     }, [])
     useEffect(() => {
-        console.log(data)
-
         if (data) {
             Object.entries(data).forEach(([key, value]) => {
                 setValue(key as keyof Detail, value)
@@ -149,8 +147,6 @@ const UniquePriceAddModal = ({
                         },
                     ],
                 }
-                console.log(formData.id)
-
                 const responsePromise: Promise<any> = createIndividualPrice(newData)
                 loading(responsePromise)
                 responsePromise.then(() => {
@@ -173,7 +169,6 @@ const UniquePriceAddModal = ({
                         },
                     ],
                 }
-                console.log(newData)
                 const responsePromise: Promise<any> = updateIndividualPrice(
                     newData.clientId,
                     newData,
@@ -280,7 +275,6 @@ const UniquePriceAddModal = ({
                                             color="white"
                                             cursor="pointer"
                                             value={data ? 'Редактировать' : 'Добавить'}
-                                            onSubmit={() => console.log('test')}
                                         />
                                     </Box>
                                 </form>

@@ -52,7 +52,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
     useEffect(() => {
         getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
             setClientsData(responseData)
-            console.log(responseData)
         })
     }, [])
 
@@ -65,7 +64,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
             })),
         }
 
-        console.log(formattedData)
         try {
             formattedData.products?.forEach((product) => {
                 const responsePromise: Promise<any> = updateDispatchQuantity(product.id, product)
@@ -89,7 +87,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
 
     useEffect(() => {
         if (data) {
-            console.log('conf')
             setValue('name', data.client.name)
             data.goodsDispatchDetails.forEach((details, index) => {
                 setValue(`quantity_${index}`, details.quantity.toString())

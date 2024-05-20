@@ -49,8 +49,6 @@ const places = [
 const FactModal = ({ isOpen, onClose }: FactModalProps) => {
     const { data: rawMaterials } = useApi<rawMaterials[]>('rawMaterials')
 
-    // console.log(rawMaterials)
-
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -87,7 +85,6 @@ const FactModal = ({ isOpen, onClose }: FactModalProps) => {
         )
 
         if (formattedData.length > 0) {
-            console.log(formattedData)
             createFactInput(formattedData).then((res) => {
                 console.log(res)
             })

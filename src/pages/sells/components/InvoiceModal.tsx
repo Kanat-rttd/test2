@@ -70,7 +70,6 @@ interface EditModalProps {
 }
 
 const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }) => {
-    console.log(selectedRow)
     const modalContentRef = useRef<HTMLDivElement>(null)
 
     const generatePDF = () => {

@@ -40,16 +40,12 @@ const ListTable = () => {
 
     const { data: purchasesData } = useApi<AllPurchases>(`productPurchase?${getURLs().toString()}`)
 
-    console.log(purchasesData)
-
     const filteredPurchases = purchasesData?.purchases.filter((purchase) => {
-        console.log(purchase.provider.id)
         if (getParam('providerId') && Number(getParam('providerId')) !== purchase.provider.id) {
             return false
         }
         return true
     })
-    console.log(filteredPurchases)
 
     const [selectedData, setSelectedData] = useState<Purchase>()
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -60,7 +56,6 @@ const ListTable = () => {
     }
 
     const handleUpdateProduct = () => {
-        console.log('mutate')
         mutate('productPurchase')
     }
 
@@ -99,7 +94,6 @@ const ListTable = () => {
                                     <Td>
                                         <EditIcon
                                             onClick={() => {
-                                                console.log(purchase)
                                                 handleSelected(purchase)
                                             }}
                                             boxSize={5}

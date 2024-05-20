@@ -64,8 +64,6 @@ export default function ListTable({ status }: any) {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const { data: shiftAccounting } = useApi<shiftAccounting[]>('shiftAccounting')
-    console.log(shiftAccounting)
-
     const { data: dispatchesData } = useApi<Dispatch[]>('release')
 
     console.log(dispatchesData)

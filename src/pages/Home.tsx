@@ -4,7 +4,6 @@ import MobileNavbar from '@/components/MobileNavbar'
 import IsMobile from '@/utils/helpers/isMobile'
 
 const Home = () => {
-    //console.log('home')
     return (
         <>
             {IsMobile() ? <MobileNavbar /> : <TopNavBar />}

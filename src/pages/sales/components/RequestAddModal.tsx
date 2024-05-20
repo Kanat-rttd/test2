@@ -96,7 +96,6 @@ const RequestAddModal = ({ isOpen, onClose }: ClientAddModalProps) => {
 
     const addRequest = () => {
         try {
-            console.log(transformedData)
             createRequest(transformedData).then((res) => {
                 console.log(res)
             })

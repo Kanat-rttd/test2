@@ -96,7 +96,6 @@ const RequestAddModal = ({ isOpen, onClose }: ClientAddModalProps) => {
 
     const addRequest = () => {
         try {
-            console.log(transformedData)
             createRequest(transformedData).then((res) => {
                 console.log(res)
             })
@@ -114,7 +113,6 @@ const RequestAddModal = ({ isOpen, onClose }: ClientAddModalProps) => {
     // const updClient = () => {
     //     if (data) {
     //         updateClient(data.id, formData).then((res) => {
-    //             console.log(res)
     //         })
     //     }
     //     onClose()

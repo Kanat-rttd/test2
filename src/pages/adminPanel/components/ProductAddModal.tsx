@@ -48,13 +48,11 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
 
     const sendData = (formData: ProductForSend) => {
         if (data) {
-            updateProduct(data.id, formData).then((res) => {
-                console.log(res)
+            updateProduct(data.id, formData).then(() => {
                 onAddProduct()
             })
         } else {
-            createProduct(formData).then((res) => {
-                console.log(res)
+            createProduct(formData).then(() => {
                 onAddProduct()
             })
         }

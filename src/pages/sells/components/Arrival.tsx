@@ -68,11 +68,9 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
     } = useForm<ArrivalInputs>()
 
     const sendData = (formData: ArrivalInputs) => {
-        console.log(invoiceNumber)
 
         createInvoiceArrival(invoiceNumber, formData)
-            .then((res) => {
-                console.log(res)
+            .then(() => {
                 mutate(`finance/${invoiceNumber}`)
                 mutate('finance/totals')
                 mutate('release/invoice')

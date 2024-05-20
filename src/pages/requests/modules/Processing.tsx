@@ -39,11 +39,9 @@ const ProcessingPage = () => {
 
     const { data: salesData } = useApi<OrderArray[]>(`sales?${getURLs().toString()}`)
 
-    console.log(salesData)
 
     // useEffect(() => {
     //     getAllSales().then((res) => {
-    //         console.log(res.data)
     //         setSalesData(res.data)
     //     })
     // }, [])
@@ -51,7 +49,6 @@ const ProcessingPage = () => {
     const handleChangeStatus = async (clientName: OrderArray) => {
         setDoneStatus(clientName.id)
             .then((res) => {
-                console.log(res)
                 // const updatedSalesData = salesData.map((sale) =>
                 //     sale.id === clientName.id ? { ...sale, done: 1 } : sale,
                 // )

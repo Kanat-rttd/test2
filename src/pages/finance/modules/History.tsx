@@ -35,16 +35,7 @@ const History = () => {
     const [sortOrder, setSortOrder] = useState('asc')
     const [isHovered, setIsHovered] = useState(false)
 
-    // const { data } = useSWR<Finance[]>('finance', fetcher)
-    console.log(sortOrder)
-
-    // const { data } = useSWR<Finance[]>(['finance', sortOrder], {
-    //     fetcher: () => getAllFinances(sortOrder),
-    // })
-
     const { data } = useApi<Finance[]>(`finance?${getURLs().toString()}`)
-
-    console.log(data)
 
     const [selectedData, setSelectedData] = useState<History | null>(null)
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -77,8 +68,6 @@ const History = () => {
         onOpen()
         setSelectedData(transaction)
     }
-
-    // console.log(dayjs(selectionRange.startDate).format('DD.MM.YYYY'))
 
     return (
         <>

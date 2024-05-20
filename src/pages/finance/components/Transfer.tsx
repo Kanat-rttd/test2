@@ -32,10 +32,8 @@ const Transfer = () => {
     } = useForm<TransferInputs>()
 
     const sendData = (formData: TransferInputs) => {
-        console.log(formData)
         createTransfer(formData)
-            .then((res) => {
-                console.log(res)
+            .then(() => {
                 success('')
             })
             .catch((error) => {

@@ -52,7 +52,6 @@ const Login = () => {
                 navigate(MAIN_ROUTE)
             })
             .catch((error) => {
-                //console.log(error)
                 toast({
                     title: 'Ошибка авторизаций.',
                     description: error.response.data,
