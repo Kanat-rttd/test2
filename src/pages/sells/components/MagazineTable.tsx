@@ -1,13 +1,5 @@
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
-import {
-    Box,
-    Select,
-    Table,
-    Tr,
-    Td,
-    Tbody,
-    Th,
-} from '@chakra-ui/react'
+import { Box, Select, Table, Tr, Td, Tbody, Th } from '@chakra-ui/react'
 
 const MagazineTable = () => {
     const data = {
@@ -28,8 +20,8 @@ const MagazineTable = () => {
 
     return (
         <>
-            <Box width={'25%'} marginBottom={10}>
-                <Select placeholder="Магазин">
+            <Box width={'25%'} marginBottom={6}>
+                <Select placeholder="Магазин" size={'sm'} borderRadius={5} width={'80%'}>
                     <option>Магазин</option>
                 </Select>
             </Box>

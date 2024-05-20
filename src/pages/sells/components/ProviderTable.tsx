@@ -28,9 +28,9 @@ const ProviderTable = () => {
                     <option>Реализатор</option>
                 </Select>
             </Box>
-            <Box width={'100%'}>
+            <Box>
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                    <Table variant="simple" width={'100%'}>
+                    <Table variant="simple">
                         <Thead>
                             <Tr>
                                 <Th>№</Th>
@@ -49,7 +49,7 @@ const ProviderTable = () => {
                                 )
                             })}
                         </Tbody>
-                        <Tfoot width={'97.4%'}>
+                        <Tfoot>
                             <Tr>
                                 <Th color={'#000'} width={'10%'} fontSize={15}>
                                     ИТОГО

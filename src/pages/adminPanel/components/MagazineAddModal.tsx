@@ -11,6 +11,7 @@ import {
     FormControl,
     FormErrorMessage,
     Box,
+    Select as ChakraSelect,
 } from '@chakra-ui/react'
 import Select from 'react-select'
 
@@ -65,10 +66,6 @@ const status = [
     },
 ]
 
-interface Status {
-    name: string
-}
-
 const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalProps) => {
     const { data: clientsData } = useApi<Client[]>('client')
     const { loading } = useNotify()
@@ -122,102 +119,84 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                     <ModalCloseButton />
                     <ModalBody>
                         <Stack spacing={4}>
-                        <form
-                            onSubmit={handleSubmitForm(sendData)}
-                            style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
-                        >
-                            <FormControl isInvalid={!!errors.name}>
-                                <Input
-                                    maxLength={20}
-                                    {...register('name', {
-                                        required: 'Поле является обязательным',
-                                    })}
-                                    autoComplete="off"
-                                    placeholder="Магазин *"
-                                    type="string"
-                                />
-                                <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
-                            </FormControl>
-
-                            <FormControl isInvalid={!!errors.clientId}>
-                                <Controller
-                                    name="clientId"
-                                    control={control}
-                                    rules={{ required: 'Поля является обязательным' }}
-                                    render={({ field }) => {
-                                        const { onChange, value } = field
-                                        return (
-                                            <Select
-                                                options={clientsData}
-                                                getOptionLabel={(option: Client) => option.name}
-                                                getOptionValue={(option: Client) => `${option.id}`}
-                                                value={clientsData?.filter(
-                                                    (option) => String(option.id) == String(value),
-                                                )}
-                                                // onChange={(val: Account) => onChange(val?.name)}
-                                                onChange={(selectedOption: Client | null) => {
-                                                    if (selectedOption) {
-                                                        onChange(selectedOption.id)
-                                                    }
-                                                }}
-                                                placeholder="Реализатор *"
-                                                isClearable
-                                                isSearchable
-                                            />
-                                        )
-                                    }}
-                                />
-                                <FormErrorMessage>{errors.clientId?.message}</FormErrorMessage>
-                            </FormControl>
-
-                            <FormControl isInvalid={!!errors.status}>
-                                <Controller
-                                    name="status"
-                                    control={control}
-                                    rules={{ required: 'Поля является обязательным' }}
-                                    render={({ field }) => {
-                                        const { onChange, value } = field
-                                        return (
-                                            <Select
-                                                options={status}
-                                                getOptionLabel={(option: Status) => option.name}
-                                                getOptionValue={(option: Status) =>
-                                                    `${option.name}`
-                                                }
-                                                value={status?.filter(
-                                                    (option) => String(option.name) == value,
-                                                )}
-                                                // onChange={(val: Account) => onChange(val?.name)}
-                                                onChange={(selectedOption: Status | null) => {
-                                                    if (selectedOption) {
-                                                        onChange(selectedOption.name)
-                                                    }
-                                                }}
-                                                placeholder="Статус *"
-                                                isClearable
-                                                isSearchable
-                                            />
-                                        )
-                                    }}
-                                />
-                                <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
-                            </FormControl>
-                            <Box
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'flex-end',
-                                    marginTop: '10px',
-                                }}
+                            <form
+                                onSubmit={handleSubmitForm(sendData)}
+                                style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                             >
-                                <Input
-                                    width={'40%'}
-                                    type="submit"
-                                    bg="purple.500"
-                                    color="white"
-                                    cursor="pointer"
-                                    value={data ? 'Редактировать' : 'Добавить'}
-                                />
-                            </Box>
+                                <FormControl isInvalid={!!errors.name}>
+                                    <Input
+                                        maxLength={20}
+                                        {...register('name', {
+                                            required: 'Поле является обязательным',
+                                        })}
+                                        autoComplete="off"
+                                        placeholder="Магазин *"
+                                        type="string"
+                                    />
+                                    <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
+                                </FormControl>
+
+                                <FormControl isInvalid={!!errors.clientId}>
+                                    <Controller
+                                        name="clientId"
+                                        control={control}
+                                        rules={{ required: 'Поле является обязательным' }}
+                                        render={({ field }) => {
+                                            const { onChange, value } = field
+                                            return (
+                                                <Select
+                                                    options={clientsData}
+                                                    getOptionLabel={(option: Client) => option.name}
+                                                    getOptionValue={(option: Client) =>
+                                                        `${option.id}`
+                                                    }
+                                                    value={clientsData?.filter(
+                                                        (option) =>
+                                                            String(option.id) == String(value),
+                                                    )}
+                                                    onChange={(selectedOption: Client | null) => {
+                                                        if (selectedOption) {
+                                                            onChange(selectedOption.id)
+                                                        }
+                                                    }}
+                                                    placeholder="Реализатор *"
+                                                    isClearable
+                                                    isSearchable
+                                                />
+                                            )
+                                        }}
+                                    />
+                                    <FormErrorMessage>{errors.clientId?.message}</FormErrorMessage>
+                                </FormControl>
+
+                                <FormControl isInvalid={!!errors.status}>
+                                    <ChakraSelect
+                                        {...register('status', {
+                                            required: 'Поле является обязательным',
+                                        })}
+                                    >
+                                        {status.map((item) => {
+                                            return <option value={item.name}>{item.name}</option>
+                                        })}
+                                    </ChakraSelect>
+                                    <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
+                                </FormControl>
+                                <Box
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                        marginTop: '10px',
+                                    }}
+                                >
+                                    <Input
+                                        width={'40%'}
+                                        type="submit"
+                                        bg="purple.500"
+                                        color="white"
+                                        cursor="pointer"
+                                        value={data ? 'Редактировать' : 'Добавить'}
+                                    />
+                                </Box>
                             </form>
                         </Stack>
                     </ModalBody>

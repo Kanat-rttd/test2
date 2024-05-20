@@ -23,7 +23,7 @@ const Input = () => {
                 </Box>
                 <Avatar bg="teal.500" />
             </Box> */}
-            <Box display={'flex'} width={'100%'} justifyContent={'center'} marginTop={10}>
+            <Box display={'flex'} width={'100%'} justifyContent={'center'} marginTop={3}>
                 <Box
                     height={'100%'}
                     width={IsMobile() ? '100%' : '25%'}
