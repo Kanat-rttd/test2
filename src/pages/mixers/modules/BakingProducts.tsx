@@ -87,7 +87,6 @@ const BakingPage = () => {
     return (
         <>
             <UniversalComponent>
-
                 <Box p={5} mt={1}>
                     <Box display={'flex'} justifyContent={'space-between'}>
                         <Box marginBottom={7} display={'flex'}>
@@ -120,17 +119,12 @@ const BakingPage = () => {
                         </Button>
                         <BakingAddModal data={selectedBaking} isOpen={isOpen} onClose={onClose} />
                     </Box>
-
-                    <Box>
-                        <TableContainer
-                            style={{ width: '100%', height: '100%', overflowY: 'auto' }}
-                        >
-                            <Table variant="simple">
+                    <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+                        <Table variant="simple">
+                            <Box pb={4}>
                                 <Thead>
-                                    <Tr width={'100%'}>
-                                        <Th width={'15%'}>
-                                            Вид хлеба
-                                        </Th>
+                                    <Tr>
+                                        <Th width={'15%'}>Вид хлеба</Th>
                                         <Th sx={styles} isNumeric width={'5%'}>
                                             Мука
                                         </Th>
@@ -164,16 +158,18 @@ const BakingPage = () => {
                                     {bakingsData?.bakingData.map((bakingRow, index) => {
                                         return (
                                             <Tr key={index}>
-                                                <Td >{bakingRow.product?.name}</Td>
-                                                <Td sx={styles} >{bakingRow.flour}</Td>
-                                                <Td sx={styles} >{bakingRow.salt}</Td>
-                                                <Td sx={styles} >{bakingRow.yeast}</Td>
-                                                <Td sx={styles} >{bakingRow.malt}</Td>
-                                                <Td sx={styles} >{bakingRow.butter}</Td>
-                                                <Td sx={styles} >{bakingRow.temperature}</Td>
-                                                <Td sx={styles} >{bakingRow.time.toLocaleString()}</Td>
-                                                <Td sx={styles} >{bakingRow.output}</Td>
-                                                <Td >
+                                                <Td>{bakingRow.product?.name}</Td>
+                                                <Td sx={styles}>{bakingRow.flour}</Td>
+                                                <Td sx={styles}>{bakingRow.salt}</Td>
+                                                <Td sx={styles}>{bakingRow.yeast}</Td>
+                                                <Td sx={styles}>{bakingRow.malt}</Td>
+                                                <Td sx={styles}>{bakingRow.butter}</Td>
+                                                <Td sx={styles}>{bakingRow.temperature}</Td>
+                                                <Td sx={styles}>
+                                                    {bakingRow.time.toLocaleString()}
+                                                </Td>
+                                                <Td sx={styles}>{bakingRow.output}</Td>
+                                                <Td>
                                                     <IconButton
                                                         variant="outline"
                                                         size={'sm'}
@@ -206,23 +202,25 @@ const BakingPage = () => {
                                         )
                                     })}
                                 </Tbody>
-                                <Tfoot>
-                                    <Tr fontSize={15} fontWeight={'bold'} color={'#000'} width={'100%'}>
-                                        <Td width={'15%'}>Итого</Td>
-                                        <Td width={'7%'}>{bakingsData?.totals?.totalFlour}</Td>
-                                        <Td width={'7%'}>{bakingsData?.totals?.totalSalt}</Td>
-                                        <Td width={'7%'}>{bakingsData?.totals?.totalYeast}</Td>
-                                        <Td width={'7%'}>{bakingsData?.totals?.totalMalt}</Td>
-                                        <Td width={'5%'}>{bakingsData?.totals?.totalButter}</Td>
-                                        <Td width={'5%'}></Td>
-                                        <Td width={'10%'}></Td>
-                                        <Td width={'3%'}>{bakingsData?.totals?.totalOutput}</Td>
-                                        <Td width={'10%'}></Td>
-                                    </Tr>
-                                </Tfoot>
-                            </Table>
-                        </TableContainer>
-                    </Box>
+                            </Box>
+                        </Table>
+                        <Table variant="simple">
+                            <Tfoot>
+                                <Tr fontSize={15} fontWeight={'bold'} color={'#000'}>
+                                    <Td width={'15%'}>Итого</Td>
+                                    <Td width={'7%'}>{bakingsData?.totals?.totalFlour}</Td>
+                                    <Td width={'7%'}>{bakingsData?.totals?.totalSalt}</Td>
+                                    <Td width={'7%'}>{bakingsData?.totals?.totalYeast}</Td>
+                                    <Td width={'7%'}>{bakingsData?.totals?.totalMalt}</Td>
+                                    <Td width={'5%'}>{bakingsData?.totals?.totalButter}</Td>
+                                    <Td width={'5%'}></Td>
+                                    <Td width={'10%'}></Td>
+                                    <Td width={'3%'}>{bakingsData?.totals?.totalOutput}</Td>
+                                    <Td width={'10%'}></Td>
+                                </Tr>
+                            </Tfoot>
+                        </Table>
+                    </TableContainer>
                 </Box>
             </UniversalComponent>
             <Dialog
