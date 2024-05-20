@@ -45,23 +45,22 @@ const PivotTable = () => {
                             )
                         })}
                     </Tbody>
-                    <Tfoot marginTop={10}>
-                        <Tr>
-                            <Th color={'#000'} fontSize={15}>
+                    <Tfoot>
+                        <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>
+                            <Td w={'15%'}>
                                 ИТОГО
-                            </Th>
-                            <Th></Th>
-                            <Th color={'#000'} fontSize={15}>
+                            </Td>
+                            <Td w={'17%'}></Td>
+                            <Td w={'25%'}>
                                 50000
-                            </Th>
-                            <Th color={'#000'} fontSize={15}>
+                            </Td>
+                            <Td w={'30%'}>
                                 50000
-                            </Th>
-                            <Th color={'#000'} fontSize={15}>
+                            </Td>
+                            <Td w={'30%'}>
                                 5000
-                            </Th>
-                            <Th> </Th>
-                            <Th> </Th>
+                            </Td>
+                            <Td> </Td>
                         </Tr>
                     </Tfoot>
                 </Table>

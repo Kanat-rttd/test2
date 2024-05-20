@@ -98,18 +98,15 @@ const Products = () => {
                         </Button>
                     </Box>
                     <Tabs variant="soft-rounded" mt={'-12px'}>
-                        <TabList justifyContent={'space-between'} height={'22px'}>
+                        <TabList height={'22px'}>
                             <Tab>List</Tab>
-                            {/* <Tab>Pivot</Tab> */}
+                            <Tab>Pivot</Tab>
                         </TabList>
                         <TabPanels>
                             <TabPanel height={'100%'} p={'10px 0'}>
                                 <ListTable />
                             </TabPanel>
-                            <TabPanel>
-                                <Box width={'25%'}>
-                                    <DateRangePicker></DateRangePicker>
-                                </Box>
+                            <TabPanel height={'100%'} p={'10px 0'}>
                                 <PivotTable />
                             </TabPanel>
                         </TabPanels>
