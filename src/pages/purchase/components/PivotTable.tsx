@@ -1,7 +1,44 @@
+import DateRange from '@/components/DateRange'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
-import { Box, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { useApi } from '@/utils/services/axios'
+import { Box, Select, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
+
+// interface Purchase {
+//     id: number
+//     date: Date
+//     providerId: number
+//     rawMaterialId: number
+//     quantity: number
+//     price: number
+//     deliverySum: number
+//     totalSum: number
+//     status: string
+//     provider: {
+//         id: number
+//         name: string
+//     }
+//     rawMaterial: {
+//         id: number
+//         name: string
+//     }
+// }
+
+interface RawMaterial {
+    id: number
+    name: string
+    uom: string
+}
+
+interface Providers {
+    id: number
+    name: string
+}
 
 const PivotTable = () => {
+    const { getParam, setParam } = useURLParameters()
+    const { data: providersData } = useApi<Providers[]>('providers')
+    const { data: rawMaterialData } = useApi<RawMaterial[]>('rawMaterials')
     const data = [
         {
             id: 1,
@@ -21,6 +58,39 @@ const PivotTable = () => {
 
     return (
         <Box width={'100%'}>
+            <Box display={'flex'} justifyContent={'space-between'} mt={3} mb={2}>
+                <Box display={'flex'} gap={'15px'}>
+                    <DateRange />
+                    <Select
+                        size={'sm'}
+                        borderRadius={4}
+                        placeholder="Поставщик"
+                        value={getParam('providerId')}
+                        onChange={(event) => setParam('providerId', event.target.value)}
+                        width={'fit-content'}
+                    >
+                        {providersData?.map((provider) => (
+                            <option key={provider.id} value={provider.id}>
+                                {provider.name}
+                            </option>
+                        ))}
+                    </Select>
+                    <Select
+                        size={'sm'}
+                        borderRadius={5}
+                        placeholder="Материалы"
+                        value={getParam('rawMaterialId')}
+                        onChange={(event) => setParam('rawMaterialId', event.target.value)}
+                        width={'fit-content'}
+                    >
+                        {rawMaterialData?.map((units) => (
+                            <option key={units.id} value={units.id}>
+                                {units.name}
+                            </option>
+                        ))}
+                    </Select>
+                </Box>
+            </Box>
             <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                 <Table variant="simple">
                     <Thead>
@@ -47,19 +117,11 @@ const PivotTable = () => {
                     </Tbody>
                     <Tfoot>
                         <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>
-                            <Td w={'15%'}>
-                                ИТОГО
-                            </Td>
+                            <Td w={'15%'}>ИТОГО</Td>
                             <Td w={'17%'}></Td>
-                            <Td w={'25%'}>
-                                50000
-                            </Td>
-                            <Td w={'30%'}>
-                                50000
-                            </Td>
-                            <Td w={'30%'}>
-                                5000
-                            </Td>
+                            <Td w={'25%'}>50000</Td>
+                            <Td w={'30%'}>50000</Td>
+                            <Td w={'30%'}>5000</Td>
                             <Td> </Td>
                         </Tr>
                     </Tfoot>
