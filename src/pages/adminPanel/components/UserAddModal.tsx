@@ -183,9 +183,11 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                 <FormErrorMessage>{errors.permission?.message}</FormErrorMessage>
                             </FormControl>
                             <FormControl isInvalid={!!errors.phone}>
-                                <PhoneInput
-                                    {...register('phone', {
-                                        required: 'Поля является обязательным',
+                                <Controller
+                                    name="phone"
+                                    control={control}
+                                    rules={{
+                                        required: 'Поле является обязательным',
                                         minLength: {
                                             value: 10,
                                             message: 'Некорректный номер телефона.',
@@ -194,7 +196,20 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                             value: 10,
                                             message: 'Некорректный номер телефона.',
                                         },
-                                    })}
+                                    }}
+                                    render={({ field }) => {
+                                        const { onChange, value } = field
+                                        return (
+                                            <PhoneInput
+                                                value={value}
+                                                onChange={(val: string) => {
+                                                    if (val.length <= 10) {
+                                                        onChange(val)
+                                                    }
+                                                }}
+                                            />
+                                        )
+                                    }}
                                 />
                                 <FormErrorMessage>{errors.phone?.message}</FormErrorMessage>
                             </FormControl>
@@ -299,8 +314,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                             </Box>
                         </form>
                     </ModalBody>
-                    <ModalFooter gap={3}>
-                    </ModalFooter>
+                    <ModalFooter gap={3}></ModalFooter>
                 </ModalContent>
             </Modal>
         </>

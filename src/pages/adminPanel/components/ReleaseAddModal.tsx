@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { createClient, updateClient } from '@/utils/services/client.service'
 // import Select from 'react-select'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import {
     Button,
     Input,
@@ -65,7 +65,7 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
     const {
         register,
         handleSubmit: handleSubmitForm,
-        // control,
+        control,
         setValue,
         getValues,
         setError,
@@ -154,6 +154,37 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.contact}>
+                        <Controller
+                            name="contact"
+                            control={control}
+                            rules={{
+                                required: 'Поле является обязательным',
+                                minLength: {
+                                    value: 10,
+                                    message: 'Некорректный номер телефона.',
+                                },
+                                maxLength: {
+                                    value: 10,
+                                    message: 'Некорректный номер телефона.',
+                                },
+                            }}
+                            render={({ field }) => {
+                                const { onChange, value } = field
+                                return (
+                                    <PhoneInput
+                                        value={value}
+                                        onChange={(val: string) => {
+                                            if (val.length <= 10) {
+                                                onChange(val)
+                                            }
+                                        }}
+                                    />
+                                )
+                            }}
+                        />
+                        <FormErrorMessage>{errors.contact?.message}</FormErrorMessage>
+                    </FormControl>
+                    {/* <FormControl isInvalid={!!errors.contact}>
                         <PhoneInput
                             {...register('contact', {
                                 required: 'Поля является обязательным',
@@ -173,7 +204,7 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                             })}
                         />
                         <FormErrorMessage>{errors.contact?.message}</FormErrorMessage>
-                    </FormControl>
+                    </FormControl> */}
 
                     <FormControl isInvalid={!!errors.telegrammId}>
                         <InputGroup>
