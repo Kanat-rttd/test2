@@ -1,4 +1,3 @@
-import DateRangePicker from '@/components/DateRangePicker'
 import {
     Box,
     Button,
@@ -61,47 +60,68 @@ const Products = () => {
         <>
             <UniversalComponent>
                 <Box width={'100%'} height={'calc(100vh-64px)'} p={5} pt={4}>
-                    <Box display={'flex'} justifyContent={'space-between'} marginBottom={5}>
-                        <Box display={'flex'} gap={'15px'}>
-                            <DateRange />
-                            <Select
-                                size={'sm'}
-                                borderRadius={4}
-                                placeholder="Поставщик"
-                                value={getParam('providerId')}
-                                onChange={handleProviderChange}
-                                width={'fit-content'}
-                            >
-                                {providersData?.map((provider) => (
-                                    <option key={provider.id} value={provider.id}>
-                                        {provider.name}
-                                    </option>
-                                ))}
-                            </Select>
-                            <Select
-                                size={'sm'}
-                                borderRadius={5}
-                                placeholder="Материалы"
-                                value={getParam('rawMaterialId')}
-                                onChange={handleRawMaterialChange}
-                                width={'fit-content'}
-                            >
-                                {rawMaterialData?.map((units) => (
-                                    <option key={units.id} value={units.id}>
-                                        {units.name}
-                                    </option>
-                                ))}
-                            </Select>
+                    <Tabs variant="soft-rounded" mt={'-5px'}>
+                        <Box display={'flex'} alignItems={'center'}
+                        justifyContent={'space-between'}>
+                            <Box>
+                                <TabList height={'22px'}>
+                                    <Tab>List</Tab>
+                                    <Tab>Pivot</Tab>
+                                </TabList>
+                                <Box
+                                    display={'flex'}
+                                    justifyContent={'space-between'}
+                                    mt={3} mb={2}
+                                >
+                                    <Box display={'flex'} gap={'15px'}>
+                                        <DateRange />
+                                        <Select
+                                            size={'sm'}
+                                            borderRadius={4}
+                                            placeholder="Поставщик"
+                                            value={getParam('providerId')}
+                                            onChange={handleProviderChange}
+                                            width={'fit-content'}
+                                        >
+                                            {providersData?.map((provider) => (
+                                                <option key={provider.id} value={provider.id}>
+                                                    {provider.name}
+                                                </option>
+                                            ))}
+                                        </Select>
+                                        <Select
+                                            size={'sm'}
+                                            borderRadius={5}
+                                            placeholder="Материалы"
+                                            value={getParam('rawMaterialId')}
+                                            onChange={handleRawMaterialChange}
+                                            width={'fit-content'}
+                                        >
+                                            {rawMaterialData?.map((units) => (
+                                                <option key={units.id} value={units.id}>
+                                                    {units.name}
+                                                </option>
+                                            ))}
+                                        </Select>
+                                        <Select
+                                            placeholder="Статус"
+                                            width={'fit-content'}
+                                            value={getParam('status')}
+                                            size={'sm'}
+                                            borderRadius={5}
+                                            onChange={(e) => setParam('status', e.target.value)}
+                                        >
+                                            <option value="Активный">Активный</option>
+                                            <option value="Неактивный">Неактивный</option>
+                                        </Select>
+                                    </Box>
+                                </Box>
+                            </Box>
+                            <Button colorScheme="purple" onClick={onOpen}>
+                                Добавить закупки
+                            </Button>
                         </Box>
-                        <Button colorScheme="purple" onClick={onOpen}>
-                            Добавить закупки
-                        </Button>
-                    </Box>
-                    <Tabs variant="soft-rounded" mt={'-12px'}>
-                        <TabList height={'22px'}>
-                            <Tab>List</Tab>
-                            <Tab>Pivot</Tab>
-                        </TabList>
+
                         <TabPanels>
                             <TabPanel height={'100%'} p={'10px 0'}>
                                 <ListTable />

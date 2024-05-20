@@ -17,10 +17,10 @@ import {
 import { Controller, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import { getAllRawMaterials } from '@/utils/services/rawMaterials.service'
-import { getAllProviders } from '@/utils/services/providers.service'
 import { createPurchase } from '@/utils/services/productPurchase.service'
 import { useState } from 'react'
 import Select from 'react-select'
+import { useApi } from '@/utils/services/axios'
 
 type PurchaseModalProps = {
     isOpen: boolean
@@ -76,9 +76,9 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
         fetcher: () => getAllRawMaterials(),
     })
 
-    const { data: providersData } = useSWR<Providers[]>('providers', {
-        fetcher: () => getAllProviders(),
-    })
+    const { data: providersData } = useApi<Providers[]>('providers')
+    console.log(providersData);
+    
 
     const [selectedRawMaterial, setSelectedRawMaterial] = useState<rawMaterials | null>(null)
 
@@ -118,7 +118,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                             <Controller
                                 name="providerId"
                                 control={control}
-                                rules={{ required: 'Поля является обязательным' }}
+                                rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
                                     const { onChange, value } = field
                                     return (
@@ -127,7 +127,10 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                             getOptionLabel={(option: Providers) => option.name}
                                             getOptionValue={(option: Providers) => `${option.id}`}
                                             value={providersData?.filter(
-                                                (option) => option.id == value,
+                                                (option) => {
+                                                    console.log(option.id, value);
+                                                    
+                                                    return option.id == value},
                                             )}
                                             // onChange={(val: Providers) => onChange(val?.id)}
                                             onChange={(selectedOption: Providers | null) => {
@@ -149,7 +152,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                             <Controller
                                 name="rawMaterialId"
                                 control={control}
-                                rules={{ required: 'Поля является обязательным' }}
+                                rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
                                     const { onChange, value } = field
                                     return (
