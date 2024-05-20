@@ -38,17 +38,19 @@ const MenuAccordion = () => {
         setIsDrawerOpen((prev) => !prev)
     }
 
-    // const userInfo = getUserInfo()
+    const userInfo = getUserInfo()
 
-    // const parsedClass = JSON.parse(String(userInfo?.class))
+    const parsedClass = JSON.parse(String(userInfo?.class))
+    console.log(parsedClass);
+    
 
-    // const filteredMenuItems = menuItems.filter((item) => {
-    //     return (
-    //         parsedClass[0].label &&
-    //         item.allowedClasses &&
-    //         item.allowedClasses.includes(parsedClass[0].label)
-    //     )
-    // })
+    const filteredMenuItems = menuItems.filter((item) => {
+        return (
+            parsedClass[0].label &&
+            item.allowedClasses &&
+            item.allowedClasses.includes(parsedClass[0].label)
+        )
+    })
 
     const handleNavigate = (route: string) => {
         setIsDrawerOpen(false)

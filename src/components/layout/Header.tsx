@@ -36,6 +36,7 @@ const Header: React.FC<StyledContainerProps> = ({ buttons }) => {
                         {buttons?.map((button) => {
                             return (
                                 <Button
+                                    key={button.puth}
                                     height={'100%'}
                                     p={'0 25px'}
                                     onClick={() => navigate(button.puth)}

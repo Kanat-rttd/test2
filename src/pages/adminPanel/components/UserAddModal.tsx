@@ -300,12 +300,6 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                         </form>
                     </ModalBody>
                     <ModalFooter gap={3}>
-                        {/* <Button onClick={handleClose} colorScheme="red">
-                            Отмена
-                        </Button>
-                        <Button colorScheme="purple" onClick={handleSubmitForm(sendData)}>
-                            {data ? 'Редактировать' : 'Добавить'}
-                        </Button> */}
                     </ModalFooter>
                 </ModalContent>
             </Modal>
