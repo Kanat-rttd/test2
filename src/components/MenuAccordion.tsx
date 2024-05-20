@@ -41,8 +41,7 @@ const MenuAccordion = () => {
     const userInfo = getUserInfo()
 
     const parsedClass = JSON.parse(String(userInfo?.class))
-    console.log(parsedClass);
-    
+    console.log(parsedClass)
 
     const filteredMenuItems = menuItems.filter((item) => {
         return (
@@ -51,6 +50,8 @@ const MenuAccordion = () => {
             item.allowedClasses.includes(parsedClass[0].label)
         )
     })
+
+    console.log(filteredMenuItems)
 
     const handleNavigate = (route: string) => {
         setIsDrawerOpen(false)
