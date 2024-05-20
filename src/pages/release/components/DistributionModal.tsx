@@ -202,8 +202,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                         alignItems={'center'}
                                         key={name}
                                     >
-                                        <Text>{index + 1}.</Text>
-                                        <Text w={'40%'}>{name}</Text>
+                                        <Text w={'40%'}>{index + 1}. {name}</Text>
                                         <Input
                                             w={'60%'}
                                             required={quantity > 1}

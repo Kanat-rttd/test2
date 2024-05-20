@@ -135,17 +135,20 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                     </Select>
 
                     <Box
-                        display={'grid'}
-                        gridTemplateColumns={'repeat(3, 1fr)'}
+                        width={'100%'}
                         gap={'10px'}
                         border={'1px solid #E2E8F0'}
                         padding={'5px'}
                         borderRadius={'8px'}
                         marginTop={'5px'}
+                        display={'flex'}
+                        flexWrap={'wrap'}
                     >
                         {breadNames.map((bread) => {
                             return (
                                 <Checkbox
+                                    w={'45%'}
+                                    p={'0 15px'}
                                     checked={selectedBreads.some(
                                         (item) => item.name === bread.bread,
                                     )}
@@ -159,11 +162,21 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                     </Box>
 
                     <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
-                        {selectedBreads.map(({ name, quantity }) => {
+                        {selectedBreads.map(({ name, quantity }, index) => {
                             return (
-                                <Box display={'flex'} gap={'10px'} key={name}>
-                                    <Text>{name}</Text>
+                                <Box
+                                    width={'100%'}
+                                    display={'flex'}
+                                    gap={'10px'}
+                                    alignItems={'center'}
+                                    key={name}
+                                >
+                                    <Text w={'40%'}>
+                                        {index + 1}. {name}
+                                    </Text>
                                     <Input
+                                        w={'60%'}
+                                        required={quantity > 1}
                                         type="number"
                                         placeholder="Кол-во"
                                         value={quantity}

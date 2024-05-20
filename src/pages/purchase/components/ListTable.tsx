@@ -7,6 +7,7 @@ import { useApi } from '@/utils/services/axios'
 import { mutate } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
+import UniversalComponent from '@/components/ui/UniversalComponent'
 
 interface AllPurchases {
     purchases: Purchase[]
@@ -61,6 +62,8 @@ const ListTable = () => {
 
     return (
         <>
+        <UniversalComponent>
+            {/* <Box></Box> */}
             <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                 <Table variant="simple">
                     <Thead>
@@ -127,6 +130,7 @@ const ListTable = () => {
                 onClose={onClose}
                 onSuccess={handleUpdateProduct}
             />
+            </UniversalComponent>
         </>
     )
 }
