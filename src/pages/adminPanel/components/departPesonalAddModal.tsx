@@ -63,29 +63,24 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
     }, [data, isOpen, reset])
 
     const sendData = (formData: DepartPersonal) => {
-        try {
-            const responsePromise: Promise<any> = data
-                ? updateDepartPersonal(data.id, formData)
-                : createDepartPersonal(formData)
-            loading(responsePromise)
+        const responsePromise: Promise<any> = data
+            ? updateDepartPersonal(data.id, formData)
+            : createDepartPersonal(formData)
+        loading(responsePromise)
 
-            responsePromise.then(() => {
+        responsePromise
+            .then(() => {
                 reset()
                 onSuccess()
                 handleClose()
             })
-            reset()
-        } catch (error: any) {
-            setError('root', {
-                message: error.response.data.message || 'Ошибка',
+            .catch((error) => {
+                console.log(error)
+                setError(error.response.data.field, {
+                    message: error.response.data.message || 'Ошибка',
+                })
             })
-        }
     }
-
-    // const status = [
-    //     { id: 1, name: 'Активный' },
-    //     { id: 2, name: 'Неактивный' },
-    // ]
 
     const handleClose = () => {
         onClose()

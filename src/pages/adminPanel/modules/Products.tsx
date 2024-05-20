@@ -26,11 +26,6 @@ import { FacilityUnit, Product } from '@/utils/types/product.types'
 import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 
-enum Status {
-    ACTIVE = 0,
-    INACTIVE = 1,
-}
-
 const AdminPanel = () => {
     const { onOpen, isOpen, onClose } = useDisclosure()
 
@@ -136,7 +131,7 @@ const AdminPanel = () => {
                                 onChange={handleSelectChange}
                             >
                                 {productStatus.map((item) => {
-                                    return <option value={item.id}>{item.label}</option>
+                                    return <option value={item.label}>{item.label}</option>
                                 })}
                             </Select>
                         </Box>
@@ -171,11 +166,7 @@ const AdminPanel = () => {
                                                 <Td>{ordinalNumber}</Td>
                                                 <Td>{product.name}</Td>
                                                 <Td>{product.bakingFacilityUnit?.facilityUnit}</Td>
-                                                <Td>
-                                                    {Number(product.status) == Status.ACTIVE
-                                                        ? 'Активный'
-                                                        : 'Неактивный'}
-                                                </Td>
+                                                <Td>{product.status}</Td>
                                                 <Td>{product.price}</Td>
                                                 <Td>{product.costPrice}</Td>
                                                 <Td>

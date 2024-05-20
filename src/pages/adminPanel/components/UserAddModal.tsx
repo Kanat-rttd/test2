@@ -61,23 +61,24 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
     }, [data, isOpen, reset])
 
     const sendData = (formData: User) => {
-        try {
-            const responsePromise: Promise<any> = data
-                ? updateUser(data.id, formData)
-                : createUser(formData)
-            loading(responsePromise)
+        const responsePromise: Promise<any> = data
+            ? updateUser(data.id, formData)
+            : createUser(formData)
 
-            responsePromise.then(() => {
+        loading(responsePromise)
+
+        responsePromise
+            .then(() => {
                 reset()
                 onSuccess()
                 handleClose()
             })
-            reset()
-        } catch (error: any) {
-            setError('root', {
-                message: error.response.data.message || 'Ошибка',
+            .catch((error) => {
+                console.log(error)
+                setError(error.response.data.field, {
+                    message: error.response.data.message || 'Ошибка',
+                })
             })
-        }
     }
 
     const permissions = [

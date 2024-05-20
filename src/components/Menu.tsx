@@ -36,6 +36,8 @@ const Drawler = () => {
 
     const userInfo = getUserInfo()
 
+    console.log(userInfo)
+
     const filteredMenuItems = menuItems.filter((item) => {
         return (
             userInfo?.class && item.allowedClasses && item.allowedClasses.includes(userInfo.class)
@@ -101,9 +103,14 @@ const Drawler = () => {
                         </DrawerBody>
 
                         <DrawerFooter>
-                            <Link onClick={() => {
-                                window.localStorage.removeItem('authToken')
-                                navigate(LOGIN_ROUTE)}}>Выход</Link>
+                            <Link
+                                onClick={() => {
+                                    window.localStorage.removeItem('authToken')
+                                    navigate(LOGIN_ROUTE)
+                                }}
+                            >
+                                Выход
+                            </Link>
                         </DrawerFooter>
                     </DrawerContent>
                 </Drawer>

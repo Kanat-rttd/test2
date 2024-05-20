@@ -111,6 +111,10 @@ const UniquePriceAddModal = ({
             setProducts(responseData)
         })
     }, [])
+
+    // const { data: productsData } = useApi<Product[]>('product')
+    // console.log(productsData)
+
     useEffect(() => {
         if (data) {
             Object.entries(data).forEach(([key, value]) => {

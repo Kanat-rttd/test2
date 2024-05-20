@@ -26,7 +26,11 @@ const AdminPanel = () => {
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Releaser | undefined>(undefined)
     const [filters, setFilters] = useState({ name: '', telegrammId: '', status: '' })
-    const { data: clientsData, isLoading } = useApi<Releaser[]>('client', filters)
+    const {
+        data: clientsData,
+        isLoading,
+        mutate: mutateClientsData,
+    } = useApi<Releaser[]>('client', filters)
     const { data: filtersData } = useSWR<Releaser[]>('clientFilter', {
         fetcher: () => getAllClients({ name: '', telegrammId: '', status: '' }),
     })
@@ -54,7 +58,7 @@ const AdminPanel = () => {
     }
 
     const handledSuccess = () => {
-        mutate(['client', filters])
+        mutateClientsData()
     }
 
     const deleteUser = (selectedData: Releaser | undefined) => {
@@ -62,10 +66,7 @@ const AdminPanel = () => {
             const responsePromise: Promise<any> = deleteClient(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {
-                mutate((currentData: Releaser[] | undefined) => {
-                    if (!currentData) return currentData
-                    return currentData.filter((client) => client.id !== selectedData?.id)
-                })
+                mutateClientsData()
             })
         } else {
             console.error('No releaser data available to delete.')
@@ -77,7 +78,7 @@ const AdminPanel = () => {
             <UniversalComponent>
                 <Box display="flex" flexDirection="column" p={5}>
                     <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
-                        <Box display={'flex'} gap={'15px'} width={'fit-content'} >
+                        <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                             <Select
                                 name="name"
                                 placeholder="Имя"
@@ -107,7 +108,6 @@ const AdminPanel = () => {
                                 placeholder="Статус"
                                 width={'fit-content'}
                                 onChange={handleSelectChange}
-                                
                             >
                                 <option value="Активный">Активный</option>
                                 <option value="Неактивный">Неактивный</option>
@@ -119,7 +119,10 @@ const AdminPanel = () => {
                         </Button>
                     </Box>
                     <Box>
-                        <TableContainer isLoading={isLoading} style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+                        <TableContainer
+                            isLoading={isLoading}
+                            style={{ width: '100%', height: '100%', overflowY: 'auto' }}
+                        >
                             <Table variant="simple">
                                 <Thead>
                                     <Tr position={'sticky'}>
@@ -180,24 +183,24 @@ const AdminPanel = () => {
                         </TableContainer>
                     </Box>
                 </Box>
-            
-            <ReleaseAddModal
-                onClose={onCloseModal}
-                isOpen={isOpen}
-                data={selectedData}
-                onSuccess={handledSuccess}
-            />
-            <Dialog
-                isOpen={dialog.isOpen}
-                onClose={dialog.onClose}
-                header="Удалить"
-                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
-                actionBtn={() => {
-                    dialog.onClose()
-                    deleteUser(selectedData)
-                }}
-                actionText="Удалить"
-            />
+
+                <ReleaseAddModal
+                    onClose={onCloseModal}
+                    isOpen={isOpen}
+                    data={selectedData}
+                    onSuccess={handledSuccess}
+                />
+                <Dialog
+                    isOpen={dialog.isOpen}
+                    onClose={dialog.onClose}
+                    header="Удалить"
+                    body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                    actionBtn={() => {
+                        dialog.onClose()
+                        deleteUser(selectedData)
+                    }}
+                    actionText="Удалить"
+                />
             </UniversalComponent>
         </>
     )

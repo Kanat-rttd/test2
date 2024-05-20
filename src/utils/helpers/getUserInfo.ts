@@ -14,7 +14,8 @@ export default function getUserInfo() {
         const token = localStorage.getItem('authToken')
 
         if (token === null) {
-            throw new Error('Auth token not found')
+            window.location.href = '/login'
+            return null
         }
 
         const decodedToken: DecodedToken = jwtDecode(token)
