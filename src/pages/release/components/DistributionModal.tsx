@@ -117,6 +117,8 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 
         const responsePromise: Promise<any> = createDispatch(distributionData)
         loading(responsePromise)
+        
+        
         responsePromise
             .then(() => {
                 onSuccess()

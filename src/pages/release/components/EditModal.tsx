@@ -46,7 +46,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
         formState: { errors },
         setValue,
         setError,
-        reset,
     } = useForm<EditModalInputs>()
 
     useEffect(() => {
@@ -56,28 +55,28 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
     }, [])
 
     const sendData = (formData: EditModalInputs) => {
-        const formattedData = {
-            products: data?.goodsDispatchDetails.map((details, index) => ({
-                id: details.id,
-                productId: details.productId,
-                quantity: formData[`quantity_${index}`],
-            })),
-        }
-
+        const formattedData = data?.goodsDispatchDetails.map((details, index) => ({
+            id: details.id,
+            productId: details.productId,
+            quantity: formData[`quantity_${index}`],
+        }))
+        if (data?.id == undefined || formattedData == undefined) return
         try {
-            formattedData.products?.forEach((product) => {
-                const responsePromise: Promise<any> = updateDispatchQuantity(product.id, product)
-                loading(responsePromise)
-                responsePromise
-                    .then(() => {
-                        reset()
-                        onClose()
-                    })
-                    .catch((error: any) => {
-                        console.error('Update dispatch quantity error:', error)
-                        throw error
-                    })
-            })
+            const responsePromise: Promise<any> = updateDispatchQuantity(
+                data.id,
+                Number(formData.clientId),
+                formattedData,
+            )
+            loading(responsePromise)
+            console.log(responsePromise, formattedData, formData)
+            responsePromise
+                .then(() => {
+                    onClose()
+                })
+                .catch((error: any) => {
+                    console.error('Update dispatch quantity error:', error)
+                    throw error
+                })
         } catch (error: any) {
             setError('root', {
                 message: error.response.data.message || 'Ошибка',
@@ -87,7 +86,9 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
 
     useEffect(() => {
         if (data) {
-            setValue('name', data.client.name)
+            console.log(data)
+
+            setValue('clientId', data.client.id.toString())
             data.goodsDispatchDetails.forEach((details, index) => {
                 setValue(`quantity_${index}`, details.quantity.toString())
             })
@@ -111,7 +112,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
                         >
                             {clientsData?.map((client, index) => {
                                 return (
-                                    <option key={index} value={client.name}>
+                                    <option key={index} value={client.id}>
                                         {client.name}
                                     </option>
                                 )

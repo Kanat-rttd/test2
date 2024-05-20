@@ -26,8 +26,6 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
     const { loading } = useNotify()
     const { getURLs } = useURLParameters()
 
-    console.log(status, facilityUnit)
-
     const [selectedData, setSelectedData] = useState<DispatchType>()
 
     const [dialog, setDialog] = useState({
