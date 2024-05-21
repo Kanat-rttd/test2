@@ -52,7 +52,7 @@ const Distribution = () => {
                             <Select
                                 size={'sm'}
                                 borderRadius={5}
-                                placeholder="Цехи"
+                                placeholder="Цех"
                                 width={'fit-content'}
                                 value={getParam('facilityUnit')}
                                 onChange={handleClientChange}

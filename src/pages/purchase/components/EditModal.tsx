@@ -188,7 +188,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                                     setSelectedRawMaterial(selectedOption)
                                                 }
                                             }}
-                                            placeholder="Сырье *"
+                                            placeholder="Товар *"
                                             isClearable
                                             isSearchable
                                         />

@@ -88,15 +88,15 @@ const BakingPage = () => {
         <>
             <UniversalComponent>
                 <Box p={5} mt={1}>
-                    <Box display={'flex'} justifyContent={'space-between'}>
-                        <Box marginBottom={7} display={'flex'}>
+                    <Box display={'flex'} justifyContent={'space-between'} width={'100%'}>
+                        <Box marginBottom={7} display={'flex'} gap={15} width={'100%'}>
                             <DateRange />
                             <Select
-                                placeholder="Цехи"
-                                width={'100%'}
-                                marginLeft={5}
+                                placeholder="Цех"
+                                width={'17%'}
                                 size={'sm'}
                                 borderRadius={5}
+                                justifyContent={'space-between'}
                             >
                                 <option value="Лепешечный">Лепешечный</option>
                                 <option value="Булочный">Булочный</option>

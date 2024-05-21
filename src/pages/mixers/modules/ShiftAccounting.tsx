@@ -16,7 +16,7 @@ const shiftAccounting = () => {
                 <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                         <DateRange />
-                        <Select size={'sm'} borderRadius={5} placeholder="Цехи" width={'fit-content'}>
+                        <Select size={'sm'} borderRadius={5} placeholder="Цех" width={'fit-content'}>
                             <option value="Лепешечный">Лепешечный</option>
                             <option value="Булочный">Булочный</option>
                             <option value="Заварной">Заварной</option>

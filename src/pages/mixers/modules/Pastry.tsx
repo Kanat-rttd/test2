@@ -84,12 +84,11 @@ const MixersPage = () => {
                 >
                     <Box display={'flex'} gap={'15px'} width={'100%'}>
                         <DateRange />
-
                         <Select
-                            width={'20%'}
+                            width={'15%'}
                             size={'sm'}
                             borderRadius={5}
-                            placeholder="Тип цеха"
+                            placeholder="Цех"
                             name="bakingFacilityUnitId"
                             onChange={handleChange}
                         >

@@ -176,7 +176,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                                     setSelectedRawMaterial(selectedOption)
                                                 }
                                             }}
-                                            placeholder="Сырье *"
+                                            placeholder="Товар *"
                                             isClearable
                                             isSearchable
                                         />

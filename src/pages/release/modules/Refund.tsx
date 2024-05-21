@@ -35,7 +35,7 @@ const Refund = () => {
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                             <DateRange />
                             <Select
-                                placeholder="Цехи"
+                                placeholder="Цех"
                                 width={'fit-content'}
                                 size={'sm'}
                                 borderRadius={5}

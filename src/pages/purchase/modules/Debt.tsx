@@ -1,11 +1,11 @@
 import { Box, Table, Tbody, Tr, Th, Td, Select } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
-import { useState } from 'react'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface Provider {
-    id: number
-    name: string
+    value: number
+    label: string
 }
 
 interface DebtPurchase {
@@ -23,35 +23,33 @@ interface DebtPurchase {
 }
 
 const Debt = () => {
-    const [selectedProviderId, setSelectedProviderId] = useState<string>('')
+    const { getParam, setParam, getURLs } = useURLParameters()
 
-    const { data: purchasesData } = useApi<DebtPurchase>('productPurchase/debt', {
-        providerId: selectedProviderId,
-    })
+    const { data: purchasesData } = useApi<DebtPurchase>(
+        `productPurchase/debt?${getURLs().toString()}`,
+    )
     const { data: providersData } = useApi<Provider[]>('providers')
-
-    const handleProviderChange = (event: any) => {
-        setSelectedProviderId(event.target.value)
-    }
 
     return (
         <>
             <Box padding={5} width={'25%'}>
                 <Select
-                mb={-4}
+                    mt={1}
+                    size={'sm'}
+                    borderRadius={5}
                     placeholder="Поставщик"
-                    value={selectedProviderId}
-                    onChange={handleProviderChange}
+                    value={getParam('providerId')}
+                    onChange={(event) => setParam('providerId', event.target.value)}
                     width={'fit-content'}
                 >
-                    {providersData?.map((provider) => (
-                        <option key={provider.id} value={provider.id}>
-                            {provider.name}
+                    {providersData?.map((provider, index) => (
+                        <option key={`${index}`} value={provider.value}>
+                            {provider.label}
                         </option>
                     ))}
                 </Select>
             </Box>
-            <Box padding={5}>
+            <Box padding={'10px 20px'}>
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant="simple">
                         <Thead>

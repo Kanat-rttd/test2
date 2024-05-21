@@ -21,7 +21,7 @@ interface AllPurchases {
 
 interface Purchase {
     id: number
-    date: Date
+    date: string
     providerId: number
     rawMaterialId: number
     quantity: number
@@ -82,11 +82,6 @@ const ListTable = () => {
             console.error('No Purchase data available to delete.')
         }
     }
-
-    const status = [
-        { value: 1, label: 'Оплачено' },
-        { value: 2, label: 'Не оплачено' },
-    ]
 
     return (
         <>

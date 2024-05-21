@@ -61,7 +61,7 @@ const JournalPage = () => {
                             {/* <DateRangePicker></DateRangePicker> */}
                             <DateRange />
                             <Select
-                                placeholder="Цехи"
+                                placeholder="Цех"
                                 width={'90%'}
                                 size={'sm'}
                                 borderRadius={5}
