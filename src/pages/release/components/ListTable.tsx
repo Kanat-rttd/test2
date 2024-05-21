@@ -83,8 +83,10 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
                                             <div
                                                 style={{ display: 'flex', flexDirection: 'column' }}
                                             >
-                                                {row.goodsDispatchDetails.map((details, index) => (
-                                                    <span key={index}>{details.product?.name}</span>
+                                                {row.goodsDispatchDetails.map((details) => (
+                                                    <span key={details.id}>
+                                                        {details.product?.name}
+                                                    </span>
                                                 ))}
                                             </div>
                                         </Td>

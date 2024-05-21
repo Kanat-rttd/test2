@@ -115,7 +115,6 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
                         {dispatchData?.data
                             ?.filter((row: Dispatch) => row.dispatch == status)
                             ?.map((row, index) => {
-                                // calculateMaxProductHeight(row)
                                 return (
                                     <Tr key={row.id}>
                                         <Td>{index + 1}</Td>
@@ -124,8 +123,8 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
                                             <div
                                                 style={{ display: 'flex', flexDirection: 'column' }}
                                             >
-                                                {row.goodsDispatchDetails.map((details, index) => (
-                                                    <span key={index}>{details.product.name}</span>
+                                                {row.goodsDispatchDetails.map((details) => (
+                                                    <span key={details.id}>{details.product.name}</span>
                                                 ))}
                                             </div>
                                         </Td>

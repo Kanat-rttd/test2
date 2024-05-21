@@ -59,7 +59,7 @@ const PivotTable = () => {
     return (
         <Box width={'100%'}>
             <Box display={'flex'} justifyContent={'space-between'} mt={3} mb={2}>
-                <Box display={'flex'} gap={'15px'}>
+                <Box display={'flex'} gap={'15px'} mb={'5px'}>
                     <DateRange />
                     <Select
                         size={'sm'}
@@ -69,8 +69,8 @@ const PivotTable = () => {
                         onChange={(event) => setParam('providerId', event.target.value)}
                         width={'fit-content'}
                     >
-                        {providersData?.map((provider) => (
-                            <option key={provider.id} value={provider.id}>
+                        {providersData?.map((provider, index) => (
+                            <option key={index} value={provider.id}>
                                 {provider.name}
                             </option>
                         ))}
@@ -83,8 +83,8 @@ const PivotTable = () => {
                         onChange={(event) => setParam('rawMaterialId', event.target.value)}
                         width={'fit-content'}
                     >
-                        {rawMaterialData?.map((units) => (
-                            <option key={units.id} value={units.id}>
+                        {rawMaterialData?.map((units, index) => (
+                            <option key={index} value={units.id}>
                                 {units.name}
                             </option>
                         ))}

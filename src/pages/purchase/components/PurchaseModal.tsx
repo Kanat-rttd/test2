@@ -21,6 +21,7 @@ import { createPurchase } from '@/utils/services/productPurchase.service'
 import { useState } from 'react'
 import Select from 'react-select'
 import { useApi } from '@/utils/services/axios'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 type PurchaseModalProps = {
     isOpen: boolean
@@ -48,18 +49,6 @@ interface Purchase {
     }
 }
 
-const defaultValues = {
-    quantity: 0,
-    price: 0,
-    deliverySum: 0,
-    date: new Date(),
-    providerId: 0,
-    rawMaterialId: 0,
-    status: {
-        value: 0,
-        label: '',
-    },
-}
 interface rawMaterials {
     id: number
     name: string
@@ -67,18 +56,18 @@ interface rawMaterials {
 }
 
 interface Providers {
-    id: number
-    name: string
+    value: number
+    label: string
 }
 
 const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
+    const { loading } = useNotify()
     const { data: rawMaterialsData } = useSWR<rawMaterials[]>('rawMaterials', {
         fetcher: () => getAllRawMaterials(),
     })
 
     const { data: providersData } = useApi<Providers[]>('providers')
-    console.log(providersData);
-    
+    console.log(providersData)
 
     const [selectedRawMaterial, setSelectedRawMaterial] = useState<rawMaterials | null>(null)
 
@@ -96,14 +85,17 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
     ]
 
     const sendData = (formData: Purchase) => {
-        createPurchase(formData)
+        const response: Promise<any> = createPurchase(formData)
+        loading(response)
+        response
             .then(() => {
                 onSuccess()
+                reset()
+                onClose()
             })
             .catch((error) => {
                 console.error('Error creating sale:', error)
             })
-        reset(defaultValues)
     }
 
     return (
@@ -124,19 +116,18 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                     return (
                                         <Select
                                             options={providersData}
-                                            getOptionLabel={(option: Providers) => option.name}
-                                            getOptionValue={(option: Providers) => `${option.id}`}
-                                            value={providersData?.filter(
-                                                (option) => {
-                                                    console.log(option.id, value);
-                                                    
-                                                    return option.id == value},
-                                            )}
-                                            // onChange={(val: Providers) => onChange(val?.id)}
-                                            onChange={(selectedOption: Providers | null) => {
-                                                if (selectedOption) {
-                                                    onChange(selectedOption.id)
-                                                }
+                                            // defaultValue={providersData?.filter(
+                                            //     (option) => option.value == value,
+                                            // )}
+                                            defaultValue={
+                                                value
+                                                    ? providersData?.filter(
+                                                          (option) => option.value == value,
+                                                      )
+                                                    : null
+                                            }
+                                            onChange={(selectedOption) => {
+                                                onChange(selectedOption?.value)
                                             }}
                                             placeholder="Поставщик *"
                                             isClearable
@@ -162,13 +153,9 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                             getOptionValue={(option: rawMaterials) =>
                                                 `${option.id}`
                                             }
-                                            value={rawMaterialsData?.filter(
-                                                (option) => option.id == value,
-                                            )}
-                                            // onChange={(val: rawMaterials) => {
-                                            //     onChange(val.id)
-                                            //     setSelectedRawMaterial(val)
-                                            // }}
+                                            value={rawMaterialsData?.filter((option) => {
+                                                return option.id == value
+                                            })}
                                             onChange={(selectedOption: rawMaterials | null) => {
                                                 if (selectedOption) {
                                                     onChange(selectedOption.id)
@@ -239,7 +226,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                             <Controller
                                 name="status"
                                 control={control}
-                                rules={{ required: 'Поля является обязательным' }}
+                                rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
                                     const { onChange } = field
                                     return (

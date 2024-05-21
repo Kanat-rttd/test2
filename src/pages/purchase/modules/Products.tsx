@@ -25,11 +25,12 @@ const Products = () => {
         <>
             <UniversalComponent>
                 <Box width={'100%'} height={'calc(100vh-64px)'} p={5} pt={4}>
-                    <Tabs variant="soft-rounded" mt={'-5px'}>
+                    <Tabs variant="soft-rounded" >
                         <Box
                             display={'flex'}
-                            alignItems={'center'}
+                            // alignItems={'center'}
                             justifyContent={'space-between'}
+                            mt={'-5px'}
                         >
                             <Box>
                                 <TabList height={'22px'}>
@@ -42,7 +43,7 @@ const Products = () => {
                             </Button>
                         </Box>
 
-                        <TabPanels mt={'-5px'}>
+                        <TabPanels mt={'-15px'}>
                             <TabPanel height={'100%'} p={0} >
                                 <ListTable />
                             </TabPanel>

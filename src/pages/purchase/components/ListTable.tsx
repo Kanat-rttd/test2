@@ -78,7 +78,7 @@ const ListTable = () => {
         <>
             <UniversalComponent>
                 <Box display={'flex'} justifyContent={'space-between'} mt={3} mb={2}>
-                    <Box display={'flex'} gap={'15px'}>
+                    <Box display={'flex'} gap={'15px'} mb={'5px'}>
                         <DateRange />
                         <Select
                             size={'sm'}
@@ -88,8 +88,8 @@ const ListTable = () => {
                             onChange={(event) => setParam('providerId', event.target.value)}
                             width={'fit-content'}
                         >
-                            {providersData?.map((provider) => (
-                                <option key={provider.id} value={provider.id}>
+                            {providersData?.map((provider, index) => (
+                                <option key={`${index}`} value={provider.id}>
                                     {provider.name}
                                 </option>
                             ))}
@@ -139,7 +139,6 @@ const ListTable = () => {
                         </Thead>
                         <Tbody>
                             {filteredPurchases?.map((purchase) => {
-                                // Здесь используйте filteredPurchases
                                 return (
                                     <Tr key={purchase.id}>
                                         <Td>{purchase.id}</Td>

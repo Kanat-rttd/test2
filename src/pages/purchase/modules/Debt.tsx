@@ -64,7 +64,7 @@ const Debt = () => {
                         <Tbody>
                             {purchasesData?.data.map((item, index) => {
                                 return (
-                                    <Tr key={index + 1}>
+                                    <Tr key={item.providerId}>
                                         <Td>{index + 1}</Td>
                                         <Td>{item.provider.name}</Td>
                                         <Td>{item.totalDebt}</Td>

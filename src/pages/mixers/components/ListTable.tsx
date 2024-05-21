@@ -96,8 +96,8 @@ export default function ListTable({ status }: any) {
                                     <Td>{row.bakingFacilityUnit.facilityUnit}</Td>
                                     <Td>
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            {row.shiftAccountingDetails.map((details, index) => (
-                                                <span key={index}>
+                                            {row.shiftAccountingDetails.map((details) => (
+                                                <span key={details.id}>
                                                     {details.departPersonal.name}
                                                 </span>
                                             ))}
@@ -105,8 +105,8 @@ export default function ListTable({ status }: any) {
                                     </Td>
                                     <Td>
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            {row.shiftAccountingDetails.map((details, index) => (
-                                                <span key={index}>{details.shiftTime}</span>
+                                            {row.shiftAccountingDetails.map((details) => (
+                                                <span key={details.id}>{details.shiftTime}</span>
                                             ))}
                                         </div>
                                     </Td>
