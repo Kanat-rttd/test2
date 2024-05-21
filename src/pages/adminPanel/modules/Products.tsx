@@ -17,8 +17,6 @@ import {
     deleteProduct,
     findByFilters,
 } from '../../../utils/services/product.service'
-import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
-import useSWR from 'swr'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Dialog from '@/components/Dialog'
 import { useApi } from '@/utils/services/axios'
@@ -32,9 +30,7 @@ const AdminPanel = () => {
     const { data: dataForSelect } = useApi<Product[]>('product')
     const [filters, setFilters] = useState({ name: '', bakingFacilityUnitId: '', status: '' })
 
-    const { data: facilityUnitsData } = useSWR<FacilityUnit[]>('mixers', {
-        fetcher: () => getAllBakingFacilityUnits(),
-    })
+    const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
 
     const { data: productsData, isLoading } = useApi<Product[]>('product', filters)
 

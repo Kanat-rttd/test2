@@ -14,9 +14,9 @@ import {
     Text,
 } from '@chakra-ui/react'
 
-import { getAllProducts } from '@/utils/services/product.service'
 import { createBaking } from '@/utils/services/baking.service'
 import { useState, useEffect } from 'react'
+import { useApi } from '@/utils/services/axios'
 
 interface ClientAddModalProps {
     data?: bakingsData | null
@@ -93,17 +93,8 @@ const BakingAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
         }
     }, [data])
 
-    const [products, setProducts] = useState<{ id: string; name: string }[]>([])
+    const {data: products} = useApi<{ id: string; name: string }[]>('product')
 
-    useEffect(() => {
-        Promise.all([getAllProducts()])
-            .then(([products]) => {
-                setProducts(products)
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error)
-            })
-    }, [])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target
@@ -154,7 +145,7 @@ const BakingAddModal = ({ data, isOpen, onClose }: ClientAddModalProps) => {
                                 <option disabled value="">
                                     Выберите хлеб
                                 </option>
-                                {products.map((product) => (
+                                {products?.map((product) => (
                                     <option key={product.id} value={product.id}>
                                         {product.name}
                                     </option>

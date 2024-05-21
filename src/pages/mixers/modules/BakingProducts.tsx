@@ -21,6 +21,7 @@ import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteBaking } from '@/utils/services/baking.service'
+import { FacilityUnit } from '@/utils/types/product.types'
 
 interface Baking {
     bakingData: bakingsData[]
@@ -58,16 +59,18 @@ const styles = {
 }
 
 const BakingPage = () => {
+    const { getURLs, getParam, setParam } = useURLParameters()
     const { loading } = useNotify()
-    const { getURLs } = useURLParameters()
     const { onOpen, onClose, isOpen } = useDisclosure()
+
+    const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
+    const { data: bakingsData } = useApi<Baking>(`baking?${getURLs().toString()}`)
+
     const [selectedBaking, setSelectedBaking] = useState<bakingsData | undefined>(undefined)
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
-
-    const { data: bakingsData } = useApi<Baking>(`baking?${getURLs().toString()}`)
 
     const handlerDelete = (selectedBaking: bakingsData | undefined) => {
         if (selectedBaking) {
@@ -97,10 +100,14 @@ const BakingPage = () => {
                                 size={'sm'}
                                 borderRadius={5}
                                 justifyContent={'space-between'}
+                                defaultValue={getParam('facilityUnit')}
+                                onChange={(e) => setParam('facilityUnit', e.target.value)}
                             >
-                                <option value="Лепешечный">Лепешечный</option>
-                                <option value="Булочный">Булочный</option>
-                                <option value="Заварной">Заварной</option>
+                                {facilityUnits?.map((item, index) => (
+                                    <option key={index} value={item.facilityUnit}>
+                                        {item.facilityUnit}
+                                    </option>
+                                ))}
                             </Select>
                         </Box>
                         <Button
@@ -120,8 +127,8 @@ const BakingPage = () => {
                         <BakingAddModal data={selectedBaking} isOpen={isOpen} onClose={onClose} />
                     </Box>
                     <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                        <Table variant="simple">
-                            <Box pb={4}>
+                        <Box pb={4}>
+                            <Table variant="simple">
                                 <Thead>
                                     <Tr>
                                         <Th width={'15%'}>Вид хлеба</Th>
@@ -202,8 +209,8 @@ const BakingPage = () => {
                                         )
                                     })}
                                 </Tbody>
-                            </Box>
-                        </Table>
+                            </Table>
+                        </Box>
                         <Table variant="simple">
                             <Tfoot>
                                 <Tr fontSize={15} fontWeight={'bold'} color={'#000'}>
