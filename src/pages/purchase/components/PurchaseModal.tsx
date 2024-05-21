@@ -15,10 +15,8 @@ import {
     InputGroup,
 } from '@chakra-ui/react'
 import { Controller, useForm } from 'react-hook-form'
-import useSWR from 'swr'
-import { getAllRawMaterials } from '@/utils/services/rawMaterials.service'
 import { createPurchase } from '@/utils/services/productPurchase.service'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Select from 'react-select'
 import { useApi } from '@/utils/services/axios'
 import { useNotify } from '@/utils/providers/ToastProvider'
@@ -50,8 +48,8 @@ interface Purchase {
 }
 
 interface rawMaterials {
-    id: number
-    name: string
+    value: number
+    label: string
     uom: string
 }
 
@@ -60,14 +58,35 @@ interface Providers {
     label: string
 }
 
+interface ProviderGoods {
+    id: number
+    providerId: number
+    goods: string
+    unitOfMeasure: string
+    place: { label: string }[]
+    status: string
+    provider: {
+        id: number
+        name: string
+    }
+}
+
 const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
     const { loading } = useNotify()
-    const { data: rawMaterialsData } = useSWR<rawMaterials[]>('rawMaterials', {
-        fetcher: () => getAllRawMaterials(),
-    })
+
+    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
+
+    const [providerGoods, setProviderGoods] = useState<rawMaterials[]>([])
+
+    useEffect(() => {
+        const _providerGoods = providerGoodsData?.map((item) => {
+            return { label: item.goods, value: item.id, uom: item.unitOfMeasure }
+        })
+
+        setProviderGoods(_providerGoods || [])
+    }, [providerGoodsData])
 
     const { data: providersData } = useApi<Providers[]>('providers')
-    console.log(providersData)
 
     const [selectedRawMaterial, setSelectedRawMaterial] = useState<rawMaterials | null>(null)
 
@@ -85,6 +104,8 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
     ]
 
     const sendData = (formData: Purchase) => {
+        console.log(formData);
+        
         const response: Promise<any> = createPurchase(formData)
         loading(response)
         response
@@ -116,9 +137,6 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                     return (
                                         <Select
                                             options={providersData}
-                                            // defaultValue={providersData?.filter(
-                                            //     (option) => option.value == value,
-                                            // )}
                                             defaultValue={
                                                 value
                                                     ? providersData?.filter(
@@ -148,17 +166,13 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                     const { onChange, value } = field
                                     return (
                                         <Select
-                                            options={rawMaterialsData}
-                                            getOptionLabel={(option: rawMaterials) => option.name}
-                                            getOptionValue={(option: rawMaterials) =>
-                                                `${option.id}`
-                                            }
-                                            value={rawMaterialsData?.filter((option) => {
-                                                return option.id == value
-                                            })}
+                                            options={providerGoods}
+                                            defaultValue={providerGoods?.filter(
+                                                (option) => option.value == value,
+                                            )}
                                             onChange={(selectedOption: rawMaterials | null) => {
                                                 if (selectedOption) {
-                                                    onChange(selectedOption.id)
+                                                    onChange(selectedOption.value)
                                                     setSelectedRawMaterial(selectedOption)
                                                 }
                                             }}
@@ -228,20 +242,20 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
-                                    const { onChange } = field
+                                    const { onChange, value } = field
                                     return (
                                         <Select
                                             options={status}
                                             value={
                                                 status?.find(
                                                     (option) =>
-                                                        option?.value ===
-                                                        (typeof field.value === 'object'
-                                                            ? field.value.value
-                                                            : field.value),
-                                                ) || ''
+                                                        option?.label === value)
                                             }
-                                            onChange={(val: any) => onChange(val)}
+                                            onChange={(val: any) => {
+                                                console.log(val)
+
+                                                return onChange(val)
+                                            }}
                                             placeholder="Статус *"
                                             isClearable
                                             isSearchable

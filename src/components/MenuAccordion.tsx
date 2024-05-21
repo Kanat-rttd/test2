@@ -50,8 +50,6 @@ const MenuAccordion = () => {
         )
     })
 
-    console.log(filteredMenuItems)
-
     const handleNavigate = (route: string) => {
         setIsDrawerOpen(false)
         navigate(route)

@@ -24,7 +24,7 @@ export const updatePurchase = async (
         quantity: number
         price: number
         deliverySum: number
-        date: Date
+        date: string
         providerId: number
         rawMaterialId: number
         status?: { value: number; label: string } | string | undefined
@@ -33,3 +33,9 @@ export const updatePurchase = async (
     const response = await $host.put(`productPurchase/${id}`, data)
     return response
 }
+
+export const deletePurchase = async (id: number) => {
+    const response = await $host.delete(`productPurchase/${id}`)
+    return response
+}
+

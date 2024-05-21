@@ -1,20 +1,35 @@
-import {
-    Box,
-    Button,
-    Tab,
-    TabList,
-    TabPanel,
-    TabPanels,
-    Tabs,
-    useDisclosure,
-} from '@chakra-ui/react'
+import { Box, Button, Select, useDisclosure } from '@chakra-ui/react'
 import ListTable from '../components/ListTable'
-import PivotTable from '../components/PivotTable'
 import PurchaseModal from '../components/PurchaseModal'
 import { mutate } from 'swr'
 import UniversalComponent from '@/components/ui/UniversalComponent'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { useApi } from '@/utils/services/axios'
+import DateRange from '@/components/DateRange'
+
+interface Providers {
+    value: number
+    label: string
+}
+
+interface ProviderGoods {
+    id: number
+    providerId: number
+    goods: string
+    unitOfMeasure: string
+    place: { label: string }[]
+    status: string
+    provider: {
+        id: number
+        name: string
+    }
+}
 
 const Products = () => {
+    const { getParam, setParam } = useURLParameters()
+    const { data: providersData } = useApi<Providers[]>('providers')
+    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
+
     const handleAddProduct = () => {
         mutate('productPurchase')
     }
@@ -24,34 +39,60 @@ const Products = () => {
     return (
         <>
             <UniversalComponent>
-                <Box width={'100%'} height={'calc(100vh-64px)'} p={5} pt={4}>
-                    <Tabs variant="soft-rounded" >
-                        <Box
-                            display={'flex'}
-                            // alignItems={'center'}
-                            justifyContent={'space-between'}
-                            mt={'-5px'}
-                        >
-                            <Box>
-                                <TabList height={'22px'}>
-                                    <Tab>List</Tab>
-                                    <Tab>Pivot</Tab>
-                                </TabList>
-                            </Box>
-                            <Button colorScheme="purple" onClick={onOpen}>
-                                Добавить закупки
-                            </Button>
+                <Box width={'100%'} height={'calc(100vh-64px)'} p={5} pt={7}>
+                    <Box
+                        display={'flex'}
+                        alignItems={'center'}
+                        justifyContent={'space-between'}
+                        mb={5}
+                    >
+                        <Box display={'flex'} gap={'15px'} mb={'5px'}>
+                            <DateRange />
+                            <Select
+                                size={'sm'}
+                                borderRadius={5}
+                                placeholder="Поставщик"
+                                value={getParam('providerId')}
+                                onChange={(event) => setParam('providerId', event.target.value)}
+                                width={'fit-content'}
+                            >
+                                {providersData?.map((provider, index) => (
+                                    <option key={`${index}`} value={provider.value}>
+                                        {provider.label}
+                                    </option>
+                                ))}
+                            </Select>
+                            <Select
+                                size={'sm'}
+                                borderRadius={5}
+                                placeholder="Товар"
+                                value={getParam('rawMaterialId')}
+                                onChange={(event) => setParam('rawMaterialId', event.target.value)}
+                                width={'fit-content'}
+                            >
+                                {providerGoodsData?.map((units) => (
+                                    <option key={units.id} value={units.id}>
+                                        {units.goods}
+                                    </option>
+                                ))}
+                            </Select>
+                            <Select
+                                placeholder="Статус"
+                                width={'fit-content'}
+                                value={getParam('paymentStatus')}
+                                size={'sm'}
+                                borderRadius={5}
+                                onChange={(e) => setParam('paymentStatus', e.target.value)}
+                            >
+                                <option value="Оплачено">Оплачено</option>
+                                <option value="Не оплачено">Не оплачено</option>
+                            </Select>
                         </Box>
-
-                        <TabPanels mt={'-15px'}>
-                            <TabPanel height={'100%'} p={0} >
-                                <ListTable />
-                            </TabPanel>
-                            <TabPanel height={'100%'} p={0}>
-                                <PivotTable />
-                            </TabPanel>
-                        </TabPanels>
-                    </Tabs>
+                        <Button colorScheme="purple" onClick={onOpen}>
+                            Добавить закупки
+                        </Button>
+                    </Box>
+                    <ListTable />
                 </Box>
                 <PurchaseModal isOpen={isOpen} onClose={onClose} onSuccess={handleAddProduct} />
             </UniversalComponent>

@@ -222,7 +222,7 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                                     <Controller
                                         name="bakery"
                                         control={control}
-                                        rules={{ required: 'Поля является обязательным' }}
+                                        rules={{ required: 'Поле является обязательным' }}
                                         render={({ field }) => {
                                             const { onChange, value } = field
                                             return (

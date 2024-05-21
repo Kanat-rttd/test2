@@ -16,15 +16,14 @@ import {
 } from '@chakra-ui/react'
 import { Controller, useForm } from 'react-hook-form'
 import Select from 'react-select'
-import { getAllProviders } from '@/utils/services/providers.service'
-import { getAllRawMaterials } from '@/utils/services/rawMaterials.service'
 import { updatePurchase } from '@/utils/services/productPurchase.service'
-import useSWR from 'swr'
 import { useState, useEffect } from 'react'
+import { useApi } from '@/utils/services/axios'
+import dayjs from 'dayjs'
 
 interface Purchase {
     id: number
-    date: Date
+    date: string
     providerId: number
     rawMaterialId: number
     quantity: number
@@ -36,34 +35,21 @@ interface Purchase {
         id: number
         name: string
     }
-    rawMaterial: {
+    providerGood: {
         id: number
         name: string
     }
 }
 
-const defaultValues = {
-    quantity: 0,
-    price: 0,
-    deliverySum: 0,
-    date: new Date(),
-    providerId: 0,
-    rawMaterialId: 0,
-    status: {
-        value: 0,
-        label: '',
-    },
-}
-
 interface rawMaterials {
-    id: number
-    name: string
+    value: number
+    label: string
     uom: string
 }
 
 interface Providers {
-    id: number
-    name: string
+    value: number
+    label: string
 }
 
 type EditModalProps = {
@@ -73,18 +59,33 @@ type EditModalProps = {
     selectedData: Purchase | undefined
 }
 
+interface ProviderGoods {
+    id: number
+    providerId: number
+    goods: string
+    unitOfMeasure: string
+    place: { label: string }[]
+    status: string
+    provider: {
+        id: number
+        name: string
+    }
+}
+
 const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps) => {
-    //TODO: Избавиться от fetcher'а который ничего не делает
-    const { data: rawMaterialsData } = useSWR<rawMaterials[]>('rawMaterials', {
-        fetcher: () => getAllRawMaterials(),
-    })
+    const { data: providersData } = useApi<Providers[]>('providers')
+    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
 
-    const { data: providersData } = useSWR<Providers[]>('providers', {
-        fetcher: () => getAllProviders(),
-    })
+    const [providerGoods, setProviderGoods] = useState<rawMaterials[]>([])
+    const [selectedRawMaterial, setSelectedRawMaterial] = useState<rawMaterials | null>(null)
+    
+    useEffect(() => {
+        const _providerGoods = providerGoodsData?.map((item) => {
+            return { label: item.goods, value: item.id, uom: item.unitOfMeasure }
+        })
 
-    //TODO: Избавиться от не нужных стейтов
-    const [selectedRawMaterial, _setSelectedRawMaterial] = useState<rawMaterials | null>(null)
+        setProviderGoods(_providerGoods || [])
+    }, [providerGoodsData])
 
     const {
         register,
@@ -97,15 +98,14 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
 
     useEffect(() => {
         if (selectedData) {
-            setValue('providerId', selectedData.providerId)
-            setValue('rawMaterialId', selectedData.rawMaterialId)
-            setValue('quantity', selectedData.quantity)
-            setValue('price', selectedData.price)
-            setValue('deliverySum', selectedData.deliverySum)
-            setValue('date', selectedData.date)
-            setValue('status', selectedData.status)
+            Object.entries(selectedData).forEach(([key, value]) => {
+                setValue(key as keyof Purchase, value)
+            })
+            setValue('date', dayjs(selectedData.date).format('YYYY-MM-DD'))
+        } else {
+            reset()
         }
-    }, [selectedData])
+    }, [selectedData, isOpen, reset])
 
     const status = [
         { value: 1, label: 'Оплачено' },
@@ -125,9 +125,11 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
     }
 
     const handleClose = () => {
-        reset(defaultValues)
+        reset()
         onClose()
     }
+    
+    
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -141,21 +143,21 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                             <Controller
                                 name="providerId"
                                 control={control}
-                                rules={{ required: 'Поля является обязательным' }}
+                                rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
                                     const { onChange, value } = field
                                     return (
                                         <Select
                                             options={providersData}
-                                            getOptionLabel={(option: Providers) => option.name}
-                                            getOptionValue={(option: Providers) => `${option.id}`}
-                                            value={providersData?.filter(
-                                                (option) => option.id == value,
-                                            )}
-                                            onChange={(selectedOption: Providers | null) => {
-                                                if (selectedOption) {
-                                                    onChange(selectedOption.id)
-                                                }
+                                            defaultValue={
+                                                value
+                                                    ? providersData?.filter(
+                                                          (option) => option.value == value,
+                                                      )
+                                                    : null
+                                            }
+                                            onChange={(selectedOption) => {
+                                                onChange(selectedOption?.value)
                                             }}
                                             placeholder="Поставщик *"
                                             isClearable
@@ -176,17 +178,14 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                     const { onChange, value } = field
                                     return (
                                         <Select
-                                            options={rawMaterialsData}
-                                            getOptionLabel={(option: rawMaterials) => option.name}
-                                            getOptionValue={(option: rawMaterials) =>
-                                                `${option.id}`
-                                            }
-                                            value={rawMaterialsData?.filter(
-                                                (option) => option.id == Number(value),
+                                            options={providerGoods}
+                                            defaultValue={providerGoods?.filter(
+                                                (option) => option.value == Number(value),
                                             )}
                                             onChange={(selectedOption: rawMaterials | null) => {
                                                 if (selectedOption) {
-                                                    onChange(selectedOption.id)
+                                                    onChange(selectedOption.value)
+                                                    setSelectedRawMaterial(selectedOption)
                                                 }
                                             }}
                                             placeholder="Сырье *"
@@ -241,6 +240,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                 {...register('date', {
                                     required: 'Поле является обязательным',
                                 })}
+                                // defaultValue={selectedData ? dayjs(selectedData.date).format('YYYY-MM-DD') : undefined}
                                 autoComplete="off"
                                 placeholder="Дата *"
                                 type="date"
@@ -252,13 +252,19 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                             <Controller
                                 name="status"
                                 control={control}
-                                rules={{ required: 'Поля является обязательным' }}
+                                rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
                                     const { onChange, value } = field
                                     return (
                                         <Select
                                             options={status}
-                                            value={value}
+                                            defaultValue={
+                                                value
+                                                    ? status?.filter(
+                                                          (option) => option.label == value,
+                                                      )
+                                                    : null
+                                            }
                                             onChange={(val: any) => onChange(val)}
                                             placeholder="Статус *"
                                             isClearable
