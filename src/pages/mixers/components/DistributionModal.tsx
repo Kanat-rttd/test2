@@ -22,6 +22,7 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 import { FacilityUnit } from '@/utils/types/product.types'
 import { useApi } from '@/utils/services/axios'
 import { DepartPersonalType } from '@/utils/types/departPersonal.types'
+import { createShiftAccounting } from '@/utils/services/shiftAccounting.service'
 
 interface DistributionModalProps {
     isOpen: boolean
@@ -52,6 +53,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
         setValue,
         formState: { errors },
         reset,
+        getValues,
     } = useForm<ShiftAccountingType>()
 
     useEffect(() => {
@@ -70,12 +72,16 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     }, [selectedFacilityUnit])
 
     const handleConfirm = () => {
+        const date = getValues('date')
+
         if (selectedPersonals.length < 1) {
             error('Выберите персонал')
             return
         }
+
         const distributionData = {
             facilityUnitsId: selectedFacilityUnit,
+            date: date,
             departPersonals: selectedPersonals.map(({ name, id, hours }) => ({
                 name,
                 id,
@@ -83,13 +89,15 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
             })),
         }
 
-        const responsePromise: Promise<any> = createShifAccounting(distributionData)
+        console.log(distributionData)
+
+        const responsePromise: Promise<any> = createShiftAccounting(distributionData)
         loading(responsePromise)
 
         responsePromise
             .then(() => {
-                onSuccess()
-                onClose()
+                // onSuccess()
+                // onClose()
                 setSelectedPersonals([])
                 setSelectedFacilityUnit('')
             })
@@ -127,10 +135,10 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     }
 
     const handleHoursChange = (event: React.ChangeEvent<HTMLInputElement>, breadName: string) => {
-        const quantity = parseInt(event.target.value)
+        const hours = parseInt(event.target.value)
         setSelectedPersonals(
             selectedPersonals.map((bread) =>
-                bread.name === breadName ? { ...bread, quantity } : bread,
+                bread.name === breadName ? { ...bread, hours } : bread,
             ),
         )
     }

@@ -5,7 +5,15 @@ export const getAllShiftAccounting = async () => {
     return data
 }
 
-export const createShifAccounting = async (data: {}) => {
+export const createShiftAccounting = async (data: {
+    facilityUnitsId: string
+    date: string
+    departPersonals: {
+        name: string
+        id: number
+        hours: number
+    }[]
+}) => {
     const response = await $host.post('shiftAccounting', data)
     return response
 }
