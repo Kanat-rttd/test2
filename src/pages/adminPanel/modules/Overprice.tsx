@@ -21,39 +21,20 @@ import DateRange from '@/components/DateRange'
 import { TableContainer, Thead } from '@/components/ui'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import UniversalComponent from '@/components/ui/UniversalComponent'
-
-interface ClientsFilter {
-    clientId: number
-    client: {
-        id: number
-        name: string
-    }
-}
-
-interface OverPrice {
-    id: number
-    price: string
-    clientId: number
-    month: string
-    year: string
-    isDeleted: number
-    client: {
-        id: number
-        name: string
-    }
-}
+import { OverPriceType } from '@/utils/types/overPrice.types'
+import { ClientsFilter } from '@/utils/types/client.type'
 
 const AdminPanel = () => {
     const { getURLs, setParam, getParam } = useURLParameters()
 
-    const { data: overPriceData, isLoading } = useApi<OverPrice[]>(
+    const { data: overPriceData, isLoading } = useApi<OverPriceType[]>(
         `overPrice?${getURLs().toString()}`,
     )
 
     const { data: clientData } = useApi<ClientsFilter[]>('overPrice/clientFilter')
 
     const { onOpen, isOpen, onClose } = useDisclosure()
-    const [selectedData, setSelectedData] = useState<OverPrice>()
+    const [selectedData, setSelectedData] = useState<OverPriceType>()
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
@@ -63,7 +44,7 @@ const AdminPanel = () => {
         mutate(`overPrice?name=${getParam('name')}`)
     }
 
-    const delOverprice = (selectedData: OverPrice | undefined) => {
+    const delOverprice = (selectedData: OverPriceType | undefined) => {
         if (selectedData) {
             deleteOverprice(selectedData.id).then(() => {
                 handleSuccess()

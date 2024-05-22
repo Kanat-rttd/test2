@@ -18,15 +18,7 @@ import { useApi } from '@/utils/services/axios'
 import { useEffect } from 'react'
 import { createProviderGoods, updateProviderGoods } from '@/utils/services/providerGoods.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
-
-export type ProviderInputs = {
-    id: number
-    providerId: number
-    goods: string
-    unitOfMeasure: string
-    bakery: { label: string }[]
-    status: string
-}
+import { ProviderInputs } from '@/utils/types/providerGoog.types'
 
 interface ProviderGoods {
     id: number
@@ -55,14 +47,6 @@ type ModalProps = {
     onClose: () => void
     selectedData: ProviderGoods | undefined
     onSuccess: () => void
-}
-
-const defaultValues = {
-    provider: 0,
-    goods: '',
-    unitOfMeasure: '',
-    bakery: [],
-    status: '',
 }
 
 interface status {
@@ -95,8 +79,6 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
             reset()
         }
     }, [selectedData, isOpen, reset])
-
-    // const bakery = [{ label: 'Батонный' }, { label: 'Заводской' }]
 
     const status = [
         { id: 1, name: 'Активный' },
@@ -134,7 +116,7 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                 isOpen={isOpen}
                 onClose={() => {
                     onClose()
-                    reset(defaultValues)
+                    reset()
                 }}
             >
                 <ModalOverlay />
@@ -299,19 +281,6 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                     </ModalBody>
 
                     <ModalFooter>
-                        {/* <Button
-                            colorScheme="red"
-                            mr={3}
-                            onClick={() => {
-                                onClose()
-                                reset(defaultValues)
-                            }}
-                        >
-                            Отмена
-                        </Button>
-                        <Button colorScheme="purple" onClick={handleSubmitForm(sendData)}>
-                            {selectedData ? 'Редактировать' : 'Добавить'}
-                        </Button> */}
                     </ModalFooter>
                 </ModalContent>
             </Modal>

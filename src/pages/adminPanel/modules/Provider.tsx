@@ -20,19 +20,7 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 import { mutate } from 'swr'
 import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
-
-interface ProviderGoods {
-    id: number
-    providerId: number
-    goods: string
-    unitOfMeasure: string
-    place: { label: string }[]
-    status: string
-    provider: {
-        id: number
-        name: string
-    }
-}
+import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
 
 const AdminProvider = () => {
     const { loading } = useNotify()
@@ -42,18 +30,18 @@ const AdminProvider = () => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const { data: providerGoodsData, isLoading } = useApi<ProviderGoods[]>('providerGoods', {
+    const { data: providerGoodsData, isLoading } = useApi<ProviderGoodsType[]>('providerGoods', {
         status: selectedStatus,
     })
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [selectedData, setSelectedData] = useState<ProviderGoods>()
+    const [selectedData, setSelectedData] = useState<ProviderGoodsType>()
 
     const handleSelectChange = (status: string) => {
         setSelectedStatus(status)
     }
 
-    const handlerDeleteProvider = (selectedData: ProviderGoods | undefined) => {
+    const handlerDeleteProvider = (selectedData: ProviderGoodsType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteProviderGoods(selectedData.id)
             loading(responsePromise)

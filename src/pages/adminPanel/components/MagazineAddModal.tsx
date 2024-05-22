@@ -20,15 +20,7 @@ import { createMagazine, updateMagazine } from '@/utils/services/magazines.servi
 import { useForm, Controller } from 'react-hook-form'
 import { useApi } from '@/utils/services/axios'
 import { useNotify } from '@/utils/providers/ToastProvider'
-
-interface Client {
-    id: string
-    name: string
-    surname: string
-    contact: string
-    telegrammId: string
-    status: string
-}
+import { ClientType } from '@/utils/types/client.type'
 
 interface Magazines {
     id: number
@@ -67,7 +59,7 @@ const status = [
 ]
 
 const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalProps) => {
-    const { data: clientsData } = useApi<Client[]>('client')
+    const { data: clientsData } = useApi<ClientType[]>('client')
     const { loading } = useNotify()
 
     const {
@@ -146,15 +138,15 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                                             return (
                                                 <Select
                                                     options={clientsData}
-                                                    getOptionLabel={(option: Client) => option.name}
-                                                    getOptionValue={(option: Client) =>
+                                                    getOptionLabel={(option: ClientType) => option.name}
+                                                    getOptionValue={(option: ClientType) =>
                                                         `${option.id}`
                                                     }
                                                     value={clientsData?.filter(
                                                         (option) =>
                                                             String(option.id) == String(value),
                                                     )}
-                                                    onChange={(selectedOption: Client | null) => {
+                                                    onChange={(selectedOption: ClientType | null) => {
                                                         if (selectedOption) {
                                                             onChange(selectedOption.id)
                                                         }

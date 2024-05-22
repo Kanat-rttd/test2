@@ -20,13 +20,9 @@ import { useEffect } from 'react'
 import { useApi } from '@/utils/services/axios'
 import { createOverprice, updateOverprice } from '@/utils/services/overprice.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { OverPriceInputs, OverPriceType } from '@/utils/types/overPrice.types'
 
-interface OverPriceInputs {
-    clientId: number
-    month: string
-    year: string
-    price: string
-}
+
 
 const defaultValues = {
     clientId: 0,
@@ -40,19 +36,6 @@ interface months {
     name: string
 }
 
-interface OverPrice {
-    id: number
-    price: string
-    clientId: number
-    month: string
-    year: string
-    isDeleted: number
-    client: {
-        id: number
-        name: string
-    }
-}
-
 interface Client {
     id: string
     name: string
@@ -63,7 +46,7 @@ interface Client {
 }
 
 interface OverPriceAddModalProps {
-    data: OverPrice | undefined
+    data: OverPriceType | undefined
     isOpen: boolean
     onClose: () => void
     onSuccess: () => void
@@ -102,7 +85,6 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                 })
         }
         handleClose()
-        // reset(defaultValues)
     }
 
     const monthData = [

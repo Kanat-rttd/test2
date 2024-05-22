@@ -19,37 +19,19 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteMagazines } from '@/utils/services/magazines.service'
 import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
-
-interface Magazines {
-    id: number
-    name: string
-    clientId: number
-    status: string
-    client: {
-        id: number
-        name: string
-    }
-}
-
-interface Client {
-    id: string
-    name: string
-    surname: string
-    contact: string
-    telegrammId: string
-    status: string
-}
+import { MagazineType } from '@/utils/types/magazine.type'
+import { ClientType } from '@/utils/types/client.type'
 
 const AdminPanel = () => {
     const { loading } = useNotify()
     const [filters, setFilters] = useState({ name: '', clientId: '', status: '' })
-    const { data: magazinesDataForSelect } = useApi<Magazines[]>('magazines')
+    const { data: magazinesDataForSelect } = useApi<MagazineType[]>('magazines')
 
-    const { data: magazinesData, isLoading } = useApi<Magazines[]>('magazines', filters)
-    const { data: clientsData } = useApi<Client[]>('client')
+    const { data: magazinesData, isLoading } = useApi<MagazineType[]>('magazines', filters)
+    const { data: clientsData } = useApi<ClientType[]>('client')
 
     const { onOpen, isOpen, onClose } = useDisclosure()
-    const [selectedData, setSelectedData] = useState<Magazines>()
+    const [selectedData, setSelectedData] = useState<MagazineType>()
 
     const [dialog, setDialog] = useState({
         isOpen: false,
@@ -60,12 +42,12 @@ const AdminPanel = () => {
         mutate(`magazines`)
     }
 
-    const deleteMagazine = (selectedData: Magazines | undefined) => {
+    const deleteMagazine = (selectedData: MagazineType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteMagazines(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {
-                mutate((currentData: Magazines[] | undefined) => {
+                mutate((currentData: MagazineType[] | undefined) => {
                     if (!currentData) return currentData
                     return currentData.filter((client) => client.id !== selectedData?.id)
                 })
