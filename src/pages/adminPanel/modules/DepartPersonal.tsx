@@ -19,32 +19,25 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteDepartPersonal } from '@/utils/services/departPersonal.service'
 import { TableContainer, Thead } from '@/components/ui'
 import DepartPersonalModal from '../components/departPesonalAddModal'
+import { DepartPersonalType } from '@/utils/types/departPersonal.types'
 
-interface DepartPersonal {
-    id: number
-    name: string
-    surname: string
-    status: string
-    userClass: string
-    fixSalary: string
-}
+
 
 const AdminPanel = () => {
     const { loading } = useNotify()
     const { onOpen, onClose, isOpen } = useDisclosure()
-    const [selectedData, setSelectedData] = useState<DepartPersonal | undefined>(undefined)
+    const [selectedData, setSelectedData] = useState<DepartPersonalType | undefined>(undefined)
     const [selectedStatus, setSelectedStatus] = useState<string>('')
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    // const { data: departPersonalData } = useApi<DepartPersonal[]>('departPersonal')
     const {
         data: departPersonalData,
         isLoading,
         mutate: mutateDepartPersonal,
-    } = useApi<DepartPersonal[]>('departPersonal', {
+    } = useApi<DepartPersonalType[]>('departPersonal', {
         status: selectedStatus,
     })
 
@@ -61,7 +54,7 @@ const AdminPanel = () => {
         setSelectedStatus(status)
     }
 
-    const deleteUser = (selectedData: DepartPersonal | undefined) => {
+    const deleteUser = (selectedData: DepartPersonalType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteDepartPersonal(selectedData.id)
             loading(responsePromise)

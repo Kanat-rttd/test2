@@ -1,7 +1,4 @@
 import { Box, Select } from '@chakra-ui/react'
-import { useState, useEffect, ChangeEvent } from 'react'
-import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.service'
-import { getByFacilityUnit } from '@/utils/services/sales.service'
 import TableData from '@/components/TableData'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
@@ -41,37 +38,10 @@ interface OrderArray {
 }
 
 const MixersPage = () => {
-    const { getURLs } = useURLParameters()
-    const [facilityUnits, setFacilityUnits] = useState<FacilityUnit[] | undefined>()
-    // const [getSalesData, setSalesData] = useState<OrderArray[]>([])
+    const { getURLs, getParam, setParam } = useURLParameters()
 
+    const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
     const { data: salesData } = useApi<OrderArray[]>(`sales?${getURLs().toString()}`)
-
-    useEffect(() => {
-        getAllBakingFacilityUnits().then((responseData) => {
-            setFacilityUnits(responseData)
-        })
-    }, [])
-
-    // useEffect(() => {
-    //     getAllSales().then((res) => {
-    //         console.log(res)
-    //         setSalesData(res)
-    //     })
-    // }, [])
-
-    const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const data = { facilityUnitId: target.value }
-
-        getByFacilityUnit(data)
-            .then((res) => {
-                console.log(res.data.data)
-                // setSalesData(res.data.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-    }
 
     return (
         <UniversalComponent>
@@ -90,7 +60,8 @@ const MixersPage = () => {
                             borderRadius={5}
                             placeholder="Цех"
                             name="bakingFacilityUnitId"
-                            onChange={handleChange}
+                            defaultValue={getParam('facilityUnit')}
+                            onChange={(e) => setParam('facilityUnit', e.target.value)}
                         >
                             {facilityUnits?.map((unit, index) => {
                                 return (

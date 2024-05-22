@@ -17,13 +17,14 @@ const StyledTableContainer: React.FC<StyledTableContainerProps> = ({
     return (
         <Box className={classes.tableWrapper}>
             <TableContainer className={classes.tableContainer} style={style} {...props}>
-                {isLoading ? (
-                    <div className={classes.spinnerOverlay}>
-                        <Spinner size="lg" color="blue.500" />
-                    </div>
-                ) : (
-                    children
-                )}
+                    {isLoading ? (
+                        <div className={classes.spinnerOverlay}>
+                            <Spinner size="lg" color="blue.500" />
+                        </div>
+                    ) : (
+                        children
+                    )}
+
             </TableContainer>
         </Box>
     )

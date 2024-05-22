@@ -18,23 +18,11 @@ import { useEffect } from 'react'
 import { createDepartPersonal, updateDepartPersonal } from '@/utils/services/departPersonal.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import StatusSelect from '@/components/shared/StatusSelect'
+import { DepartPersonalType } from '@/utils/types/departPersonal.types'
 
-interface DepartPersonal {
-    id: number
-    name: string
-    surname: string
-    status: string
-    userClass: string
-    fixSalary: string
-}
-
-// interface status {
-//     id: number
-//     name: string
-// }
 
 interface DepartPesonalAddModalProps {
-    data: DepartPersonal | undefined
+    data: DepartPersonalType | undefined
     isOpen: boolean
     onClose: () => void
     onSuccess: () => void
@@ -50,19 +38,19 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
         setError,
         formState: { errors },
         reset,
-    } = useForm<DepartPersonal>()
+    } = useForm<DepartPersonalType>()
 
     useEffect(() => {
         if (data) {
             Object.entries(data).forEach(([key, value]) => {
-                setValue(key as keyof DepartPersonal, value)
+                setValue(key as keyof DepartPersonalType, value)
             })
         } else {
             reset()
         }
     }, [data, isOpen, reset])
 
-    const sendData = (formData: DepartPersonal) => {
+    const sendData = (formData: DepartPersonalType) => {
         const responsePromise: Promise<any> = data
             ? updateDepartPersonal(data.id, formData)
             : createDepartPersonal(formData)

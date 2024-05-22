@@ -1,36 +1,53 @@
-import { Box, Button, Select, useDisclosure } from '@chakra-ui/react'
+import {
+    Box,
+    Button,
+    Tab,
+    TabList,
+    TabPanel,
+    TabPanels,
+    Tabs,
+    useDisclosure,
+} from '@chakra-ui/react'
 import ListTable from '../components/ListTable'
 import DistributionModal from '../components/DistributionModal'
-import DateRange from '@/components/DateRange'
+import PivotTable from '../components/PivotTable'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
-const shiftAccounting = () => {
+export default function ShiftAccounting() {
+    const { setParam } = useURLParameters()
     const handleSuccess = () => {
         console.log('1')
     }
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    const clearParam = () => {
+        setParam('facilityUnit', '')
+    }
+
     return (
         <Box mt={1}>
-            <Box width={'100%'} height={'100%'} p={5}>
-                <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
-                    <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        <DateRange />
-                        <Select size={'sm'} borderRadius={5} placeholder="Цех" width={'fit-content'}>
-                            <option value="Лепешечный">Лепешечный</option>
-                            <option value="Булочный">Булочный</option>
-                            <option value="Заварной">Заварной</option>
-                        </Select>
+            <Tabs variant="soft-rounded" height={'100%'} mt={'-10px'}>
+                <Box width={'100%'} height={'100%'} p={5}>
+                    <Box display={'flex'} justifyContent={'space-between'}>
+                        <TabList height={'22px'}>
+                            <Tab onClick={clearParam}>List</Tab>
+                            <Tab onClick={clearParam}>Pivot</Tab>
+                        </TabList>
+                        <Button colorScheme="purple" onClick={onOpen}>
+                            Добавить часы
+                        </Button>
                     </Box>
-
-                    <Button colorScheme="purple" onClick={onOpen}>
-                        Добавить часы
-                    </Button>
+                    <TabPanels height={'100%'}>
+                        <TabPanel height={'100%'} p={'10px 0'}>
+                            <ListTable status="1" />
+                        </TabPanel>
+                        <TabPanel p={'10px 0'}>
+                            <PivotTable />
+                        </TabPanel>
+                    </TabPanels>
                 </Box>
-                <Box>
-                    <ListTable status="1" />
-                </Box>
-            </Box>
+            </Tabs>
             <DistributionModal
                 isOpen={isOpen}
                 onClose={onClose}
@@ -41,5 +58,3 @@ const shiftAccounting = () => {
         </Box>
     )
 }
-
-export default shiftAccounting
