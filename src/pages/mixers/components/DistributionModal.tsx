@@ -1,7 +1,8 @@
 import {
     Box,
-    Button,
     Checkbox,
+    FormControl,
+    FormErrorMessage,
     Input,
     Modal,
     ModalBody,
@@ -15,187 +16,258 @@ import {
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 
-import { getBreadNames } from '@/utils/services/product.service'
-import { getAllClients } from '@/utils/services/client.service'
-import { createDispatch } from '@/utils/services/dispatch.service'
+import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
+import { useForm } from 'react-hook-form'
+import { useNotify } from '@/utils/providers/ToastProvider'
+import { FacilityUnit } from '@/utils/types/product.types'
+import { useApi } from '@/utils/services/axios'
+import { DepartPersonalType } from '@/utils/types/departPersonal.types'
 
 interface DistributionModalProps {
     isOpen: boolean
     onOpen: () => void
     onClose: () => void
     onSuccess: () => void
-    status: string
+    data: ShiftAccountingType | undefined
 }
 
-interface Client {
-    id: number
-    name: string
-}
-
-interface BreadNames {
-    id: string
-    bread: string
-}
+type DepartPersonalNames = { id: number; name: string; hours: number; facilityUnit: number }
 
 const DistributionModal: React.FC<DistributionModalProps> = ({
+    data,
     isOpen,
     onClose,
     onSuccess,
-    status,
 }) => {
-    const [breadNames, setBreadNames] = useState<BreadNames[]>([])
-    const [clientsData, setClientsData] = useState<Client[]>([])
+    const { loading, error } = useNotify()
+    const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
+    const { data: departPersonalData } = useApi<DepartPersonalType[]>('departPersonal')
+
+    const [selectedFacilityUnit, setSelectedFacilityUnit] = useState<string>('')
+    const [selectedPersonals, setSelectedPersonals] = useState<DepartPersonalNames[]>([])
+
+    const {
+        register,
+        handleSubmit: handleSubmitForm,
+        setValue,
+        formState: { errors },
+        reset,
+    } = useForm<ShiftAccountingType>()
 
     useEffect(() => {
-        getBreadNames().then((responseData) => {
-            setBreadNames(responseData)
-        })
-    }, [])
+        if (data) {
+            Object.entries(data).forEach(([key, value]) => {
+                setValue(key as keyof ShiftAccountingType, value)
+            })
+        } else {
+            reset()
+        }
+    }, [data, isOpen, reset])
 
     useEffect(() => {
-        getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
-            setClientsData(responseData)
-        })
-    }, [])
+        console.log(selectedFacilityUnit)
+        console.log(departPersonalData, selectedPersonals)
+    }, [selectedFacilityUnit])
 
-    const [recipient, setRecipient] = useState<string>('')
-    const [selectedBreads, setSelectedBreads] = useState<
-        { id: string; name: string; quantity: number }[]
-    >([])
+    const handleConfirm = () => {
+        if (selectedPersonals.length < 1) {
+            error('Выберите персонал')
+            return
+        }
+        const distributionData = {
+            facilityUnitsId: selectedFacilityUnit,
+            departPersonals: selectedPersonals.map(({ name, id, hours }) => ({
+                name,
+                id,
+                hours,
+            })),
+        }
 
-    const handleRecipientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setRecipient(event.target.value)
+        const responsePromise: Promise<any> = createShifAccounting(distributionData)
+        loading(responsePromise)
+
+        responsePromise
+            .then(() => {
+                onSuccess()
+                onClose()
+                setSelectedPersonals([])
+                setSelectedFacilityUnit('')
+            })
+            .catch((error) => {
+                console.error('Error creating:', error)
+            })
     }
 
-    const handleBreadSelection = (bread: string, id: string) => {
-        if (selectedBreads.find((item) => item.name === bread)) {
-            setSelectedBreads(
-                selectedBreads.map((item) =>
-                    item.name === bread ? { ...item, quantity: item.quantity + 1 } : item,
-                ),
+    const handlePersonalSelection = (name: string, id: number, facilityUnit: number) => {
+        if (selectedPersonals.find((item) => item.name === name)) {
+            setSelectedPersonals(
+                selectedPersonals
+                    .map((item) => (item.name === name ? null : item))
+                    .filter((item) => item !== null) as {
+                    id: number
+                    name: string
+                    hours: number
+                    facilityUnit: number
+                }[],
             )
         } else {
-            setSelectedBreads([...selectedBreads, { name: bread, id: id, quantity: 1 }])
+            setSelectedPersonals([...selectedPersonals, { name, id, hours: 1, facilityUnit }])
         }
     }
 
-    const handleQuantityChange = (
-        event: React.ChangeEvent<HTMLInputElement>,
-        breadName: string,
-    ) => {
+    const handleClose = () => {
+        setSelectedFacilityUnit('')
+        setSelectedPersonals([])
+        onClose()
+        reset()
+    }
+
+    const handleFacilityUnitChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedFacilityUnit(event.target.value)
+    }
+
+    const handleHoursChange = (event: React.ChangeEvent<HTMLInputElement>, breadName: string) => {
         const quantity = parseInt(event.target.value)
-        setSelectedBreads(
-            selectedBreads.map((bread) =>
+        setSelectedPersonals(
+            selectedPersonals.map((bread) =>
                 bread.name === breadName ? { ...bread, quantity } : bread,
             ),
         )
     }
 
-    const handleConfirm = () => {
-        const distributionData = {
-            userId: recipient,
-            products: selectedBreads.map(({ name, id, quantity }) => ({
-                name,
-                id,
-                quantity: quantity,
-            })),
-            dispatch: status,
-        }
-        createDispatch(distributionData)
-            .then(() => {
-                onSuccess()
-            })
-            .catch((error) => {
-                console.error('Error creating sale:', error)
-            })
-
-        onClose()
-    }
-
     return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+        <Modal isOpen={isOpen} onClose={handleClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>{status == '0' ? 'Выдача' : 'Возврат'} продукции</ModalHeader>
+                <ModalHeader>{data ? 'Изменить' : 'Добавить'} часы</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody display={'flex'} gap={'10px'} flexDirection={'column'}>
-                    <Select
-                        placeholder="Выберите получателя"
-                        width={'100%'}
-                        onChange={handleRecipientChange}
-                        value={recipient}
+                    <form
+                        onSubmit={handleSubmitForm(handleConfirm)}
+                        style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                     >
-                        {clientsData?.map((client, index) => {
-                            return (
-                                <option key={index} value={client.id}>
-                                    {client.name}
-                                </option>
-                            )
-                        })}
-                    </Select>
+                        <FormControl isInvalid={!!errors.bakingFacilityUnitId}>
+                            <Select
+                                {...register('bakingFacilityUnitId', {
+                                    required: 'Поле является обязательным',
+                                })}
+                                placeholder="Цех"
+                                defaultValue={data ? data.bakingFacilityUnitId : ''}
+                                onChange={handleFacilityUnitChange}
+                            >
+                                {facilityUnits?.map((item, index) => (
+                                    <option key={index} value={item.id}>
+                                        {item.facilityUnit}
+                                    </option>
+                                ))}
+                            </Select>
 
-                    <Box
-                        width={'100%'}
-                        gap={'10px'}
-                        border={'1px solid #E2E8F0'}
-                        padding={'5px'}
-                        borderRadius={'8px'}
-                        marginTop={'5px'}
-                        display={'flex'}
-                        flexWrap={'wrap'}
-                    >
-                        {breadNames.map((bread) => {
-                            return (
-                                <Checkbox
-                                    w={'45%'}
-                                    p={'0 15px'}
-                                    checked={selectedBreads.some(
-                                        (item) => item.name === bread.bread,
-                                    )}
-                                    onChange={() => handleBreadSelection(bread.bread, bread.id)}
-                                    key={bread.bread}
-                                >
-                                    {bread.bread}
-                                </Checkbox>
-                            )
-                        })}
-                    </Box>
+                            <FormErrorMessage>
+                                {errors.bakingFacilityUnitId?.message}
+                            </FormErrorMessage>
+                        </FormControl>
+                        <FormControl isInvalid={!!errors.date}>
+                            <Input
+                                {...register('date', {
+                                    required: 'Поле является обязательным',
+                                })}
+                                autoComplete="off"
+                                placeholder="Дата *"
+                                type="date"
+                                defaultValue={new Date().toISOString().split('T')[0]}
+                            />
+                            <FormErrorMessage>{errors.date?.message}</FormErrorMessage>
+                        </FormControl>
 
-                    <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
-                        {selectedBreads.map(({ name, quantity }, index) => {
-                            return (
+                        {selectedFacilityUnit && (
+                            <>
                                 <Box
                                     width={'100%'}
-                                    display={'flex'}
                                     gap={'10px'}
-                                    alignItems={'center'}
-                                    key={name}
+                                    border={'1px solid #E2E8F0'}
+                                    padding={'5px'}
+                                    borderRadius={'8px'}
+                                    marginTop={'5px'}
+                                    display={'flex'}
+                                    flexWrap={'wrap'}
                                 >
-                                    <Text w={'40%'}>
-                                        {index + 1}. {name}
-                                    </Text>
-                                    <Input
-                                        w={'60%'}
-                                        required={quantity > 1}
-                                        type="number"
-                                        placeholder="Кол-во"
-                                        value={quantity}
-                                        onChange={(e) => handleQuantityChange(e, name)}
-                                    />
+                                    {departPersonalData?.map((user) => {
+                                        if (
+                                            user.bakingFacilityUnit.id ===
+                                            Number(selectedFacilityUnit)
+                                        ) {
+                                            console.log(user.name)
+
+                                            return (
+                                                <Checkbox
+                                                    w={'45%'}
+                                                    p={'0 15px'}
+                                                    checked={selectedPersonals.some(
+                                                        (item) => item.name === user.name,
+                                                    )}
+                                                    onChange={() =>
+                                                        handlePersonalSelection(
+                                                            user.name,
+                                                            user.id,
+                                                            user.bakingFacilityUnit.id,
+                                                        )
+                                                    }
+                                                    key={user.name}
+                                                >
+                                                    <Text>{user.name}</Text>
+                                                </Checkbox>
+                                            )
+                                        }
+                                    })}
                                 </Box>
-                            )
-                        })}
-                    </Box>
+                                <Box display={'flex'} flexDirection={'column'} gap={'10px'} pl={1}>
+                                    {selectedPersonals.map(({ name, hours }, index) => {
+                                        return (
+                                            <Box
+                                                width={'100%'}
+                                                display={'flex'}
+                                                gap={'10px'}
+                                                alignItems={'center'}
+                                                key={name}
+                                            >
+                                                <Text w={'40%'}>
+                                                    {index + 1}. {name}
+                                                </Text>
+                                                <Input
+                                                    w={'60%'}
+                                                    required={hours > 1}
+                                                    type="number"
+                                                    placeholder="Кол-во"
+                                                    value={hours}
+                                                    onChange={(e) => handleHoursChange(e, name)}
+                                                />
+                                            </Box>
+                                        )
+                                    })}
+                                </Box>
+                            </>
+                        )}
+
+                        <Box
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                marginTop: '10px',
+                            }}
+                        >
+                            <Input
+                                width={'40%'}
+                                type="submit"
+                                bg="purple.500"
+                                color="white"
+                                cursor="pointer"
+                                value={data ? 'Редактировать' : 'Добавить'}
+                            />
+                        </Box>
+                    </form>
                 </ModalBody>
 
-                <ModalFooter>
-                    <Button mr={3} onClick={onClose} colorScheme={'red'}>
-                        Отмена
-                    </Button>
-                    <Button colorScheme={'purple'} onClick={handleConfirm}>
-                        Подтвердить
-                    </Button>
-                </ModalFooter>
+                <ModalFooter></ModalFooter>
             </ModalContent>
         </Modal>
     )

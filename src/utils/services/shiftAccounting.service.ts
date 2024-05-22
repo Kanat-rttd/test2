@@ -5,11 +5,12 @@ export const getAllShiftAccounting = async () => {
     return data
 }
 
-// export const createDispatch = async (data: {
-//     userId: string
-//     products: { name: string; quantity: number; id: string }[]
-//     dispatch: string
-// }) => {
-//     const response = await $host.post('release', data)
-//     return response
-// }
+export const createShifAccounting = async (data: {}) => {
+    const response = await $host.post('shiftAccounting', data)
+    return response
+}
+
+export const updateShifAccounting = async (id: number, data: {}) => {
+    const response = await $host.put(`shiftAccounting/${id}`, data)
+    return response
+}

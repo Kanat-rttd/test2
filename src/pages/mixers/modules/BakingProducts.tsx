@@ -108,7 +108,7 @@ const BakingPage = () => {
                                 onChange={(e) => setParam('facilityUnit', e.target.value)}
                             >
                                 {facilityUnits?.map((item, index) => (
-                                    <option key={index} value={item.facilityUnit}>
+                                    <option key={index} value={item.id}>
                                         {item.facilityUnit}
                                     </option>
                                 ))}

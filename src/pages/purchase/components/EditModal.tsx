@@ -240,7 +240,6 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                 {...register('date', {
                                     required: 'Поле является обязательным',
                                 })}
-                                // defaultValue={selectedData ? dayjs(selectedData.date).format('YYYY-MM-DD') : undefined}
                                 autoComplete="off"
                                 placeholder="Дата *"
                                 type="date"

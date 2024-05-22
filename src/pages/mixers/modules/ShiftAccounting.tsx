@@ -53,7 +53,7 @@ export default function ShiftAccounting() {
                 onClose={onClose}
                 onOpen={onOpen}
                 onSuccess={handleSuccess}
-                status="1"
+                data={undefined}
             />
         </Box>
     )

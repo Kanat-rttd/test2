@@ -1,7 +1,6 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Box, Select, Table, Tbody, Td, Th, Tr, useDisclosure } from '@chakra-ui/react'
-import EditModal from './EditModal'
+import { Box, IconButton, Select, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import { useState } from 'react'
 import dayjs from 'dayjs'
 import { useApi } from '@/utils/services/axios'
@@ -10,6 +9,9 @@ import DateRange from '@/components/DateRange'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { FacilityUnit } from '@/utils/types/product.types'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
+// import { useNotify } from '@/utils/providers/ToastProvider'
+import EditModal from './EditModal'
 
 interface Dispatch {
     id: number
@@ -37,47 +39,51 @@ interface Dispatch {
     }
 }
 
-interface shiftAccounting {
-    id: number
-    date: Date
-    bakingFacilityUnitId: number
-    shiftAccountingDetails: [
-        {
-            id: number
-            shiftAccountingId: number
-            departPersonalId: number
-            shiftTime: number
-            departPersonal: {
-                id: number
-                name: string
-            }
-        },
-    ]
-    bakingFacilityUnit: {
-        id: number
-        facilityUnit: string
-    }
-}
+// interface ListTableProps {
+//     status: string
+// }
 
-interface ListTableProps {
-    status: string
-}
-
-export default function ListTable({ status }: ListTableProps) {
-    console.log(status)
+export default function ListTable() {
+    // const { loading } = useNotify()
     const { getParam, setParam } = useURLParameters()
-    const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const { data: shiftAccounting } = useApi<shiftAccounting[]>('shiftAccounting')
-    const { data: dispatchesData } = useApi<Dispatch[]>('release')
+    const [dialog, setDialog] = useState({
+        isOpen: false,
+        onClose: () => setDialog({ ...dialog, isOpen: false }),
+    })
+
+    const { data: shiftAccounting, mutate: mutateShiftAccountingData } =
+        useApi<ShiftAccountingType[]>('shiftAccounting')
+    // const { data: dispatchesData } = useApi<Dispatch[]>('release')
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
 
-    console.log(dispatchesData)
+    const [selectedData, setSelectedData] = useState<ShiftAccountingType | undefined>(undefined)
+
+    const handleClose = () => {
+        setSelectedData(undefined)
+        modal.onClose()
+    }
+
+    const handleSuccess = () => {
+        mutateShiftAccountingData()
+    }
 
     const [modal, setModal] = useState({
         isOpen: false,
         onClose: () => setModal({ ...modal, isOpen: false }),
     })
+
+    const handlerDeleteShiftAccounting = (selectedData: ShiftAccountingType | undefined) => {
+        // if (selectedData) {
+        //     const responsePromise: Promise<any> = deleteShiftAccounting(selectedData.id)
+        //     loading(responsePromise)
+        //     responsePromise.then(() => {
+        //         mutateShiftAccountingData()
+        //     })
+        // } else {
+        //     console.error('No user data available to delete.')
+        // }
+    }
 
     return (
         <>
@@ -93,7 +99,7 @@ export default function ListTable({ status }: ListTableProps) {
                         onChange={(e) => setParam('facilityUnit', e.target.value)}
                     >
                         {facilityUnits?.map((item, index) => (
-                            <option key={index} value={item.facilityUnit}>
+                            <option key={index} value={item.id}>
                                 {item.facilityUnit}
                             </option>
                         ))}
@@ -141,24 +147,34 @@ export default function ListTable({ status }: ListTableProps) {
                                                 ))}
                                             </div>
                                         </Td>
-                                        <Td style={{ display: 'flex', gap: '10px' }}>
-                                            {
-                                                <EditIcon
-                                                    boxSize={'1.5em'}
-                                                    cursor={'pointer'}
-                                                    onClick={() =>
-                                                        setModal({ ...modal, isOpen: true })
-                                                    }
-                                                />
-                                            }
-                                            {
-                                                <DeleteIcon
-                                                    boxSize={'1.5em'}
-                                                    color={'red'}
-                                                    cursor={'pointer'}
-                                                    onClick={onOpen}
-                                                />
-                                            }
+                                        <Td>
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={2}
+                                                onClick={() => {
+                                                    setSelectedData(row)
+                                                    setModal({ ...modal, isOpen: true })
+                                                }}
+                                                icon={<EditIcon />}
+                                            />
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
+                                                onClick={() => {
+                                                    setSelectedData(row)
+                                                    setDialog({
+                                                        ...dialog,
+                                                        isOpen: true,
+                                                    })
+                                                }}
+                                                icon={<DeleteIcon />}
+                                            />
                                         </Td>
                                     </Tr>
                                 )
@@ -167,17 +183,23 @@ export default function ListTable({ status }: ListTableProps) {
                     </Table>
                 </TableContainer>
             </UniversalComponent>
-            <EditModal isOpen={modal.isOpen} onClose={modal.onClose} />
+            <EditModal
+                isOpen={modal.isOpen}
+                onClose={handleClose}
+                onSuccess={handleSuccess}
+                data={selectedData}
+            />
             <Dialog
-                isOpen={isOpen}
-                onClose={onClose}
+                isOpen={dialog.isOpen}
+                onClose={dialog.onClose}
                 header="Удалить"
                 body="Вы уверены? Вы не сможете отменить это действие впоследствии."
-                actionBtn={onClose}
+                actionBtn={() => {
+                    dialog.onClose()
+                    handlerDeleteShiftAccounting(selectedData)
+                }}
                 actionText="Удалить"
             />
         </>
     )
 }
-
-// export default ListTable
