@@ -10,6 +10,7 @@ import {
     FormControl,
     FormErrorMessage,
     Box,
+    Select,
 } from '@chakra-ui/react'
 
 // import Select from 'react-select'
@@ -19,7 +20,8 @@ import { createDepartPersonal, updateDepartPersonal } from '@/utils/services/dep
 import { useNotify } from '@/utils/providers/ToastProvider'
 import StatusSelect from '@/components/shared/StatusSelect'
 import { DepartPersonalType } from '@/utils/types/departPersonal.types'
-
+import { FacilityUnit } from '@/utils/types/product.types'
+import { useApi } from '@/utils/services/axios'
 
 interface DepartPesonalAddModalProps {
     data: DepartPersonalType | undefined
@@ -30,6 +32,7 @@ interface DepartPesonalAddModalProps {
 
 const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonalAddModalProps) => {
     const { loading } = useNotify()
+    const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>('mixers')
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -113,6 +116,24 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
                                     />
                                 </InputGroup>
                                 <FormErrorMessage>{errors.surname?.message}</FormErrorMessage>
+                            </FormControl>
+                            <FormControl isInvalid={!!errors.bakingFacilityUnitId}>
+                                <Select
+                                    placeholder="Выберите цех"
+                                    defaultValue={data?.bakingFacilityUnit.id}
+                                    {...register('bakingFacilityUnitId', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                >
+                                    {facilityUnits?.map((unit, index) => (
+                                        <option key={index} value={unit.id}>
+                                            {unit.facilityUnit}
+                                        </option>
+                                    ))}
+                                </Select>
+                                <FormErrorMessage>
+                                    {errors.bakingFacilityUnitId?.message}
+                                </FormErrorMessage>
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.userClass}>

@@ -61,7 +61,7 @@ const ProcessedPage = () => {
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                             <DateRange />
                             <Select
-                                placeholder="Тип цеха"
+                                placeholder="Цех"
                                 name="bakingFacilityUnitId"
                                 size={'sm'}
                                 borderRadius={5}

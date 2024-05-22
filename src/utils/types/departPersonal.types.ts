@@ -5,6 +5,7 @@ export type DepartPersonalType = {
     status: string
     userClass: string
     fixSalary: string
+    bakingFacilityUnitId: number
     bakingFacilityUnit: {
         id: number,
         facilityUnit: string
