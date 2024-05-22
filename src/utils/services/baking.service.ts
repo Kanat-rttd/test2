@@ -20,6 +20,8 @@ export const createBaking = async (data: {
     return response
 }
 
+
+
 export const deleteBaking = async (id: number) => {
     const response = await $host.delete(`baking/${id}`)
     return response

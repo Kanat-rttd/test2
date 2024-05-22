@@ -234,39 +234,6 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.status}>
-                                {/* <Controller
-                                    name="status"
-                                    control={control}
-                                    rules={{ required: 'Поля является обязательным' }}
-                                    render={({ field }) => {
-                                        const { onChange, value } = field
-                                        return (
-                                            <Select
-                                                options={status}
-                                                getOptionLabel={(option: status) => option.name}
-                                                getOptionValue={(option: status) => option.name}
-                                                value={status.find(
-                                                    (option) => option.name === value,
-                                                )}
-                                                onChange={(
-                                                    selectedOption: {
-                                                        id: number
-                                                        name: string
-                                                    } | null,
-                                                ) => {
-                                                    if (selectedOption) {
-                                                        onChange(selectedOption.name)
-                                                    } else {
-                                                        onChange(null)
-                                                    }
-                                                }}
-                                                placeholder="Статус *"
-                                                isClearable
-                                                isSearchable
-                                            />
-                                        )
-                                    }}
-                                /> */}
                                 <StatusSelect
                                     {...register('status', {
                                         required: 'Поле является обязательным',

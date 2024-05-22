@@ -64,13 +64,17 @@ const BakingPage = () => {
     const { onOpen, onClose, isOpen } = useDisclosure()
 
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
-    const { data: bakingsData } = useApi<Baking>(`baking?${getURLs().toString()}`)
+    const { data: bakingsData, mutate: mutateBakingData } = useApi<Baking>(`baking?${getURLs().toString()}`)
 
     const [selectedBaking, setSelectedBaking] = useState<bakingsData | undefined>(undefined)
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
+
+    const handledSuccess = () => {
+        mutateBakingData()
+    }
 
     const handlerDelete = (selectedBaking: bakingsData | undefined) => {
         if (selectedBaking) {
@@ -124,7 +128,7 @@ const BakingPage = () => {
                         >
                             Добавить
                         </Button>
-                        <BakingAddModal data={selectedBaking} isOpen={isOpen} onClose={onClose} />
+                        <BakingAddModal data={selectedBaking} isOpen={isOpen} onClose={onClose} onSuccess={handledSuccess} />
                     </Box>
                     <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                         <Box pb={4}>
