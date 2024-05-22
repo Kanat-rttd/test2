@@ -42,7 +42,7 @@ const ProviderTable = () => {
                             {calculationsData?.Data.map((item, index) => {
                                 return (
                                     <Tr key={index}>
-                                        <Td>{index}</Td>
+                                        <Td>{index + 1}</Td>
                                         <Td>{item.ClientName}</Td>
                                         <Td>{item.Debt}</Td>
                                     </Tr>

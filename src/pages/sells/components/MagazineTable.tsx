@@ -1,28 +1,55 @@
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import { Box, Select, Table, Tr, Td, Tbody, Th } from '@chakra-ui/react'
+import { useApi } from '@/utils/services/axios'
+import { useState } from 'react'
+
+interface MagazineDebtView {
+    mainData: [
+        {
+            MagazineName: string
+            Debit: string
+        },
+    ]
+    total: number
+}
+
+interface MagazineData {
+    id: number
+    name: string
+    clientId: number
+    status: string
+}
 
 const MagazineTable = () => {
-    const data = {
-        mainData: [
-            {
-                id: 1,
-                provider: 'My Mart 1',
-                debt: 6200,
-            },
-            {
-                id: 2,
-                provider: 'My Mart 2',
-                debt: 5400,
-            },
-        ],
-        total: 5000,
+    const [filters, setFilters] = useState({ MagazineName: '' })
+
+    const { data: magazineDebtData } = useApi<MagazineDebtView>('reports/magazineDebt', filters)
+    const { data: magazinesData } = useApi<MagazineData[]>('magazines')
+
+    console.log(magazinesData)
+
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const { name, value } = event.target
+        setFilters((prevFilters) => ({
+            ...prevFilters,
+            [name]: value,
+        }))
     }
 
     return (
         <>
             <Box width={'25%'} marginBottom={6}>
-                <Select placeholder="Магазин" size={'sm'} borderRadius={5} width={'80%'}>
-                    <option>Магазин</option>
+                <Select
+                    name="MagazineName"
+                    placeholder="Магазин"
+                    width={'fit-content'}
+                    onChange={handleSelectChange}
+                >
+                    {magazinesData?.map((item, index) => (
+                        <option key={index} value={item.name}>
+                            {item.name}
+                        </option>
+                    ))}
                 </Select>
             </Box>
             <Box>
@@ -36,12 +63,12 @@ const MagazineTable = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {data.mainData.map((item) => {
+                            {magazineDebtData?.mainData.map((item, index) => {
                                 return (
-                                    <Tr key={item.id}>
-                                        <Td>{item.id}</Td>
-                                        <Td>{item.provider}</Td>
-                                        <Td>{item.debt}</Td>
+                                    <Tr key={index}>
+                                        <Td>{index + 1}</Td>
+                                        <Td>{item.MagazineName}</Td>
+                                        <Td>{item.Debit}</Td>
                                     </Tr>
                                 )
                             })}
@@ -53,7 +80,7 @@ const MagazineTable = () => {
                                 </Th>
                                 <Th> </Th>
                                 <Th color={'#000'} fontSize={15}>
-                                    {data.total}
+                                    {magazineDebtData?.total}
                                 </Th>
                             </Tr>
                         </Tfoot>
