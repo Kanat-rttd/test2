@@ -33,26 +33,16 @@ interface OrderArray {
 
 const ProcessingPage = () => {
     const { getURLs } = useURLParameters()
-    // const [getSalesData, setSalesData] = useState<OrderArray[]>([])
 
-    // const { data: salesData } = useApi<OrderArray[]>('sales')
-
-    const { data: salesData } = useApi<OrderArray[]>(`sales?${getURLs().toString()}`)
-
-    // useEffect(() => {
-    //     getAllSales().then((res) => {
-    //         setSalesData(res.data)
-    //     })
-    // }, [])
+    const { data: salesData, mutate: mutateSalesData } = useApi<OrderArray[]>(
+        `sales?${getURLs().toString()}`,
+    )
 
     const handleChangeStatus = async (clientName: OrderArray) => {
         setDoneStatus(clientName.id)
             .then((res) => {
                 console.log(res)
-                // const updatedSalesData = salesData.map((sale) =>
-                //     sale.id === clientName.id ? { ...sale, done: 1 } : sale,
-                // )
-                // setSalesData(updatedSalesData)
+                mutateSalesData()
             })
             .catch((error) => {
                 console.error('Error updating order status:', error)

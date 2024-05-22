@@ -1,8 +1,8 @@
 import { Box, Select } from '@chakra-ui/react'
-import { useState, useEffect, ChangeEvent } from 'react'
+// import { useState, useEffect, ChangeEvent } from 'react'
 
 import TableData from '@/components/TableData'
-import { getByFacilityUnit } from '@/utils/services/sales.service'
+// import { getByFacilityUnit } from '@/utils/services/sales.service'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
@@ -41,44 +41,23 @@ interface FacilityUnit {
 }
 
 const ProcessedPage = () => {
-    const { getURLs } = useURLParameters()
-
-    const [getSalesData, setSalesData] = useState<OrderArray[]>([])
+    const { getURLs, setParam } = useURLParameters()
 
     const { data: salesData } = useApi<OrderArray[]>(`sales?${getURLs().toString()}`)
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(
         `mixers?${getURLs().toString()}`,
     )
 
-    useEffect(() => {
-        if (salesData) {
-            setSalesData(salesData)
-        }
-    }, [])
-
-
-    const handleChange = ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        const data = { facilityUnitId: target.value }
-
-        getByFacilityUnit(data)
-            .then((res) => {
-                setSalesData(res.data.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const { value } = event.target
+        setParam('facilityUnitId', value)
     }
 
     return (
         <Box overflowY={'hidden'}>
             <UniversalComponent>
                 <Box width={'100%'} p={5} mt={1}>
-                    <Box
-                        mb={8}
-                        height={'5%'}
-                        display={'flex'}
-                        justifyContent={'space-between'}
-                    >
+                    <Box mb={8} height={'5%'} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
                             <DateRange />
                             <Select
@@ -86,7 +65,7 @@ const ProcessedPage = () => {
                                 name="bakingFacilityUnitId"
                                 size={'sm'}
                                 borderRadius={5}
-                                onChange={handleChange}
+                                onChange={handleSelectChange}
                                 width={'100%'}
                             >
                                 {facilityUnits?.map((unit, index) => {
@@ -100,7 +79,7 @@ const ProcessedPage = () => {
                         </Box>
                     </Box>
                     <Box height={'calc(95% - 2.5rem)'}>
-                        <TableData data={getSalesData.filter((sale) => sale.done === 1)} />
+                        <TableData data={salesData?.filter((sale) => sale.done === 1)} />
                     </Box>
                 </Box>
             </UniversalComponent>

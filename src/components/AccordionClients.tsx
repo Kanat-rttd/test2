@@ -49,6 +49,10 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
         handleChangeStatus(clientName)
     }
 
+    if (!data || data.length === 0) {
+        return <div>Данных в находящихся в обработке пока нет</div>
+    }
+
     return (
         <Accordion
             defaultIndex={defaultIndex}

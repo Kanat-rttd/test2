@@ -126,8 +126,12 @@ const AdminPanel = () => {
                                 name="status"
                                 onChange={handleSelectChange}
                             >
-                                {productStatus.map((item) => {
-                                    return <option value={item.label}>{item.label}</option>
+                                {productStatus.map((item, index) => {
+                                    return (
+                                        <option key={index} value={item.label}>
+                                            {item.label}
+                                        </option>
+                                    )
                                 })}
                             </Select>
                         </Box>
