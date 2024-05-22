@@ -15,7 +15,7 @@ import {
     FormLabel,
 } from '@chakra-ui/react'
 
-import { createBaking } from '@/utils/services/baking.service'
+import { createBaking, updateBaking } from '@/utils/services/baking.service'
 import { useEffect } from 'react'
 import { useApi } from '@/utils/services/axios'
 import { useForm } from 'react-hook-form'
@@ -30,6 +30,7 @@ interface ClientAddModalProps {
 }
 
 interface bakingsData {
+    id: number
     breadType: string
     flour: string
     salt: string
@@ -55,6 +56,9 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
         formState: { errors },
         reset,
     } = useForm<bakingsData>()
+
+    console.log(data);
+    
 
     useEffect(() => {
         if (data) {
@@ -117,6 +121,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                         variant="filled"
                                         placeholder=""
                                         name="breadType"
+                                        defaultValue={data ? data.product?.id : ''}
                                     >
                                         <option disabled value="">
                                             Выберите хлеб
