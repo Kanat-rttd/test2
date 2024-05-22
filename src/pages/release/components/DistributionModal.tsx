@@ -49,7 +49,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     onSuccess,
     status,
 }) => {
-    const { loading } = useNotify()
+    const { loading, error } = useNotify()
     const [breadNames, setBreadNames] = useState<BreadNames[]>([])
     const [clientsData, setClientsData] = useState<Client[]>([])
 
@@ -105,6 +105,10 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     }
 
     const handleConfirm = () => {
+        if(selectedBreads.length < 1) {
+            error('Выберите продукт')
+            return
+        }
         const distributionData = {
             userId: recipient,
             products: selectedBreads.map(({ name, id, quantity }) => ({

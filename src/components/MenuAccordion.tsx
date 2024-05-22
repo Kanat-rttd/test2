@@ -77,8 +77,8 @@ const MenuAccordion = () => {
 
                             <DrawerBody display="flex" p={2} gap="0.5rem" flexDirection="column">
                                 <Accordion allowMultiple>
-                                    {menuItems.map((MenuItem) => (
-                                        <Fragment key={MenuItem.route}>
+                                    {menuItems.map((MenuItem, index) => (
+                                        <Fragment key={index}>
                                             <AccordionItem key={MenuItem.label}>
                                                 <h2>
                                                     <AccordionButton>
@@ -94,12 +94,12 @@ const MenuAccordion = () => {
                                                     </AccordionButton>
                                                 </h2>
                                                 {subMenuItems.map(
-                                                    ({ route, label, path }) =>
+                                                    ({ route, label, path }, index) =>
                                                         path === MenuItem.route && (
                                                             <AccordionPanel
                                                                 pb={4}
                                                                 ml={'20px'}
-                                                                key={path}
+                                                                key={index}
                                                             >
                                                                 <Link
                                                                     key={route}
