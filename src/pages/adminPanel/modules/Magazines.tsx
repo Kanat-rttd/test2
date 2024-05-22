@@ -48,27 +48,13 @@ const AdminPanel = () => {
     const { data: magazinesData, isLoading } = useApi<Magazines[]>('magazines', filters)
     const { data: clientsData } = useApi<Client[]>('client')
 
-    // const { data: facilityUnitsData } = useSWR<FacilityUnit[]>('mixers', {
-    //     fetcher: () => getAllBakingFacilityUnits(),
-    // })
-
-    // const { data: productsData } = useSWR<ProductList[]>('product', {
-    //     fetcher: () => getAllProducts(),
-    // })
-
     const { onOpen, isOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<Magazines>()
-    // const [data, setData] = useState<ProductList[]>([])
+
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
-
-    // useEffect(() => {
-    //     getAllProducts().then((responseData) => {
-    //         setData(responseData)
-    //     })
-    // }, [])
 
     const handledSuccess = () => {
         mutate(`magazines`)

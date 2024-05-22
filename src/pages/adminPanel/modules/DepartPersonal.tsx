@@ -21,8 +21,6 @@ import { TableContainer, Thead } from '@/components/ui'
 import DepartPersonalModal from '../components/departPesonalAddModal'
 import { DepartPersonalType } from '@/utils/types/departPersonal.types'
 
-
-
 const AdminPanel = () => {
     const { loading } = useNotify()
     const { onOpen, onClose, isOpen } = useDisclosure()
@@ -40,6 +38,8 @@ const AdminPanel = () => {
     } = useApi<DepartPersonalType[]>('departPersonal', {
         status: selectedStatus,
     })
+
+    console.log(departPersonalData)
 
     const handleClose = () => {
         onClose()

@@ -26,28 +26,40 @@ interface AddFactModalInputs {
 }
 
 interface Place {
-    id: number
-    name: string
+    label: string
 }
 
-interface rawMaterials {
+// interface rawMaterials {
+//     id: number
+//     name: string
+//     uom: string
+// }
+
+interface providerGoods {
     id: number
-    name: string
-    uom: string
+    providerId: number
+    goods: string
+    unitOfMeasure: string
+    place: string
+    status: string
+    isDeleted: boolean
+    provider: {
+        id: number
+        name: string
+    }
 }
 
 type FactModalProps = {
     isOpen: boolean
     onClose: () => void
+    onSuccess: () => void
 }
 
-const places = [
-    { id: 1, name: 'Кладовка' },
-    { id: 2, name: 'Цех 1' },
-]
+const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
+    const { data: providerGoodsData } = useApi<providerGoods[]>('providerGoods')
+    const { data: placesData } = useApi<Place[]>('place')
 
-const FactModal = ({ isOpen, onClose }: FactModalProps) => {
-    const { data: rawMaterials } = useApi<rawMaterials[]>('rawMaterials')
+    console.log(placesData)
 
     const {
         register,
@@ -69,12 +81,12 @@ const FactModal = ({ isOpen, onClose }: FactModalProps) => {
             ) => {
                 if (key !== 'place' && formData[key as keyof AddFactModalInputs] !== '') {
                     const index = Number(key.split('_')[1])
-                    const material = rawMaterials && rawMaterials[index]
+                    const material = providerGoodsData && providerGoodsData[index]
                     if (material) {
                         acc.push({
-                            name: material.name,
+                            name: material.goods,
                             place: formData.place,
-                            unitOfMeasure: material.uom,
+                            unitOfMeasure: material.unitOfMeasure,
                             quantity: Number(formData[key as keyof AddFactModalInputs]),
                         })
                     }
@@ -87,6 +99,8 @@ const FactModal = ({ isOpen, onClose }: FactModalProps) => {
         if (formattedData.length > 0) {
             createFactInput(formattedData).then((res) => {
                 console.log(res)
+                onSuccess()
+                onClose()
             })
         }
     }
@@ -108,15 +122,15 @@ const FactModal = ({ isOpen, onClose }: FactModalProps) => {
                                     const { onChange, value } = field
                                     return (
                                         <Select
-                                            options={places}
-                                            getOptionLabel={(option: Place) => option.name}
-                                            getOptionValue={(option: Place) => `${option.name}`}
-                                            value={places?.filter(
-                                                (option) => String(option.name) == value,
+                                            options={placesData}
+                                            getOptionLabel={(option: Place) => option.label}
+                                            getOptionValue={(option: Place) => `${option.label}`}
+                                            value={placesData?.filter(
+                                                (option) => String(option.label) == value,
                                             )}
                                             onChange={(selectedOption: Place | null) => {
                                                 if (selectedOption) {
-                                                    onChange(selectedOption.name)
+                                                    onChange(selectedOption.label)
                                                 }
                                             }}
                                             placeholder="Место *"
@@ -129,8 +143,8 @@ const FactModal = ({ isOpen, onClose }: FactModalProps) => {
                             <FormErrorMessage>{errors.place?.message}</FormErrorMessage>
                         </FormControl>
 
-                        {rawMaterials &&
-                            rawMaterials.map((material, index) => {
+                        {providerGoodsData &&
+                            providerGoodsData.map((item, index) => {
                                 return (
                                     <Box
                                         display={'flex'}
@@ -139,20 +153,22 @@ const FactModal = ({ isOpen, onClose }: FactModalProps) => {
                                         justifyContent={'space-between'}
                                         key={index}
                                     >
-                                        <Text>{material.name}</Text>
+                                        <Text>{item.goods}</Text>
                                         <FormControl
                                             width={'70%'}
-                                            key={material.id}
+                                            key={item.id}
                                             isInvalid={!!errors[`quantity_${index}`]}
                                         >
                                             <InputGroup>
                                                 <Input
                                                     {...register(`quantity_${index}`)}
                                                     autoComplete="off"
-                                                    placeholder={`Количество ${material.name} *`}
+                                                    placeholder={`Количество ${item.goods} *`}
                                                     type="text"
                                                 />
-                                                <InputRightAddon>{material.uom}</InputRightAddon>
+                                                <InputRightAddon>
+                                                    {item.unitOfMeasure}
+                                                </InputRightAddon>
                                             </InputGroup>
                                             <FormErrorMessage>
                                                 {(errors as any)[`quantity_${index}`]?.message}

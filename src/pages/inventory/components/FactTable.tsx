@@ -1,6 +1,6 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { Table, Tbody, Tr, Th, Td, Box, IconButton } from '@chakra-ui/react'
-import { useApi } from '@/utils/services/axios'
+// import { useApi } from '@/utils/services/axios'
 import { mutate } from '@/utils/services/axios'
 import dayjs from 'dayjs'
 import { useState } from 'react'
@@ -24,8 +24,12 @@ interface factInput {
     totalFact: number
 }
 
-const FactTable = () => {
-    const { data: factInput } = useApi<factInput>('factInput')
+type FactTableProps = {
+    factInput: factInput | undefined
+}
+
+const FactTable = ({ factInput }: FactTableProps) => {
+    // const { data: factInput } = useApi<factInput>('factInput')
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
