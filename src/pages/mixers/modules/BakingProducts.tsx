@@ -22,37 +22,8 @@ import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteBaking } from '@/utils/services/baking.service'
 import { FacilityUnit } from '@/utils/types/product.types'
-
-interface Baking {
-    bakingData: bakingsData[]
-    totals: BakingTotals
-}
-
-interface bakingsData {
-    id: number
-    breadType: string
-    flour: string
-    salt: string
-    yeast: string
-    malt: string
-    butter: string
-    temperature: string
-    time: string
-    output: string
-    product?: {
-        name: string
-        id: string
-    }
-}
-
-interface BakingTotals {
-    totalButter: number
-    totalFlour: number
-    totalMalt: number
-    totalOutput: number
-    totalSalt: number
-    totalYeast: number
-}
+import { BakingDataType, BakingType } from '@/utils/types/baking.types'
+import dayjs from 'dayjs'
 
 const styles = {
     textAlign: 'center',
@@ -64,9 +35,11 @@ const BakingPage = () => {
     const { onOpen, onClose, isOpen } = useDisclosure()
 
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
-    const { data: bakingsData, mutate: mutateBakingData } = useApi<Baking>(`baking?${getURLs().toString()}`)
+    const { data: bakingsData, mutate: mutateBakingData } = useApi<BakingType>(
+        `baking?${getURLs().toString()}`,
+    )
 
-    const [selectedBaking, setSelectedBaking] = useState<bakingsData | undefined>(undefined)
+    const [selectedBaking, setSelectedBaking] = useState<BakingDataType | undefined>(undefined)
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
@@ -76,12 +49,12 @@ const BakingPage = () => {
         mutateBakingData()
     }
 
-    const handlerDelete = (selectedBaking: bakingsData | undefined) => {
+    const handlerDelete = (selectedBaking: BakingDataType | undefined) => {
         if (selectedBaking) {
             const responsePromise: Promise<any> = deleteBaking(selectedBaking.id)
             loading(responsePromise)
             responsePromise.then(() => {
-                mutate((currentData: bakingsData[] | undefined) => {
+                mutate((currentData: BakingDataType[] | undefined) => {
                     if (!currentData) return currentData
                     return currentData.filter((item) => item.id !== selectedBaking?.id)
                 })
@@ -128,7 +101,12 @@ const BakingPage = () => {
                         >
                             Добавить
                         </Button>
-                        <BakingAddModal data={selectedBaking} isOpen={isOpen} onClose={onClose} onSuccess={handledSuccess} />
+                        <BakingAddModal
+                            data={selectedBaking}
+                            isOpen={isOpen}
+                            onClose={onClose}
+                            onSuccess={handledSuccess}
+                        />
                     </Box>
                     <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                         <Box pb={4}>
@@ -136,33 +114,16 @@ const BakingPage = () => {
                                 <Thead>
                                     <Tr>
                                         <Th width={'15%'}>Вид хлеба</Th>
-                                        <Th sx={styles} isNumeric width={'5%'}>
-                                            Мука
-                                        </Th>
-                                        <Th sx={styles} isNumeric width={'5%'}>
-                                            Соль
-                                        </Th>
-                                        <Th sx={styles} isNumeric width={'5%'}>
-                                            Дрожжи
-                                        </Th>
-                                        <Th sx={styles} isNumeric width={'5%'}>
-                                            Солод
-                                        </Th>
-                                        <Th sx={styles} isNumeric width={'5%'}>
-                                            Масло
-                                        </Th>
-                                        <Th sx={styles} isNumeric width={'5%'}>
-                                            t°
-                                        </Th>
-                                        <Th sx={styles} isNumeric width={'5%'}>
-                                            Время
-                                        </Th>
-                                        <Th sx={styles} isNumeric width={'5%'}>
-                                            Выход
-                                        </Th>
-                                        <Th isNumeric width={'5%'}>
-                                            Действия
-                                        </Th>
+                                        <Th sx={styles}>Мука</Th>
+                                        <Th sx={styles}>Соль</Th>
+                                        <Th sx={styles}>Дрожжи</Th>
+                                        <Th sx={styles}>Солод</Th>
+                                        <Th sx={styles}>Масло</Th>
+                                        <Th sx={styles}>t°</Th>
+                                        <Th sx={styles}>Время и дата</Th>
+                                        <Th sx={styles}>Выход</Th>
+                                        <Th sx={styles}>Брак</Th>
+                                        <Th>Действия</Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>
@@ -177,9 +138,12 @@ const BakingPage = () => {
                                                 <Td sx={styles}>{bakingRow.butter}</Td>
                                                 <Td sx={styles}>{bakingRow.temperature}</Td>
                                                 <Td sx={styles}>
-                                                    {bakingRow.time.toLocaleString()}
+                                                    {dayjs(
+                                                        `${bakingRow.date + bakingRow.time}`,
+                                                    ).format('HH:mm DD.MM.YYYY')}
                                                 </Td>
                                                 <Td sx={styles}>{bakingRow.output}</Td>
+                                                <Td sx={styles}>{bakingRow.defective}</Td>
                                                 <Td>
                                                     <IconButton
                                                         variant="outline"
@@ -218,15 +182,16 @@ const BakingPage = () => {
                         <Table variant="simple">
                             <Tfoot>
                                 <Tr fontSize={15} fontWeight={'bold'} color={'#000'}>
-                                    <Td width={'15%'}>Итого</Td>
-                                    <Td width={'7%'}>{bakingsData?.totals?.totalFlour}</Td>
-                                    <Td width={'7%'}>{bakingsData?.totals?.totalSalt}</Td>
-                                    <Td width={'7%'}>{bakingsData?.totals?.totalYeast}</Td>
+                                    <Td width={'14%'}>Итого</Td>
+                                    <Td width={'5%'}>{bakingsData?.totals?.totalFlour}</Td>
+                                    <Td width={'8%'}>{bakingsData?.totals?.totalSalt}</Td>
+                                    <Td width={'8%'}>{bakingsData?.totals?.totalYeast}</Td>
                                     <Td width={'7%'}>{bakingsData?.totals?.totalMalt}</Td>
-                                    <Td width={'5%'}>{bakingsData?.totals?.totalButter}</Td>
-                                    <Td width={'5%'}></Td>
+                                    <Td width={'10%'}>{bakingsData?.totals?.totalButter}</Td>
                                     <Td width={'10%'}></Td>
-                                    <Td width={'3%'}>{bakingsData?.totals?.totalOutput}</Td>
+                                    <Td width={'8%'}></Td>
+                                    <Td width={'5%'}>{bakingsData?.totals?.totalOutput}</Td>
+                                    <Td width={'8%'}>{bakingsData?.totals?.totalDefective}</Td>
                                     <Td width={'10%'}></Td>
                                 </Tr>
                             </Tfoot>

@@ -16,34 +16,19 @@ import {
 } from '@chakra-ui/react'
 
 import { createBaking, updateBaking } from '@/utils/services/baking.service'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useApi } from '@/utils/services/axios'
 import { useForm } from 'react-hook-form'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { BakingDataType } from '@/utils/types/baking.types'
+import dayjs from 'dayjs'
 
 interface ClientAddModalProps {
-    data?: bakingsData | null
+    data?: BakingDataType | null
     isOpen: boolean
     quantity?: number
     onClose: () => void
     onSuccess: () => void
-}
-
-interface bakingsData {
-    id: number
-    breadType: string
-    flour: string
-    salt: string
-    yeast: string
-    malt: string
-    butter: string
-    temperature: string
-    time: string
-    output: string
-    product?: {
-        name: string
-        id: string
-    }
 }
 
 const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProps) => {
@@ -55,25 +40,27 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
         setError,
         formState: { errors },
         reset,
-    } = useForm<bakingsData>()
+    } = useForm<BakingDataType>()
 
-    console.log(data);
-    
+    const { data: products } = useApi<{ id: string; name: string }[]>('product')
+    const [startDate, setStartDate] = useState<Date>(new Date())
+    const [endDate, setEndDate] = useState<Date>(new Date())
 
     useEffect(() => {
         if (data) {
             Object.entries(data).forEach(([key, value]) => {
-                setValue(key as keyof bakingsData, value)
+                setValue(key as keyof BakingDataType, value)
             })
         } else {
             reset()
         }
     }, [data, isOpen, reset])
 
+    useEffect(() => {
+        getStartEndDates()
+    }, [data])
 
-    const { data: products } = useApi<{ id: string; name: string }[]>('product')
-
-    const sendData = (formData: bakingsData) => {
+    const sendData = (formData: BakingDataType) => {
         const responsePromise: Promise<any> = data
             ? updateBaking(data.id, formData)
             : createBaking(formData)
@@ -99,6 +86,27 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
         onClose()
     }
 
+    const getStartEndDates = () => {
+        if (data && data.date) {
+            const { date } = data
+            const parsedDate = dayjs(date, 'YYYY-MM-DD', true)
+
+            if (parsedDate.isValid()) {
+                const startDate = parsedDate.subtract(2, 'day').toDate()
+                const endDate = parsedDate.add(4, 'day').toDate()
+                setStartDate(startDate)
+                setEndDate(endDate)
+            } else {
+                console.error('Invalid date format:', date)
+            }
+        } else {
+            const startDate = dayjs().subtract(3, 'day').toDate()
+            const endDate = dayjs().add(3, 'day').toDate()
+            setStartDate(startDate)
+            setEndDate(endDate)
+        }
+    }
+
     return (
         <Modal isCentered isOpen={isOpen} onClose={handleModalClose}>
             <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
@@ -112,7 +120,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 onSubmit={handleSubmitForm(sendData)}
                                 style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                             >
-                                <FormControl isInvalid={!!errors.breadType}>
+                                <FormControl isInvalid={!!errors.breadType} isRequired>
                                     <FormLabel fontWeight={'bold'}>Вид хлеба</FormLabel>
                                     <Select
                                         {...register('breadType', {
@@ -134,7 +142,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                     </Select>
                                     <FormErrorMessage>{errors.breadType?.message}</FormErrorMessage>
                                 </FormControl>
-                                <FormControl isInvalid={!!errors.flour}>
+                                <FormControl isInvalid={!!errors.flour} isRequired>
                                     <FormLabel fontWeight={'bold'}>Мука</FormLabel>
                                     <Input
                                         {...register('flour', {
@@ -146,7 +154,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                     />
                                     <FormErrorMessage>{errors.flour?.message}</FormErrorMessage>
                                 </FormControl>
-                                <FormControl isInvalid={!!errors.salt}>
+                                <FormControl isInvalid={!!errors.salt} isRequired>
                                     <FormLabel fontWeight={'bold'}>Соль</FormLabel>
                                     <Input
                                         {...register('salt', {
@@ -158,7 +166,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                     />
                                     <FormErrorMessage>{errors.salt?.message}</FormErrorMessage>
                                 </FormControl>
-                                <FormControl isInvalid={!!errors.yeast}>
+                                <FormControl isInvalid={!!errors.yeast} isRequired>
                                     <FormLabel fontWeight={'bold'}>Дрожжи</FormLabel>
                                     <Input
                                         {...register('yeast', {
@@ -170,7 +178,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                     />
                                     <FormErrorMessage>{errors.yeast?.message}</FormErrorMessage>
                                 </FormControl>
-                                <FormControl isInvalid={!!errors.malt}>
+                                <FormControl isInvalid={!!errors.malt} isRequired>
                                     <FormLabel fontWeight={'bold'}>Солод</FormLabel>
                                     <Input
                                         {...register('malt', {
@@ -182,7 +190,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                     />
                                     <FormErrorMessage>{errors.malt?.message}</FormErrorMessage>
                                 </FormControl>
-                                <FormControl isInvalid={!!errors.butter}>
+                                <FormControl isInvalid={!!errors.butter} isRequired>
                                     <FormLabel fontWeight={'bold'}>Масло</FormLabel>
                                     <Input
                                         {...register('butter', {
@@ -194,7 +202,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                     />
                                     <FormErrorMessage>{errors.butter?.message}</FormErrorMessage>
                                 </FormControl>
-                                <FormControl isInvalid={!!errors.temperature}>
+                                <FormControl isInvalid={!!errors.temperature} isRequired>
                                     <FormLabel fontWeight={'bold'}>T</FormLabel>
                                     <Input
                                         {...register('temperature', {
@@ -208,7 +216,22 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                         {errors.temperature?.message}
                                     </FormErrorMessage>
                                 </FormControl>
-                                <FormControl isInvalid={!!errors.time}>
+                                <FormControl isInvalid={!!errors.date} isRequired>
+                                    <FormLabel fontWeight={'bold'}>Дата</FormLabel>
+                                    <Input
+                                        {...register('date', {
+                                            required: 'Поле является обязательным',
+                                        })}
+                                        autoComplete="off"
+                                        placeholder="Дата *"
+                                        type="date"
+                                        defaultValue={new Date().toISOString().split('T')[0]}
+                                        min={startDate.toISOString().split('T')[0]}
+                                        max={endDate.toISOString().split('T')[0]}
+                                    />
+                                    <FormErrorMessage>{errors.date?.message}</FormErrorMessage>
+                                </FormControl>
+                                <FormControl isInvalid={!!errors.time} isRequired>
                                     <FormLabel fontWeight={'bold'}>Время</FormLabel>
                                     <Input
                                         {...register('time', {
@@ -220,7 +243,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                     />
                                     <FormErrorMessage>{errors.time?.message}</FormErrorMessage>
                                 </FormControl>
-                                <FormControl isInvalid={!!errors.output}>
+                                <FormControl isInvalid={!!errors.output} isRequired>
                                     <FormLabel fontWeight={'bold'}>Выход</FormLabel>
                                     <Input
                                         {...register('output', {
@@ -232,6 +255,19 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                     />
                                     <FormErrorMessage>{errors.output?.message}</FormErrorMessage>
                                 </FormControl>
+                                <FormControl isInvalid={!!errors.defective} isRequired>
+                                    <FormLabel fontWeight={'bold'}>Брак</FormLabel>
+                                    <Input
+                                        {...register('defective', {
+                                            required: 'Поле является обязательным',
+                                        })}
+                                        type="number"
+                                        name="defective"
+                                        placeholder=""
+                                    />
+                                    <FormErrorMessage>{errors.defective?.message}</FormErrorMessage>
+                                </FormControl>
+
                                 <Box
                                     style={{
                                         display: 'flex',
@@ -252,8 +288,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                         </Box>
                     </Stack>
                 </ModalBody>
-                <ModalFooter display={'flex'} alignSelf={'center'} gap={5}>
-                </ModalFooter>
+                <ModalFooter display={'flex'} alignSelf={'center'} gap={5}></ModalFooter>
             </ModalContent>
         </Modal>
     )

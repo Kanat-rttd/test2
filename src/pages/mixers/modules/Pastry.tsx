@@ -4,44 +4,18 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { OrderArrayType } from '@/utils/types/order.types'
 
 interface FacilityUnit {
     id: number
     facilityUnit: string
 }
 
-interface OrderArray {
-    id: number
-    userId: string
-    totalPrice: string
-    createdAt: Date
-    done: number
-    orderDetails: [
-        {
-            orderDetailsId: string
-            productId: string
-            orderedQuantity: string
-            product: {
-                bakingFacilityUnit: {
-                    id: string
-                    facilityUnit: string
-                }
-                name: string
-                price: string
-            }
-        },
-    ]
-    user: {
-        id: string
-        name: string
-    }
-}
-
 const MixersPage = () => {
     const { getURLs, getParam, setParam } = useURLParameters()
 
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
-    const { data: salesData } = useApi<OrderArray[]>(`sales?${getURLs().toString()}`)
+    const { data: salesData } = useApi<OrderArrayType[]>(`sales?${getURLs().toString()}`)
 
     return (
         <UniversalComponent>

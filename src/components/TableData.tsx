@@ -1,36 +1,8 @@
 import { Table, Tr, Th, Tbody, Td } from '@chakra-ui/react'
 import { TableContainer, Tfoot, Thead } from './ui'
+import { OrderArrayType } from '@/utils/types/order.types'
 
-interface OrderArray {
-    id: number
-    userId: string
-    totalPrice: string
-    createdAt: Date
-    done: number
-    orderDetails: [
-        {
-            orderDetailsId: string
-            productId: string
-            orderedQuantity: string
-            product: ProductType
-        },
-    ]
-    user: {
-        id: string
-        name: string
-    }
-}
-
-type ProductType = {
-    bakingFacilityUnit: {
-        id: string
-        facilityUnit: string
-    }
-    name: string
-    price: string
-}
-
-const TableData = ({ data }: { data: OrderArray[] | undefined }) => {
+const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
     console.log(data)
     const uniqProducts = new Set<string>()
     data?.forEach((order) => {
@@ -64,7 +36,7 @@ const TableData = ({ data }: { data: OrderArray[] | undefined }) => {
                 <Tbody>
                     {data?.map((item, index) => (
                         <Tr key={index}>
-                            <Td>{item.user.name}</Td>
+                            <Td>{item.client.name}</Td>
                             {Array.from(uniqProducts).map((productName, productIndex) => (
                                 <Td width={'20%'} textAlign={'center'} key={productIndex}>
                                     {item.orderDetails.find(

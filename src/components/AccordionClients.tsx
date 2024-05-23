@@ -15,7 +15,6 @@ import {
     Td,
     Tfoot,
     Button,
-    IconButton,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import Dialog from './Dialog'
@@ -87,45 +86,61 @@ const AccordionClients = ({
                 {data?.map((order, index) => (
                     <AccordionItem key={index}>
                         <h2>
-                            <AccordionButton backgroundColor={'#e6e6e6'}>
+                            <AccordionButton backgroundColor={'#e6e6e6'} display={'flex'}
+                            gap={'10px'}>
                                 <Box
                                     display={'flex'}
                                     justifyContent={'space-between'}
                                     as="span"
                                     flex="1"
                                     textAlign="left"
+                                    mr={'60px'}
                                 >
                                     <Heading size={'sm'}>{order.client.name}</Heading>
                                     <Heading size={'sm'}>Итого: {order.totalPrice}</Heading>
-                                    {/* <Box>
-                                        <IconButton
-                                            variant="outline"
-                                            size={'sm'}
-                                            colorScheme="teal"
-                                            aria-label="Send email"
-                                            marginRight={3}
-                                            onClick={() => {
+                                </Box>
+                                <Box display={'flex'}>
+                                    <Box
+                                        p={1.5}
+                                        backgroundColor={'#fff'}
+                                        border={'1px solid teal'}
+                                        borderRadius={4}
+                                        display={'flex'}
+                                        alignItems={'center'}
+                                        justifyContent={'center'}
+                                        marginRight={2}
+                                    >
+                                        <EditIcon
+                                            color="teal"
+                                            onClick={(event) => {
+                                                event.stopPropagation()
                                                 setSelectedData(order)
                                                 onOpen()
                                             }}
-                                            icon={<EditIcon />}
                                         />
-                                        <IconButton
-                                            variant="outline"
-                                            size={'sm'}
-                                            colorScheme="teal"
-                                            aria-label="Send email"
-                                            marginRight={3}
-                                            onClick={() => {
+                                    </Box>
+
+                                    <Box
+                                        p={1.5}
+                                        backgroundColor={'#fff'}
+                                        border={'1px solid teal'}
+                                        borderRadius={4}
+                                        display={'flex'}
+                                        alignItems={'center'}
+                                        justifyContent={'center'}
+                                    >
+                                        <DeleteIcon
+                                            color="teal"
+                                            onClick={(event) => {
+                                                event.stopPropagation()
                                                 setSelectedData(order)
                                                 setDialog({
                                                     ...dialog,
                                                     isOpen: true,
                                                 })
                                             }}
-                                            icon={<DeleteIcon />}
                                         />
-                                    </Box> */}
+                                    </Box>
                                 </Box>
                                 <AccordionIcon />
                             </AccordionButton>

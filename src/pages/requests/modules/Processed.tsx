@@ -7,33 +7,7 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
-
-interface OrderArray {
-    id: number
-    userId: string
-    totalPrice: string
-    createdAt: Date
-    done: number
-    orderDetails: [
-        {
-            orderDetailsId: string
-            productId: string
-            orderedQuantity: string
-            product: {
-                bakingFacilityUnit: {
-                    id: string
-                    facilityUnit: string
-                }
-                name: string
-                price: string
-            }
-        },
-    ]
-    user: {
-        id: string
-        name: string
-    }
-}
+import { OrderArrayType } from '@/utils/types/order.types'
 
 interface FacilityUnit {
     id: number
@@ -43,7 +17,7 @@ interface FacilityUnit {
 const ProcessedPage = () => {
     const { getURLs, setParam } = useURLParameters()
 
-    const { data: salesData } = useApi<OrderArray[]>(`sales?${getURLs().toString()}`)
+    const { data: salesData } = useApi<OrderArrayType[]>(`sales?${getURLs().toString()}`)
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(
         `mixers?${getURLs().toString()}`,
     )
