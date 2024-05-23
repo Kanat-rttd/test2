@@ -25,6 +25,7 @@ const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
             <Table variant="simple">
                 <Thead>
                     <Tr>
+                        <Th>№</Th>
                         <Th> Реализаторы</Th>
                         {Array.from(uniqProducts).map((name, index) => (
                             <Th textAlign={'center'} key={index}>
@@ -36,6 +37,7 @@ const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
                 <Tbody>
                     {data?.map((item, index) => (
                         <Tr key={index}>
+                            <Td>{index + 1}</Td>
                             <Td>{item.client.name}</Td>
                             {Array.from(uniqProducts).map((productName, productIndex) => (
                                 <Td width={'20%'} textAlign={'center'} key={productIndex}>

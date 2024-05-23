@@ -8,8 +8,10 @@ import { useApi } from '@/utils/services/axios'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { OrderArrayType } from '@/utils/types/order.types'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 const ProcessingPage = () => {
+    const { loading } = useNotify()
     const { getURLs } = useURLParameters()
     const { onOpen, isOpen, onClose } = useDisclosure()
 
@@ -18,7 +20,9 @@ const ProcessingPage = () => {
     )
 
     const handleChangeStatus = async (clientName: OrderArrayType) => {
-        setDoneStatus(clientName.id)
+        const responsePromise: Promise<any> = setDoneStatus(clientName.id)
+        loading(responsePromise)
+        responsePromise
             .then((res) => {
                 console.log(res)
                 mutateSalesData()
