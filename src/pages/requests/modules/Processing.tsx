@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react'
+import { Box, Button, useDisclosure } from '@chakra-ui/react'
 import AccordionClients from '@/components/AccordionClients'
 // import { getAllSales } from '@/utils/services/sales.service'
 import { setDoneStatus } from '@/utils/services/sales.service'
@@ -7,38 +7,17 @@ import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
-
-interface OrderArray {
-    id: number
-    userId: string
-    totalPrice: string
-    createdAt: Date
-    done: number
-    orderDetails: [
-        {
-            orderDetailsId: string
-            productId: string
-            orderedQuantity: string
-            product: {
-                name: string
-                price: string
-            }
-        },
-    ]
-    user: {
-        id: string
-        name: string
-    }
-}
+import { OrderArrayType } from '@/utils/types/order.types'
 
 const ProcessingPage = () => {
     const { getURLs } = useURLParameters()
+    const { onOpen, isOpen, onClose } = useDisclosure()
 
-    const { data: salesData, mutate: mutateSalesData } = useApi<OrderArray[]>(
+    const { data: salesData, mutate: mutateSalesData } = useApi<OrderArrayType[]>(
         `sales?${getURLs().toString()}`,
     )
 
-    const handleChangeStatus = async (clientName: OrderArray) => {
+    const handleChangeStatus = async (clientName: OrderArrayType) => {
         setDoneStatus(clientName.id)
             .then((res) => {
                 console.log(res)
@@ -49,6 +28,12 @@ const ProcessingPage = () => {
             })
     }
 
+    const handleClose = () => {
+        mutateSalesData()
+        onClose()
+    }
+
+
     return (
         <UniversalComponent>
             <Box width={'100%'} height={'94%'} p={5} mt={1}>
@@ -58,8 +43,16 @@ const ProcessingPage = () => {
                     display={'flex'}
                     justifyContent={'space-between'}
                 >
-                    <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                    <Box
+                        width={'100%'}
+                        display={'flex'}
+                        justifyContent={'space-between'}
+                        alignItems={'center'}
+                    >
                         <DateRange />
+                        <Button colorScheme="purple" onClick={onOpen}>
+                            Добавить закупки
+                        </Button>
                     </Box>
                 </Box>
                 <Box>
@@ -67,10 +60,14 @@ const ProcessingPage = () => {
                         <AccordionClients
                             data={salesData.filter((sale) => sale.done === 0)}
                             handleChangeStatus={handleChangeStatus}
+                            isOpen={isOpen}
+                            handleClose={handleClose}
+                            onOpen={onOpen}
                         />
                     )}
                 </Box>
             </Box>
+            
         </UniversalComponent>
     )
 }

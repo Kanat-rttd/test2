@@ -114,44 +114,38 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                             style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                         >
                             <FormControl isInvalid={!!errors.name}>
-                                <InputGroup>
-                                    <Input
-                                        {...register('name', {
-                                            required: 'Поле является обязательным',
-                                        })}
-                                        autoComplete="off"
-                                        placeholder="Имя *"
-                                        type="text"
-                                    />
-                                </InputGroup>
+                                <Input
+                                    {...register('name', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                    autoComplete="off"
+                                    placeholder="Имя *"
+                                    type="text"
+                                />
                                 <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.surname}>
-                                <InputGroup>
-                                    <Input
-                                        {...register('surname', {
-                                            required: 'Поле является обязательным',
-                                        })}
-                                        autoComplete="off"
-                                        placeholder="Фамилия *"
-                                        type="text"
-                                    />
-                                </InputGroup>
+                                <Input
+                                    {...register('surname', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                    autoComplete="off"
+                                    placeholder="Фамилия *"
+                                    type="text"
+                                />
                                 <FormErrorMessage>{errors.surname?.message}</FormErrorMessage>
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.userClass}>
-                                <InputGroup>
-                                    <Input
-                                        {...register('userClass', {
-                                            required: 'Поле является обязательным',
-                                        })}
-                                        autoComplete="off"
-                                        placeholder="Должность *"
-                                        type="text"
-                                    />
-                                </InputGroup>
+                                <Input
+                                    {...register('userClass', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                    placeholder="Должность *"
+                                    autoComplete="off"
+                                    type="text"
+                                />
                                 <FormErrorMessage>{errors.userClass?.message}</FormErrorMessage>
                             </FormControl>
 

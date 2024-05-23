@@ -6,12 +6,26 @@ export const getAllSales = async () => {
 }
 
 export const createSale = async (data: {
-    date: string
     products: { productId: number; orderedQuantity: number; price: number }[]
-    comment: string
     clientId: string
 }) => {
     const response = await $host.post('sales', data)
+    return response
+}
+
+export const updateSale = async (
+    id: number,
+    data: {
+        products: { productId: number; orderedQuantity: number; price: number }[]
+        clientId: string
+    },
+) => {
+    const response = await $host.put(`sales/${id}`, data)
+    return response
+}
+
+export const deleteSale = async (id: number) => {
+    const response = await $host.delete(`sales/${id}`)
     return response
 }
 
