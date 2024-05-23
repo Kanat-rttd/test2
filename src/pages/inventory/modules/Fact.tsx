@@ -1,9 +1,10 @@
-import { Box, Button, Input, Select, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Select, useDisclosure } from '@chakra-ui/react'
 import FactTable from '../components/FactTable'
 import FactModal from '../components/AddFactModal'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useApi } from '@/utils/services/axios'
-import { useState } from 'react'
+import DateRange from '@/components/DateRange'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface factInput {
     table: [
@@ -24,20 +25,14 @@ interface Place {
 }
 
 const Fact = () => {
+    const { getURLs, setParam, getParam } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [filters, setFilters] = useState({ name: '', place: '' })
 
-    const { data: factInputData, mutate: mutateFactInput } = useApi<factInput>('factInput', filters)
+    const { data: factInputData, mutate: mutateFactInput } = useApi<factInput>(
+        `factInput?${getURLs().toString()}`,
+    )
 
     const { data: placesData } = useApi<Place[]>('place')
-
-    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const { name, value } = event.target
-        setFilters((prevFilters) => ({
-            ...prevFilters,
-            [name]: value,
-        }))
-    }
 
     const successHandler = () => {
         console.log('success')
@@ -55,15 +50,17 @@ const Fact = () => {
                         height={'5%'}
                     >
                         <Box display={'flex'} gap={'15px'} width={'fit-content'} w={'100%'}>
-                            <Input
+                            <DateRange />
+                            <Select
+                                placeholder="Товар"
                                 w={'20%'}
                                 size={'sm'}
                                 borderRadius={5}
-                                type="date"
-                                disabled
-                                defaultValue={new Date().toISOString().split('T')[0]}
-                            />
-                            <Select placeholder="Товар" w={'20%'} size={'sm'} borderRadius={5}>
+                                defaultValue={getParam('name')}
+                                onChange={(e) => {
+                                    setParam('name', e.target.value)
+                                }}
+                            >
                                 <option value="Лепешечный">Товар 1</option>
                                 <option value="Булочный">Дом</option>
                             </Select>
@@ -71,8 +68,13 @@ const Fact = () => {
                             <Select
                                 placeholder="Место"
                                 width={'fit-content'}
-                                name="name"
-                                onChange={handleSelectChange}
+                                w={'20%'}
+                                size={'sm'}
+                                borderRadius={5}
+                                defaultValue={getParam('place')}
+                                onChange={(e) => {
+                                    setParam('place', e.target.value)
+                                }}
                             >
                                 {placesData?.map((item, index) => (
                                     <option key={index} value={item.label}>

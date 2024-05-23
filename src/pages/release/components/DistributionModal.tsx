@@ -105,7 +105,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     }
 
     const handleConfirm = () => {
-        if(selectedBreads.length < 1) {
+        if (selectedBreads.length < 1) {
             error('Выберите продукт')
             return
         }
@@ -121,8 +121,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 
         const responsePromise: Promise<any> = createDispatch(distributionData)
         loading(responsePromise)
-        
-        
+
         responsePromise
             .then(() => {
                 onSuccess()
@@ -139,7 +138,6 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
         onClose()
         setSelectedBreads([])
         setRecipient('')
-
     }
 
     return (
@@ -206,10 +204,12 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                         alignItems={'center'}
                                         key={name}
                                     >
-                                        <Text w={'40%'}>{index + 1}. {name}</Text>
+                                        <Text w={'40%'}>
+                                            {index + 1}. {name}
+                                        </Text>
                                         <Input
                                             w={'60%'}
-                                            required={quantity > 1}
+                                            required={(!quantity)}
                                             type="number"
                                             placeholder="Кол-во"
                                             value={quantity}

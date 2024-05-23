@@ -44,6 +44,9 @@ const MagazineTable = () => {
                     placeholder="Магазин"
                     width={'fit-content'}
                     onChange={handleSelectChange}
+                    w={'80%'}
+                    size={'sm'}
+                    borderRadius={5}
                 >
                     {magazinesData?.map((item, index) => (
                         <option key={index} value={item.name}>

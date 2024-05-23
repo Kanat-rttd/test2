@@ -1,9 +1,12 @@
-import { Box, Button, Input, Select, useDisclosure } from '@chakra-ui/react'
+import { Box, Button, Select, useDisclosure } from '@chakra-ui/react'
 import InventoryTable from '../components/InventoryTable'
 import CorrectModal from '../components/Modal'
 import UniversalComponent from '@/components/ui/UniversalComponent'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import DateRange from '@/components/DateRange'
 
 const Inventory = () => {
+    const { getURLs, setParam, getParam } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
@@ -17,19 +20,30 @@ const Inventory = () => {
                         height={'5%'}
                     >
                         <Box display={'flex'} gap={'15px'} width={'fit-content'} w={'100%'}>
-                            <Input
+                            <DateRange />
+                            <Select
+                                placeholder="Товар"
                                 w={'20%'}
                                 size={'sm'}
                                 borderRadius={5}
-                                type="date"
-                                disabled
-                                defaultValue={new Date().toISOString().split('T')[0]}
-                            />
-                            <Select placeholder="Товар" w={'20%'} size={'sm'} borderRadius={5}>
+                                defaultValue={getParam('name')}
+                                onChange={(e) => {
+                                    setParam('name', e.target.value)
+                                }}
+                            >
                                 <option value="Лепешечный">Товар 1</option>
                                 <option value="Булочный">Дом</option>
                             </Select>
-                            <Select placeholder="Место" w={'20%'} size={'sm'} borderRadius={5}>
+                            <Select
+                                placeholder="Место"
+                                w={'20%'}
+                                size={'sm'}
+                                borderRadius={5}
+                                defaultValue={getParam('place')}
+                                onChange={(e) => {
+                                    setParam('place', e.target.value)
+                                }}
+                            >
                                 <option value="Лепешечный">Улица</option>
                                 <option value="Булочный">Дом</option>
                             </Select>
