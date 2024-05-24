@@ -21,8 +21,8 @@ import { useApi } from '@/utils/services/axios'
 import { createOverprice, updateOverprice } from '@/utils/services/overprice.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { OverPriceInputs, OverPriceType } from '@/utils/types/overPrice.types'
-
-
+import { ClientType } from '@/utils/types/client.type'
+import { monthData } from '@/utils/constants/month.consts'
 
 const defaultValues = {
     clientId: 0,
@@ -36,15 +36,6 @@ interface months {
     name: string
 }
 
-interface Client {
-    id: string
-    name: string
-    surname: string
-    contact: string
-    telegrammId: string
-    status: string
-}
-
 interface OverPriceAddModalProps {
     data: OverPriceType | undefined
     isOpen: boolean
@@ -56,7 +47,7 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
 
     const { success, error } = useNotify()
 
-    const { data: clientData } = useApi<Client[]>('client')
+    const { data: clientData } = useApi<ClientType[]>('client')
 
     const {
         register,
@@ -87,20 +78,7 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
         handleClose()
     }
 
-    const monthData = [
-        { id: 1, name: 'Январь' },
-        { id: 2, name: 'Февраль' },
-        { id: 3, name: 'Март' },
-        { id: 4, name: 'Апрель' },
-        { id: 5, name: 'Май' },
-        { id: 6, name: 'Июнь' },
-        { id: 7, name: 'Июль' },
-        { id: 8, name: 'Август' },
-        { id: 9, name: 'Сентябрь' },
-        { id: 10, name: 'Октябрь' },
-        { id: 11, name: 'Ноябрь' },
-        { id: 12, name: 'Декабрь' },
-    ]
+
 
     useEffect(() => {
         if (data) {
@@ -128,18 +106,18 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                             <Controller
                                 name="clientId"
                                 control={control}
-                                rules={{ required: 'Поля является обязательным' }}
+                                rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
                                     const { onChange, value } = field
                                     return (
                                         <Select
                                             options={clientData}
-                                            getOptionLabel={(option: Client) => option.name}
-                                            getOptionValue={(option: Client) => `${option.id}`}
+                                            getOptionLabel={(option: ClientType) => option.name}
+                                            getOptionValue={(option: ClientType) => `${option.id}`}
                                             value={clientData?.filter(
-                                                (option: Client) => Number(option.id) == value,
+                                                (option: ClientType) => Number(option.id) == value,
                                             )}
-                                            onChange={(selectedOption: Client | null) => {
+                                            onChange={(selectedOption: ClientType | null) => {
                                                 if (selectedOption) {
                                                     onChange(selectedOption.id)
                                                 }
@@ -158,7 +136,7 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                             <Controller
                                 name="month"
                                 control={control}
-                                rules={{ required: 'Поля является обязательным' }}
+                                rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
                                     const { onChange, value } = field
                                     return (

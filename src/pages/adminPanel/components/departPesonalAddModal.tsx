@@ -12,8 +12,6 @@ import {
     Box,
     Select,
 } from '@chakra-ui/react'
-
-// import Select from 'react-select'
 import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { createDepartPersonal, updateDepartPersonal } from '@/utils/services/departPersonal.service'
@@ -36,7 +34,6 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
     const {
         register,
         handleSubmit: handleSubmitForm,
-        // control,
         setValue,
         setError,
         formState: { errors },
@@ -194,14 +191,6 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
                             </Box>
                         </form>
                     </ModalBody>
-                    {/* <ModalFooter gap={3}>
-                        <Button onClick={handleClose} colorScheme="red">
-                            Отмена
-                        </Button>
-                        <Button colorScheme="purple" onClick={handleSubmitForm(sendData)}>
-                            {data ? 'Редактировать' : 'Добавить'}
-                        </Button>
-                    </ModalFooter> */}
                 </ModalContent>
             </Modal>
         </>

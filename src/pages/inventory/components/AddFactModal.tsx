@@ -124,7 +124,7 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                             <Controller
                                 name="place"
                                 control={control}
-                                rules={{ required: 'Поля является обязательным' }}
+                                rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
                                     const { onChange, value } = field
                                     return (

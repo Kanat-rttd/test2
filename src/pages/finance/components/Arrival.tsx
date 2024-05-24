@@ -93,7 +93,7 @@ const Arrival = () => {
                 <Controller
                     name="account"
                     control={control}
-                    rules={{ required: 'Поля является обязательным' }}
+                    rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
                         const { onChange, value } = field
                         return (
@@ -122,7 +122,7 @@ const Arrival = () => {
                 <Controller
                     name="financeCategoryId"
                     control={control}
-                    rules={{ required: 'Поля является обязательным' }}
+                    rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
                         const { onChange, value } = field
                         return (
@@ -153,7 +153,7 @@ const Arrival = () => {
                 <Controller
                     name="clientId"
                     control={control}
-                    rules={{ required: 'Поля является обязательным' }}
+                    rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
                         const { onChange, value } = field
                         return (

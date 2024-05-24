@@ -26,29 +26,9 @@ import {
 import { useApi } from '@/utils/services/axios'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { useForm } from 'react-hook-form'
-
-interface Client {
-    id: string
-    name: string
-    surname: string
-    contact: string
-    telegrammId: string
-    status: string
-}
-
-interface individualPrice {
-    clientId: string
-    clientName: string
-    detail: [
-        {
-            individualPriceId: string
-            id: string
-            name: string
-            price: string
-            date: Date
-        },
-    ]
-}
+import { ClientType } from '@/utils/types/client.type'
+import { UniquePriceDetail, UniquePriceType } from '@/utils/types/uniquePrice.types'
+import { individualPriceType } from '@/utils/types/individualPrice.types'
 
 interface Product {
     id: string
@@ -62,22 +42,8 @@ interface Product {
     }
 }
 
-export interface UniquePrice {
-    clientId: string
-    clientName: string
-    detail: Detail[]
-}
-
-type Detail = {
-    individualPriceId: string
-    id: string
-    name: string
-    price: string
-    date: Date
-}
-
 interface UniquePriceAddModal {
-    data: UniquePrice | undefined
+    data: UniquePriceType | undefined
     selectedRelease: string
     isOpen: boolean
     onClose: () => void
@@ -92,10 +58,10 @@ const UniquePriceAddModal = ({
     onSuccess,
 }: UniquePriceAddModal) => {
     const { loading } = useNotify()
-    const { data: individualPrices } = useApi<individualPrice[]>('inPrice')
+    const { data: individualPrices } = useApi<individualPriceType[]>('inPrice')
     const [products, setProducts] = useState<Product[]>([])
     // const [selectedProduct, setSelectedProduct] = useState('')
-    const [clientsData, setClientsData] = useState<Client[]>([])
+    const [clientsData, setClientsData] = useState<ClientType[]>([])
 
     const {
         register,
@@ -104,7 +70,7 @@ const UniquePriceAddModal = ({
         setValue,
         formState: { errors },
         reset,
-    } = useForm<Detail>()
+    } = useForm<UniquePriceDetail>()
 
     useEffect(() => {
         getAllProducts().then((responseData) => {
@@ -112,15 +78,12 @@ const UniquePriceAddModal = ({
         })
     }, [])
 
-    // const { data: productsData } = useApi<Product[]>('product')
-    // console.log(productsData)
-
     useEffect(() => {
-        if (data) {
-            Object.entries(data).forEach(([key, value]) => {
-                setValue(key as keyof Detail, value)
+        if (data && data.detail.length > 0) {
+            const firstDetail = data.detail[0];
+            Object.entries(firstDetail).forEach(([key, value]) => {
+                setValue(key as keyof UniquePriceDetail, value)
             })
-            // setSelectedProduct(String(data.detail[0].id))
             setValue('name', String(data.detail[0].id))
             setValue('price', data.detail[0].price)
         } else {
@@ -134,7 +97,7 @@ const UniquePriceAddModal = ({
         })
     }, [])
 
-    const handleAddOrUpdate = (formData: Detail) => {
+    const handleAddOrUpdate = (formData: UniquePriceDetail) => {
         try {
             let newData
 
@@ -286,16 +249,6 @@ const UniquePriceAddModal = ({
                         </Stack>
                     </ModalBody>
                     <ModalFooter gap={3}>
-                        {/* <Button colorScheme="red" onClick={handleCancel}>
-                            Закрыть
-                        </Button>
-                        <Button
-                            colorScheme="purple"
-                            onClick={handleAddOrUpdate}
-                            // onClick={data ? updUser : addUser}
-                        >
-                            {data ? 'Изменить' : 'Добавить'}
-                        </Button> */}
                     </ModalFooter>
                 </ModalContent>
             </Modal>

@@ -173,7 +173,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                             <Controller
                                 name="rawMaterialId"
                                 control={control}
-                                rules={{ required: 'Поля является обязательным' }}
+                                rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
                                     const { onChange, value } = field
                                     return (

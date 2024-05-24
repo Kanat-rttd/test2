@@ -19,6 +19,7 @@ import { useEffect } from 'react'
 import { createProviderGoods, updateProviderGoods } from '@/utils/services/providerGoods.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { ProviderInputs } from '@/utils/types/providerGoog.types'
+import StatusSelect from '@/components/shared/StatusSelect'
 
 interface ProviderGoods {
     id: number
@@ -49,11 +50,6 @@ type ModalProps = {
     onSuccess: () => void
 }
 
-interface status {
-    id: number
-    name: string
-}
-
 const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps) => {
     const { loading } = useNotify()
     const { data: providersData } = useApi<Providers[]>('providers')
@@ -79,11 +75,6 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
             reset()
         }
     }, [selectedData, isOpen, reset])
-
-    const status = [
-        { id: 1, name: 'Активный' },
-        { id: 2, name: 'Неактивный' },
-    ]
 
     const sendData = (formData: ProviderInputs) => {
         try {
@@ -230,33 +221,10 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                                 </FormControl>
 
                                 <FormControl isInvalid={!!errors.status}>
-                                    <Controller
-                                        name="status"
-                                        control={control}
-                                        rules={{ required: 'Поля является обязательным' }}
-                                        render={({ field }) => {
-                                            const { onChange, value } = field
-                                            return (
-                                                <Select
-                                                    options={status}
-                                                    getOptionLabel={(option: status) => option.name}
-                                                    getOptionValue={(option: status) => option.name}
-                                                    value={status?.find(
-                                                        (option) => option.name === value,
-                                                    )}
-                                                    onChange={(selectedOption: status | null) => {
-                                                        if (selectedOption) {
-                                                            onChange(selectedOption.name)
-                                                        } else {
-                                                            onChange('')
-                                                        }
-                                                    }}
-                                                    placeholder="Статус *"
-                                                    isClearable
-                                                    isSearchable
-                                                />
-                                            )
-                                        }}
+                                    <StatusSelect
+                                        {...register('status', {
+                                            required: 'Поле является обязательным',
+                                        })}
                                     />
                                     <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
                                 </FormControl>
@@ -280,8 +248,7 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                         </Box>
                     </ModalBody>
 
-                    <ModalFooter>
-                    </ModalFooter>
+                    <ModalFooter></ModalFooter>
                 </ModalContent>
             </Modal>
         </>

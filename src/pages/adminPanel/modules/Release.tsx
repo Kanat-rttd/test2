@@ -11,7 +11,7 @@ import {
     Tr,
     useDisclosure,
 } from '@chakra-ui/react'
-import ReleaseAddModal, { Releaser } from '../components/ReleaseAddModal'
+import ReleaseAddModal from '../components/ReleaseAddModal'
 import { useState, useEffect } from 'react'
 import { deleteClient, getAllClients } from '@/utils/services/client.service'
 import useSWR, { mutate } from 'swr'
@@ -20,18 +20,19 @@ import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { Thead, TableContainer } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
+import { ReleaserType } from '@/utils/types/releaser.types'
 
 const AdminPanel = () => {
     const { loading } = useNotify()
     const { onOpen, onClose, isOpen } = useDisclosure()
-    const [selectedData, setSelectedData] = useState<Releaser | undefined>(undefined)
+    const [selectedData, setSelectedData] = useState<ReleaserType | undefined>(undefined)
     const [filters, setFilters] = useState({ name: '', telegrammId: '', status: '' })
     const {
         data: clientsData,
         isLoading,
         mutate: mutateClientsData,
-    } = useApi<Releaser[]>('client', filters)
-    const { data: filtersData } = useSWR<Releaser[]>('clientFilter', {
+    } = useApi<ReleaserType[]>('client', filters)
+    const { data: filtersData } = useSWR<ReleaserType[]>('clientFilter', {
         fetcher: () => getAllClients({ name: '', telegrammId: '', status: '' }),
     })
 
@@ -61,7 +62,7 @@ const AdminPanel = () => {
         mutateClientsData()
     }
 
-    const deleteUser = (selectedData: Releaser | undefined) => {
+    const deleteUser = (selectedData: ReleaserType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteClient(selectedData.id)
             loading(responsePromise)

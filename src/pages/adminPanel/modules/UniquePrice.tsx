@@ -19,7 +19,7 @@ import {
     useDisclosure,
     IconButton,
 } from '@chakra-ui/react'
-import UniquePriceAddModal, { UniquePrice } from '../components/UniquePriceAddModal'
+import UniquePriceAddModal from '../components/UniquePriceAddModal'
 import { useState, useEffect, useMemo } from 'react'
 import Dialog from '@/components/Dialog'
 import {
@@ -27,57 +27,29 @@ import {
     deleteIndividualPrice,
 } from '@/utils/services/individualPrices.service'
 
-import { getAllClients } from '@/utils/services/client.service'
 import { useApi } from '@/utils/services/axios'
 import { TableContainer } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
+import { individualPriceType } from '@/utils/types/individualPrice.types'
+import { UniquePriceType } from '@/utils/types/uniquePrice.types'
 
-interface Client {
-    id: string
-    name: string
-    surname: string
-    contact: string
-    telegrammId: string
-    status: string
-}
-
-interface individualPrice {
-    clientId: string
-    clientName: string
-    detail: [
-        {
-            individualPriceId: string
-            id: string
-            name: string
-            price: string
-            date: Date
-        },
-    ]
-}
 
 const AdminPanel = () => {
-    const { data: individualPrices } = useApi<individualPrice[]>('inPrice')
+    const { data: individualPrices } = useApi<individualPriceType[]>('inPrice')
     const { onOpen, onClose, isOpen } = useDisclosure()
-    const [selectedData, setSelectedData] = useState<UniquePrice | undefined>(undefined)
+    const [selectedData, setSelectedData] = useState<UniquePriceType | undefined>(undefined)
     const [selectedRelease, setSelectedRelease] = useState<string>('')
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const [_clients, setClientsData] = useState<Client[]>([])
-    const [inPriceData, setInPriceData] = useState<individualPrice[]>([])
+    const [inPriceData, setInPriceData] = useState<individualPriceType[]>([])
 
     const handleClose = () => {
         onClose()
         setSelectedData(undefined)
     }
-
-    useEffect(() => {
-        getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
-            setClientsData(responseData)
-        })
-    }, [])
 
     const getIndividualPrices = () => {
         getAllIndividualPrices().then((responseData) => {

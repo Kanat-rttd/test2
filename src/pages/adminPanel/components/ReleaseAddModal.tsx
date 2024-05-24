@@ -20,47 +20,17 @@ import PasswordInput from '@/components/shared/PasswordInput'
 import PhoneInput from '@/components/shared/PhoneInput'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import StatusSelect from '@/components/shared/StatusSelect'
-
-export interface Releaser {
-    id: number
-    name: string
-    surname: string
-    contact: string
-    telegrammId: string
-    status: string
-    password: string
-    checkPassword: string
-}
-
-// interface status {
-//     id: number
-//     name: string
-// }
+import { ReleaserType } from '@/utils/types/releaser.types'
 
 interface ReleaseAddModalProps {
-    data: Releaser | undefined
+    data: ReleaserType | undefined
     isOpen: boolean
     onClose: () => void
     onSuccess: () => void
 }
 
-// const defaultValues = {
-//     name: '',
-//     surname: '',
-//     contact: '',
-//     telegrammId: '',
-//     status: '',
-//     password: '',
-//     checkPassword: '',
-// }
-
 const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose, onSuccess }) => {
     const { loading } = useNotify()
-
-    // const status = [
-    //     { id: 1, name: 'Активный' },
-    //     { id: 2, name: 'Неактивный' },
-    // ]
 
     const {
         register,
@@ -71,9 +41,9 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
         setError,
         formState: { errors },
         reset,
-    } = useForm<Releaser>()
+    } = useForm<ReleaserType>()
 
-    const sendData = (formData: Releaser) => {
+    const sendData = (formData: ReleaserType) => {
         try {
             const responsePromise: Promise<any> = data
                 ? updateClient(data.id, formData)
@@ -93,20 +63,10 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
         }
     }
 
-    // useEffect(() => {
-    //     if (data) {
-    //         setValue('name', data.name)
-    //         setValue('surname', data.surname)
-    //         setValue('contact', data.contact)
-    //         setValue('telegrammId', data.telegrammId)
-    //         setValue('status', data.status)
-    //     }
-    // }, [data])
-
     useEffect(() => {
         if (data) {
             Object.entries(data).forEach(([key, value]) => {
-                setValue(key as keyof Releaser, value)
+                setValue(key as keyof ReleaserType, value)
             })
         } else {
             reset()
@@ -184,28 +144,6 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                         />
                         <FormErrorMessage>{errors.contact?.message}</FormErrorMessage>
                     </FormControl>
-                    {/* <FormControl isInvalid={!!errors.contact}>
-                        <PhoneInput
-                            {...register('contact', {
-                                required: 'Поля является обязательным',
-                                minLength: {
-                                    value: 10,
-                                    message: 'Некорректный номер телефона.',
-                                },
-                                maxLength: {
-                                    value: 10,
-                                    message: 'Некорректный номер телефона.',
-                                },
-                                pattern: {
-                                    value: /^\d+$/,
-                                    message:
-                                        'Некорректный номер телефона. Используйте только цифры',
-                                },
-                            })}
-                        />
-                        <FormErrorMessage>{errors.contact?.message}</FormErrorMessage>
-                    </FormControl> */}
-
                     <FormControl isInvalid={!!errors.telegrammId}>
                         <InputGroup>
                             <Input
@@ -230,32 +168,6 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.status}>
-                        {/* <Controller
-                            name="status"
-                            control={control}
-                            rules={{ required: 'Поле является обязательным' }}
-                            render={({ field }) => {
-                                const { onChange, value } = field
-                                return (
-                                    <Select
-                                        options={status}
-                                        getOptionLabel={(option: status) => option.name}
-                                        getOptionValue={(option: status) => option.name}
-                                        value={status.find((option) => option.name === value)}
-                                        onChange={(selectedOption: status | null) => {
-                                            if (selectedOption) {
-                                                onChange(selectedOption.name)
-                                            } else {
-                                                onChange(null)
-                                            }
-                                        }}
-                                        placeholder="Статус *"
-                                        isClearable
-                                        isSearchable
-                                    />
-                                )
-                            }}
-                        /> */}
                         <StatusSelect
                             {...register('status', {
                                 required: 'Поле является обязательным',

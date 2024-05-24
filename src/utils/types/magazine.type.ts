@@ -3,8 +3,10 @@ export type MagazineType = {
     name: string
     clientId: number
     status: string
-    client: {
-        id: number
-        name: string
-    }
+    client: Client
+}
+
+export type Client = {
+    id: number
+    name: string
 }

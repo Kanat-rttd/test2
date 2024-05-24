@@ -96,7 +96,7 @@ const CorrectModal = ({ isOpen, onClose, onSuccess }: EditModalProps) => {
                                 <Controller
                                     name="item"
                                     control={control}
-                                    rules={{ required: 'Поля является обязательным' }}
+                                    rules={{ required: 'Поле является обязательным' }}
                                     render={({ field }) => {
                                         const { onChange, value } = field
                                         return (

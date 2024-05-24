@@ -15,15 +15,12 @@ import { useState } from 'react'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 
 import { useApi } from '@/utils/services/axios'
-// import Header from '@/components/Header'
 import Dialog from '@/components/Dialog'
 import { deleteUser } from '@/utils/services/user.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { User } from '@/utils/types/user.types'
 import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
-// import { mutate } from 'swr'
-// import { getAllUsers } from '../../../utils/services/user.service'
 
 const AdminPanel = () => {
     const { loading } = useNotify()
@@ -34,10 +31,6 @@ const AdminPanel = () => {
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
-
-    // const { data: usersData } = useSWR<Users[]>(['user', selectedStatus], {
-    //     fetcher: () => getAllUsers(selectedStatus),
-    // })
 
     const {
         data: usersData,

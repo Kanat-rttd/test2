@@ -228,7 +228,7 @@ const DebtTransferForm = () => {
                         <Controller
                             name="invoiceNumber"
                             control={control}
-                            rules={{ required: 'Поля является обязательным' }}
+                            rules={{ required: 'Поле является обязательным' }}
                             render={({ field }) => {
                                 const { onChange, value } = field
                                 return (
