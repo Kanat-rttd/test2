@@ -20,6 +20,7 @@ import { useApi } from '@/utils/services/axios'
 import Select from 'react-select'
 import { Controller, useForm } from 'react-hook-form'
 import { createFactInput } from '@/utils/services/factInput.service'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 interface AddFactModalInputs {
     [key: string]: string
@@ -56,6 +57,7 @@ type FactModalProps = {
 }
 
 const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
+    const { loading } = useNotify()
     const { data: providerGoodsData } = useApi<providerGoods[]>('providerGoods')
     const { data: placesData } = useApi<Place[]>('place')
 
@@ -96,13 +98,18 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
             [],
         )
 
-        if (formattedData.length > 0) {
-            createFactInput(formattedData).then((res) => {
+        if (formattedData.length == 0 || !formattedData) return
+        const responsePromise: Promise<any> = createFactInput(formattedData)
+        loading(responsePromise)
+        responsePromise
+            .then((res) => {
                 console.log(res)
                 onSuccess()
                 onClose()
             })
-        }
+            .catch((error) => {
+                console.error('Error updating data:', error)
+            })
     }
 
     return (

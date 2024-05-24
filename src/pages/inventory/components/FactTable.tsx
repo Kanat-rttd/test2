@@ -1,7 +1,6 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { Table, Tbody, Tr, Th, Td, Box, IconButton } from '@chakra-ui/react'
-// import { useApi } from '@/utils/services/axios'
-import { mutate } from '@/utils/services/axios'
+import { useApi } from '@/utils/services/axios'
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import EditModal from './EditModal'
@@ -9,6 +8,8 @@ import { useDisclosure } from '@chakra-ui/react'
 import Dialog from '@/components/Dialog'
 import { deleteFactInput } from '@/utils/services/factInput.service'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 interface factInput {
     table: [
@@ -24,18 +25,14 @@ interface factInput {
     totalFact: number
 }
 
-type FactTableProps = {
-    factInput: factInput | undefined
-}
-
-const FactTable = ({ factInput }: FactTableProps) => {
-    // const { data: factInput } = useApi<factInput>('factInput')
+const FactTable = () => {
+    const { loading } = useNotify()
+    const { getURLs } = useURLParameters()
+    const { data: factInputData, mutate: mutateFactInput } = useApi<factInput>(
+        `factInput?${getURLs().toString()}`,
+    )
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-
-    const handleUpdateProduct = () => {
-        console.log('mutate')
-    }
 
     const handleSelected = (data: {
         id: number
@@ -66,21 +63,21 @@ const FactTable = ({ factInput }: FactTableProps) => {
         | undefined
     >(undefined)
 
-    const deleteFactHandler = (
-        data:
-            | {
-                  id: number
-                  name: string
-                  place: string
-                  unitOfMeasure: string
-                  quantity: number
-                  updatedAt: string
-              }
-            | undefined,
-    ) => {
-        deleteFactInput(data?.id).then(() => {
-            mutate('factInput')
-        })
+    const deleteFactHandler = () => {
+        if (selectedData) {
+            const responsePromise: Promise<any> = deleteFactInput(selectedData.id)
+            loading(responsePromise)
+            responsePromise.then(() => {
+                successHandler()
+            })
+        } else {
+            console.error('No user data available to delete.')
+        }
+    }
+
+    const successHandler = () => {
+        console.log('success')
+        mutateFactInput()
     }
 
     return (
@@ -98,13 +95,13 @@ const FactTable = ({ factInput }: FactTableProps) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {factInput?.table.map((item, index) => (
+                        {factInputData?.table.map((item, index) => (
                             <Tr key={item.id}>
                                 <Td>{index + 1}</Td>
                                 <Td>{item.name}</Td>
                                 <Td>{item.unitOfMeasure}</Td>
                                 <Td>{item.quantity}</Td>
-                                <Td>{dayjs(item.updatedAt).format('DD.MM.YYYY HH:MM')}</Td>
+                                <Td>{dayjs(item.updatedAt).format('DD.MM.YYYY HH:mm')}</Td>
                                 <Td>
                                     <IconButton
                                         variant="outline"
@@ -145,10 +142,10 @@ const FactTable = ({ factInput }: FactTableProps) => {
                             <Th fontSize={15} color={'#000'}>
                                 ИТОГО
                             </Th>
-                            <Th></Th>
-                            <Th></Th>
-                            <Th fontSize={15} color={'#000'}>
-                                {factInput?.totalFact}
+                            <Th w={'15%'}></Th>
+                            <Th w={'40%'}></Th>
+                            <Th w={'24%'} fontSize={15} color={'#000'}>
+                                {factInputData?.totalFact}
                             </Th>
                             <Th></Th>
                             <Th></Th>
@@ -160,7 +157,7 @@ const FactTable = ({ factInput }: FactTableProps) => {
                 selectedData={selectedData}
                 isOpen={isOpen}
                 onClose={onClose}
-                onSuccess={handleUpdateProduct}
+                onSuccess={successHandler}
             />
             <Dialog
                 isOpen={dialog.isOpen}
@@ -168,7 +165,7 @@ const FactTable = ({ factInput }: FactTableProps) => {
                 header="Удалить"
                 body="Вы уверены? Вы не сможете отменить это действие впоследствии."
                 actionBtn={() => {
-                    deleteFactHandler(selectedData)
+                    deleteFactHandler()
                     dialog.onClose()
                 }}
                 actionText="Удалить"

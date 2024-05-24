@@ -19,8 +19,8 @@ import { Controller, useForm } from 'react-hook-form'
 import Select from 'react-select'
 import { useEffect } from 'react'
 import { updateFactInput } from '@/utils/services/factInput.service'
-import { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 const defaultValues = {
     id: 0,
@@ -60,8 +60,8 @@ interface Place {
     label: string
 }
 
-
 const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps) => {
+    const { loading } = useNotify()
     const { data: placesData } = useApi<Place[]>('place')
     const {
         register,
@@ -86,11 +86,13 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
 
         const sendData = { ...formData, name, quantity }
 
-        updateFactInput(id, sendData)
+        const responsePromise: Promise<any> = updateFactInput(id, sendData)
+        loading(responsePromise)
+        responsePromise
             .then(() => {
                 onSuccess()
-                mutate('factInput')
                 handleClose()
+                reset()
             })
             .catch((error) => {
                 console.error('Error updating data:', error)
@@ -114,7 +116,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                             <Controller
                                 name="place"
                                 control={control}
-                                rules={{ required: 'Поля является обязательным' }}
+                                rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
                                     const { onChange, value } = field
                                     return (

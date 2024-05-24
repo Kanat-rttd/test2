@@ -41,7 +41,7 @@ const Fact = () => {
     const { getURLs, setParam, getParam } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const { data: factInputData, mutate: mutateFactInput } = useApi<factInput>(
+    const { mutate: mutateFactInput } = useApi<factInput>(
         `factInput?${getURLs().toString()}`,
     )
 
@@ -106,7 +106,7 @@ const Fact = () => {
                         </Button>
                     </Box>
                     <Box height={'calc(95% - 2.5rem)'} position={'relative'}>
-                        <FactTable factInput={factInputData} />
+                        <FactTable />
                     </Box>
                 </Box>
             </UniversalComponent>
