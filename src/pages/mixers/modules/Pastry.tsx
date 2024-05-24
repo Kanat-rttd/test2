@@ -34,8 +34,8 @@ const MixersPage = () => {
                             borderRadius={5}
                             placeholder="Цех"
                             name="bakingFacilityUnitId"
-                            defaultValue={getParam('facilityUnit')}
-                            onChange={(e) => setParam('facilityUnit', e.target.value)}
+                            defaultValue={getParam('facilityUnitId')}
+                            onChange={(e) => setParam('facilityUnitId', e.target.value)}
                         >
                             {facilityUnits?.map((unit, index) => {
                                 return (

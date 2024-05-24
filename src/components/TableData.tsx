@@ -51,14 +51,14 @@ const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
                 </Tbody>
                 <Tfoot>
                     <Tr display={'flex'} justifyContent={'space-between'}>
-                        <Th fontSize={15} color={'#000'} width={'19%'}>
+                        <Th fontSize={15} color={'#000'} width={'35%'}>
                             Итого
                         </Th>
                         {Array.from(uniqProducts).map((productName, productIndex) => (
                             <Th
                                 fontSize={15}
                                 color={'#000'}
-                                width={'21%'}
+                                width={'25%'}
                                 textAlign={'center'}
                                 key={productIndex}
                             >
