@@ -143,7 +143,7 @@ const DebtTransferForm = () => {
                         <Controller
                             name="fromProvider"
                             control={control}
-                            rules={{ required: 'Поля является обязательным' }}
+                            rules={{ required: 'Поле является обязательным' }}
                             render={({ field }) => {
                                 const { onChange, value } = field
                                 return (
@@ -186,7 +186,7 @@ const DebtTransferForm = () => {
                         <Controller
                             name="toMagazine"
                             control={control}
-                            rules={{ required: 'Поля является обязательным' }}
+                            rules={{ required: 'Поле является обязательным' }}
                             render={({ field }) => {
                                 const { onChange, value } = field
                                 const filteredMagazines = magazinesData?.filter(

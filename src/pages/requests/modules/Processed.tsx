@@ -15,7 +15,7 @@ interface FacilityUnit {
 }
 
 const ProcessedPage = () => {
-    const { getURLs, setParam } = useURLParameters()
+    const { getURLs, setParam, getParam } = useURLParameters()
 
     const { data: salesData } = useApi<OrderArrayType[]>(`sales?${getURLs().toString()}`)
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(
@@ -36,10 +36,11 @@ const ProcessedPage = () => {
                             <DateRange />
                             <Select
                                 placeholder="Цех"
-                                name="bakingFacilityUnitId"
+                                name="facilityUnitId"
                                 size={'sm'}
                                 borderRadius={5}
                                 onChange={handleSelectChange}
+                                value={getParam('facilityUnitId')}
                                 width={'100%'}
                             >
                                 {facilityUnits?.map((unit, index) => {
