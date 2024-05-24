@@ -29,6 +29,10 @@ const Inventory = () => {
     const { data: placesData } = useApi<Place[]>('place')
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    const onSuccess = () => {
+        console.log('success');
+    }
+
     return (
         <>
             <UniversalComponent>
@@ -84,7 +88,7 @@ const Inventory = () => {
                     </Box>
                 </Box>
             </UniversalComponent>
-            <CorrectModal isOpen={isOpen} onClose={onClose} />
+            <CorrectModal isOpen={isOpen} onClose={onClose} onSuccess={onSuccess} />
         </>
     )
 }

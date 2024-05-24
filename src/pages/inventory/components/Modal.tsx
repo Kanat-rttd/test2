@@ -1,3 +1,4 @@
+// import { useNotify } from '@/utils/providers/ToastProvider'
 import { useApi } from '@/utils/services/axios'
 import {
     Modal,
@@ -22,6 +23,7 @@ import Select from 'react-select'
 type EditModalProps = {
     isOpen: boolean
     onClose: () => void
+    onSuccess: () => void
 }
 
 type EditModalInputs = {
@@ -43,21 +45,43 @@ interface ProviderGoods {
     }
 }
 
-
-const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
+const CorrectModal = ({ isOpen, onClose, onSuccess }: EditModalProps) => {
+    // const { loading } = useNotify()
     const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
-    
+
     const {
         register,
         handleSubmit: handleSubmitForm,
         control,
         formState: { errors },
         // reset,
+        // setError,
     } = useForm<EditModalInputs>()
 
     const sendData = (formData: EditModalInputs) => {
-        console.log(formData)
+        console.log(formData);
+        
+        // const responsePromise: Promise<any> = create(formData)
+        // loading(responsePromise)
+
+        // responsePromise
+        //     .then(() => {
+        //         reset()
+        //         onSuccess()
+        //         handleClose()
+        //     })
+        //     .catch((error) => {
+        //         console.log(error)
+        //         setError(error.response.data.field, {
+        //             message: error.response.data.message || 'Ошибка',
+        //         })
+        //     })
     }
+
+    // const handleClose = () => {
+    //     reset()
+    //     onClose()
+    // }
 
     return (
         <>

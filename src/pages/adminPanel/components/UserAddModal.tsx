@@ -23,11 +23,6 @@ import { User } from '@/utils/types/user.types'
 import PasswordInput from '@/components/shared/PasswordInput'
 import StatusSelect from '@/components/shared/StatusSelect'
 
-// type status = {
-//     id: number
-//     name: string
-// }
-
 interface UserAddModalProps {
     data: User | undefined
     isOpen: boolean
@@ -90,11 +85,6 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
         { label: 'Отчеты' },
         { label: 'Инвентаризация' },
     ]
-
-    // const status = [
-    //     { id: 0, name: 'Активный' },
-    //     { id: 1, name: 'Неактивный' },
-    // ]
 
     const handleClose = () => {
         onClose()
