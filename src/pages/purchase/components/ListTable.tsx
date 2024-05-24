@@ -155,11 +155,12 @@ const ListTable = () => {
                             <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>
                                 <Td w={'5%'}>ИТОГО</Td>
                                 <Td w={'5%'}> </Td>
-                                <Td w={'10%'}> </Td>
-                                <Td w={'13%'}> </Td>
-                                <Td w={'9%'}>{purchasesData?.totalQuantity}</Td>
-                                <Td w={'9%'}> </Td>
-                                <Td w={'11%'}>{purchasesData?.totalSum}</Td>
+                                <Td w={'5%'}> </Td>
+                                <Td w={'5%'}> </Td>
+                                <Td w={'7%'}> </Td>
+                                <Td w={'10%'}>{purchasesData?.totalQuantity}</Td>
+                                <Td w={'4%'}> </Td>
+                                <Td w={'10%'}>{purchasesData?.totalSum}</Td>
                                 <Td w={'9%'}>{purchasesData?.totalDeliverySum}</Td>
                                 <Td w={'10%'}> </Td>
                                 <Td w={'10%'}> </Td>

@@ -5,19 +5,7 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
-
-interface ProviderGoods {
-    id: number
-    providerId: number
-    goods: string
-    unitOfMeasure: string
-    place: { label: string }[]
-    status: string
-    provider: {
-        id: number
-        name: string
-    }
-}
+import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
 
 interface Place {
     label: string
@@ -25,12 +13,12 @@ interface Place {
 
 const Inventory = () => {
     const { getURLs, setParam, getParam } = useURLParameters()
-    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
+    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
     const { data: placesData } = useApi<Place[]>('place')
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const onSuccess = () => {
-        console.log('success');
+        console.log('success')
     }
 
     return (

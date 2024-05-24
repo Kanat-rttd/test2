@@ -21,6 +21,7 @@ import Select from 'react-select'
 import { Controller, useForm } from 'react-hook-form'
 import { createFactInput } from '@/utils/services/factInput.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
 
 interface AddFactModalInputs {
     [key: string]: string
@@ -28,26 +29,6 @@ interface AddFactModalInputs {
 
 interface Place {
     label: string
-}
-
-// interface rawMaterials {
-//     id: number
-//     name: string
-//     uom: string
-// }
-
-interface providerGoods {
-    id: number
-    providerId: number
-    goods: string
-    unitOfMeasure: string
-    place: string
-    status: string
-    isDeleted: boolean
-    provider: {
-        id: number
-        name: string
-    }
 }
 
 type FactModalProps = {
@@ -58,7 +39,7 @@ type FactModalProps = {
 
 const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
     const { loading } = useNotify()
-    const { data: providerGoodsData } = useApi<providerGoods[]>('providerGoods')
+    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
     const { data: placesData } = useApi<Place[]>('place')
 
     console.log(placesData)

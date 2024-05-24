@@ -5,33 +5,8 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '@/components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
-
-interface factInput {
-    table: [
-        {
-            id: number
-            name: string
-            place: string
-            unitOfMeasure: string
-            quantity: number
-            updatedAt: string
-        },
-    ]
-    totalFact: number
-}
-
-interface ProviderGoods {
-    id: number
-    providerId: number
-    goods: string
-    unitOfMeasure: string
-    place: { label: string }[]
-    status: string
-    provider: {
-        id: number
-        name: string
-    }
-}
+import { FactInputType } from '@/utils/types/factInput.types'
+import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
 
 interface Place {
     label: string
@@ -41,11 +16,9 @@ const Fact = () => {
     const { getURLs, setParam, getParam } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const { mutate: mutateFactInput } = useApi<factInput>(
-        `factInput?${getURLs().toString()}`,
-    )
+    const { mutate: mutateFactInput } = useApi<FactInputType>(`factInput?${getURLs().toString()}`)
 
-    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
+    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
     const { data: placesData } = useApi<Place[]>('place')
 
     const successHandler = () => {

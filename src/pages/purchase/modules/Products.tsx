@@ -6,29 +6,17 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '@/components/DateRange'
+import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
 
 interface Providers {
     value: number
     label: string
 }
 
-interface ProviderGoods {
-    id: number
-    providerId: number
-    goods: string
-    unitOfMeasure: string
-    place: { label: string }[]
-    status: string
-    provider: {
-        id: number
-        name: string
-    }
-}
-
 const Products = () => {
     const { getParam, setParam } = useURLParameters()
     const { data: providersData } = useApi<Providers[]>('providers')
-    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
+    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
 
     const handleAddProduct = () => {
         mutate('productPurchase')

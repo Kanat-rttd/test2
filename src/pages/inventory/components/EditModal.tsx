@@ -21,6 +21,7 @@ import { useEffect } from 'react'
 import { updateFactInput } from '@/utils/services/factInput.service'
 import { useApi } from '@/utils/services/axios'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { AddFactModalInputs, FactInputTableData } from '@/utils/types/factInput.types'
 
 const defaultValues = {
     id: 0,
@@ -35,25 +36,7 @@ type EditModalProps = {
     isOpen: boolean
     onClose: () => void
     onSuccess: () => void
-    selectedData: factInput | undefined
-}
-
-interface factInput {
-    id: number
-    name: string
-    place: string
-    unitOfMeasure: string
-    quantity: number
-    updatedAt: string
-}
-
-interface AddFactModalInputs {
-    id: number
-    name: string
-    place: string
-    unitOfMeasure: string
-    quantity: string
-    updatedAt: string
+    selectedData: FactInputTableData | undefined
 }
 
 interface Place {

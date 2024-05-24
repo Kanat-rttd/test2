@@ -1,5 +1,6 @@
 // import { useNotify } from '@/utils/providers/ToastProvider'
 import { useApi } from '@/utils/services/axios'
+import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
 import {
     Modal,
     ModalOverlay,
@@ -32,22 +33,9 @@ type EditModalInputs = {
     comment: string
 }
 
-interface ProviderGoods {
-    id: number
-    providerId: number
-    goods: string
-    unitOfMeasure: string
-    place: { label: string }[]
-    status: string
-    provider: {
-        id: number
-        name: string
-    }
-}
-
 const CorrectModal = ({ isOpen, onClose, onSuccess }: EditModalProps) => {
     // const { loading } = useNotify()
-    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
+    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
 
     const {
         register,
@@ -59,8 +47,8 @@ const CorrectModal = ({ isOpen, onClose, onSuccess }: EditModalProps) => {
     } = useForm<EditModalInputs>()
 
     const sendData = (formData: EditModalInputs) => {
-        console.log(formData);
-        
+        console.log(formData)
+
         // const responsePromise: Promise<any> = create(formData)
         // loading(responsePromise)
 

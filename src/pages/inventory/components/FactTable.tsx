@@ -10,25 +10,12 @@ import { deleteFactInput } from '@/utils/services/factInput.service'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useNotify } from '@/utils/providers/ToastProvider'
-
-interface factInput {
-    table: [
-        {
-            id: number
-            name: string
-            place: string
-            unitOfMeasure: string
-            quantity: number
-            updatedAt: string
-        },
-    ]
-    totalFact: number
-}
+import { FactInputType } from '@/utils/types/factInput.types'
 
 const FactTable = () => {
     const { loading } = useNotify()
     const { getURLs } = useURLParameters()
-    const { data: factInputData, mutate: mutateFactInput } = useApi<factInput>(
+    const { data: factInputData, mutate: mutateFactInput } = useApi<FactInputType>(
         `factInput?${getURLs().toString()}`,
     )
 
