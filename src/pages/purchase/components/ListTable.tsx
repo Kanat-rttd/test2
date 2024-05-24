@@ -4,7 +4,6 @@ import { useState } from 'react'
 import EditModal from './EditModal'
 import dayjs from 'dayjs'
 import { useApi } from '@/utils/services/axios'
-import { mutate } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import Dialog from '@/components/Dialog'
@@ -68,7 +67,7 @@ const ListTable = () => {
     }
 
     const handleUpdateProduct = () => {
-        mutate('productPurchase')
+        mutatePurchaseData()
     }
 
     const handlerDelete = (selectedData: Purchase | undefined) => {
