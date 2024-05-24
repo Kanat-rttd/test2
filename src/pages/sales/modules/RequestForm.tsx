@@ -90,7 +90,7 @@ const RequestForm = () => {
     }
 
     return (
-        <>
+        <div style={{overflowY: 'auto', height: '100dvh'}}>
             {isSuccess ? (
                 <SuccessPage />
             ) : isError ? (
@@ -208,7 +208,7 @@ const RequestForm = () => {
                 </>
             )}
             <BottomModal isOpen={isOpen} onClose={onClose} handleAddProduct={handleAddProduct} />
-        </>
+        </div>
     )
 }
 

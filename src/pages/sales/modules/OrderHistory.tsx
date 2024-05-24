@@ -105,7 +105,7 @@ const OrderHistory = () => {
     }
 
     return (
-        <>
+        <div style={{ overflowY: 'auto', height: '100dvh' }}>
             <MobileNavbar></MobileNavbar>
             <Box
                 display="flex"
@@ -217,7 +217,7 @@ const OrderHistory = () => {
                     />
                 </Box>
             </Box>
-        </>
+        </div>
     )
 }
 

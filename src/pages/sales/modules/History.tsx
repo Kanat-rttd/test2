@@ -39,7 +39,7 @@ const History = () => {
     }, [])
 
     return (
-        <>
+        <div style={{overflowY: 'scroll', height: '100dvh'}}>
             <MobileNavbar></MobileNavbar>
             <Box display="flex" flexDirection={'column'} height="100vh" textAlign={'center'}>
                 <Box borderBottom={'1px solid black'} p={5}>
@@ -73,7 +73,7 @@ const History = () => {
                     ))} */}
                 </Box>
             </Box>
-        </>
+        </div>
     )
 }
 
