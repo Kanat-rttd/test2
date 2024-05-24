@@ -1,3 +1,4 @@
+import { useApi } from '@/utils/services/axios'
 import {
     Modal,
     ModalOverlay,
@@ -29,7 +30,23 @@ type EditModalInputs = {
     comment: string
 }
 
+interface ProviderGoods {
+    id: number
+    providerId: number
+    goods: string
+    unitOfMeasure: string
+    place: { label: string }[]
+    status: string
+    provider: {
+        id: number
+        name: string
+    }
+}
+
+
 const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
+    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
+    
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -42,16 +59,6 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
         console.log(formData)
     }
 
-    const items = [
-        {
-            value: 1,
-            label: 'Товар 1',
-        },
-        {
-            value: 2,
-            label: 'Товар 2',
-        },
-    ]
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
@@ -70,11 +77,11 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
                                         const { onChange, value } = field
                                         return (
                                             <Select
-                                                options={items}
-                                                // getOptionLabel={(option) => option.category}
-                                                // getOptionValue={(option) => `${option.id}`}
-                                                value={items?.find(
-                                                    (option) => option.label == value,
+                                                options={providerGoodsData || []}
+                                                getOptionLabel={(option) => option.goods}
+                                                getOptionValue={(option) => `${option.id}`}
+                                                value={providerGoodsData?.find(
+                                                    (option) => option.goods == value,
                                                 )}
                                                 onChange={(val) => onChange(val)}
                                                 placeholder="Товар *"

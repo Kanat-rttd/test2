@@ -4,9 +4,29 @@ import CorrectModal from '../components/Modal'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import DateRange from '@/components/DateRange'
+import { useApi } from '@/utils/services/axios'
+
+interface ProviderGoods {
+    id: number
+    providerId: number
+    goods: string
+    unitOfMeasure: string
+    place: { label: string }[]
+    status: string
+    provider: {
+        id: number
+        name: string
+    }
+}
+
+interface Place {
+    label: string
+}
 
 const Inventory = () => {
     const { getURLs, setParam, getParam } = useURLParameters()
+    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
+    const { data: placesData } = useApi<Place[]>('place')
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
@@ -31,8 +51,11 @@ const Inventory = () => {
                                     setParam('name', e.target.value)
                                 }}
                             >
-                                <option value="Лепешечный">Товар 1</option>
-                                <option value="Булочный">Дом</option>
+                                {providerGoodsData?.map((item, index) => (
+                                    <option key={index} value={item.goods}>
+                                        {item.goods}
+                                    </option>
+                                ))}
                             </Select>
                             <Select
                                 placeholder="Место"
@@ -44,8 +67,11 @@ const Inventory = () => {
                                     setParam('place', e.target.value)
                                 }}
                             >
-                                <option value="Лепешечный">Улица</option>
-                                <option value="Булочный">Дом</option>
+                                {placesData?.map((item, index) => (
+                                    <option key={index} value={item.label}>
+                                        {item.label}
+                                    </option>
+                                ))}
                             </Select>
                         </Box>
 

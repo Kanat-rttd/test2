@@ -20,6 +20,19 @@ interface factInput {
     totalFact: number
 }
 
+interface ProviderGoods {
+    id: number
+    providerId: number
+    goods: string
+    unitOfMeasure: string
+    place: { label: string }[]
+    status: string
+    provider: {
+        id: number
+        name: string
+    }
+}
+
 interface Place {
     label: string
 }
@@ -32,6 +45,7 @@ const Fact = () => {
         `factInput?${getURLs().toString()}`,
     )
 
+    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
     const { data: placesData } = useApi<Place[]>('place')
 
     const successHandler = () => {
@@ -56,13 +70,16 @@ const Fact = () => {
                                 w={'20%'}
                                 size={'sm'}
                                 borderRadius={5}
-                                defaultValue={getParam('name')}
+                                value={getParam('name')}
                                 onChange={(e) => {
                                     setParam('name', e.target.value)
                                 }}
                             >
-                                <option value="Лепешечный">Товар 1</option>
-                                <option value="Булочный">Дом</option>
+                                {providerGoodsData?.map((item, index) => (
+                                    <option key={index} value={item.goods}>
+                                        {item.goods}
+                                    </option>
+                                ))}
                             </Select>
 
                             <Select
@@ -71,7 +88,7 @@ const Fact = () => {
                                 w={'20%'}
                                 size={'sm'}
                                 borderRadius={5}
-                                defaultValue={getParam('place')}
+                                value={getParam('place')}
                                 onChange={(e) => {
                                     setParam('place', e.target.value)
                                 }}

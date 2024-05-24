@@ -20,6 +20,7 @@ import Select from 'react-select'
 import { useEffect } from 'react'
 import { updateFactInput } from '@/utils/services/factInput.service'
 import { mutate } from 'swr'
+import { useApi } from '@/utils/services/axios'
 
 const defaultValues = {
     id: 0,
@@ -56,16 +57,12 @@ interface AddFactModalInputs {
 }
 
 interface Place {
-    id: number
-    name: string
+    label: string
 }
 
-const places = [
-    { id: 1, name: 'Кладовка' },
-    { id: 2, name: 'Цех 1' },
-]
 
 const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps) => {
+    const { data: placesData } = useApi<Place[]>('place')
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -83,9 +80,9 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
     }, [selectedData])
 
     const updateData = (formData: AddFactModalInputs) => {
-        let name = selectedData?.name || ''
-        let id = selectedData?.id || 0
-        let quantity = parseFloat(formData.quantity)
+        const name = selectedData?.name || ''
+        const id = selectedData?.id || 0
+        const quantity = parseFloat(formData.quantity)
 
         const sendData = { ...formData, name, quantity }
 
@@ -122,15 +119,15 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                     const { onChange, value } = field
                                     return (
                                         <Select
-                                            options={places}
-                                            getOptionLabel={(option: Place) => option.name}
-                                            getOptionValue={(option: Place) => `${option.name}`}
-                                            value={places?.filter(
-                                                (option) => String(option.name) == value,
+                                            options={placesData || []}
+                                            getOptionLabel={(option: Place) => option.label}
+                                            getOptionValue={(option: Place) => `${option.label}`}
+                                            value={placesData?.filter(
+                                                (option) => String(option.label) == value,
                                             )}
                                             onChange={(selectedOption: Place | null) => {
                                                 if (selectedOption) {
-                                                    onChange(selectedOption.name)
+                                                    onChange(selectedOption.label)
                                                 }
                                             }}
                                             placeholder="Место *"
