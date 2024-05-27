@@ -32,15 +32,15 @@ const Debt = () => {
 
     return (
         <>
-            <Box padding={5} width={'25%'}>
+            <Box padding={5} width={'20%'}>
                 <Select
                     mt={1}
+                    w={'100%'}
                     size={'sm'}
                     borderRadius={5}
                     placeholder="Поставщик"
                     value={getParam('providerId')}
                     onChange={(event) => setParam('providerId', event.target.value)}
-                    width={'fit-content'}
                 >
                     {providersData?.map((provider, index) => (
                         <option key={`${index}`} value={provider.value}>
