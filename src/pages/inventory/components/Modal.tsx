@@ -33,7 +33,7 @@ type EditModalInputs = {
     comment: string
 }
 
-const CorrectModal = ({ isOpen, onClose, onSuccess }: EditModalProps) => {
+const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
     // const { loading } = useNotify()
     const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
 

@@ -12,7 +12,7 @@ interface Place {
 }
 
 const Inventory = () => {
-    const { getURLs, setParam, getParam } = useURLParameters()
+    const { setParam, getParam } = useURLParameters()
     const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
     const { data: placesData } = useApi<Place[]>('place')
     const { isOpen, onOpen, onClose } = useDisclosure()
