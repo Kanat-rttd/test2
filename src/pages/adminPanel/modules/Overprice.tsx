@@ -15,7 +15,6 @@ import { useState } from 'react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Dialog from '@/components/Dialog'
 import { useApi } from '@/utils/services/axios'
-import { mutate } from 'swr'
 import { deleteOverprice } from '@/utils/services/overprice.service'
 import DateRange from '@/components/DateRange'
 import { TableContainer, Thead } from '@/components/ui'
@@ -25,9 +24,9 @@ import { OverPriceType } from '@/utils/types/overPrice.types'
 import { ClientsFilter } from '@/utils/types/client.type'
 
 const AdminPanel = () => {
-    const { getURLs, setParam, getParam } = useURLParameters()
+    const { getURLs, setParam } = useURLParameters()
 
-    const { data: overPriceData, isLoading } = useApi<OverPriceType[]>(
+    const { data: overPriceData, isLoading, mutate: mutateOverPriceData } = useApi<OverPriceType[]>(
         `overPrice?${getURLs().toString()}`,
     )
 
@@ -41,7 +40,7 @@ const AdminPanel = () => {
     })
 
     const handleSuccess = () => {
-        mutate(`overPrice?name=${getParam('name')}`)
+        mutateOverPriceData()
     }
 
     const delOverprice = (selectedData: OverPriceType | undefined) => {
