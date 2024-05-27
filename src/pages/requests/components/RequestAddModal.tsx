@@ -7,20 +7,24 @@ import {
     Stack,
     ModalFooter,
     ModalOverlay,
-    InputGroup,
     Input,
     Box,
     Select,
+    FormControl,
+    FormErrorMessage,
+    Button,
 } from '@chakra-ui/react'
 
-import { ChangeEvent, useState } from 'react'
-import { useForm } from 'react-hook-form'
+// import { ChangeEvent, useEffect } from 'react'
+import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form'
 import { OrderArrayType } from '@/utils/types/order.types'
 import { createSale, updateSale } from '@/utils/services/sales.service'
 import { ClientType } from '@/utils/types/client.type'
 import { Product } from '@/utils/types/product.types'
 import { useApi } from '@/utils/services/axios'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { useEffect } from 'react'
+import { CloseIcon } from '@chakra-ui/icons'
 
 interface ClientAddModalProps {
     isOpen: boolean
@@ -29,84 +33,120 @@ interface ClientAddModalProps {
     selectedData: OrderArrayType | undefined
 }
 
-const modalData = {
-    name: '',
-    products: [{ productId: '', orderedQuantity: '', price: '' }],
-}
-
 type FormData = {
-    name: string
-    productId: string
-    orderedQuantity: string
+    clientId: string
+    products: { productId: number | null; orderedQuantity: number | null }[]
 }
 
 const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps) => {
     const { loading } = useNotify()
     const { data: clients } = useApi<ClientType[]>('client')
     const { data: products } = useApi<Product[]>('product')
-    const [formData, setFormData] = useState(modalData)
-    const [transformedData, setTransformedData] = useState<any[]>([])
+    // const [formData, setFormData] = useState(modalData)
+    // const [transformedData, setTransformedData] = useState<any[]>([])
 
-    const { handleSubmit: handleSubmitForm } = useForm<FormData>()
+    const {
+        register,
+        reset,
+        setValue,
+        control,
+        setError,
+        formState: { errors },
+        handleSubmit: handleSubmitForm,
+    } = useForm<FormData>()
 
-    const handleChange =
-        (index: number, field: string) =>
-        ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-            const { value } = target
-            const newItems = [...formData.products]
-            newItems[index] = { ...newItems[index], [field]: value }
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'products',
+    })
 
-            if (index === formData.products.length - 1) {
-                newItems.push({ productId: '', orderedQuantity: '', price: '' })
-            }
-
-            setFormData({
-                ...formData,
-                products: newItems,
+    useEffect(() => {
+        if (selectedData) {
+            const data = selectedData?.orderDetails.map((order) => {
+                return {
+                    productId: +order.productId,
+                    orderedQuantity: +order.orderedQuantity,
+                }
             })
-            
-            const _transformedData = newItems
-                .filter((item) => item.productId !== '' && item.orderedQuantity !== '')
-                .map((item) => ({
-                    price: products?.find((product) => product.id === Number(item.productId))
-                        ?.price,
-                    productId: item.productId,
-                    orderedQuantity: item.orderedQuantity,
-                }))
-
-            setTransformedData(_transformedData)
-            
+            setValue('clientId', selectedData.client.id)
+            setValue('products', data)
+        } else {
+            reset()
         }
+    }, [selectedData])
 
-    const handleNameChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        const { value } = event.target
-        setFormData({
-            ...formData,
-            name: value,
-        })
-    }
+    // const handleChange =
+    //     (index: number, field: string) =>
+    //     ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    //         const { value } = target
+    //         const newItems = [...formData.products]
+    //         newItems[index] = { ...newItems[index], [field]: value }
 
-    const addRequest = () => {
+    //         if (index === formData.products.length - 1) {
+    //             newItems.push({ productId: '', orderedQuantity: ''})
+    //         }
+
+    //         setFormData({
+    //             ...formData,
+    //             products: newItems,
+    //         })
+
+    //         const _transformedData = newItems
+    //             .filter((item) => item.productId !== '' && item.orderedQuantity !== '')
+    //             .map((item) => ({
+    //                 price: products?.find((product) => product.id === Number(item.productId))
+    //                     ?.price,
+    //                 productId: item.productId,
+    //                 orderedQuantity: item.orderedQuantity,
+    //             }))
+
+    //         setTransformedData(_transformedData)
+    //     }
+
+    // useEffect(() => {
+    //     if (selectedData) {
+    //         const _transformedData = selectedData?.orderDetails
+    //             .filter((item) => item.productId !== '' && item.orderedQuantity !== '')
+    //             .map((item) => ({
+    //                 price: products?.find((product) => product.id === Number(item.productId))
+    //                     ?.price,
+    //                 productId: item.productId,
+    //                 orderedQuantity: item.orderedQuantity,
+    //             }))
+
+    //         console.log(_transformedData)
+    //         setTransformedData(_transformedData)
+    //     }
+    // }, [selectedData])
+
+    // const handleNameChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    //     const { value } = event.target
+    //     setFormData({
+    //         ...formData,
+    //         name: value,
+    //     })
+    // }
+
+    const addRequest: SubmitHandler<FormData> = (formData) => {
         try {
             const responsePromise: Promise<any> = selectedData
-                ? updateSale(selectedData.id, {
-                      clientId: formData.name ? formData.name : selectedData?.client.id,
-                      products: [...transformedData],
-                  })
-                : createSale({ clientId: formData.name, products: [...transformedData] })
+                ? updateSale(selectedData.id, formData)
+                : createSale(formData)
             loading(responsePromise)
             responsePromise.then((res) => {
                 console.log(res)
                 onClose()
             })
-        } catch (error) {
-            console.error(error)
+        } catch (error: any) {
+            setError('root', {
+                message: error.response.data.message || 'Ошибка',
+            })
         }
     }
 
     const handleModalClose = () => {
-        setFormData(modalData)
         onClose()
+        reset()
     }
 
     return (
@@ -121,73 +161,67 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
                             onSubmit={handleSubmitForm(addRequest)}
                             style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                         >
-                            <Select
-                                variant="filled"
-                                placeholder="Имя клиента"
-                                name="name"
-                                onChange={handleNameChange}
-                                defaultValue={selectedData?.client.id}
+                            <FormControl id="type" isRequired isInvalid={!!errors.clientId}>
+                                <Select
+                                    {...register('clientId', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                    variant="filled"
+                                    placeholder="Имя клиента"
+                                    name="name"
+                                >
+                                    {clients?.map((client, index) => (
+                                        <option key={index} value={client.id}>
+                                            {client.name}
+                                        </option>
+                                    ))}
+                                </Select>
+                                <FormErrorMessage>{errors.clientId?.message}</FormErrorMessage>
+                            </FormControl>
+                            <FormControl
+                                isRequired
+                                gap="1rem"
+                                display="flex"
+                                flexDirection="column"
                             >
-                                {clients?.map((client, index) => (
-                                    <option key={index} value={client.id}>
-                                        {client.name}
-                                    </option>
-                                ))}
-                            </Select>
-                            {selectedData
-                                ? selectedData?.orderDetails.map((item, index) => (
-                                      <Box key={index} display={'flex'}>
-                                          <Select
-                                              variant="filled"
-                                              placeholder="Вид хлеба"
-                                              name={`productId-${index}`}
-                                              onChange={handleChange(index, 'productId')}
-                                              defaultValue={item.productId}
-                                          >
-                                              {products?.map((product, index) => (
-                                                  <option key={index} value={product.id}>
-                                                      {product.name}
-                                                  </option>
-                                              ))}
-                                          </Select>
+                                {fields.map((_, index) => {
+                                    return (
+                                        <Box>
+                                            <Select
+                                                {...register(`products.${index}.productId`, {
+                                                    required: 'Поле является обязательным',
+                                                })}
+                                                variant="filled"
+                                                placeholder="Вид хлеба"
+                                            >
+                                                {products?.map((product, index) => (
+                                                    <option key={index} value={product.id}>
+                                                        {product.name}
+                                                    </option>
+                                                ))}
+                                            </Select>
 
-                                          <InputGroup paddingLeft={15}>
-                                              <Input
-                                                  name={`orderedQuantity-${index}`}
-                                                  onChange={handleChange(index, 'orderedQuantity')}
-                                                  placeholder="Количество"
-                                                  defaultValue={item.orderedQuantity}
-                                              />
-                                          </InputGroup>
-                                      </Box>
-                                  ))
-                                : formData.products.map((item, index) => (
-                                      <Box key={index} display={'flex'}>
-                                          <Select
-                                              variant="filled"
-                                              placeholder="Вид хлеба"
-                                              name={`productId-${index}`}
-                                              onChange={handleChange(index, 'productId')}
-                                              value={item.productId}
-                                          >
-                                              {products?.map((product, index) => (
-                                                  <option key={index} value={product.id}>
-                                                      {product.name}
-                                                  </option>
-                                              ))}
-                                          </Select>
-
-                                          <InputGroup paddingLeft={15}>
-                                              <Input
-                                                  name={`orderedQuantity-${index}`}
-                                                  onChange={handleChange(index, 'orderedQuantity')}
-                                                  placeholder="Количество"
-                                                  value={item.orderedQuantity}
-                                              />
-                                          </InputGroup>
-                                      </Box>
-                                  ))}
-
+                                            <Input
+                                                {...register(`products.${index}.orderedQuantity`, {
+                                                    required: 'Поле является обязательным',
+                                                })}
+                                                placeholder="Количество"
+                                            />
+                                            <CloseIcon
+                                                cursor="pointer"
+                                                onClick={() => index > 0 && remove(index)}
+                                            />
+                                        </Box>
+                                    )
+                                })}
+                                <Button
+                                    onClick={() => {
+                                        append({ productId: null, orderedQuantity: null })
+                                    }}
+                                >
+                                    Добавить
+                                </Button>
+                            </FormControl>
                             <Box
                                 style={{
                                     display: 'flex',
