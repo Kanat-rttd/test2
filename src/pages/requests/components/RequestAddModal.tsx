@@ -90,7 +90,7 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
         try {
             const responsePromise: Promise<any> = selectedData
                 ? updateSale(selectedData.id, {
-                      clientId: selectedData?.client.id,
+                      clientId: formData.name ? formData.name : selectedData?.client.id,
                       products: [...transformedData],
                   })
                 : createSale({ clientId: formData.name, products: [...transformedData] })
@@ -126,7 +126,7 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
                                 placeholder="Имя клиента"
                                 name="name"
                                 onChange={handleNameChange}
-                                value={selectedData?.client.id}
+                                defaultValue={selectedData?.client.id}
                             >
                                 {clients?.map((client, index) => (
                                     <option key={index} value={client.id}>

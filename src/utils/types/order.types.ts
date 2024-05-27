@@ -1,7 +1,7 @@
 export type OrderArrayType = {
     id: number
     userId: string
-    totalPrice: string
+    totalQuantity: string
     createdAt: Date
     done: number
     orderDetails: [

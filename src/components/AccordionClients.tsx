@@ -102,7 +102,7 @@ const AccordionClients = ({
                                     mr={'60px'}
                                 >
                                     <Heading size={'sm'}>{order.client.name}</Heading>
-                                    <Heading size={'sm'}>Итого: {order.totalPrice}</Heading>
+                                    <Heading size={'sm'}>Итого: {order.totalQuantity}</Heading>
                                 </Box>
                                 <Box display={'flex'}>
                                     <Box

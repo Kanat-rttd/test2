@@ -1,23 +1,25 @@
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { IconButton, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
+import { Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-import { deleteDispatch, getAllDispatches } from '@/utils/services/dispatch.service'
 import { TableContainer, Thead } from '@/components/ui'
-import Dialog from '@/components/Dialog'
-import EditModal from './EditModal'
 import { DispatchType } from '@/utils/types/dispatch.types'
-import { useNotify } from '@/utils/providers/ToastProvider'
-import { mutate } from 'swr'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { useApi } from '@/utils/services/axios'
 
 interface PivotTableProps {
     status: string
 }
 
+type Dispatch = {
+    data: DispatchType[]
+    totalPrice: number
+    totalQuantity: number
+}
+
 const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
-    const { loading } = useNotify()
+    const { getURLs } = useURLParameters()
     const [data, setData] = useState<DispatchType[]>([])
     const [headers, setHeaders] = useState<any[]>([])
-    const [selectedData, setSelectedData] = useState<DispatchType>()
+    const { data: dispatchesData } = useApi<Dispatch>(`release?${getURLs().toString()}`)
 
     const [dialog, setDialog] = useState({
         isOpen: false,
@@ -27,39 +29,25 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
         isOpen: false,
         onClose: () => setModal({ ...modal, isOpen: false }),
     })
+    useEffect(() => {}, [])
 
     useEffect(() => {
-        getAllDispatches().then((res) => {
-            const uniqueProductNames = [
-                ...new Set(
-                    res.data
-                        .filter((row: DispatchType) => row.dispatch == Number(status))
-                        .flatMap((item: DispatchType) =>
-                            item.goodsDispatchDetails.map((detail) => detail.product.name),
-                        ),
-                ),
-            ]
-            const headers = uniqueProductNames.map((name) => ({ bread: name }))
+        if(!dispatchesData) return
 
-            setHeaders(headers)
-            setData(res.data.filter((row: DispatchType) => row.dispatch == Number(status)))
-        })
-    }, [])
+        const uniqueProductNames = [
+            ...new Set(
+                dispatchesData.data
+                    .filter((row: DispatchType) => row.dispatch == Number(status))
+                    .flatMap((item: DispatchType) =>
+                        item.goodsDispatchDetails.map((detail) => detail.product.name),
+                    ),
+            ),
+        ]
+        const headers = uniqueProductNames.map((name) => ({ bread: name }))
 
-    const handlerDelete = (selectedData: DispatchType | undefined) => {
-        if (selectedData) {
-            const responsePromise: Promise<any> = deleteDispatch(selectedData.id)
-            loading(responsePromise)
-            responsePromise.then(() => {
-                mutate((currentData: DispatchType[] | undefined) => {
-                    if (!currentData) return currentData
-                    return currentData.filter((item) => item.id !== selectedData?.id)
-                })
-            })
-        } else {
-            console.error('No data available to delete.')
-        }
-    }
+        setHeaders(headers)
+        setData(dispatchesData.data.filter((row: DispatchType) => row.dispatch == Number(status)))
+    }, [dispatchesData])
 
     return (
         <>
@@ -72,7 +60,6 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
                             {headers.map((head) => (
                                 <Th key={head.bread}>{head.bread}</Th>
                             ))}
-                            <Th>Действия</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -80,7 +67,7 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
                             .sort((a, b) => a.id - b.id)
                             .map((row, index) => (
                                 <Tr key={row.id}>
-                                    <Td>{index+1}</Td>
+                                    <Td>{index + 1}</Td>
                                     <Td>{row.client.name}</Td>
                                     {headers.map((header, index) => {
                                         const quantity = row.goodsDispatchDetails.find(
@@ -88,52 +75,11 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
                                         )?.quantity
                                         return <Td key={index}>{quantity}</Td>
                                     })}
-                                    <Td>
-                                        <IconButton
-                                            variant="outline"
-                                            size={'sm'}
-                                            colorScheme="teal"
-                                            aria-label="Send email"
-                                            marginRight={3}
-                                            onClick={() => {
-                                                setSelectedData(row)
-                                                setModal({ ...modal, isOpen: true })
-                                            }}
-                                            icon={<EditIcon />}
-                                        />
-                                        <IconButton
-                                            variant="outline"
-                                            size={'sm'}
-                                            colorScheme="teal"
-                                            aria-label="Send email"
-                                            marginRight={3}
-                                            onClick={() => {
-                                                setSelectedData(row)
-                                                setDialog({
-                                                    ...dialog,
-                                                    isOpen: true,
-                                                })
-                                            }}
-                                            icon={<DeleteIcon />}
-                                        />
-                                    </Td>
                                 </Tr>
                             ))}
                     </Tbody>
                 </Table>
             </TableContainer>
-            <EditModal data={selectedData} isOpen={modal.isOpen} onClose={modal.onClose} />
-            <Dialog
-                isOpen={dialog.isOpen}
-                onClose={dialog.onClose}
-                header="Удалить"
-                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
-                actionBtn={() => {
-                    dialog.onClose()
-                    handlerDelete(selectedData)
-                }}
-                actionText="Удалить"
-            />
         </>
     )
 }
