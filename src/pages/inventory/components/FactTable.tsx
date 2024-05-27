@@ -130,8 +130,8 @@ const FactTable = () => {
                                 ИТОГО
                             </Th>
                             <Th w={'15%'}></Th>
-                            <Th w={'40%'}></Th>
-                            <Th w={'24%'} fontSize={15} color={'#000'}>
+                            <Th w={'51%'}></Th>
+                            <Th fontSize={15} color={'#000'}>
                                 {factInputData?.totalFact}
                             </Th>
                             <Th></Th>

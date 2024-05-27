@@ -54,7 +54,7 @@ const ProviderTable = () => {
                                 <Th color={'#000'} width={'10%'} fontSize={15}>
                                     ИТОГО
                                 </Th>
-                                <Th width={'60%'}> </Th>
+                                <Th width={'67%'}> </Th>
                                 <Th color={'#000'} fontSize={15}>
                                     {calculationsData?.Total}
                                 </Th>

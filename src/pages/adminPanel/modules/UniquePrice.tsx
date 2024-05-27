@@ -33,7 +33,6 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import { individualPriceType } from '@/utils/types/individualPrice.types'
 import { UniquePriceType } from '@/utils/types/uniquePrice.types'
 
-
 const AdminPanel = () => {
     const { data: individualPrices } = useApi<individualPriceType[]>('inPrice')
     const { onOpen, onClose, isOpen } = useDisclosure()
@@ -126,7 +125,7 @@ const AdminPanel = () => {
                                                 {recentUpdatesDates?.map((dateData) => {
                                                     if (dateData.name == item.clientName) {
                                                         return (
-                                                            <Text mr={'10px'} fontWeight={'600'}>
+                                                            <Text mr={'10px'} fontWeight={'600'} key={dateData.name}>
                                                                 {dateData.recentUpdates
                                                                     ? dayjs(
                                                                           dateData.recentUpdates,
@@ -152,11 +151,15 @@ const AdminPanel = () => {
                                                     <Thead>
                                                         <Tr textAlign={'center'}>
                                                             <Th w={'20%'}>Продукты</Th>
-                                                            <Th w={'20%'} isNumeric>Цена</Th>
+                                                            <Th w={'20%'} isNumeric>
+                                                                Цена
+                                                            </Th>
                                                             <Th></Th>
-                                                            <Th w={'20%'} isNumeric>Время изменения</Th>
+                                                            <Th w={'20%'} isNumeric>
+                                                                Время изменения
+                                                            </Th>
                                                             <Th></Th>
-                                                            
+
                                                             <Th w={'10%'} textAlign={'center'}>
                                                                 Действия
                                                             </Th>
@@ -170,11 +173,11 @@ const AdminPanel = () => {
                                                                         <Td w={'20%'}>
                                                                             {value.name}
                                                                         </Td>
-                                                                        <Td w={'20%'}  isNumeric>
+                                                                        <Td w={'20%'} isNumeric>
                                                                             {value.price}
                                                                         </Td>
                                                                         <Td></Td>
-                                                                        <Td w={'20%'}  isNumeric>
+                                                                        <Td w={'20%'} isNumeric>
                                                                             {dayjs(
                                                                                 value.date,
                                                                             ).format(
@@ -182,8 +185,13 @@ const AdminPanel = () => {
                                                                             )}
                                                                         </Td>
                                                                         <Td></Td>
-                                                                        
-                                                                        <Td display={'flex'} justifyContent={'center'}>
+
+                                                                        <Td
+                                                                            display={'flex'}
+                                                                            justifyContent={
+                                                                                'center'
+                                                                            }
+                                                                        >
                                                                             <IconButton
                                                                                 variant="outline"
                                                                                 size={'sm'}
@@ -259,7 +267,10 @@ const AdminPanel = () => {
                                                             <Th></Th>
                                                             <Th></Th>
                                                             <Th></Th>
-                                                            <Th display={'flex'} justifyContent={'center'}>
+                                                            <Th
+                                                                display={'flex'}
+                                                                justifyContent={'center'}
+                                                            >
                                                                 <Button
                                                                     colorScheme="purple"
                                                                     onClick={() => {

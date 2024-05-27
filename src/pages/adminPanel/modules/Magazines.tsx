@@ -27,7 +27,7 @@ const AdminPanel = () => {
     const [filters, setFilters] = useState({ name: '', clientId: '', status: '' })
     const { data: magazinesDataForSelect } = useApi<MagazineType[]>('magazines')
 
-    const { data: magazinesData, isLoading } = useApi<MagazineType[]>('magazines', filters)
+    const { data: magazinesData, isLoading, mutate: mutateMagazinesData } = useApi<MagazineType[]>('magazines', filters)
     const { data: clientsData } = useApi<ClientType[]>('client')
 
     const { onOpen, isOpen, onClose } = useDisclosure()
@@ -39,7 +39,7 @@ const AdminPanel = () => {
     })
 
     const handledSuccess = () => {
-        mutate(`magazines`)
+        mutateMagazinesData()
     }
 
     const deleteMagazine = (selectedData: MagazineType | undefined) => {

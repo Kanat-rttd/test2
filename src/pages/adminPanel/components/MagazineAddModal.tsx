@@ -168,7 +168,7 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                                         })}
                                     >
                                         {status.map((item) => {
-                                            return <option value={item.name}>{item.name}</option>
+                                            return <option key={item.name} value={item.name}>{item.name}</option>
                                         })}
                                     </ChakraSelect>
                                     <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
@@ -193,10 +193,6 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                         </Stack>
                     </ModalBody>
                     <ModalFooter gap={3}>
-                        {/* <Button onClick={onClose}>Закрыть</Button>
-                        <Button onClick={handleSubmitForm(sendData)}>
-                            {data ? 'Редактировать' : 'Добавить'} продукт
-                        </Button> */}
                     </ModalFooter>
                 </ModalContent>
             </Modal>
