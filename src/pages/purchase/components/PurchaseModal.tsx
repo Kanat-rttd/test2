@@ -31,7 +31,7 @@ interface Purchase {
     id: number
     date: Date
     providerId: number
-    rawMaterialId: number
+    providerGoodId: number
     quantity: number
     price: number
     deliverySum: number
@@ -104,8 +104,8 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
     ]
 
     const sendData = (formData: Purchase) => {
-        console.log(formData);
-        
+        console.log(formData)
+
         const response: Promise<any> = createPurchase(formData)
         loading(response)
         response
@@ -157,9 +157,9 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                             <FormErrorMessage>{errors.providerId?.message}</FormErrorMessage>
                         </FormControl>
 
-                        <FormControl isInvalid={!!errors.rawMaterialId}>
+                        <FormControl isInvalid={!!errors.providerGoodId}>
                             <Controller
-                                name="rawMaterialId"
+                                name="providerGoodId"
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -183,7 +183,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                     )
                                 }}
                             />
-                            <FormErrorMessage>{errors.rawMaterialId?.message}</FormErrorMessage>
+                            <FormErrorMessage>{errors.providerGoodId?.message}</FormErrorMessage>
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.quantity}>
@@ -246,11 +246,9 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                     return (
                                         <Select
                                             options={status}
-                                            value={
-                                                status?.find(
-                                                    (option) =>
-                                                        option?.label === value)
-                                            }
+                                            value={status?.find(
+                                                (option) => option?.label === value,
+                                            )}
                                             onChange={(val: any) => {
                                                 console.log(val)
 

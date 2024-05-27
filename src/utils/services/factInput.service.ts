@@ -7,7 +7,7 @@ export const getAllFactInputs = async () => {
 
 export const createFactInput = async (
     data: {
-        name: string
+        id: number
         place: string
         unitOfMeasure: string
         quantity: number

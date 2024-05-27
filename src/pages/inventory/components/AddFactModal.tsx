@@ -53,20 +53,29 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
 
     const sendData = (formData: AddFactModalInputs) => {
         const formattedData: {
+            id: number
             name: string
             place: string
             unitOfMeasure: string
             quantity: number
         }[] = Object.keys(formData).reduce(
             (
-                acc: { name: string; place: string; unitOfMeasure: string; quantity: number }[],
+                acc: {
+                    id: number
+                    name: string
+                    place: string
+                    unitOfMeasure: string
+                    quantity: number
+                }[],
                 key,
             ) => {
                 if (key !== 'place' && formData[key as keyof AddFactModalInputs] !== '') {
                     const index = Number(key.split('_')[1])
                     const material = providerGoodsData && providerGoodsData[index]
+                    // console.log(material)
                     if (material) {
                         acc.push({
+                            id: material.id,
                             name: material.goods,
                             place: formData.place,
                             unitOfMeasure: material.unitOfMeasure,
@@ -80,6 +89,8 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
         )
 
         if (formattedData.length == 0 || !formattedData) return
+
+        // console.log(formattedData)
         const responsePromise: Promise<any> = createFactInput(formattedData)
         loading(responsePromise)
         responsePromise

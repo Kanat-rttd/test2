@@ -12,17 +12,25 @@ import ListTable from '../components/ListTable'
 import DistributionModal from '../components/DistributionModal'
 import PivotTable from '../components/PivotTable'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
+import { useApi } from '@/utils/services/axios'
 
 export default function ShiftAccounting() {
-    const { setParam } = useURLParameters()
-    const handleSuccess = () => {
-        console.log('1')
-    }
+    const { setParam, getURLs } = useURLParameters()
+
+    const { data: shiftAccounting, mutate: mutateShiftAccountingData } = useApi<
+        ShiftAccountingType[]
+    >(`shiftAccounting?${getURLs().toString()}`)
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const clearParam = () => {
         setParam('facilityUnit', '')
+        setParam('personal', '')
+    }
+
+    const handleSuccess = () => {
+        mutateShiftAccountingData()
     }
 
     return (
@@ -40,10 +48,13 @@ export default function ShiftAccounting() {
                     </Box>
                     <TabPanels height={'100%'}>
                         <TabPanel height={'100%'} p={'10px 0'}>
-                            <ListTable status="1" />
+                            <ListTable
+                                shiftAccounting={shiftAccounting}
+                                mutate={mutateShiftAccountingData}
+                            />
                         </TabPanel>
                         <TabPanel p={'10px 0'}>
-                            <PivotTable />
+                            <PivotTable shiftAccounting={shiftAccounting} />
                         </TabPanel>
                     </TabPanels>
                 </Box>

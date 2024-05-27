@@ -12,39 +12,42 @@ import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
 // import { useNotify } from '@/utils/providers/ToastProvider'
 import EditModal from './EditModal'
+import { deleteShiftAccounting } from '@/utils/services/shiftAccounting.service'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
-interface Dispatch {
-    id: number
-    clientId: number
-    createdAt: Date
-    dispatch: string
-    goodsDispatchDetails: [
-        {
-            id: number
-            productId: number
-            quantity: number
-            product: {
-                name: string
-                price: number
-                bakingFacilityUnit: {
-                    id: number
-                    facilityUnit: string
-                }
-            }
-        },
-    ]
-    client: {
-        id: number
-        name: string
-    }
-}
-
-// interface ListTableProps {
-//     status: string
+// interface Dispatch {
+//     id: number
+//     clientId: number
+//     createdAt: Date
+//     dispatch: string
+//     goodsDispatchDetails: [
+//         {
+//             id: number
+//             productId: number
+//             quantity: number
+//             product: {
+//                 name: string
+//                 price: number
+//                 bakingFacilityUnit: {
+//                     id: number
+//                     facilityUnit: string
+//                 }
+//             }
+//         },
+//     ]
+//     client: {
+//         id: number
+//         name: string
+//     }
 // }
 
-export default function ListTable() {
-    // const { loading } = useNotify()
+interface ListTableProps {
+    shiftAccounting: ShiftAccountingType[] | undefined
+    mutate: () => void
+}
+
+export default function ListTable({ shiftAccounting, mutate }: ListTableProps) {
+    const { loading } = useNotify()
     const { getParam, setParam } = useURLParameters()
 
     const [dialog, setDialog] = useState({
@@ -52,9 +55,6 @@ export default function ListTable() {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const { data: shiftAccounting, mutate: mutateShiftAccountingData } =
-        useApi<ShiftAccountingType[]>('shiftAccounting')
-    // const { data: dispatchesData } = useApi<Dispatch[]>('release')
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
 
     const [selectedData, setSelectedData] = useState<ShiftAccountingType | undefined>(undefined)
@@ -65,7 +65,7 @@ export default function ListTable() {
     }
 
     const handleSuccess = () => {
-        mutateShiftAccountingData()
+        mutate()
     }
 
     const [modal, setModal] = useState({
@@ -74,15 +74,16 @@ export default function ListTable() {
     })
 
     const handlerDeleteShiftAccounting = (selectedData: ShiftAccountingType | undefined) => {
-        // if (selectedData) {
-        //     const responsePromise: Promise<any> = deleteShiftAccounting(selectedData.id)
-        //     loading(responsePromise)
-        //     responsePromise.then(() => {
-        //         mutateShiftAccountingData()
-        //     })
-        // } else {
-        //     console.error('No user data available to delete.')
-        // }
+        if (selectedData) {
+            console.log(selectedData)
+            const responsePromise: Promise<any> = deleteShiftAccounting(selectedData.id)
+            loading(responsePromise)
+            responsePromise.then(() => {
+                mutate()
+            })
+        } else {
+            console.error('No user data available to delete.')
+        }
     }
 
     return (
@@ -119,10 +120,10 @@ export default function ListTable() {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {shiftAccounting?.map((row) => {
+                            {shiftAccounting?.map((row, index) => {
                                 return (
                                     <Tr key={row.id}>
-                                        <Td>{row.id}</Td>
+                                        <Td>{index + 1}</Td>
                                         <Td>{dayjs(row.date).format('DD.MM.YYYY')}</Td>
                                         <Td>{row.bakingFacilityUnit.facilityUnit}</Td>
                                         <Td>

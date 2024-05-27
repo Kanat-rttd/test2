@@ -18,10 +18,15 @@ import { useEffect } from 'react'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
 import dayjs from 'dayjs'
+import { updateShiftAccounting } from '@/utils/services/shiftAccounting.service'
+
+// interface EditModalInputs {
+//     date: string
+//     hours: string
+// }
 
 interface EditModalInputs {
-    date: string
-    hours: string
+    [key: string]: string
 }
 
 interface EditModalProps {
@@ -51,7 +56,18 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
 
     const handleConfirm = (formData: EditModalInputs) => {
         const shiftAccountigId = data?.id?.toString() ?? ''
-        const responsePromise: Promise<any> = updateShiftAccounting(shiftAccountigId, formData)
+
+        const formattedData = data?.shiftAccountingDetails.map((details, index) => ({
+            date: formData.date,
+            shiftAccountingDetailsId: details.id,
+            shiftAccountingId: data?.id,
+            departPersonalId: details.departPersonalId,
+            shiftTime: formData[`quantity_${index}`],
+        }))
+
+        console.log(formattedData)
+
+        const responsePromise: Promise<any> = updateShiftAccounting(shiftAccountigId, formattedData)
         loading(responsePromise)
         responsePromise
             .then(() => {
@@ -88,12 +104,46 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
                         </FormControl>
                         <Box
                             display={'flex'}
-                            flexDirection={'row'}
-                            alignItems={'center'}
+                            flexDirection={'column'}
+                            // alignItems={'center'}
+                            gap={2}
                             justifyContent={'space-between'}
                             ml={1}
                         >
-                            <Text>{data?.shiftAccountingDetails[0].departPersonal.name}</Text>
+                            {data &&
+                                data.shiftAccountingDetails.map((details, index) => {
+                                    return (
+                                        <Box
+                                            display={'flex'}
+                                            flexDirection={'row'}
+                                            alignItems={'center'}
+                                            justifyContent={'space-between'}
+                                            key={index}
+                                        >
+                                            <Text>{details.departPersonal.name}</Text>
+                                            <FormControl
+                                                width={'70%'}
+                                                key={index}
+                                                isInvalid={!!errors[`quantity_${index}`]}
+                                            >
+                                                <InputGroup>
+                                                    <Input
+                                                        {...register(`quantity_${index}`, {
+                                                            required: 'Поле является обязательным',
+                                                        })}
+                                                        autoComplete="off"
+                                                        placeholder={`Часы *`}
+                                                        type="text"
+                                                    />
+                                                </InputGroup>
+                                                <FormErrorMessage>
+                                                    {(errors as any)[`quantity_${index}`]?.message}
+                                                </FormErrorMessage>
+                                            </FormControl>
+                                        </Box>
+                                    )
+                                })}
+                            {/* <Text>{data?.shiftAccountingDetails[0].departPersonal.name}</Text>
                             <FormControl width={'70%'} isInvalid={!!errors.hours}>
                                 <InputGroup>
                                     <Input
@@ -107,7 +157,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
                                     />
                                 </InputGroup>
                                 <FormErrorMessage>{errors.hours?.message}</FormErrorMessage>
-                            </FormControl>
+                            </FormControl> */}
                         </Box>
                         <Box
                             style={{

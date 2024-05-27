@@ -25,7 +25,7 @@ interface Purchase {
     id: number
     date: string
     providerId: number
-    rawMaterialId: number
+    providerGoodId: number
     quantity: number
     price: number
     deliverySum: number
@@ -38,6 +38,7 @@ interface Purchase {
     providerGood: {
         id: number
         name: string
+        unitOfMeasure: string
     }
 }
 
@@ -77,8 +78,12 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
     const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
 
     const [providerGoods, setProviderGoods] = useState<rawMaterials[]>([])
-    const [selectedRawMaterial, setSelectedRawMaterial] = useState<rawMaterials | null>(null)
-    
+    const [selectedRawMaterial, setSelectedRawMaterial] = useState(
+        selectedData?.providerGood.unitOfMeasure,
+    )
+
+    console.log(selectedData)
+
     useEffect(() => {
         const _providerGoods = providerGoodsData?.map((item) => {
             return { label: item.goods, value: item.id, uom: item.unitOfMeasure }
@@ -86,6 +91,10 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
 
         setProviderGoods(_providerGoods || [])
     }, [providerGoodsData])
+
+    useEffect(() => {
+        setSelectedRawMaterial(selectedData?.providerGood.unitOfMeasure)
+    }, [selectedData])
 
     const {
         register,
@@ -128,8 +137,6 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
         reset()
         onClose()
     }
-    
-    
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -169,9 +176,9 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                             <FormErrorMessage>{errors.providerId?.message}</FormErrorMessage>
                         </FormControl>
 
-                        <FormControl isInvalid={!!errors.rawMaterialId}>
+                        <FormControl isInvalid={!!errors.providerGoodId}>
                             <Controller
-                                name="rawMaterialId"
+                                name="providerGoodId"
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -185,7 +192,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                             onChange={(selectedOption: rawMaterials | null) => {
                                                 if (selectedOption) {
                                                     onChange(selectedOption.value)
-                                                    setSelectedRawMaterial(selectedOption)
+                                                    setSelectedRawMaterial(selectedOption.uom)
                                                 }
                                             }}
                                             placeholder="Товар *"
@@ -195,7 +202,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                     )
                                 }}
                             />
-                            <FormErrorMessage>{errors.rawMaterialId?.message}</FormErrorMessage>
+                            <FormErrorMessage>{errors.providerGoodId?.message}</FormErrorMessage>
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.quantity}>
@@ -208,7 +215,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                     placeholder="Количество *"
                                     type="number"
                                 />
-                                <InputRightAddon>{selectedRawMaterial?.uom}</InputRightAddon>
+                                <InputRightAddon>{selectedRawMaterial}</InputRightAddon>
                             </InputGroup>
                             <FormErrorMessage>{errors.quantity?.message}</FormErrorMessage>
                         </FormControl>

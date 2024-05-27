@@ -3,7 +3,7 @@ import { Table, Tbody, Tr, Th, Td, useDisclosure, Box, IconButton } from '@chakr
 import { useState } from 'react'
 import EditModal from './EditModal'
 import dayjs from 'dayjs'
-import { useApi } from '@/utils/services/axios'
+// import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import Dialog from '@/components/Dialog'
@@ -22,7 +22,7 @@ interface Purchase {
     id: number
     date: string
     providerId: number
-    rawMaterialId: number
+    providerGoodId: number
     quantity: number
     price: number
     deliverySum: number
@@ -35,16 +35,22 @@ interface Purchase {
     providerGood: {
         id: number
         name: string
+        unitOfMeasure: string
     }
 }
 
-const ListTable = () => {
-    const { loading } = useNotify()
-    const { getURLs, getParam } = useURLParameters()
+interface ListTableProps {
+    purchasesData: AllPurchases | undefined
+    mutate: () => void
+}
 
-    const { data: purchasesData, mutate: mutatePurchaseData } = useApi<AllPurchases>(
-        `productPurchase?${getURLs().toString()}`,
-    )
+const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
+    const { loading } = useNotify()
+    const { getParam } = useURLParameters()
+
+    // const { data: purchasesData, mutate: mutatePurchaseData } = useApi<AllPurchases>(
+    //     `productPurchase?${getURLs().toString()}`,
+    // )
 
     const filteredPurchases = purchasesData?.purchases.filter((purchase) => {
         if (getParam('providerId') && Number(getParam('providerId')) !== purchase.provider.id) {
@@ -67,7 +73,7 @@ const ListTable = () => {
     }
 
     const handleUpdateProduct = () => {
-        mutatePurchaseData()
+        mutate()
     }
 
     const handlerDelete = (selectedData: Purchase | undefined) => {
@@ -75,7 +81,7 @@ const ListTable = () => {
             const responsePromise: Promise<any> = deletePurchase(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {
-                mutatePurchaseData()
+                mutate()
             })
         } else {
             console.error('No Purchase data available to delete.')
@@ -103,10 +109,10 @@ const ListTable = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {filteredPurchases?.map((purchase) => {
+                                {filteredPurchases?.map((purchase, index) => {
                                     return (
                                         <Tr key={purchase.id}>
-                                            <Td>{purchase.id}</Td>
+                                            <Td>{index + 1}</Td>
                                             <Td>{dayjs(purchase.date).format('DD.MM.YYYY')}</Td>
                                             <Td>{purchase.provider.name}</Td>
                                             <Td>{purchase.providerGood.name}</Td>

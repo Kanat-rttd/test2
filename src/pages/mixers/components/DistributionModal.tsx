@@ -96,8 +96,8 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 
         responsePromise
             .then(() => {
-                // onSuccess()
-                // onClose()
+                onSuccess()
+                onClose()
                 setSelectedPersonals([])
                 setSelectedFacilityUnit('')
             })

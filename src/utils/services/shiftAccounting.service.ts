@@ -7,7 +7,7 @@ export const getAllShiftAccounting = async () => {
 
 export const createShiftAccounting = async (data: {
     facilityUnitsId: string
-    date: string
+    date: Date
     departPersonals: {
         name: string
         id: number
@@ -18,7 +18,23 @@ export const createShiftAccounting = async (data: {
     return response
 }
 
-export const updateShifAccounting = async (id: number, data: {}) => {
+export const updateShiftAccounting = async (
+    id: string,
+    data:
+        | {
+              date: string
+              shiftAccountingDetailsId: number
+              shiftAccountingId: number
+              departPersonalId: number
+              shiftTime: string
+          }[]
+        | undefined,
+) => {
     const response = await $host.put(`shiftAccounting/${id}`, data)
+    return response
+}
+
+export const deleteShiftAccounting = async (id: number) => {
+    const response = await $host.put(`shiftAccounting/delete/${id}`)
     return response
 }

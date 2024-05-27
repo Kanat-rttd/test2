@@ -1,7 +1,6 @@
 import { Box, Button, Select, useDisclosure } from '@chakra-ui/react'
 import ListTable from '../components/ListTable'
 import PurchaseModal from '../components/PurchaseModal'
-import { mutate } from 'swr'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
@@ -13,13 +12,45 @@ interface Providers {
     label: string
 }
 
+interface AllPurchases {
+    purchases: Purchase[]
+    totalQuantity: number
+    totalSum: number
+    totalDeliverySum: number
+}
+
+interface Purchase {
+    id: number
+    date: string
+    providerId: number
+    providerGoodId: number
+    quantity: number
+    price: number
+    deliverySum: number
+    totalSum: number
+    status: string
+    provider: {
+        id: number
+        name: string
+    }
+    providerGood: {
+        id: number
+        name: string
+        unitOfMeasure: string
+    }
+}
+
 const Products = () => {
-    const { getParam, setParam } = useURLParameters()
+    const { getParam, setParam, getURLs } = useURLParameters()
     const { data: providersData } = useApi<Providers[]>('providers')
     const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
 
+    const { data: purchasesData, mutate: mutatePurchaseData } = useApi<AllPurchases>(
+        `productPurchase?${getURLs().toString()}`,
+    )
+
     const handleAddProduct = () => {
-        mutate('productPurchase')
+        mutatePurchaseData()
     }
 
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -80,7 +111,7 @@ const Products = () => {
                             Добавить закупки
                         </Button>
                     </Box>
-                    <ListTable />
+                    <ListTable purchasesData={purchasesData} mutate={mutatePurchaseData} />
                 </Box>
                 <PurchaseModal isOpen={isOpen} onClose={onClose} onSuccess={handleAddProduct} />
             </UniversalComponent>

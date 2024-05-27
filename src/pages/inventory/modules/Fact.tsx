@@ -49,7 +49,7 @@ const Fact = () => {
                                 }}
                             >
                                 {providerGoodsData?.map((item, index) => (
-                                    <option key={index} value={item.goods}>
+                                    <option key={index} value={item.id}>
                                         {item.goods}
                                     </option>
                                 ))}
