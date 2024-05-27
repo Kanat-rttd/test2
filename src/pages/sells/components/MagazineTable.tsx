@@ -81,7 +81,7 @@ const MagazineTable = () => {
                                 <Th color={'#000'} fontSize={15}>
                                     ИТОГО
                                 </Th>
-                                <Th> </Th>
+                                <Th w={'80%'}> </Th>
                                 <Th color={'#000'} fontSize={15}>
                                     {magazineDebtData?.total}
                                 </Th>
