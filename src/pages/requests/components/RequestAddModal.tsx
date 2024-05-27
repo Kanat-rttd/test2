@@ -64,7 +64,7 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
                 ...formData,
                 products: newItems,
             })
-
+            
             const _transformedData = newItems
                 .filter((item) => item.productId !== '' && item.orderedQuantity !== '')
                 .map((item) => ({
@@ -74,9 +74,8 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
                     orderedQuantity: item.orderedQuantity,
                 }))
 
-            console.log('1111', _transformedData)
-
             setTransformedData(_transformedData)
+            
         }
 
     const handleNameChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -90,7 +89,10 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
     const addRequest = () => {
         try {
             const responsePromise: Promise<any> = selectedData
-                ? updateSale( selectedData.id, { clientId: formData.name, products: [...transformedData] })
+                ? updateSale(selectedData.id, {
+                      clientId: selectedData?.client.id,
+                      products: [...transformedData],
+                  })
                 : createSale({ clientId: formData.name, products: [...transformedData] })
             loading(responsePromise)
             responsePromise.then((res) => {
@@ -111,7 +113,7 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
         <Modal isCentered isOpen={isOpen} onClose={handleModalClose}>
             <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
             <ModalContent>
-                <ModalHeader>{'Добавить'} заказ</ModalHeader>
+                <ModalHeader>{selectedData ? 'Редактировать' : 'Добавить'} заказ</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <Stack spacing={4}>
@@ -124,7 +126,7 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
                                 placeholder="Имя клиента"
                                 name="name"
                                 onChange={handleNameChange}
-                                value={formData?.name ?? ''}
+                                value={selectedData?.client.id}
                             >
                                 {clients?.map((client, index) => (
                                     <option key={index} value={client.id}>
@@ -132,33 +134,60 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
                                     </option>
                                 ))}
                             </Select>
+                            {selectedData
+                                ? selectedData?.orderDetails.map((item, index) => (
+                                      <Box key={index} display={'flex'}>
+                                          <Select
+                                              variant="filled"
+                                              placeholder="Вид хлеба"
+                                              name={`productId-${index}`}
+                                              onChange={handleChange(index, 'productId')}
+                                              defaultValue={item.productId}
+                                          >
+                                              {products?.map((product, index) => (
+                                                  <option key={index} value={product.id}>
+                                                      {product.name}
+                                                  </option>
+                                              ))}
+                                          </Select>
 
-                            {formData.products.map((item, index) => (
-                                <Box key={index} display={'flex'}>
-                                    <Select
-                                        variant="filled"
-                                        placeholder="Вид хлеба"
-                                        name={`productId-${index}`}
-                                        onChange={handleChange(index, 'productId')}
-                                        value={item.productId}
-                                    >
-                                        {products?.map((product, index) => (
-                                            <option key={index} value={product.id}>
-                                                {product.name}
-                                            </option>
-                                        ))}
-                                    </Select>
+                                          <InputGroup paddingLeft={15}>
+                                              <Input
+                                                  name={`orderedQuantity-${index}`}
+                                                  onChange={handleChange(index, 'orderedQuantity')}
+                                                  placeholder="Количество"
+                                                  defaultValue={item.orderedQuantity}
+                                              />
+                                          </InputGroup>
+                                      </Box>
+                                  ))
+                                : formData.products.map((item, index) => (
+                                      <Box key={index} display={'flex'}>
+                                          <Select
+                                              variant="filled"
+                                              placeholder="Вид хлеба"
+                                              name={`productId-${index}`}
+                                              onChange={handleChange(index, 'productId')}
+                                              value={item.productId}
+                                          >
+                                              {products?.map((product, index) => (
+                                                  <option key={index} value={product.id}>
+                                                      {product.name}
+                                                  </option>
+                                              ))}
+                                          </Select>
 
-                                    <InputGroup paddingLeft={15}>
-                                        <Input
-                                            name={`orderedQuantity-${index}`}
-                                            onChange={handleChange(index, 'orderedQuantity')}
-                                            placeholder="Количество"
-                                            value={item.orderedQuantity}
-                                        />
-                                    </InputGroup>
-                                </Box>
-                            ))}
+                                          <InputGroup paddingLeft={15}>
+                                              <Input
+                                                  name={`orderedQuantity-${index}`}
+                                                  onChange={handleChange(index, 'orderedQuantity')}
+                                                  placeholder="Количество"
+                                                  value={item.orderedQuantity}
+                                              />
+                                          </InputGroup>
+                                      </Box>
+                                  ))}
+
                             <Box
                                 style={{
                                     display: 'flex',

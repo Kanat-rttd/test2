@@ -65,7 +65,7 @@ const ProcessingPage = () => {
                             data={salesData.filter((sale) => sale.done === 0)}
                             handleChangeStatus={handleChangeStatus}
                             isOpen={isOpen}
-                            handleClose={handleClose}
+                            onClose={handleClose}
                             onOpen={onOpen}
                         />
                     )}

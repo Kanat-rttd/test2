@@ -26,7 +26,7 @@ type accorfionClientType = {
     isOpen: boolean
     data: OrderArrayType[]
     handleChangeStatus: (clientName: OrderArrayType) => void
-    handleClose: () => void
+    onClose: () => void
     onOpen: () => void
 }
 
@@ -35,7 +35,7 @@ const AccordionClients = ({
     handleChangeStatus,
     isOpen,
     onOpen,
-    handleClose,
+    onClose,
 }: accorfionClientType) => {
     const { loading } = useNotify()
     const defaultIndex = Array.from({ length: data.length }, (_, index) => index)
@@ -67,6 +67,11 @@ const AccordionClients = ({
         } else {
             console.error('No user data available to delete.')
         }
+    }
+
+    const handleClose = () => {
+        setSelectedData(undefined)
+        onClose()
     }
 
     return (
@@ -115,6 +120,8 @@ const AccordionClients = ({
                                             onClick={(event) => {
                                                 event.stopPropagation()
                                                 setSelectedData(order)
+                                                console.log(order);
+                                                
                                                 onOpen()
                                             }}
                                         />
