@@ -8,7 +8,6 @@
 }
 
 .tableWrapper {
-    position: relative;
     height: 100%;
     width: 100%; 
     min-height: 77lvh;  
@@ -16,14 +15,14 @@
     overflow-x: auto;
     overflow-y: auto;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    padding-bottom: 35px;
+    /* padding-bottom: 5px; */
     border-radius: 5px;
     
 }
 
 .tfoot {
     width: 100%;
-    position: absolute;
+    position: sticky;
     bottom: 0;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     background-color: white;

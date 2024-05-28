@@ -27,7 +27,7 @@ const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
                         <Th>№</Th>
                         <Th>Реализаторы</Th>
                         {Array.from(uniqProducts).map((name, index) => (
-                            <Th textAlign={'center'} minW={'100px'} key={index}>
+                            <Th minWidth={'150px'} textAlign={'center'} key={index}>
                                 {name}
                             </Th>
                         ))}
@@ -39,7 +39,7 @@ const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
                             <Td>{index + 1}</Td>
                             <Td>{item.client.name}</Td>
                             {Array.from(uniqProducts).map((productName, productIndex) => (
-                                <Td width={'160px'} textAlign={'center'} key={productIndex}>
+                                <Td textAlign={'center'} key={productIndex}>
                                     {item.orderDetails.find(
                                         (prod) => prod.product.name === productName,
                                     )?.orderedQuantity || ''}
@@ -49,32 +49,25 @@ const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
                     ))}
                 </Tbody>
                 <Tfoot>
-                    <Tr display={'flex'} justifyContent={'space-between'} mr={'1rem'}>
+                    <Tr>
                         <Th fontSize={16} fontWeight={'bold'} color={'#000'}>
                             Итого
                         </Th>
-                        <Tr
-                            width={'72%'}
-                            display={'flex'}
-                            justifyContent={'space-between'}
-                            mr={'32px'}
-                            gap={'10%'}
-                        >
-                            {Array.from(uniqProducts).map((productName, productIndex) => (
-                                <Th
-                                w={'160px'}
-                                    key={productIndex}
-                                    fontSize={16}
-                                    fontWeight={'bold'}
-                                    color={'#000'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                    textAlign={'center'}
-                                >
-                                    {getColumnTotal(productName)}
-                                </Th>
-                            ))}
-                        </Tr>
+                        <Th></Th>
+
+                        {Array.from(uniqProducts).map((productName, productIndex) => (
+                            <Th
+                                marginLeft={'50px'}
+                                minWidth={'150px'}
+                                key={productIndex}
+                                fontSize={16}
+                                fontWeight={'bold'}
+                                textAlign={'center'}
+                                color={'#000'}
+                            >
+                                {getColumnTotal(productName)}
+                            </Th>
+                        ))}
                     </Tr>
                 </Tfoot>
             </Table>
