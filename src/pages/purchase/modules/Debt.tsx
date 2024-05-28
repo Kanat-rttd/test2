@@ -75,7 +75,7 @@ const Debt = () => {
                                 <Th color={'#000'} fontSize={15}>
                                     ИТОГО
                                 </Th>
-                                <Th> </Th>
+                                <Th width={'77%'}> </Th>
                                 <Th color={'#000'} fontSize={15}>
                                     {purchasesData?.totalDebt}
                                 </Th>

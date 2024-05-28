@@ -128,7 +128,6 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                         })}
                                         variant="filled"
                                         placeholder=""
-                                        name="breadType"
                                         defaultValue={data ? data.product?.id : ''}
                                     >
                                         <option disabled value="">
@@ -149,8 +148,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             required: 'Поле является обязательным',
                                         })}
                                         type="number"
-                                        name="flour"
-                                        placeholder=""
+                                        step="any"
                                     />
                                     <FormErrorMessage>{errors.flour?.message}</FormErrorMessage>
                                 </FormControl>
@@ -161,8 +159,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             required: 'Поле является обязательным',
                                         })}
                                         type="number"
-                                        name="salt"
-                                        placeholder=""
+                                        step="any"
                                     />
                                     <FormErrorMessage>{errors.salt?.message}</FormErrorMessage>
                                 </FormControl>
@@ -173,8 +170,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             required: 'Поле является обязательным',
                                         })}
                                         type="number"
-                                        name="yeast"
-                                        placeholder=""
+                                        step="any"
                                     />
                                     <FormErrorMessage>{errors.yeast?.message}</FormErrorMessage>
                                 </FormControl>
@@ -185,8 +181,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             required: 'Поле является обязательным',
                                         })}
                                         type="number"
-                                        name="malt"
-                                        placeholder=""
+                                        step="any"
                                     />
                                     <FormErrorMessage>{errors.malt?.message}</FormErrorMessage>
                                 </FormControl>
@@ -197,8 +192,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             required: 'Поле является обязательным',
                                         })}
                                         type="number"
-                                        name="butter"
-                                        placeholder=""
+                                        step="any"
                                     />
                                     <FormErrorMessage>{errors.butter?.message}</FormErrorMessage>
                                 </FormControl>
@@ -209,8 +203,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             required: 'Поле является обязательным',
                                         })}
                                         type="number"
-                                        name="temperature"
-                                        placeholder=""
+                                        step="any"
                                     />
                                     <FormErrorMessage>
                                         {errors.temperature?.message}
@@ -250,8 +243,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             required: 'Поле является обязательным',
                                         })}
                                         type="number"
-                                        name="output"
-                                        placeholder=""
+                                        step="any"
                                     />
                                     <FormErrorMessage>{errors.output?.message}</FormErrorMessage>
                                 </FormControl>
@@ -262,8 +254,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             required: 'Поле является обязательным',
                                         })}
                                         type="number"
-                                        name="defective"
-                                        placeholder=""
+                                        step="any"
                                     />
                                     <FormErrorMessage>{errors.defective?.message}</FormErrorMessage>
                                 </FormControl>
