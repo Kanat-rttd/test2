@@ -15,7 +15,6 @@ import {
     Button,
 } from '@chakra-ui/react'
 
-// import { ChangeEvent, useEffect } from 'react'
 import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form'
 import { OrderArrayType } from '@/utils/types/order.types'
 import { createSale, updateSale } from '@/utils/services/sales.service'
@@ -34,7 +33,7 @@ interface ClientAddModalProps {
 }
 
 type FormData = {
-    clientId: string
+    clientId: number
     products: { productId: number | null; orderedQuantity: number | null }[]
 }
 
@@ -42,8 +41,6 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
     const { loading } = useNotify()
     const { data: clients } = useApi<ClientType[]>('client')
     const { data: products } = useApi<Product[]>('product')
-    // const [formData, setFormData] = useState(modalData)
-    // const [transformedData, setTransformedData] = useState<any[]>([])
 
     const {
         register,
@@ -68,66 +65,16 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
                     orderedQuantity: +order.orderedQuantity,
                 }
             })
-            setValue('clientId', selectedData.client.id)
+            setValue('clientId', +selectedData.client.id)
             setValue('products', data)
         } else {
             reset()
         }
     }, [selectedData])
 
-    // const handleChange =
-    //     (index: number, field: string) =>
-    //     ({ target }: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    //         const { value } = target
-    //         const newItems = [...formData.products]
-    //         newItems[index] = { ...newItems[index], [field]: value }
-
-    //         if (index === formData.products.length - 1) {
-    //             newItems.push({ productId: '', orderedQuantity: ''})
-    //         }
-
-    //         setFormData({
-    //             ...formData,
-    //             products: newItems,
-    //         })
-
-    //         const _transformedData = newItems
-    //             .filter((item) => item.productId !== '' && item.orderedQuantity !== '')
-    //             .map((item) => ({
-    //                 price: products?.find((product) => product.id === Number(item.productId))
-    //                     ?.price,
-    //                 productId: item.productId,
-    //                 orderedQuantity: item.orderedQuantity,
-    //             }))
-
-    //         setTransformedData(_transformedData)
-    //     }
-
-    // useEffect(() => {
-    //     if (selectedData) {
-    //         const _transformedData = selectedData?.orderDetails
-    //             .filter((item) => item.productId !== '' && item.orderedQuantity !== '')
-    //             .map((item) => ({
-    //                 price: products?.find((product) => product.id === Number(item.productId))
-    //                     ?.price,
-    //                 productId: item.productId,
-    //                 orderedQuantity: item.orderedQuantity,
-    //             }))
-
-    //         console.log(_transformedData)
-    //         setTransformedData(_transformedData)
-    //     }
-    // }, [selectedData])
-
-    // const handleNameChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    //     const { value } = event.target
-    //     setFormData({
-    //         ...formData,
-    //         name: value,
-    //     })
-    // }
-
     const addRequest: SubmitHandler<FormData> = (formData) => {
+        console.log(formData);
+        
         try {
             const responsePromise: Promise<any> = selectedData
                 ? updateSale(selectedData.id, formData)
@@ -168,7 +115,6 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
                                     })}
                                     variant="filled"
                                     placeholder="Имя клиента"
-                                    name="name"
                                 >
                                     {clients?.map((client, index) => (
                                         <option key={index} value={client.id}>
@@ -186,7 +132,7 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
                             >
                                 {fields.map((_, index) => {
                                     return (
-                                        <Box>
+                                        <Box display="flex" gap="1rem" alignItems="center" key={index}>
                                             <Select
                                                 {...register(`products.${index}.productId`, {
                                                     required: 'Поле является обязательным',

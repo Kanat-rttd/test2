@@ -9,6 +9,7 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { OrderArrayType } from '@/utils/types/order.types'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import RequestAddModal from '../components/RequestAddModal'
 
 const ProcessingPage = () => {
     const { loading } = useNotify()
@@ -18,6 +19,7 @@ const ProcessingPage = () => {
     const { data: salesData, mutate: mutateSalesData } = useApi<OrderArrayType[]>(
         `sales?${getURLs().toString()}`,
     )
+    
 
     const handleChangeStatus = async (clientName: OrderArrayType) => {
         const responsePromise: Promise<any> = setDoneStatus(clientName.id)
@@ -70,6 +72,7 @@ const ProcessingPage = () => {
                         />
                     )}
                 </Box>
+                <RequestAddModal isOpen={isOpen} onClose={handleClose} selectedData={undefined} />
             </Box>
             
         </UniversalComponent>
