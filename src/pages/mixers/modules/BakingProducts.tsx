@@ -15,7 +15,7 @@ import BakingAddModal from '../components/BakingAddModal'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
-import { mutate, useApi } from '@/utils/services/axios'
+import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import Dialog from '@/components/Dialog'
@@ -54,10 +54,7 @@ const BakingPage = () => {
             const responsePromise: Promise<any> = deleteBaking(selectedBaking.id)
             loading(responsePromise)
             responsePromise.then(() => {
-                mutate((currentData: BakingDataType[] | undefined) => {
-                    if (!currentData) return currentData
-                    return currentData.filter((item) => item.id !== selectedBaking?.id)
-                })
+                mutateBakingData()
             })
         } else {
             console.error('No user data available to delete.')
