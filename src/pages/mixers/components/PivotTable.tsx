@@ -97,14 +97,17 @@ const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
                         ))}
                     </Tbody>
                     <Tfoot>
-                        <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>
-                            <Th w={'15%'}>Итого</Th>
+                        <Tr>
+                            <Th w={'16.4%'} color={'#000'} fontSize={15} fontWeight={'bold'}>
+                                Итого
+                            </Th>
+                            <Th w={'77%'}></Th>
                             {Array.from(uniqPersonal).map((productName, productIndex) => (
                                 <Th
                                     fontSize={15}
                                     color={'#000'}
-                                    width={'25%'}
-                                    textAlign={'center'}
+                                    width={'27%'}
+                                    // textAlign={'center'}
                                     key={productIndex}
                                 >
                                     {getColumnTotal(productName)}
