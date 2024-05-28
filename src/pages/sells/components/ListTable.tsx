@@ -51,7 +51,6 @@ interface ListTableProps {
 const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, status }) => {
     const { getParam } = useURLParameters()
     const { loading } = useNotify()
-    // const [data, setData] = useState<Dispatch[]>([])
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const [selectedRow, setSelectedRow] = useState<Dispatch | null>(null)
@@ -112,87 +111,115 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {dispatchData?.data
-                            ?.filter((row: Dispatch) => row.dispatch == status)
-                            ?.map((row, index) => {
-                                return (
-                                    <Tr key={row.id}>
-                                        <Td>{index + 1}</Td>
-                                        <Td>{row.client.name}</Td>
-                                        <Td>
-                                            <div
-                                                style={{ display: 'flex', flexDirection: 'column' }}
-                                            >
-                                                {row.goodsDispatchDetails.map((details) => (
-                                                    <span key={details.id}>{details.product.name}</span>
-                                                ))}
-                                            </div>
-                                        </Td>
-                                        <Td>
-                                            <div
-                                                style={{ display: 'flex', flexDirection: 'column' }}
-                                            >
-                                                {row.goodsDispatchDetails.map((details, index) => (
-                                                    <span key={index}>{details.quantity}</span>
-                                                ))}
-                                            </div>
-                                        </Td>
-                                        <Td>
-                                            <div
-                                                style={{ display: 'flex', flexDirection: 'column' }}
-                                            >
-                                                {row.goodsDispatchDetails.map((details, index) => (
-                                                    <span key={index}>
-                                                        {details.price !== null
-                                                            ? details.price
-                                                            : details.product.price}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </Td>
-                                        <Td>
-                                            <div
-                                                style={{ display: 'flex', flexDirection: 'column' }}
-                                            >
-                                                {row.goodsDispatchDetails.map((details, index) => (
-                                                    <span key={index}>
-                                                        {Number(
-                                                            details.price !== null
-                                                                ? details.price
-                                                                : details.product.price,
-                                                        ) * Number(details.quantity)}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </Td>
-                                        <Td>
-                                            <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
-                                                marginRight={3}
-                                                onClick={() => {
-                                                    handleEditClick(row)
-                                                }}
-                                                icon={<EditIcon />}
-                                            />
-                                            <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
-                                                marginRight={3}
-                                                onClick={() => {
-                                                    setSelectedRow(row)
-                                                    onOpen()
-                                                }}
-                                                icon={<DeleteIcon />}
-                                            />
-                                        </Td>
-                                    </Tr>
-                                )
-                            })}
+                        {dispatchData?.data.length ? (
+                            dispatchData?.data
+                                ?.filter((row: Dispatch) => row.dispatch == status)
+                                ?.map((row, index) => {
+                                    return (
+                                        <Tr key={row.id}>
+                                            <Td>{index + 1}</Td>
+                                            <Td>{row.client.name}</Td>
+                                            <Td>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                    }}
+                                                >
+                                                    {row.goodsDispatchDetails.map((details) => (
+                                                        <span key={details.id}>
+                                                            {details.product.name}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </Td>
+                                            <Td>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                    }}
+                                                >
+                                                    {row.goodsDispatchDetails.map(
+                                                        (details, index) => (
+                                                            <span key={index}>
+                                                                {details.quantity}
+                                                            </span>
+                                                        ),
+                                                    )}
+                                                </div>
+                                            </Td>
+                                            <Td>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                    }}
+                                                >
+                                                    {row.goodsDispatchDetails.map(
+                                                        (details, index) => (
+                                                            <span key={index}>
+                                                                {details.price !== null
+                                                                    ? details.price
+                                                                    : details.product.price}
+                                                            </span>
+                                                        ),
+                                                    )}
+                                                </div>
+                                            </Td>
+                                            <Td>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                    }}
+                                                >
+                                                    {row.goodsDispatchDetails.map(
+                                                        (details, index) => (
+                                                            <span key={index}>
+                                                                {Number(
+                                                                    details.price !== null
+                                                                        ? details.price
+                                                                        : details.product.price,
+                                                                ) * Number(details.quantity)}
+                                                            </span>
+                                                        ),
+                                                    )}
+                                                </div>
+                                            </Td>
+                                            <Td>
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        handleEditClick(row)
+                                                    }}
+                                                    icon={<EditIcon />}
+                                                />
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        setSelectedRow(row)
+                                                        onOpen()
+                                                    }}
+                                                    icon={<DeleteIcon />}
+                                                />
+                                            </Td>
+                                        </Tr>
+                                    )
+                                })
+                        ) : (
+                            <Tr>
+                                <Th>Нет данных</Th>
+                            </Tr>
+                        )}
                     </Tbody>
                     <Tfoot>
                         <Tr>

@@ -34,8 +34,6 @@ interface Product {
 }
 
 const JournalPage = () => {
-    // Данные выбора даты
-    // const {getURLs, getParam} = useURLParameters()
     const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
     const { data: clientsData } = useApi<Client[]>('client')
     const { data: productData } = useApi<Product[]>('product')
