@@ -50,8 +50,8 @@ const RemainProducts = () => {
                         <Tbody>
                             {data.map((product, index) => {
                                 return (
-                                    <Tr key={index}>
-                                        <Td>{product.id}</Td>
+                                    <Tr key={index+1}>
+                                        <Td>{index+1}</Td>
                                         <Td>{product.name}</Td>
                                         <Td>{product.remainOnTheBeginning}</Td>
                                         <Td>{product.baking}</Td>

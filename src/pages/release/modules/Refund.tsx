@@ -58,7 +58,7 @@ const Refund = () => {
                             </TabList>
                             <TabPanels>
                                 <TabPanel p={'10px 0'}>
-                                    <ListTable facilityUnit={'0'} status="0" />
+                                    <ListTable facilityUnit={'0'} status="1" />
                                 </TabPanel>
                                 <TabPanel p={'10px 0'}>
                                     <PivotTable status="1" />

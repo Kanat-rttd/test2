@@ -1,5 +1,5 @@
 .tableContainer {
-    height: 70dvh;
+    height: 100%;
     width: 100%;    
     overflow-x: auto;
     overflow-y: auto;
@@ -10,12 +10,11 @@
 .tableWrapper {
     height: 100%;
     width: 100%; 
-    min-height: 77lvh;  
+    /* min-height: 77lvh;   */
     max-height: 77lvh; 
     overflow-x: auto;
     overflow-y: auto;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    /* padding-bottom: 5px; */
     border-radius: 5px;
     
 }

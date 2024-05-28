@@ -27,6 +27,9 @@ import dayjs from 'dayjs'
 
 const styles = {
     textAlign: 'center',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    color: '#000',
 }
 
 const BakingPage = () => {
@@ -106,90 +109,102 @@ const BakingPage = () => {
                         />
                     </Box>
                     <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                        <Box pb={4}>
-                            <Table variant="simple">
-                                <Thead>
-                                    <Tr>
-                                        <Th width={'15%'}>Вид хлеба</Th>
-                                        <Th sx={styles}>Мука</Th>
-                                        <Th sx={styles}>Соль</Th>
-                                        <Th sx={styles}>Дрожжи</Th>
-                                        <Th sx={styles}>Солод</Th>
-                                        <Th sx={styles}>Масло</Th>
-                                        <Th sx={styles}>t°</Th>
-                                        <Th sx={styles}>Время и дата</Th>
-                                        <Th sx={styles}>Выход</Th>
-                                        <Th sx={styles}>Брак</Th>
-                                        <Th>Действия</Th>
-                                    </Tr>
-                                </Thead>
-                                <Tbody>
-                                    {bakingsData?.bakingData.map((bakingRow, index) => {
-                                        return (
-                                            <Tr key={index}>
-                                                <Td>{bakingRow.product?.name}</Td>
-                                                <Td sx={styles}>{bakingRow.flour}</Td>
-                                                <Td sx={styles}>{bakingRow.salt}</Td>
-                                                <Td sx={styles}>{bakingRow.yeast}</Td>
-                                                <Td sx={styles}>{bakingRow.malt}</Td>
-                                                <Td sx={styles}>{bakingRow.butter}</Td>
-                                                <Td sx={styles}>{bakingRow.temperature}</Td>
-                                                <Td sx={styles}>
-                                                    {dayjs(
-                                                        `${bakingRow.date + bakingRow.time}`,
-                                                    ).format('HH:mm DD.MM.YYYY')}
-                                                </Td>
-                                                <Td sx={styles}>{bakingRow.output}</Td>
-                                                <Td sx={styles}>{bakingRow.defective}</Td>
-                                                <Td>
-                                                    <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
-                                                        marginRight={3}
-                                                        onClick={() => {
-                                                            setSelectedBaking(bakingRow)
-                                                            onOpen()
-                                                        }}
-                                                        icon={<EditIcon />}
-                                                    />
-                                                    <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
-                                                        marginRight={3}
-                                                        onClick={() => {
-                                                            setSelectedBaking(bakingRow)
-                                                            setDialog({
-                                                                ...dialog,
-                                                                isOpen: true,
-                                                            })
-                                                        }}
-                                                        icon={<DeleteIcon />}
-                                                    />
-                                                </Td>
-                                            </Tr>
-                                        )
-                                    })}
-                                </Tbody>
-                            </Table>
-                        </Box>
                         <Table variant="simple">
+                            <Thead>
+                                <Tr>
+                                    <Th>Вид хлеба</Th>
+                                    <Th sx={styles}>Мука</Th>
+                                    <Th sx={styles}>Соль</Th>
+                                    <Th sx={styles}>Дрожжи</Th>
+                                    <Th sx={styles}>Солод</Th>
+                                    <Th sx={styles}>Масло</Th>
+                                    <Th sx={styles}>t°</Th>
+                                    <Th sx={styles}>Время и дата</Th>
+                                    <Th sx={styles}>Выход</Th>
+                                    <Th sx={styles}>Брак</Th>
+                                    <Th>Действия</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {bakingsData?.bakingData.map((bakingRow, index) => {
+                                    return (
+                                        <Tr key={index} textAlign={'center'}>
+                                            <Td>{bakingRow.product?.name}</Td>
+                                            <Td textAlign={'center'}>{bakingRow.flour}</Td>
+                                            <Td textAlign={'center'}>{bakingRow.salt}</Td>
+                                            <Td textAlign={'center'}>{bakingRow.yeast}</Td>
+                                            <Td textAlign={'center'}>{bakingRow.malt}</Td>
+                                            <Td textAlign={'center'}>{bakingRow.butter}</Td>
+                                            <Td textAlign={'center'}>{bakingRow.temperature}</Td>
+                                            <Td textAlign={'center'}>
+                                                {dayjs(`${bakingRow.date + bakingRow.time}`).format(
+                                                    'HH:mm DD.MM.YYYY',
+                                                )}
+                                            </Td>
+                                            <Td textAlign={'center'}>{bakingRow.output}</Td>
+                                            <Td textAlign={'center'}>{bakingRow.defective}</Td>
+                                            <Td>
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        setSelectedBaking(bakingRow)
+                                                        onOpen()
+                                                    }}
+                                                    icon={<EditIcon />}
+                                                />
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        setSelectedBaking(bakingRow)
+                                                        setDialog({
+                                                            ...dialog,
+                                                            isOpen: true,
+                                                        })
+                                                    }}
+                                                    icon={<DeleteIcon />}
+                                                />
+                                            </Td>
+                                        </Tr>
+                                    )
+                                })}
+                            </Tbody>
                             <Tfoot>
-                                <Tr fontSize={15} fontWeight={'bold'} color={'#000'}>
-                                    <Td width={'14%'}>Итого</Td>
-                                    <Td width={'5%'}>{bakingsData?.totals?.totalFlour}</Td>
-                                    <Td width={'8%'}>{bakingsData?.totals?.totalSalt}</Td>
-                                    <Td width={'8%'}>{bakingsData?.totals?.totalYeast}</Td>
-                                    <Td width={'7%'}>{bakingsData?.totals?.totalMalt}</Td>
-                                    <Td width={'10%'}>{bakingsData?.totals?.totalButter}</Td>
-                                    <Td width={'10%'}></Td>
-                                    <Td width={'8%'}></Td>
-                                    <Td width={'5%'}>{bakingsData?.totals?.totalOutput}</Td>
-                                    <Td width={'8%'}>{bakingsData?.totals?.totalDefective}</Td>
-                                    <Td width={'10%'}></Td>
+                                <Tr>
+                                    <Th fontSize={16} fontWeight={'bold'} color={"#000"}>
+                                        Итого
+                                    </Th>
+                                    <Th sx={styles}>
+                                        {bakingsData?.totals?.totalFlour}
+                                    </Th>
+                                    <Th sx={styles}>
+                                        {bakingsData?.totals?.totalSalt}
+                                    </Th>
+                                    <Th sx={styles}>
+                                        {bakingsData?.totals?.totalYeast}
+                                    </Th>
+                                    <Th sx={styles}>
+                                        {bakingsData?.totals?.totalMalt}
+                                    </Th>
+                                    <Th sx={styles}>
+                                        {bakingsData?.totals?.totalButter}
+                                    </Th>
+                                    <Th sx={styles}></Th>
+                                    <Th sx={styles}></Th>
+                                    <Th sx={styles}>
+                                        {bakingsData?.totals?.totalOutput}
+                                    </Th>
+                                    <Th sx={styles}>
+                                        {bakingsData?.totals?.totalDefective}
+                                    </Th>
+                                    <Th sx={styles}></Th>
                                 </Tr>
                             </Tfoot>
                         </Table>

@@ -63,13 +63,9 @@ const RemainRawMaterials = () => {
                             <Tfoot>
                                 <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>
                                     <Td>Итого</Td>
-                                    <Td width={'22%'}></Td>
                                     <Td>100</Td>
-                                    <Td width={'21%'}></Td>
                                     <Td>100</Td>
-                                    <Td width={'10%'}></Td>
                                     <Td>100</Td>
-                                    <Td width={'10%'}></Td>
                                     <Td>100</Td>
                                 </Tr>
                             </Tfoot>

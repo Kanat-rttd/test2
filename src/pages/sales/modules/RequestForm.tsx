@@ -44,7 +44,7 @@ const RequestForm = () => {
         setSelectedProducts(updatedProducts)
     }
 
-    const clientId = userInfo?.userId || ''
+    const clientId = Number(userInfo?.userId) || null
 
     const handleSubmit = (): void => {
         const requestData = {
@@ -55,7 +55,7 @@ const RequestForm = () => {
                 price: product.price,
             })),
             comment: comment,
-            clientId: clientId,
+            clientId: Number(clientId),
         }
         if (requestData.products.length === 0) {
             toast({

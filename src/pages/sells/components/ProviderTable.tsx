@@ -39,15 +39,21 @@ const ProviderTable = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {calculationsData?.Data.map((item, index) => {
-                                return (
-                                    <Tr key={index}>
-                                        <Td>{index + 1}</Td>
-                                        <Td>{item.ClientName}</Td>
-                                        <Td>{item.Debt}</Td>
-                                    </Tr>
-                                )
-                            })}
+                            {calculationsData?.Data.length ? (
+                                calculationsData?.Data.map((item, index) => {
+                                    return (
+                                        <Tr key={index}>
+                                            <Td>{index + 1}</Td>
+                                            <Td>{item.ClientName}</Td>
+                                            <Td>{item.Debt}</Td>
+                                        </Tr>
+                                    )
+                                })
+                            ) : (
+                                <Tr>
+                                    <Td>Нет данных</Td>
+                                </Tr>
+                            )}
                         </Tbody>
                         <Tfoot>
                             <Tr>

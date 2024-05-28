@@ -66,15 +66,21 @@ const MagazineTable = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {magazineDebtData?.mainData.map((item, index) => {
-                                return (
-                                    <Tr key={index}>
-                                        <Td>{index + 1}</Td>
-                                        <Td>{item.MagazineName}</Td>
-                                        <Td>{item.Debit}</Td>
-                                    </Tr>
-                                )
-                            })}
+                            {magazineDebtData?.mainData.length ? (
+                                magazineDebtData?.mainData.map((item, index) => {
+                                    return (
+                                        <Tr key={index}>
+                                            <Td>{index + 1}</Td>
+                                            <Td>{item.MagazineName}</Td>
+                                            <Td>{item.Debit}</Td>
+                                        </Tr>
+                                    )
+                                })
+                            ) : (
+                                <Tr>
+                                    <Td>Нет данных</Td>
+                                </Tr>
+                            )}
                         </Tbody>
                         <Tfoot>
                             <Tr>
