@@ -3,7 +3,6 @@ import { TableContainer, Tfoot, Thead } from './ui'
 import { OrderArrayType } from '@/utils/types/order.types'
 
 const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
-    console.log(data)
     const uniqProducts = new Set<string>()
     data?.forEach((order) => {
         order.orderDetails.forEach((detail) => {
@@ -26,9 +25,9 @@ const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
                 <Thead>
                     <Tr>
                         <Th>№</Th>
-                        <Th> Реализаторы</Th>
+                        <Th>Реализаторы</Th>
                         {Array.from(uniqProducts).map((name, index) => (
-                            <Th textAlign={'center'} key={index}>
+                            <Th textAlign={'center'} minW={'100px'} key={index}>
                                 {name}
                             </Th>
                         ))}
@@ -40,7 +39,7 @@ const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
                             <Td>{index + 1}</Td>
                             <Td>{item.client.name}</Td>
                             {Array.from(uniqProducts).map((productName, productIndex) => (
-                                <Td width={'20%'} textAlign={'center'} key={productIndex}>
+                                <Td width={'160px'} textAlign={'center'} key={productIndex}>
                                     {item.orderDetails.find(
                                         (prod) => prod.product.name === productName,
                                     )?.orderedQuantity || ''}
@@ -50,21 +49,32 @@ const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
                     ))}
                 </Tbody>
                 <Tfoot>
-                    <Tr display={'flex'} justifyContent={'space-between'}>
-                        <Th fontSize={15} color={'#000'} width={'35%'}>
+                    <Tr display={'flex'} justifyContent={'space-between'} mr={'1rem'}>
+                        <Th fontSize={16} fontWeight={'bold'} color={'#000'}>
                             Итого
                         </Th>
-                        {Array.from(uniqProducts).map((productName, productIndex) => (
-                            <Th
-                                fontSize={15}
-                                color={'#000'}
-                                width={'25%'}
-                                textAlign={'center'}
-                                key={productIndex}
-                            >
-                                {getColumnTotal(productName)}
-                            </Th>
-                        ))}
+                        <Tr
+                            width={'72%'}
+                            display={'flex'}
+                            justifyContent={'space-between'}
+                            mr={'32px'}
+                            gap={'10%'}
+                        >
+                            {Array.from(uniqProducts).map((productName, productIndex) => (
+                                <Th
+                                w={'160px'}
+                                    key={productIndex}
+                                    fontSize={16}
+                                    fontWeight={'bold'}
+                                    color={'#000'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                    textAlign={'center'}
+                                >
+                                    {getColumnTotal(productName)}
+                                </Th>
+                            ))}
+                        </Tr>
                     </Tr>
                 </Tfoot>
             </Table>

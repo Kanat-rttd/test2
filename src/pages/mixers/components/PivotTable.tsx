@@ -107,7 +107,6 @@ const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
                                     fontSize={15}
                                     color={'#000'}
                                     width={'27%'}
-                                    // textAlign={'center'}
                                     key={productIndex}
                                 >
                                     {getColumnTotal(productName)}
