@@ -15,36 +15,43 @@ import {
     Td,
     Tfoot,
     Button,
+    useDisclosure,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import Dialog from './Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
-import { mutate } from 'swr'
 import { deleteSale } from '@/utils/services/sales.service'
+import { useApi } from '@/utils/services/axios'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 type accorfionClientType = {
-    isOpen: boolean
     data: OrderArrayType[]
     handleChangeStatus: (clientName: OrderArrayType) => void
-    onClose: () => void
-    onOpen: () => void
+
 }
 
 const AccordionClients = ({
     data,
     handleChangeStatus,
-    isOpen,
-    onOpen,
-    onClose,
 }: accorfionClientType) => {
+    const { getURLs } = useURLParameters()
     const { loading } = useNotify()
+    const { mutate: mutateSalesData } = useApi<OrderArrayType[]>(`sales?${getURLs().toString()}`)
     const defaultIndex = Array.from({ length: data.length }, (_, index) => index)
     const [selectedData, setSelectedData] = useState<OrderArrayType | undefined>(undefined)
+
+    const { onOpen, isOpen, onClose } = useDisclosure()
 
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
+    
+    // const [editModal, setEditModal] = useState({
+    //     isOpen: false,
+    //     onClose: () => setEditModal({ ...editModal, isOpen: false }),
+    // })
+
 
     const handleConfirmClick = (clientName: OrderArrayType) => {
         handleChangeStatus(clientName)
@@ -59,10 +66,7 @@ const AccordionClients = ({
             const responsePromise: Promise<any> = deleteSale(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {
-                mutate((currentData: OrderArrayType[] | undefined) => {
-                    if (!currentData) return currentData
-                    return currentData.filter((client) => client.id !== selectedData?.id)
-                })
+                mutateSalesData()
             })
         } else {
             console.error('No user data available to delete.')
@@ -88,11 +92,14 @@ const AccordionClients = ({
                     minHeight: '79dvh',
                 }}
             >
-                {data?.map((order, index) => (
-                    <AccordionItem key={index}>
+                {data?.map((order) => (
+                    <AccordionItem key={order.id}>
                         <h2>
-                            <AccordionButton backgroundColor={'#e6e6e6'} display={'flex'}
-                            gap={'10px'}>
+                            <AccordionButton
+                                backgroundColor={'#e6e6e6'}
+                                display={'flex'}
+                                gap={'10px'}
+                            >
                                 <Box
                                     display={'flex'}
                                     justifyContent={'space-between'}
@@ -120,8 +127,8 @@ const AccordionClients = ({
                                             onClick={(event) => {
                                                 event.stopPropagation()
                                                 setSelectedData(order)
-                                                console.log(order);
-                                                
+                                                console.log(order)
+
                                                 onOpen()
                                             }}
                                         />
@@ -180,7 +187,7 @@ const AccordionClients = ({
                     </AccordionItem>
                 ))}
             </Accordion>
-            <RequestAddModal isOpen={isOpen} onClose={handleClose} selectedData={selectedData} />
+            <RequestAddModal isOpen={isOpen} onClose={handleClose} selectedData={selectedData} mutate={mutateSalesData}/>
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}

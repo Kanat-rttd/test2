@@ -1,6 +1,5 @@
 import { Box, Button, useDisclosure } from '@chakra-ui/react'
 import AccordionClients from '@/components/AccordionClients'
-// import { getAllSales } from '@/utils/services/sales.service'
 import { setDoneStatus } from '@/utils/services/sales.service'
 import DateRange from '@/components/DateRange'
 
@@ -19,7 +18,6 @@ const ProcessingPage = () => {
     const { data: salesData, mutate: mutateSalesData } = useApi<OrderArrayType[]>(
         `sales?${getURLs().toString()}`,
     )
-    
 
     const handleChangeStatus = async (clientName: OrderArrayType) => {
         const responsePromise: Promise<any> = setDoneStatus(clientName.id)
@@ -38,7 +36,6 @@ const ProcessingPage = () => {
         mutateSalesData()
         onClose()
     }
-
 
     return (
         <UniversalComponent>
@@ -66,15 +63,16 @@ const ProcessingPage = () => {
                         <AccordionClients
                             data={salesData.filter((sale) => sale.done === 0)}
                             handleChangeStatus={handleChangeStatus}
-                            isOpen={isOpen}
-                            onClose={handleClose}
-                            onOpen={onOpen}
                         />
                     )}
                 </Box>
-                <RequestAddModal isOpen={isOpen} onClose={handleClose} selectedData={undefined} />
+                <RequestAddModal
+                    isOpen={isOpen}
+                    onClose={handleClose}
+                    selectedData={undefined}
+                    mutate={mutateSalesData}
+                />
             </Box>
-            
         </UniversalComponent>
     )
 }

@@ -30,6 +30,7 @@ interface ClientAddModalProps {
     quantity?: number
     onClose: () => void
     selectedData: OrderArrayType | undefined
+    mutate: () => void
 }
 
 type FormData = {
@@ -37,7 +38,7 @@ type FormData = {
     products: { productId: number | null; orderedQuantity: number | null }[]
 }
 
-const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps) => {
+const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddModalProps) => {
     const { loading } = useNotify()
     const { data: clients } = useApi<ClientType[]>('client')
     const { data: products } = useApi<Product[]>('product')
@@ -61,11 +62,11 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
         if (selectedData) {
             const data = selectedData?.orderDetails.map((order) => {
                 return {
-                    productId: +order.productId,
-                    orderedQuantity: +order.orderedQuantity,
+                    productId: Number(order.productId),
+                    orderedQuantity: Number(order.orderedQuantity),
                 }
             })
-            setValue('clientId', +selectedData.client.id)
+            setValue('clientId', Number(selectedData.client.id))
             setValue('products', data)
         } else {
             reset()
@@ -73,8 +74,6 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
     }, [selectedData])
 
     const addRequest: SubmitHandler<FormData> = (formData) => {
-        console.log(formData);
-        
         try {
             const responsePromise: Promise<any> = selectedData
                 ? updateSale(selectedData.id, formData)
@@ -82,6 +81,7 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
             loading(responsePromise)
             responsePromise.then((res) => {
                 console.log(res)
+                mutate()
                 onClose()
             })
         } catch (error: any) {
@@ -116,8 +116,8 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
                                     variant="filled"
                                     placeholder="Имя клиента"
                                 >
-                                    {clients?.map((client, index) => (
-                                        <option key={index} value={client.id}>
+                                    {clients?.map((client) => (
+                                        <option key={client.name} value={client.id}>
                                             {client.name}
                                         </option>
                                     ))}
@@ -140,8 +140,8 @@ const RequestAddModal = ({ isOpen, onClose, selectedData }: ClientAddModalProps)
                                                 variant="filled"
                                                 placeholder="Вид хлеба"
                                             >
-                                                {products?.map((product, index) => (
-                                                    <option key={index} value={product.id}>
+                                                {products?.map((product) => (
+                                                    <option key={product.name} value={product.id}>
                                                         {product.name}
                                                     </option>
                                                 ))}
