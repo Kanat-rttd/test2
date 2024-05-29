@@ -306,7 +306,7 @@ export const headerButtons: headerButton[] = [
             },
             {
                 puth: SELLS_INVOICE_ROUTE,
-                label: 'Накладной',
+                label: 'Накладные',
                 isCurrentPage: false,
             },
             {
@@ -331,7 +331,7 @@ export const headerButtons: headerButton[] = [
             },
             {
                 puth: SELLS_INVOICE_ROUTE,
-                label: 'Накладной',
+                label: 'Накладные',
                 isCurrentPage: true,
             },
             {
@@ -356,7 +356,7 @@ export const headerButtons: headerButton[] = [
             },
             {
                 puth: SELLS_INVOICE_ROUTE,
-                label: 'Накладной',
+                label: 'Накладные',
                 isCurrentPage: false,
             },
             {
@@ -381,7 +381,7 @@ export const headerButtons: headerButton[] = [
             },
             {
                 puth: SELLS_INVOICE_ROUTE,
-                label: 'Накладной',
+                label: 'Накладные',
                 isCurrentPage: false,
             },
             {

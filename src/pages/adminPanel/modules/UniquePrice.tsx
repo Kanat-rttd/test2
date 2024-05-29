@@ -122,10 +122,10 @@ const AdminPanel = () => {
                                                 >
                                                     {item.clientName}
                                                 </Box>
-                                                {recentUpdatesDates?.map((dateData) => {
+                                                {recentUpdatesDates?.map((dateData, index) => {
                                                     if (dateData.name == item.clientName) {
                                                         return (
-                                                            <Text mr={'10px'} fontWeight={'600'} key={dateData.name}>
+                                                            <Text mr={'10px'} fontWeight={'600'} key={index}>
                                                                 {dateData.recentUpdates
                                                                     ? dayjs(
                                                                           dateData.recentUpdates,
@@ -167,9 +167,9 @@ const AdminPanel = () => {
                                                     </Thead>
                                                     <Tbody>
                                                         {item.detail &&
-                                                            item.detail.map((value) => {
+                                                            item.detail.map((value, index) => {
                                                                 return (
-                                                                    <Tr key={value.id}>
+                                                                    <Tr key={index}>
                                                                         <Td w={'20%'}>
                                                                             {value.name}
                                                                         </Td>

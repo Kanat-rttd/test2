@@ -227,7 +227,7 @@ export const subMenuItems: MenuItem[] = [
     },
     {
         route: SELLS_INVOICE_ROUTE,
-        label: 'Накладной',
+        label: 'Накладные',
         path: SALES_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
