@@ -10,6 +10,7 @@ import { getAllFinancesCategories } from '@/utils/services/financeCategories.ser
 // import { fetcher } from '@/utils/services/axios'
 // import { useNotify } from '@/utils/providers/ToastProvider'
 import { createConsumption } from '@/utils/services/finance.service'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 const account = [
     {
@@ -43,6 +44,7 @@ interface Client {
 }
 
 const Arrival = () => {
+    const { loading } = useNotify()
     const { data: clientsData } = useSWR<Client[]>(['client'], {
         fetcher: () => getAllClients({ name: '', telegrammId: '', status: '' }),
     })
@@ -55,14 +57,19 @@ const Arrival = () => {
         register,
         handleSubmit: handleSubmitForm,
         control,
+        setValue, 
         formState: { errors },
-        // reset,
+        reset,
     } = useForm<ArrivalInputs>()
 
     const sendData = (formData: ArrivalInputs) => {
-        createConsumption(formData)
+        const responsePromise: Promise<any> = createConsumption(formData)
+        loading(responsePromise)
+        responsePromise
             .then((res) => {
                 console.log(res)
+                reset()
+                setValue('amount', '')
             })
             .catch((error) => {
                 console.error('Error creating sale:', error)

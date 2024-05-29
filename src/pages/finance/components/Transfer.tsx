@@ -22,19 +22,21 @@ interface Account {
 }
 
 const Transfer = () => {
-    const { success } = useNotify()
+    const { loading } = useNotify()
     const {
         register,
         handleSubmit: handleSubmitForm,
         control,
         formState: { errors },
-        // reset,
+        reset,
     } = useForm<TransferInputs>()
 
     const sendData = (formData: TransferInputs) => {
-        createTransfer(formData)
+        const responsePromise: Promise<any> = createTransfer(formData)
+        loading(responsePromise)
+        responsePromise
             .then(() => {
-                success('')
+               reset()
             })
             .catch((error) => {
                 console.error('Error creating sale:', error)

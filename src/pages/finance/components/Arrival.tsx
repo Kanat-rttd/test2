@@ -95,6 +95,7 @@ const Arrival = () => {
         register,
         handleSubmit: handleSubmitForm,
         control,
+        setValue,
         formState: { errors },
         reset,
     } = useForm<ArrivalInputs>()
@@ -106,6 +107,7 @@ const Arrival = () => {
             .then((res) => {
                 console.log(res)
                 reset()
+                setValue('amount', '')
             })
             .catch((error) => {
                 console.error('Error creating sale:', error)
