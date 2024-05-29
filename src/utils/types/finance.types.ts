@@ -5,6 +5,7 @@ export type ArrivalInputs = {
     financeCategoryId: string
     clientId: number
     comment: string
+    invoiceNumber: number
 }
 
 export type TransferInputs = {

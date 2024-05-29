@@ -6,6 +6,7 @@ import { createArrival } from '@/utils/services/finance.service'
 import useSWR from 'swr'
 import { getAllClients } from '@/utils/services/client.service'
 import { getAllFinancesCategories } from '@/utils/services/financeCategories.service'
+import { useApi } from '@/utils/services/axios'
 
 const account = [
     {
@@ -38,7 +39,48 @@ interface Client {
     status: number
 }
 
+interface InvoiceData {
+    createdAt: Date
+    clientId: number
+    clientName: string
+    invoiceNumber: number
+    totalProducts: {
+        id: number
+        name: string
+        price: number
+        quantity: number
+        totalPrice: number
+    }[]
+    totalSum: number
+    dispatches: {
+        id: number
+        clientId: number
+        createdAt: Date
+        dispatch: number
+        goodsDispatchDetails: {
+            id: number
+            productId: number
+            quantity: number
+            price: number | null
+            product: {
+                id: number
+                name: string
+                price: number
+                bakingFacilityUnit: {
+                    id: number
+                    facilityUnit: string
+                }
+            }
+        }[]
+        client: {
+            id: number
+            name: string
+        }
+    }[]
+}
+
 const Arrival = () => {
+    const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
     const { data: clientsData } = useSWR<Client[]>(['client'], {
         fetcher: () => getAllClients({ name: '', telegrammId: '', status: '' }),
     })
@@ -176,6 +218,38 @@ const Arrival = () => {
                     }}
                 />
                 <FormErrorMessage>{errors.clientId?.message}</FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={!!errors.invoiceNumber}>
+                <Controller
+                    name="invoiceNumber"
+                    control={control}
+                    render={({ field }) => {
+                        const { onChange, value } = field
+                        return (
+                            <Select
+                                options={dispatchesData}
+                                getOptionLabel={(option: InvoiceData) =>
+                                    String(option.invoiceNumber)
+                                }
+                                getOptionValue={(option: InvoiceData) => `${option.invoiceNumber}`}
+                                value={dispatchesData?.filter(
+                                    (option) => String(option.invoiceNumber) == String(value),
+                                )}
+                                // onChange={(val: Account) => onChange(val?.name)}
+                                onChange={(selectedOption: InvoiceData | null) => {
+                                    if (selectedOption) {
+                                        onChange(selectedOption.invoiceNumber)
+                                    }
+                                }}
+                                placeholder="Номер накладной"
+                                isClearable
+                                isSearchable
+                            />
+                        )
+                    }}
+                />
+                <FormErrorMessage>{errors.invoiceNumber?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl>
