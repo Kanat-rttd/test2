@@ -7,11 +7,6 @@ import DateRange from '@/components/DateRange'
 // import Header from '@/components/Header'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
-interface financeTotalWithInvoiceNumbers {
-    invoiceNumber: number
-    totalAmount: number
-}
-
 interface InvoiceData {
     createdAt: Date
     clientId: number
@@ -62,11 +57,9 @@ interface Client {
 }
 
 const InvoicePage = () => {
-    // const navigate = useNavigate()
     const { setParam, getURLs } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const { data: financeTotals } = useApi<financeTotalWithInvoiceNumbers[]>('finance/totals')
     const { data: clientsData } = useApi<Client[]>('client')
     const { data: dispatchesData } = useApi<InvoiceData[]>(
         `release/invoice?${getURLs().toString()}`,
@@ -100,17 +93,6 @@ const InvoicePage = () => {
                                     </option>
                                 ))}
                             </Select>
-                            <Select
-                                placeholder="Статус"
-                                width={'fit-content'}
-                                size={'sm'}
-                                borderRadius={5}
-                                name="status"
-                                onChange={handleSelectChange}
-                            >
-                                <option value="Не оплачено">Не оплачено</option>
-                                <option value="Оплачено">Оплачено</option>
-                            </Select>
                         </Box>
                     </Box>
                     <Box
@@ -124,15 +106,7 @@ const InvoicePage = () => {
                         }}
                     >
                         {dispatchesData?.map((row, index) => {
-                            const financeTotal = financeTotals?.find(
-                                (item) => item.invoiceNumber === row.invoiceNumber,
-                            )
-
-                            const paymentStatus =
-                                financeTotal && row.totalSum == financeTotal.totalAmount
-                                    ? 'Оплачено'
-                                    : 'Не оплачено'
-
+                            const overPrice = 5000
                             return (
                                 <Button
                                     key={index}
@@ -148,20 +122,25 @@ const InvoicePage = () => {
                                     }}
                                     marginBottom={1}
                                 >
-                                    <Text>{dayjs(row.createdAt).format('DD.MM.YYYY')}</Text>
-                                    <Text>{row.totalSum}</Text>
-                                    <Text>{paymentStatus}</Text>
+                                    <Box display={'flex'} gap={10} textAlign={'start'} w={'35%'}>
+                                        <Text w={'30%'} color={'gray'} fontWeight={''}>№ {row.invoiceNumber}</Text>
+                                        <Text w={'44%'}>{row.clientName}</Text>
+                                        <Text w={'25%'}>{dayjs(row.createdAt).format('DD.MM.YYYY')}</Text>
+                                    </Box>
+                                    <Box display={'flex'} gap={20} w={'30%'}>
+                                        <Text textAlign={'start'}>Сверху: {overPrice} ₸</Text>
+                                        <Text textAlign={'start'}>Сумма: {row.totalSum} ₸</Text>
+                                    </Box>
+                                    <Text w={'12%'} textAlign={'start'}>
+                                        Итого: {overPrice + row.totalSum} ₸
+                                    </Text>
                                 </Button>
                             )
                         })}
                     </Box>
                 </Box>
             </Box>
-            <InvoiceModal
-                isOpen={isOpen}
-                onClose={onClose}
-                selectedRow={selectedRow}
-            ></InvoiceModal>
+            <InvoiceModal isOpen={isOpen} onClose={onClose} selectedRow={selectedRow} />
         </>
     )
 }

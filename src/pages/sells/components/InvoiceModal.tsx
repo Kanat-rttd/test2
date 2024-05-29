@@ -14,12 +14,10 @@ import {
     Th,
     Tbody,
     Td,
-    Heading,
     IconButton,
 } from '@chakra-ui/react'
 import { DownloadIcon } from '@chakra-ui/icons'
 import dayjs from 'dayjs'
-import Arrival from './Arrival'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 
@@ -100,10 +98,10 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay overflow={'hidden'} />
-            <ModalContent maxWidth={'90%'} height={'90%'} margin={0} alignSelf={'center'}>
+            <ModalContent maxWidth={'40%'} height={'90%'} margin={0} alignSelf={'center'}>
                 <ModalCloseButton />
                 <ModalBody display={'flex'} flexDirection={'row'}>
-                    <Box width={'50%'}>
+                    <Box width={'100%'}>
                         <IconButton
                             size={'sm'}
                             aria-label="downloadPdf"
@@ -187,19 +185,19 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                     ))}
                                 </Tbody>
                             </Table>
-                            <Box display={'flex'} marginBottom={5}>
+                            <Box display={'flex'} marginBottom={7} mt={10}>
                                 <Text marginLeft={'auto'}>Получено</Text>
                                 <Text>________</Text>
                             </Box>
-                            <Box display={'flex'} flexDirection={'column'} marginBottom={'5px'}>
-                                <Text marginLeft={'auto'}>Сверху: 5000 тг</Text>
-                                <Text marginLeft={'auto'}>Всего: {selectedRow?.totalSum} тг</Text>
+                            <Box display={'flex'} flexDirection={'column'} marginBottom={'5px'} gap={2}>
+                                <Text marginLeft={'auto'} fontWeight={'bold'}>Сверху: 5000 тг</Text>
+                                <Text marginLeft={'auto'} fontWeight={'bold'}>Всего: {selectedRow?.totalSum} тг</Text>
                             </Box>
                         </Box>
                     </Box>
-                    <Box w={'1px'} bgColor={'black'} height={'95%'} alignSelf={'center'}></Box>
+                    {/* <Box w={'1px'} bgColor={'black'} height={'95%'} alignSelf={'center'}></Box> */}
 
-                    <Box width={'50%'} p={7}>
+                    {/* <Box width={'50%'} p={7}>
                         <Box>
                             <Heading size={'md'} textAlign={'center'}>
                                 Оплата
@@ -218,7 +216,7 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                 totalSumm={selectedRow?.totalSum}
                             />
                         </Box>
-                    </Box>
+                    </Box> */}
                 </ModalBody>
             </ModalContent>
         </Modal>
