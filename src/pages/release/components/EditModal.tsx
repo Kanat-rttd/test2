@@ -35,9 +35,10 @@ interface EditModalProps {
     data: DispatchType | undefined
     isOpen: boolean
     onClose: () => void
+    onSuccess: () => void
 }
 
-const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
+const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess }) => {
     const { loading } = useNotify()
     const [clientsData, setClientsData] = useState<Client[]>([])
     const {
@@ -72,6 +73,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data }) => {
             responsePromise
                 .then(() => {
                     onClose()
+                    onSuccess()
                 })
                 .catch((error: any) => {
                     console.error('Update dispatch quantity error:', error)

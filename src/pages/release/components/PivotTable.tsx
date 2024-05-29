@@ -29,7 +29,6 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
         isOpen: false,
         onClose: () => setModal({ ...modal, isOpen: false }),
     })
-    useEffect(() => {}, [])
 
     useEffect(() => {
         if(!dispatchesData) return

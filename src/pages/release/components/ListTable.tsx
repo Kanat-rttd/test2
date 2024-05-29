@@ -4,7 +4,7 @@ import { IconButton, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import EditModal from './EditModal'
 import { useState } from 'react'
 import dayjs from 'dayjs'
-import { mutate, useApi } from '@/utils/services/axios'
+import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Thead } from '@/components/ui'
 import { useNotify } from '@/utils/providers/ToastProvider'
@@ -35,7 +35,7 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const { data: dispatchesData } = useApi<Dispatch>(`release?${getURLs().toString()}`)
+    const { data: dispatchesData, mutate: mutateDispatchesData } = useApi<Dispatch>(`release?${getURLs().toString()}`)
 
     const [modal, setModal] = useState({
         isOpen: false,
@@ -47,14 +47,16 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
             const responsePromise: Promise<any> = deleteDispatch(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {
-                mutate((currentData: DispatchType[] | undefined) => {
-                    if (!currentData) return currentData
-                    return currentData.filter((item) => item.id !== selectedData?.id)
-                })
+                mutateDispatchesData()
             })
         } else {
             console.error('No data available to delete.')
         }
+    }
+
+    const onSuccess = () => {
+        mutateDispatchesData()
+        setSelectedData(undefined)
     }
 
     return (
@@ -135,7 +137,7 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
                     </Tbody>
                 </Table>
             </TableContainer>
-            <EditModal data={selectedData} isOpen={modal.isOpen} onClose={modal.onClose} />
+            <EditModal data={selectedData} isOpen={modal.isOpen} onClose={modal.onClose} onSuccess={onSuccess} />
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}

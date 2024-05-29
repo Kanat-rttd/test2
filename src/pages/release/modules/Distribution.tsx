@@ -9,7 +9,6 @@ import {
     Tabs,
     useDisclosure,
 } from '@chakra-ui/react'
-import { mutate } from '@/utils/services/axios'
 import ListTable from '../components/ListTable'
 import PivotTable from '../components/PivotTable'
 import DistributionModal from '../components/DistributionModal'
@@ -17,24 +16,32 @@ import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { DispatchType } from '@/utils/types/dispatch.types'
 
 interface FacilityUnit {
     id: number
     facilityUnit: string
 }
 
+type Dispatch = {
+    data: DispatchType[]
+    totalPrice: number
+    totalQuantity: number
+}
+
 const Distribution = () => {
-    const { getParam, setParam } = useURLParameters()
+    const { getParam, getURLs, setParam } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
+    const { mutate: mutateDispatchesData } = useApi<Dispatch>(`release?${getURLs().toString()}`)
 
     const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setParam('facilityUnit', event.target.value)
     }
 
     const handleUpdateProduct = () => {
-        mutate('release')
+        mutateDispatchesData()
     }
 
     return (
