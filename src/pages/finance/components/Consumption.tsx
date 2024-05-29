@@ -87,6 +87,7 @@ const Arrival = () => {
                 <Input
                     {...register('date', { required: 'Поле является обязательным' })}
                     autoComplete="off"
+                    defaultValue={new Date().toISOString().split('T')[0]}
                     placeholder="Дата"
                     type="date"
                 />

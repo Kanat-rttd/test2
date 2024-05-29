@@ -7,6 +7,7 @@ import useSWR from 'swr'
 import { getAllClients } from '@/utils/services/client.service'
 import { getAllFinancesCategories } from '@/utils/services/financeCategories.service'
 import { useApi } from '@/utils/services/axios'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 const account = [
     {
@@ -80,6 +81,7 @@ interface InvoiceData {
 }
 
 const Arrival = () => {
+    const { loading } = useNotify()
     const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
     const { data: clientsData } = useSWR<Client[]>(['client'], {
         fetcher: () => getAllClients({ name: '', telegrammId: '', status: '' }),
@@ -94,19 +96,20 @@ const Arrival = () => {
         handleSubmit: handleSubmitForm,
         control,
         formState: { errors },
-        // reset,
+        reset,
     } = useForm<ArrivalInputs>()
 
     const sendData = (formData: ArrivalInputs) => {
-        // console.log(formData)
-        createArrival(formData)
+        const responsePromise: Promise<any> = createArrival(formData)
+        loading(responsePromise)
+        responsePromise
             .then((res) => {
                 console.log(res)
+                reset()
             })
             .catch((error) => {
                 console.error('Error creating sale:', error)
             })
-        // mutate()
     }
 
     return (
@@ -126,6 +129,7 @@ const Arrival = () => {
                 <Input
                     {...register('date', { required: 'Поле является обязательным' })}
                     autoComplete="off"
+                    defaultValue={new Date().toISOString().split('T')[0]}
                     placeholder="Дата"
                     type="date"
                 />
@@ -146,9 +150,7 @@ const Arrival = () => {
                                 value={account?.filter((option) => String(option.name) == value)}
                                 // onChange={(val: Account) => onChange(val?.name)}
                                 onChange={(selectedOption: Account | null) => {
-                                    if (selectedOption) {
-                                        onChange(selectedOption.name)
-                                    }
+                                    onChange(selectedOption?.name)
                                 }}
                                 placeholder="Выберите счет *"
                                 isClearable
@@ -177,9 +179,7 @@ const Arrival = () => {
                                 )}
                                 // onChange={(val: Category) => onChange(val?.id)}
                                 onChange={(selectedOption: Category | null) => {
-                                    if (selectedOption) {
-                                        onChange(selectedOption.id)
-                                    }
+                                    onChange(selectedOption?.id)
                                 }}
                                 placeholder="Категория *"
                                 isClearable
@@ -206,9 +206,7 @@ const Arrival = () => {
                                 value={clientsData?.filter((option) => option.id == value)}
                                 // onChange={(val: Client) => onChange(val?.id)}
                                 onChange={(selectedOption: Client | null) => {
-                                    if (selectedOption) {
-                                        onChange(selectedOption.id)
-                                    }
+                                    onChange(selectedOption?.id)
                                 }}
                                 placeholder="Контрагент *"
                                 isClearable
@@ -238,9 +236,7 @@ const Arrival = () => {
                                 )}
                                 // onChange={(val: Account) => onChange(val?.name)}
                                 onChange={(selectedOption: InvoiceData | null) => {
-                                    if (selectedOption) {
-                                        onChange(selectedOption.invoiceNumber)
-                                    }
+                                    onChange(selectedOption?.invoiceNumber)
                                 }}
                                 placeholder="Номер накладной"
                                 isClearable

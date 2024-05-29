@@ -1,10 +1,9 @@
 import IsMobile from '@/utils/helpers/isMobile'
-import { Box, Link, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import Arrival from '../components/Arrival'
 import Consumption from '../components/Consumption'
 import Transfer from '../components/Transfer'
 // import Drawler from '@/components/Menu'
-import { FINANCE_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
 
 const Input = () => {
     return (
@@ -54,21 +53,6 @@ const Input = () => {
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>
-                    </Box>
-                    <Box style={{ textAlign: 'end' }}>
-                        <Link
-                            href={FINANCE_HISTORY_ROUTE}
-                            style={{
-                                color: '#2196f3',
-                                textAlign: 'end',
-                                // fontSize: '14px',
-                                lineHeight: '20px',
-                                fontWeight: 600,
-                            }}
-                            isExternal
-                        >
-                            История транзакций
-                        </Link>
                     </Box>
                 </Box>
             </Box>
