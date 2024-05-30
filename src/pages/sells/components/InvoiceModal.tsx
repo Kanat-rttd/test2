@@ -80,8 +80,8 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
             return
         }
 
-        const contentWidth = contentRef.offsetWidth * 0.4
-        const contentHeight = contentRef.offsetHeight * 0.4
+        const contentWidth = contentRef.offsetWidth * 0.3
+        const contentHeight = contentRef.offsetHeight * 0.3
 
         const pdf = new jsPDF('p', 'mm', 'a4')
 

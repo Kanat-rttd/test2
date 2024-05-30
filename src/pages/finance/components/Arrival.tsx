@@ -3,11 +3,9 @@ import { Box, Button, FormControl, FormErrorMessage, Input, Textarea } from '@ch
 import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
 import { createArrival } from '@/utils/services/finance.service'
-import useSWR from 'swr'
-import { getAllClients } from '@/utils/services/client.service'
-import { getAllFinancesCategories } from '@/utils/services/financeCategories.service'
 import { useApi } from '@/utils/services/axios'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { ContragentType } from '@/utils/types/contragent.types'
 
 const account = [
     {
@@ -29,15 +27,6 @@ interface Category {
 interface Account {
     id: number
     name: string
-}
-
-interface Client {
-    id: number
-    name: string
-    surname: string
-    contact: string
-    telegrammId: string
-    status: number
 }
 
 interface InvoiceData {
@@ -83,13 +72,8 @@ interface InvoiceData {
 const Arrival = () => {
     const { loading } = useNotify()
     const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
-    const { data: clientsData } = useSWR<Client[]>(['client'], {
-        fetcher: () => getAllClients({ name: '', telegrammId: '', status: '' }),
-    })
-
-    const { data: categoriesData } = useSWR<Category[]>(['financeCategories'], {
-        fetcher: () => getAllFinancesCategories(),
-    })
+    const { data: categoriesData } = useApi<Category[]>('financeCategories')
+    const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=Активный')
 
     const {
         register,
@@ -202,12 +186,13 @@ const Arrival = () => {
                         const { onChange, value } = field
                         return (
                             <Select
-                                options={clientsData}
-                                getOptionLabel={(option: Client) => option.name}
-                                getOptionValue={(option: Client) => `${option.id}`}
-                                value={clientsData?.filter((option) => option.id == value)}
-                                // onChange={(val: Client) => onChange(val?.id)}
-                                onChange={(selectedOption: Client | null) => {
+                                options={contragetnsData}
+                                getOptionLabel={(option: ContragentType) =>
+                                    `${option.contragentName} - ${option.type}`
+                                }
+                                getOptionValue={(option: ContragentType) => `${option.id}`}
+                                value={contragetnsData?.filter((option) => option.id == value)}
+                                onChange={(selectedOption: ContragentType | null) => {
                                     onChange(selectedOption?.id)
                                 }}
                                 placeholder="Контрагент *"
