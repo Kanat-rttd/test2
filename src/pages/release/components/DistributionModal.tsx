@@ -12,13 +12,13 @@ import {
     Select,
     Text,
 } from '@chakra-ui/react'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
-import { getBreadNames } from '@/utils/services/product.service'
-import { getAllClients } from '@/utils/services/client.service'
 import { createDispatch } from '@/utils/services/dispatch.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { useForm } from 'react-hook-form'
+import { ClientType } from '@/utils/types/client.type'
+import { useApi } from '@/utils/services/axios'
 
 interface DistributionModalProps {
     isOpen: boolean
@@ -26,16 +26,6 @@ interface DistributionModalProps {
     onClose: () => void
     onSuccess: () => void
     status: string
-}
-
-interface Client {
-    id: number
-    name: string
-}
-
-interface BreadNames {
-    id: string
-    bread: string
 }
 
 type formType = {
@@ -50,22 +40,10 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     status,
 }) => {
     const { loading, error } = useNotify()
-    const [breadNames, setBreadNames] = useState<BreadNames[]>([])
-    const [clientsData, setClientsData] = useState<Client[]>([])
+    const { data: clientsData } = useApi<ClientType[]>('client?status=Активный')
+    const { data: products } = useApi<{ id: string; name: string }[]>('product?status=Активный')
 
     const { handleSubmit: handleSubmitForm } = useForm<formType>()
-
-    useEffect(() => {
-        getBreadNames().then((responseData) => {
-            setBreadNames(responseData)
-        })
-    }, [])
-
-    useEffect(() => {
-        getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
-            setClientsData(responseData)
-        })
-    }, [])
 
     const [recipient, setRecipient] = useState<string>('')
     const [selectedBreads, setSelectedBreads] = useState<
@@ -177,18 +155,18 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                             display={'flex'}
                             flexWrap={'wrap'}
                         >
-                            {breadNames.map((bread) => {
+                            {products?.map((bread) => {
                                 return (
                                     <Checkbox
                                         w={'45%'}
                                         p={'0 15px'}
                                         checked={selectedBreads.some(
-                                            (item) => item.name === bread.bread,
+                                            (item) => item.name === bread.name,
                                         )}
-                                        onChange={() => handleBreadSelection(bread.bread, bread.id)}
-                                        key={bread.bread}
+                                        onChange={() => handleBreadSelection(bread.name, bread.id)}
+                                        key={bread.name}
                                     >
-                                        <Text>{bread.bread}</Text>
+                                        <Text>{bread.name}</Text>
                                     </Checkbox>
                                 )
                             })}

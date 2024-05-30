@@ -74,7 +74,7 @@ interface ProviderGoods {
 const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
     const { loading } = useNotify()
 
-    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
+    const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods?status=Активный')
 
     const [providerGoods, setProviderGoods] = useState<rawMaterials[]>([])
 

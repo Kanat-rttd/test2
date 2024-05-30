@@ -42,7 +42,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
         reset,
     } = useForm<BakingDataType>()
 
-    const { data: products } = useApi<{ id: string; name: string }[]>('product')
+    const { data: products } = useApi<{ id: string; name: string }[]>('product?status=Активный')
     const [startDate, setStartDate] = useState<Date>(new Date())
     const [endDate, setEndDate] = useState<Date>(new Date())
 

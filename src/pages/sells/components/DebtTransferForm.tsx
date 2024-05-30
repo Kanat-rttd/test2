@@ -87,8 +87,8 @@ const DebtTransferForm = () => {
     const [selectedProvider, setSelectedProvider] = useState<string | null>(null)
 
     // const { data: debtTransfer } = useApi('debtTransfer')
-    const { data: magazinesData } = useApi<Magazines[]>('magazines')
-    const { data: clientsData } = useApi<Client[]>('client')
+    const { data: magazinesData } = useApi<Magazines[]>('magazines?status=Активный')
+    const { data: clientsData } = useApi<Client[]>('client?status=Активный')
     const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
 
     const {

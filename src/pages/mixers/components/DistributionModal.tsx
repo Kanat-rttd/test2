@@ -42,7 +42,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 }) => {
     const { loading, error } = useNotify()
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
-    const { data: departPersonalData } = useApi<DepartPersonalType[]>('departPersonal')
+    const { data: departPersonalData } = useApi<DepartPersonalType[]>('departPersonal?status=Активный')
 
     const [selectedFacilityUnit, setSelectedFacilityUnit] = useState<string>('')
     const [selectedPersonals, setSelectedPersonals] = useState<DepartPersonalNames[]>([])

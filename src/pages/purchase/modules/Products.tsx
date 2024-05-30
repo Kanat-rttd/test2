@@ -1,7 +1,6 @@
 import { Box, Button, Select, useDisclosure } from '@chakra-ui/react'
 import ListTable from '../components/ListTable'
 import PurchaseModal from '../components/PurchaseModal'
-import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '@/components/DateRange'
@@ -57,8 +56,7 @@ const Products = () => {
 
     return (
         <>
-            <UniversalComponent>
-                <Box width={'100%'} height={'calc(100vh-64px)'} p={5} pt={7}>
+                <Box width={'100%'} p={5} pt={7}>
                     <Box
                         display={'flex'}
                         alignItems={'center'}
@@ -114,7 +112,6 @@ const Products = () => {
                     <ListTable purchasesData={purchasesData} mutate={mutatePurchaseData} />
                 </Box>
                 <PurchaseModal isOpen={isOpen} onClose={onClose} onSuccess={handleAddProduct} />
-            </UniversalComponent>
         </>
     )
 }

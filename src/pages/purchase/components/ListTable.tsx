@@ -1,15 +1,13 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Table, Tbody, Tr, Th, Td, useDisclosure, Box, IconButton } from '@chakra-ui/react'
+import { Table, Tbody, Tr, Th, Td, useDisclosure, IconButton } from '@chakra-ui/react'
 import { useState } from 'react'
 import EditModal from './EditModal'
 import dayjs from 'dayjs'
-// import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deletePurchase } from '@/utils/services/productPurchase.service'
-import UniversalComponent from '@/components/ui/UniversalComponent'
 
 interface AllPurchases {
     purchases: Purchase[]
@@ -90,90 +88,90 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
 
     return (
         <>
-            <UniversalComponent>
-                <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                    <Box pb={4}>
-                        <Table variant="simple">
-                            <Thead>
-                                <Tr>
-                                    <Th>№</Th>
-                                    <Th>Дата</Th>
-                                    <Th>Поставщик</Th>
-                                    <Th>Товар</Th>
-                                    <Th>Количество</Th>
-                                    <Th>Цена</Th>
-                                    <Th>Сумма</Th>
-                                    <Th>Сумма доставки</Th>
-                                    <Th>Статус</Th>
-                                    <Th>Действия</Th>
+            <TableContainer style={{ width: '100%', overflowY: 'auto' }}>
+                <Table variant="simple">
+                    <Thead>
+                        <Tr>
+                            <Th>№</Th>
+                            <Th>Дата</Th>
+                            <Th>Поставщик</Th>
+                            <Th>Товар</Th>
+                            <Th>Количество</Th>
+                            <Th>Цена</Th>
+                            <Th>Сумма</Th>
+                            <Th>Сумма доставки</Th>
+                            <Th>Статус</Th>
+                            <Th>Действия</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {filteredPurchases?.map((purchase, index) => {
+                            return (
+                                <Tr key={purchase.id}>
+                                    <Td>{index + 1}</Td>
+                                    <Td>{dayjs(purchase.date).format('DD.MM.YYYY')}</Td>
+                                    <Td>{purchase.provider.name}</Td>
+                                    <Td>{purchase.providerGood.name}</Td>
+                                    <Td>{purchase.quantity}</Td>
+                                    <Td>{purchase.price}</Td>
+                                    <Td>{purchase.totalSum}</Td>
+                                    <Td>{purchase.deliverySum}</Td>
+                                    <Td>{purchase.status}</Td>
+                                    <Td>
+                                        <IconButton
+                                            variant="outline"
+                                            size={'sm'}
+                                            colorScheme="teal"
+                                            aria-label="Send email"
+                                            marginRight={3}
+                                            onClick={() => {
+                                                handleSelected(purchase)
+                                            }}
+                                            icon={<EditIcon />}
+                                        />
+                                        <IconButton
+                                            variant="outline"
+                                            size={'sm'}
+                                            colorScheme="teal"
+                                            aria-label="Send email"
+                                            onClick={() => {
+                                                setSelectedData(purchase)
+                                                setDialog({
+                                                    ...dialog,
+                                                    isOpen: true,
+                                                })
+                                            }}
+                                            icon={<DeleteIcon />}
+                                        />
+                                    </Td>
                                 </Tr>
-                            </Thead>
-                            <Tbody>
-                                {filteredPurchases?.map((purchase, index) => {
-                                    return (
-                                        <Tr key={purchase.id}>
-                                            <Td>{index + 1}</Td>
-                                            <Td>{dayjs(purchase.date).format('DD.MM.YYYY')}</Td>
-                                            <Td>{purchase.provider.name}</Td>
-                                            <Td>{purchase.providerGood.name}</Td>
-                                            <Td>{purchase.quantity}</Td>
-                                            <Td>{purchase.price}</Td>
-                                            <Td>{purchase.totalSum}</Td>
-                                            <Td>{purchase.deliverySum}</Td>
-                                            <Td>{purchase.status}</Td>
-                                            <Td>
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        handleSelected(purchase)
-                                                    }}
-                                                    icon={<EditIcon />}
-                                                />
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        setSelectedData(purchase)
-                                                        setDialog({
-                                                            ...dialog,
-                                                            isOpen: true,
-                                                        })
-                                                    }}
-                                                    icon={<DeleteIcon />}
-                                                />
-                                            </Td>
-                                        </Tr>
-                                    )
-                                })}
-                            </Tbody>
-                        </Table>
-                    </Box>
-                    <Table variant="simple">
-                        <Tfoot>
-                            <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>
-                                <Td w={'5%'}>ИТОГО</Td>
-                                <Td w={'5%'}> </Td>
-                                <Td w={'5%'}> </Td>
-                                <Td w={'5%'}> </Td>
-                                <Td w={'7%'}> </Td>
-                                <Td w={'10%'}>{purchasesData?.totalQuantity}</Td>
-                                <Td w={'4%'}> </Td>
-                                <Td w={'10%'}>{purchasesData?.totalSum}</Td>
-                                <Td w={'9%'}>{purchasesData?.totalDeliverySum}</Td>
-                                <Td w={'10%'}> </Td>
-                                <Td w={'10%'}> </Td>
-                            </Tr>
-                        </Tfoot>
-                    </Table>
-                </TableContainer>
-            </UniversalComponent>
+                            )
+                        })}
+                    </Tbody>
+                    <Tfoot>
+                        <Tr>
+                            <Th color={'#000'} fontSize={15} fontWeight={'bold'}>
+                                ИТОГО
+                            </Th>
+                            <Th> </Th>
+                            <Th> </Th>
+                            <Th> </Th>
+                            <Th> </Th>
+                            <Th color={'#000'} fontSize={15} fontWeight={'bold'}>
+                                {purchasesData?.totalQuantity}
+                            </Th>
+                            <Th color={'#000'} fontSize={15} fontWeight={'bold'}>
+                                {purchasesData?.totalSum}
+                            </Th>
+                            <Th color={'#000'} fontSize={15} fontWeight={'bold'}>
+                                {purchasesData?.totalDeliverySum}
+                            </Th>
+                            <Th> </Th>
+                            <Th> </Th>
+                        </Tr>
+                    </Tfoot>
+                </Table>
+            </TableContainer>
             <EditModal
                 selectedData={selectedData}
                 isOpen={isOpen}

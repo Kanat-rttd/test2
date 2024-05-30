@@ -40,8 +40,8 @@ type FormData = {
 
 const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddModalProps) => {
     const { loading } = useNotify()
-    const { data: clients } = useApi<ClientType[]>('client')
-    const { data: products } = useApi<Product[]>('product')
+    const { data: clients } = useApi<ClientType[]>('client?status=Активный')
+    const { data: products } = useApi<Product[]>('product?status=Активный')
 
     const {
         register,

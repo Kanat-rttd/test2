@@ -35,7 +35,7 @@ type EditModalInputs = {
 
 const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
     // const { loading } = useNotify()
-    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
+    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods?status=Активный')
 
     const {
         register,

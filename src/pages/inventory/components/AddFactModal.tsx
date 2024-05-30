@@ -39,7 +39,7 @@ type FactModalProps = {
 
 const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
     const { loading } = useNotify()
-    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
+    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods?status=Активный')
     const { data: placesData } = useApi<Place[]>('place')
 
     console.log(placesData)
