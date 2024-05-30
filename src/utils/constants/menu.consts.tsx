@@ -30,6 +30,7 @@ import {
     INVENTORY_ROUTE,
     INVENTORY_DETAILS_ROUTE,
     ADMIN_PROVIDER_ROUTE,
+    ADMIN_GOODS_ROUTE,
     INVENTORY_FACT_ROUTE,
     // SELLS_ROUTE,
     SELLS_JOURNAL_ROUTE,
@@ -149,7 +150,13 @@ export const subMenuItems: MenuItem[] = [
     },
     {
         route: ADMIN_PROVIDER_ROUTE,
-        label: 'Поставщик-товары',
+        label: 'Поставшики',
+        path: ADMIN_ROUTE,
+        allowedClasses: ['Admin'],
+    },
+    {
+        route: ADMIN_GOODS_ROUTE,
+        label: 'Tовары',
         path: ADMIN_ROUTE,
         allowedClasses: ['Admin'],
     },

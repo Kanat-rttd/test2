@@ -11,17 +11,19 @@ import {
     Tr,
     useDisclosure,
 } from '@chakra-ui/react'
-import ProviderAddModal from '../components/ProviderAddModal'
 import { useState } from 'react'
 import Dialog from '@/components/Dialog'
 import { useApi } from '@/utils/services/axios'
 import { deleteProviderGoods } from '@/utils/services/providerGoods.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { mutate } from 'swr'
 import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
+import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
+import GoodsAddModal from '../components/GoodsAddModal'
 import { ProviderType } from '@/utils/types/provider.types'
 
-const AdminProvider = () => {
+const AdminGoods = () => {
     const { loading } = useNotify()
     const [selectedStatus, setSelectedStatus] = useState('')
     const [dialog, setDialog] = useState({
@@ -29,23 +31,24 @@ const AdminProvider = () => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const { data: providersData, isLoading, mutate: mutateProviderData } = useApi<ProviderType[]>('providers', {
+    const { data: providerGoodsData, isLoading } = useApi<ProviderGoodsType[]>('providerGoods', {
         status: selectedStatus,
     })
+    const { data: providerData, } = useApi<ProviderType[]>('providers')
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [selectedData, setSelectedData] = useState<ProviderType>()
+    const [selectedData, setSelectedData] = useState<ProviderGoodsType>()
 
     const handleSelectChange = (status: string) => {
         setSelectedStatus(status)
     }
 
-    const handlerDeleteProvider = (selectedData: ProviderType | undefined) => {
+    const handlerDeleteProvider = (selectedData: ProviderGoodsType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteProviderGoods(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {
-                mutateProviderData()
+                mutate(`providerGoods?status=${selectedStatus}`)
             })
         } else {
             console.error('No user data available to delete.')
@@ -53,7 +56,7 @@ const AdminProvider = () => {
     }
 
     const handledSuccess = () => {
-        mutateProviderData()
+        mutate(`providerGoods?status=${selectedStatus}`)
         setSelectedData(undefined)
     }
 
@@ -61,6 +64,7 @@ const AdminProvider = () => {
         setSelectedData(undefined)
         onClose()
     }
+
     return (
         <>
             <UniversalComponent>
@@ -92,16 +96,28 @@ const AdminProvider = () => {
                                 <Tr>
                                     <Th>№</Th>
                                     <Th>Поставщик</Th>
+                                    <Th>Товары</Th>
+                                    <Th>Единица измерения</Th>
+                                    <Th>Место</Th>
                                     <Th>Статус</Th>
                                     <Th>Действия</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {providersData?.map((item, index) => {
+                                {providerGoodsData?.map((item, index) => {
+                                    const placesLabels = JSON.parse(String(item.place)).map(
+                                        (place: { label: string }) => place.label,
+                                    )
+                                    const providerName = providerData?.find((provider) => provider.id == item.providerId)
+                                    const placesString = placesLabels.join(', ')
+
                                     return (
                                         <Tr key={index}>
                                             <Td>{index + Number(1)}</Td>
-                                            <Td>{item.providerName}</Td>
+                                            <Td>{providerName?.providerName}</Td>
+                                            <Td>{item.goods}</Td>
+                                            <Td>{item.unitOfMeasure}</Td>
+                                            <Td>{placesString}</Td>
                                             <Td>{item.status}</Td>
                                             <Td sx={{ width: '5%' }}>
                                                 <IconButton
@@ -150,7 +166,7 @@ const AdminProvider = () => {
                     }}
                     actionText="Удалить"
                 />
-                <ProviderAddModal
+                <GoodsAddModal
                     isOpen={isOpen}
                     onClose={handleClose}
                     selectedData={selectedData}
@@ -161,4 +177,4 @@ const AdminProvider = () => {
     )
 }
 
-export default AdminProvider
+export default AdminGoods

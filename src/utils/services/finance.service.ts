@@ -24,7 +24,7 @@ export const createArrival = async (data: {
     account: string
     amount: string
     financeCategoryId: string
-    clientId: number
+    contragentId: number
     comment: string
     date: Date
     invoiceNumber: number | undefined
@@ -42,7 +42,7 @@ export const createInvoiceArrival = async (
         account: string
         amount: string
         financeCategoryId: string
-        clientId: number
+        contragentId: number
         comment: string
         date: Date
     },
@@ -60,7 +60,7 @@ export const createConsumption = async (data: {
     account: string
     amount: string
     financeCategoryId: string
-    clientId: number
+    contragentId: number
     comment: string
     date: Date
 }) => {

@@ -3,7 +3,7 @@ export type ArrivalInputs = {
     date: Date
     account: string
     financeCategoryId: string
-    clientId: number
+    contragentId: number
     comment: string
     invoiceNumber: number
 }

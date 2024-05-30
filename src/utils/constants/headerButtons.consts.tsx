@@ -8,6 +8,7 @@ import {
     ADMIN_OVERPRICE_ROUTE,
     ADMIN_MAGAZINES_ROUTE,
     ADMIN_PROVIDER_ROUTE,
+    ADMIN_GOODS_ROUTE,
 
     // REQUEST_ROUTE,
     REQUEST_PROCESSING_ROUTE,
@@ -141,7 +142,27 @@ export const headerButtons: headerButton[] = [
         buttonsData: [
             {
                 puth: ADMIN_PROVIDER_ROUTE,
-                label: 'Поставщик товары',
+                label: 'Поставщики',
+                isCurrentPage: true,
+            },
+             {
+                puth: ADMIN_GOODS_ROUTE,
+                label: 'Товары',
+                isCurrentPage: false,
+            },
+        ],
+    },
+    {
+        currentPage: ADMIN_GOODS_ROUTE,
+        buttonsData: [
+            {
+                puth: ADMIN_PROVIDER_ROUTE,
+                label: 'Поставщики',
+                isCurrentPage: false,
+            },
+             {
+                puth: ADMIN_GOODS_ROUTE,
+                label: 'Товары',
                 isCurrentPage: true,
             },
         ],

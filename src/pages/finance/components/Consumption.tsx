@@ -2,15 +2,10 @@ import { ArrivalInputs } from '@/utils/types/finance.types'
 import { Box, Button, FormControl, FormErrorMessage, Input, Textarea } from '@chakra-ui/react'
 import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
-// import { useState, useEffect } from 'react'
-import useSWR from 'swr'
-
-import { getAllClients } from '@/utils/services/client.service'
-import { getAllFinancesCategories } from '@/utils/services/financeCategories.service'
-// import { fetcher } from '@/utils/services/axios'
-// import { useNotify } from '@/utils/providers/ToastProvider'
 import { createConsumption } from '@/utils/services/finance.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { ContragentType } from '@/utils/types/contragent.types'
+import { useApi } from '@/utils/services/axios'
 
 const account = [
     {
@@ -34,24 +29,18 @@ interface Account {
     name: string
 }
 
-interface Client {
-    id: number
-    name: string
-    surname: string
-    contact: string
-    telegrammId: string
-    status: number
-}
+
+const formatOptionLabel = (option: ContragentType) => (
+    <div  style={{display: 'flex', justifyContent: 'space-between'}}>
+        <span>{option.contragentName}</span>
+        <span style={{ marginLeft: '50px', color: '#bfbdbd' }}> {option.type}</span>
+    </div>
+)
 
 const Arrival = () => {
     const { loading } = useNotify()
-    const { data: clientsData } = useSWR<Client[]>(['client'], {
-        fetcher: () => getAllClients({ name: '', telegrammId: '', status: '' }),
-    })
-
-    const { data: categoriesData } = useSWR<Category[]>(['financeCategories'], {
-        fetcher: () => getAllFinancesCategories(),
-    })
+    const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=Активный')
+    const { data: categoriesData } = useApi<Category[]>('financeCategories')
 
     const {
         register,
@@ -74,7 +63,6 @@ const Arrival = () => {
             .catch((error) => {
                 console.error('Error creating sale:', error)
             })
-        // mutate()
     }
 
     return (
@@ -158,32 +146,33 @@ const Arrival = () => {
                 <FormErrorMessage>{errors.financeCategoryId?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.clientId}>
-                <Controller
-                    name="clientId"
+            <FormControl isInvalid={!!errors.contragentId}>
+            <Controller
+                    name="contragentId"
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
                         const { onChange, value } = field
                         return (
                             <Select
-                                options={clientsData}
-                                getOptionLabel={(option: Client) => option.name}
-                                getOptionValue={(option: Client) => `${option.id}`}
-                                value={clientsData?.filter((option) => option.id == value)}
-                                onChange={(selectedOption: Client | null) => {
-                                    if (selectedOption) {
-                                        onChange(selectedOption.id)
-                                    }
+                                options={contragetnsData}
+                                getOptionLabel={(option: ContragentType) =>
+                                    `${option.contragentName} - ${option.type}`
+                                }
+                                getOptionValue={(option: ContragentType) => `${option.id}`}
+                                value={contragetnsData?.filter((option) => option.id == value)}
+                                onChange={(selectedOption: ContragentType | null) => {
+                                    onChange(selectedOption?.id)
                                 }}
                                 placeholder="Контрагент *"
+                                formatOptionLabel={formatOptionLabel}
                                 isClearable
                                 isSearchable
                             />
                         )
                     }}
                 />
-                <FormErrorMessage>{errors.clientId?.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.contragentId?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl>

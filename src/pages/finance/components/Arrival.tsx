@@ -31,7 +31,7 @@ interface Account {
 
 interface InvoiceData {
     createdAt: Date
-    clientId: number
+    contragentId: number
     clientName: string
     invoiceNumber: number
     totalProducts: {
@@ -44,7 +44,7 @@ interface InvoiceData {
     totalSum: number
     dispatches: {
         id: number
-        clientId: number
+        contragentId: number
         createdAt: Date
         dispatch: number
         goodsDispatchDetails: {
@@ -70,9 +70,9 @@ interface InvoiceData {
 }
 
 const formatOptionLabel = (option: ContragentType) => (
-    <div>
-        <span className="contragent-name">{option.contragentName}</span>
-        <span style={{ color: '#a6a6a6' }}> - {option.type}</span>
+    <div  style={{display: 'flex', justifyContent: 'space-between'}}>
+        <span>{option.contragentName}</span>
+        <span style={{ marginLeft: '50px', color: '#bfbdbd' }}> {option.type}</span>
     </div>
 )
 
@@ -184,9 +184,9 @@ const Arrival = () => {
                 <FormErrorMessage>{errors.financeCategoryId?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.clientId}>
+            <FormControl isInvalid={!!errors.contragentId}>
                 <Controller
-                    name="clientId"
+                    name="contragentId"
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
@@ -201,12 +201,6 @@ const Arrival = () => {
                                 value={contragetnsData?.filter((option) => option.id == value)}
                                 onChange={(selectedOption: ContragentType | null) => {
                                     onChange(selectedOption?.id)
-                                    console.log(
-                                        selectedOption?.contragentName +
-                                            '\u001b[37m - ' +
-                                            selectedOption?.type +
-                                            '\u001b[0m',
-                                    )
                                 }}
                                 placeholder="Контрагент *"
                                 formatOptionLabel={formatOptionLabel}
@@ -216,7 +210,7 @@ const Arrival = () => {
                         )
                     }}
                 />
-                <FormErrorMessage>{errors.clientId?.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.contragentId?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.invoiceNumber}>
