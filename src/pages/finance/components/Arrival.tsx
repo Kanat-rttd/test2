@@ -69,6 +69,13 @@ interface InvoiceData {
     }[]
 }
 
+const formatOptionLabel = (option: ContragentType) => (
+    <div>
+        <span className="contragent-name">{option.contragentName}</span>
+        <span style={{ color: '#a6a6a6' }}> - {option.type}</span>
+    </div>
+)
+
 const Arrival = () => {
     const { loading } = useNotify()
     const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
@@ -194,8 +201,15 @@ const Arrival = () => {
                                 value={contragetnsData?.filter((option) => option.id == value)}
                                 onChange={(selectedOption: ContragentType | null) => {
                                     onChange(selectedOption?.id)
+                                    console.log(
+                                        selectedOption?.contragentName +
+                                            '\u001b[37m - ' +
+                                            selectedOption?.type +
+                                            '\u001b[0m',
+                                    )
                                 }}
                                 placeholder="Контрагент *"
+                                formatOptionLabel={formatOptionLabel}
                                 isClearable
                                 isSearchable
                             />
