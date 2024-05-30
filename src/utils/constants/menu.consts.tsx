@@ -10,7 +10,7 @@ import {
     SALES_REQUEST_FORM_ROUTE,
     SALES_HISTORY_ROUTE,
     MIXERS_ROUTE,
-    MIXERS_PASTRY_ROUTE,
+    // MIXERS_PASTRY_ROUTE,
     MIXERS_BAKINGPRODUCTS_ROUTE,
     MIXERS_REMAIN_PRODUCTS_ROUTE,
     MIXERS_REMAIN_RAW_MATERIALS_ROUTE,
@@ -173,15 +173,9 @@ export const subMenuItems: MenuItem[] = [
     },
     {
         route: REQUEST_PROCESSED_ROUTE,
-        label: 'Обработанные',
+        label: 'Обработанные заявки',
         path: MIXERS_ROUTE,
         allowedClasses: ['Admin'],
-    },
-    {
-        route: MIXERS_PASTRY_ROUTE,
-        label: 'Заявки',
-        path: MIXERS_ROUTE,
-        allowedClasses: ['Admin', 'Client'],
     },
     {
         route: MIXERS_BAKINGPRODUCTS_ROUTE,

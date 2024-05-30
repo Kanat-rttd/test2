@@ -18,7 +18,7 @@ import {
     // SALES_HISTORY_ROUTE,
 
     // MIXERS_ROUTE,
-    MIXERS_PASTRY_ROUTE,
+    // MIXERS_PASTRY_ROUTE,
     MIXERS_BAKINGPRODUCTS_ROUTE,
     MIXERS_REMAIN_PRODUCTS_ROUTE,
     MIXERS_REMAIN_RAW_MATERIALS_ROUTE,
@@ -176,7 +176,12 @@ export const headerButtons: headerButton[] = [
             },
             {
                 puth: REQUEST_PROCESSED_ROUTE,
-                label: 'Обработанные',
+                label: 'Обработанные заявки',
+                isCurrentPage: false,
+            },
+            {
+                puth: MIXERS_BAKINGPRODUCTS_ROUTE,
+                label: 'Выпечка',
                 isCurrentPage: false,
             },
         ],
@@ -191,17 +196,7 @@ export const headerButtons: headerButton[] = [
             },
             {
                 puth: REQUEST_PROCESSED_ROUTE,
-                label: 'Обработанные',
-                isCurrentPage: true,
-            },
-        ],
-    },
-    {
-        currentPage: MIXERS_PASTRY_ROUTE,
-        buttonsData: [
-            {
-                puth: MIXERS_PASTRY_ROUTE,
-                label: 'Заявки',
+                label: 'Обработанные заявки',
                 isCurrentPage: true,
             },
             {
@@ -215,8 +210,13 @@ export const headerButtons: headerButton[] = [
         currentPage: MIXERS_BAKINGPRODUCTS_ROUTE,
         buttonsData: [
             {
-                puth: MIXERS_PASTRY_ROUTE,
-                label: 'Заявки',
+                puth: REQUEST_PROCESSING_ROUTE,
+                label: 'Обработка',
+                isCurrentPage: false,
+            },
+            {
+                puth: REQUEST_PROCESSED_ROUTE,
+                label: 'Обработанные заявки',
                 isCurrentPage: false,
             },
             {
