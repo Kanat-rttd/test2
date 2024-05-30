@@ -112,7 +112,7 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                             <Box display={'flex'} justifyContent={'space-between'}>
                                 <Text>#{selectedRow?.invoiceNumber}</Text>
                             </Box>
-                            <Box display={'flex'} justifyContent={'space-between'} p={3}>
+                            <Box display={'flex'} justifyContent={'space-between'} p={2} pb={2}>
                                 <Text>Расходная накладная от</Text>
                                 <Text>{dayjs(selectedRow?.createdAt).format('DD-MM-YYYY')}</Text>
                             </Box>
@@ -122,12 +122,11 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                 borderWidth={'2px'}
                                 orientation="horizontal"
                             />
-                            <Box display={'flex'} justifyContent={'space-between'} p={3}>
+                            <Box display={'flex'} justifyContent={'space-between'} pt={1} p={2} pb={3}>
                                 <Box
                                     display={'flex'}
                                     justifyContent={'space-between'}
                                     flexDirection={'column'}
-                                    marginBottom={'5px'}
                                 >
                                     <Text>Получатель</Text>
                                     <Text>Покупатель</Text>
@@ -136,7 +135,6 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                     display={'flex'}
                                     flexDirection={'column'}
                                     justifyContent={'space-between'}
-                                    marginBottom={'5px'}
                                 >
                                     <Text></Text>
                                     <Text>{selectedRow?.clientName}</Text>
@@ -147,7 +145,7 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                 borderColor={'black'}
                                 borderWidth={'2px'}
                                 orientation="horizontal"
-                                marginBottom={5}
+                                marginBottom={3}
                             />
                             <Table size={'xs'} variant={'unstyled'} fontSize={'12px'}>
                                 <Thead>
@@ -165,6 +163,7 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                             Сумма
                                         </Th>
                                     </Tr>
+                                    <Tr height={2}></Tr>
                                 </Thead>
                                 <Tbody>
                                     {selectedRow?.totalProducts.map((item, index) => (
@@ -185,11 +184,11 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                     ))}
                                 </Tbody>
                             </Table>
-                            <Box display={'flex'} marginBottom={7} mt={10}>
+                            <Box display={'flex'} marginBottom={3} mt={3}>
                                 <Text marginLeft={'auto'}>Получено</Text>
                                 <Text>________</Text>
                             </Box>
-                            <Box display={'flex'} flexDirection={'column'} marginBottom={'5px'} gap={2}>
+                            <Box display={'flex'} flexDirection={'column'}>
                                 <Text marginLeft={'auto'} fontWeight={'bold'}>Сверху: 5000 тг</Text>
                                 <Text marginLeft={'auto'} fontWeight={'bold'}>Всего: {selectedRow?.totalSum} тг</Text>
                             </Box>
