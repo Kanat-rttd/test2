@@ -13,7 +13,7 @@ import {
 import { useState } from 'react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Dialog from '@/components/Dialog'
-import { mutate, useApi } from '@/utils/services/axios'
+import { useApi } from '@/utils/services/axios'
 import MagazineAddModal from '../components/MagazineAddModal'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteMagazines } from '@/utils/services/magazines.service'

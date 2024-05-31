@@ -1,6 +1,5 @@
 import {
     Box,
-    Button,
     Divider,
     FormControl,
     FormErrorMessage,
@@ -96,13 +95,13 @@ const DebtTransferForm = () => {
         handleSubmit: handleSubmitForm,
         control,
         formState: { errors },
-        // reset,
+        reset,
     } = useForm<DebtTransferInputs>()
 
     const sendData = (formData: DebtTransferInputs) => {
         createDebtTransfer(formData)
-            .then((res) => {
-                console.log(res)
+            .then(() => {
+                reset()
             })
             .catch((error) => {
                 console.error('Error creating sale:', error)
@@ -138,148 +137,161 @@ const DebtTransferForm = () => {
                         />
                         <FormErrorMessage>{errors.fromProvider?.message}</FormErrorMessage>
                     </FormControl> */}
+                    <form
+                        onSubmit={handleSubmitForm(sendData)}
+                        style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
+                    >
+                        <FormControl isInvalid={!!errors.fromProvider}>
+                            <Controller
+                                name="fromProvider"
+                                control={control}
+                                rules={{ required: 'Поле является обязательным' }}
+                                render={({ field }) => {
+                                    const { onChange, value } = field
+                                    return (
+                                        <Select
+                                            options={clientsData}
+                                            getOptionLabel={(option: Client) => option.name}
+                                            getOptionValue={(option: Client) => `${option.id}`}
+                                            value={clientsData?.filter(
+                                                (option) => String(option.id) == String(value),
+                                            )}
+                                            // onChange={(val: Account) => onChange(val?.name)}
+                                            onChange={(selectedOption: Client | null) => {
+                                                if (selectedOption) {
+                                                    onChange(selectedOption.id)
+                                                    setSelectedProvider(selectedOption.name)
+                                                }
+                                            }}
+                                            placeholder="Реализатор *"
+                                            isClearable
+                                            isSearchable
+                                        />
+                                    )
+                                }}
+                            />
+                            <FormErrorMessage>{errors.fromProvider?.message}</FormErrorMessage>
+                        </FormControl>
 
-                    <FormControl isInvalid={!!errors.fromProvider}>
-                        <Controller
-                            name="fromProvider"
-                            control={control}
-                            rules={{ required: 'Поле является обязательным' }}
-                            render={({ field }) => {
-                                const { onChange, value } = field
-                                return (
-                                    <Select
-                                        options={clientsData}
-                                        getOptionLabel={(option: Client) => option.name}
-                                        getOptionValue={(option: Client) => `${option.id}`}
-                                        value={clientsData?.filter(
-                                            (option) => String(option.id) == String(value),
-                                        )}
-                                        // onChange={(val: Account) => onChange(val?.name)}
-                                        onChange={(selectedOption: Client | null) => {
-                                            if (selectedOption) {
-                                                onChange(selectedOption.id)
-                                                setSelectedProvider(selectedOption.name)
+                        <FormControl isInvalid={!!errors.summa}>
+                            <Input
+                                maxLength={20}
+                                {...register('summa', { required: 'Поле является обязательным' })}
+                                autoComplete="off"
+                                placeholder="Сумма *"
+                                type="number"
+                            />
+                            <FormErrorMessage>{errors.summa?.message}</FormErrorMessage>
+                        </FormControl>
+
+                        <FormControl isInvalid={!!errors.toMagazine}>
+                            <Controller
+                                name="toMagazine"
+                                control={control}
+                                rules={{ required: 'Поле является обязательным' }}
+                                render={({ field }) => {
+                                    const { onChange, value } = field
+                                    const filteredMagazines = magazinesData?.filter(
+                                        (option) => option.client.name == selectedProvider,
+                                    )
+                                    return (
+                                        <Select
+                                            options={filteredMagazines}
+                                            getOptionLabel={(option: Magazines) => option.name}
+                                            getOptionValue={(option: Magazines) => `${option.id}`}
+                                            value={
+                                                value
+                                                    ? filteredMagazines?.filter(
+                                                          (option) => option.id == value,
+                                                      )
+                                                    : null
                                             }
-                                        }}
-                                        placeholder="Реализатор *"
-                                        isClearable
-                                        isSearchable
-                                    />
-                                )
-                            }}
-                        />
-                        <FormErrorMessage>{errors.fromProvider?.message}</FormErrorMessage>
-                    </FormControl>
+                                            onChange={(selectedOption: Magazines | null) => {
+                                                if (selectedOption) {
+                                                    onChange(selectedOption.id)
+                                                }
+                                            }}
+                                            placeholder="К магазинам *"
+                                            isClearable
+                                            isSearchable
+                                        />
+                                    )
+                                }}
+                            />
+                            <FormErrorMessage>{errors.toMagazine?.message}</FormErrorMessage>
+                        </FormControl>
 
-                    <FormControl isInvalid={!!errors.summa}>
-                        <Input
-                            maxLength={20}
-                            {...register('summa', { required: 'Поле является обязательным' })}
-                            autoComplete="off"
-                            placeholder="Сумма *"
-                            type="number"
-                        />
-                        <FormErrorMessage>{errors.summa?.message}</FormErrorMessage>
-                    </FormControl>
+                        <FormControl variant={'floating'} isInvalid={!!errors.date}>
+                            <Input
+                                {...register('date', { required: 'Поле является обязательным' })}
+                                autoComplete="off"
+                                placeholder="Дата"
+                                type="date"
+                            />
+                        </FormControl>
 
-                    <FormControl isInvalid={!!errors.toMagazine}>
-                        <Controller
-                            name="toMagazine"
-                            control={control}
-                            rules={{ required: 'Поле является обязательным' }}
-                            render={({ field }) => {
-                                const { onChange, value } = field
-                                const filteredMagazines = magazinesData?.filter(
-                                    (option) => option.client.name == selectedProvider,
-                                )
-                                return (
-                                    <Select
-                                        options={filteredMagazines}
-                                        getOptionLabel={(option: Magazines) => option.name}
-                                        getOptionValue={(option: Magazines) => `${option.id}`}
-                                        value={filteredMagazines?.find(
-                                            (option) => option.id === value,
-                                        )}
-                                        onChange={(selectedOption: Magazines | null) => {
-                                            if (selectedOption) {
-                                                onChange(selectedOption.id)
+                        <FormControl isInvalid={!!errors.invoiceNumber}>
+                            <Controller
+                                name="invoiceNumber"
+                                control={control}
+                                rules={{ required: 'Поле является обязательным' }}
+                                render={({ field }) => {
+                                    const { onChange, value } = field
+                                    return (
+                                        <Select
+                                            options={dispatchesData}
+                                            getOptionLabel={(option: InvoiceData) =>
+                                                String(option.invoiceNumber)
                                             }
-                                        }}
-                                        placeholder="К магазинам *"
-                                        isClearable
-                                        isSearchable
-                                    />
-                                )
-                            }}
-                        />
-                        <FormErrorMessage>{errors.toMagazine?.message}</FormErrorMessage>
-                    </FormControl>
-
-                    <FormControl variant={'floating'} isInvalid={!!errors.date}>
-                        <Input
-                            {...register('date', { required: 'Поле является обязательным' })}
-                            autoComplete="off"
-                            placeholder="Дата"
-                            type="date"
-                        />
-                    </FormControl>
-
-                    <FormControl isInvalid={!!errors.invoiceNumber}>
-                        <Controller
-                            name="invoiceNumber"
-                            control={control}
-                            rules={{ required: 'Поле является обязательным' }}
-                            render={({ field }) => {
-                                const { onChange, value } = field
-                                return (
-                                    <Select
-                                        options={dispatchesData}
-                                        getOptionLabel={(option: InvoiceData) =>
-                                            String(option.invoiceNumber)
-                                        }
-                                        getOptionValue={(option: InvoiceData) =>
-                                            `${option.invoiceNumber}`
-                                        }
-                                        value={dispatchesData?.filter(
-                                            (option) =>
-                                                String(option.invoiceNumber) == String(value),
-                                        )}
-                                        // onChange={(val: Account) => onChange(val?.name)}
-                                        onChange={(selectedOption: InvoiceData | null) => {
-                                            if (selectedOption) {
-                                                onChange(selectedOption.invoiceNumber)
+                                            getOptionValue={(option: InvoiceData) =>
+                                                `${option.invoiceNumber}`
                                             }
-                                        }}
-                                        placeholder="Номер накладной *"
-                                        isClearable
-                                        isSearchable
-                                    />
-                                )
-                            }}
-                        />
-                        <FormErrorMessage>{errors.invoiceNumber?.message}</FormErrorMessage>
-                    </FormControl>
+                                            value={dispatchesData?.filter(
+                                                (option) =>
+                                                    String(option.invoiceNumber) == String(value),
+                                            )}
+                                            // onChange={(val: Account) => onChange(val?.name)}
+                                            onChange={(selectedOption: InvoiceData | null) => {
+                                                if (selectedOption) {
+                                                    onChange(selectedOption.invoiceNumber)
+                                                }
+                                            }}
+                                            placeholder="Номер накладной *"
+                                            isClearable
+                                            isSearchable
+                                        />
+                                    )
+                                }}
+                            />
+                            <FormErrorMessage>{errors.invoiceNumber?.message}</FormErrorMessage>
+                        </FormControl>
 
-                    <FormControl>
-                        <Textarea
-                            placeholder="Комментарий"
-                            maxLength={50}
-                            size="sm"
-                            {...register('comment')}
-                            resize="none"
-                        />
-                    </FormControl>
-                    <Box style={{ width: '100%', textAlign: 'center' }}>
-                        <Button colorScheme="blue" mr={3}>
-                            Закрыть
-                        </Button>
-                        <Button
-                            style={{ background: '#29647C', color: '#fff' }}
-                            onClick={handleSubmitForm(sendData)}
+                        <FormControl>
+                            <Textarea
+                                placeholder="Комментарий"
+                                maxLength={50}
+                                size="sm"
+                                {...register('comment')}
+                                resize="none"
+                            />
+                        </FormControl>
+                        <Box
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                marginTop: '10px',
+                            }}
                         >
-                            Отправить
-                        </Button>
-                    </Box>
+                            <Input
+                                width={'40%'}
+                                type="submit"
+                                bg="purple.500"
+                                color="white"
+                                cursor="pointer"
+                                value={'Подтвердить'}
+                            />
+                        </Box>
+                    </form>
                 </Box>
             </Box>
         </>
