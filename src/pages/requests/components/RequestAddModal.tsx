@@ -82,6 +82,7 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
             responsePromise.then((res) => {
                 console.log(res)
                 mutate()
+                reset()
                 onClose()
             })
         } catch (error: any) {

@@ -20,11 +20,6 @@ import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
 import dayjs from 'dayjs'
 import { updateShiftAccounting } from '@/utils/services/shiftAccounting.service'
 
-// interface EditModalInputs {
-//     date: string
-//     hours: string
-// }
-
 interface EditModalInputs {
     [key: string]: string
 }
@@ -134,6 +129,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
                                                         autoComplete="off"
                                                         placeholder={`Часы *`}
                                                         type="text"
+                                                        defaultValue={details.shiftTime}
                                                     />
                                                 </InputGroup>
                                                 <FormErrorMessage>
