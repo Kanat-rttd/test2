@@ -47,10 +47,7 @@ const AdminPanel = () => {
             const responsePromise: Promise<any> = deleteMagazines(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {
-                mutate((currentData: MagazineType[] | undefined) => {
-                    if (!currentData) return currentData
-                    return currentData.filter((client) => client.id !== selectedData?.id)
-                })
+                mutateMagazinesData()
             })
         } else {
             console.error('No user data available to delete.')
