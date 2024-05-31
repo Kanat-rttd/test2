@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import {
     Modal,
     ModalOverlay,
@@ -7,15 +7,20 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    Button,
     FormControl,
     InputGroup,
     Input,
     Box,
     Text,
+    Select,
 } from '@chakra-ui/react'
 
 import { updateDispatchPrice } from '@/utils/services/dispatch.service'
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
+import { useApi } from '@/utils/services/axios'
+import { ClientType } from '@/utils/types/client.type'
+import { Product } from '@/utils/types/product.types'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 interface Dispatch {
     id: number
@@ -26,7 +31,7 @@ interface Dispatch {
         id: number
         productId: number
         quantity: number
-        price: string
+        price: number
         product: {
             name: string
             price: number
@@ -49,51 +54,62 @@ interface EditModalProps {
     onSuccess: () => void
 }
 
+type FormData = {
+    clientId: number
+    products: { productId: number; quantity: number; price: number }[]
+}
+
 const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onSuccess }) => {
-    const [formData, setFormData] = useState<Dispatch>({
-        id: 0,
-        clientId: 0,
-        createdAt: '',
-        dispatch: '',
-        goodsDispatchDetails: [],
-        client: {
-            id: 0,
-            name: '',
-        },
+    const { loading } = useNotify()
+    const { data: clients } = useApi<ClientType[]>('client')
+    const { data: products } = useApi<Product[]>('product')
+
+    const {
+        register,
+        reset,
+        setValue,
+        control,
+        setError,
+        handleSubmit: handleSubmitForm,
+    } = useForm<FormData>()
+
+    const { fields } = useFieldArray({
+        control,
+        name: 'products',
     })
 
     useEffect(() => {
         if (selectedRow) {
-            setFormData(selectedRow)
+            const data = selectedRow?.goodsDispatchDetails.map((detail) => {
+                return {
+                    productId: Number(detail.productId),
+                    quantity: Number(detail.quantity),
+                    price: Number(detail.product.price),
+                }
+            })
+            setValue('clientId', Number(selectedRow.client.id))
+            setValue('products', data)
+        } else {
+            reset()
         }
     }, [selectedRow])
 
-    const handleInputChange = (index: number, field: string, value: string | number) => {
-        const updatedGoodsDispatchDetails = [...formData.goodsDispatchDetails]
-        updatedGoodsDispatchDetails[index] = {
-            ...updatedGoodsDispatchDetails[index],
-            [field]: value,
-        }
-        setFormData((prevState) => ({
-            ...prevState,
-            goodsDispatchDetails: updatedGoodsDispatchDetails,
-        }))
-    }
-
-    const updateData = () => {
-
-        formData.goodsDispatchDetails.forEach((item) => {
-            const updObj = {
-                productId: item.productId,
-                price: item.price,
-            }
-
-            updateDispatchPrice(item.id, updObj).then(() => {
+    const updateData: SubmitHandler<FormData> = (formData) => {
+        if (!selectedRow) return
+        try {
+            const responsePromise: Promise<any> = updateDispatchPrice(selectedRow.id, formData)
+            loading(responsePromise)
+            responsePromise.then((res) => {
+                console.log(res)
+                reset()
                 onSuccess()
+                onClose()
             })
-        })
-
-        onClose()
+        } catch (error: any) {
+            setError('root', {
+                message: error.response.data.message || 'Ошибка',
+            })
+        }
     }
 
     return (
@@ -103,124 +119,108 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                 <ModalHeader textAlign={'center'}>Изменить</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <FormControl>
-                        <InputGroup>
-                            <Input
-                                value={formData.client.name}
-                                onChange={(e) =>
-                                    setFormData((prevState) => ({
-                                        ...prevState,
-                                        client: {
-                                            ...prevState.client,
-                                            name: e.target.value,
-                                        },
-                                    }))
-                                }
-                                autoComplete="off"
-                                placeholder="Имя *"
-                                type="text"
-                                marginBottom={3}
-                                readOnly
-                                bg={'RGB(223, 223, 223)'}
-                            />
-                        </InputGroup>
-                    </FormControl>
+                    <form
+                        onSubmit={handleSubmitForm(updateData)}
+                        style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
+                    >
+                        <FormControl>
+                            <Select
+                                {...register('clientId', {
+                                    required: 'Поле является обязательным',
+                                })}
+                                variant="filled"
+                                placeholder="Имя клиента"
+                                disabled
+                            >
+                                {clients?.map((client) => (
+                                    <option key={client.name} value={client.id}>
+                                        {client.name}
+                                    </option>
+                                ))}
+                            </Select>
+                        </FormControl>
 
-                    <FormControl>
-                        <InputGroup>
-                            <Input
-                                value={
-                                    formData.createdAt
-                                        ? new Date(formData.createdAt).toISOString().split('T')[0]
-                                        : ''
-                                }
-                                onChange={(e) =>
-                                    setFormData((prevState) => ({
-                                        ...prevState,
-                                        createdAt: e.target.value,
-                                    }))
-                                }
-                                autoComplete="off"
-                                placeholder="Дата *"
-                                type="date"
-                                marginBottom={3}
-                                readOnly
-                                bg={'RGB(223, 223, 223)'}
-                            />
-                        </InputGroup>
-                    </FormControl>
+                        <FormControl>
+                            <InputGroup>
+                                <Input
+                                    value={
+                                        selectedRow?.createdAt
+                                            ? new Date(selectedRow?.createdAt)
+                                                  .toISOString()
+                                                  .split('T')[0]
+                                            : ''
+                                    }
+                                    autoComplete="off"
+                                    placeholder="Дата *"
+                                    type="date"
+                                    marginBottom={3}
+                                    readOnly
+                                    bg={'RGB(223, 223, 223)'}
+                                />
+                            </InputGroup>
+                        </FormControl>
 
-                    <Box display="flex" gap={5} marginBottom={1}>
-                        <Text width="50%">Название товара</Text>
-                        <Text width="25%">Количество</Text>
-                        <Text width="25%">Цена</Text>
-                    </Box>
-
-                    {formData.goodsDispatchDetails.map((detail, index) => (
-                        <Box key={index} display={'flex'} gap={5} marginBottom={3}>
-                            <FormControl width="50%">
-                                <InputGroup>
-                                    <Input
-                                        value={detail.product.name}
-                                        onChange={(e) =>
-                                            handleInputChange(index, 'product.name', e.target.value)
-                                        }
-                                        autoComplete="off"
-                                        placeholder="Название товара"
-                                        type="text"
-                                        readOnly
-                                        bg={'RGB(223, 223, 223)'}
-                                    />
-                                </InputGroup>
-                            </FormControl>
-
-                            <FormControl width="25%">
-                                <InputGroup>
-                                    <Input
-                                        value={detail.quantity}
-                                        onChange={(e) =>
-                                            handleInputChange(
-                                                index,
-                                                'quantity',
-                                                parseInt(e.target.value),
-                                            )
-                                        }
-                                        autoComplete="off"
-                                        type="number"
-                                        readOnly
-                                        bg={'RGB(223, 223, 223)'}
-                                    />
-                                </InputGroup>
-                            </FormControl>
-
-                            <FormControl width="25%">
-                                <InputGroup>
-                                    <Input
-                                        value={
-                                            detail.price !== null
-                                                ? detail.price
-                                                : detail.product.price
-                                        }
-                                        onChange={(e) =>
-                                            handleInputChange(index, 'price', e.target.value)
-                                        }
-                                        autoComplete="off"
-                                        type="text"
-                                    />
-                                </InputGroup>
-                            </FormControl>
+                        <Box display="flex" gap={5} marginBottom={1}>
+                            <Text width="50%">Название товара</Text>
+                            <Text width="25%">Количество</Text>
+                            <Text width="25%">Цена</Text>
                         </Box>
-                    ))}
+                        {fields.map((_, index) => {
+                            return (
+                                <Box display="flex" gap="1rem" alignItems="center" key={index}>
+                                    <Select
+                                        width="50%"
+                                        {...register(`products.${index}.productId`, {
+                                            required: 'Поле является обязательным',
+                                        })}
+                                        variant="filled"
+                                        placeholder="Вид хлеба"
+                                        disabled
+                                    >
+                                        {products?.map((product) => (
+                                            <option key={product.name} value={product.id}>
+                                                {product.name}
+                                            </option>
+                                        ))}
+                                    </Select>
+                                    <Input
+                                        width="25%"
+                                        {...register(`products.${index}.quantity`, {
+                                            required: 'Поле является обязательным',
+                                        })}
+                                        placeholder="Количество"
+                                        readOnly
+                                    />
+                                    <Input
+                                        width="25%"
+                                        {...register(`products.${index}.price`, {
+                                            required: 'Поле является обязательным',
+                                        })}
+                                        placeholder="Количество"
+                                    />
+                                </Box>
+                            )
+                        })}
+                        <Box
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                marginTop: '10px',
+                            }}
+                        >
+                            <Input
+                                width={'40%'}
+                                type="submit"
+                                bg="purple.500"
+                                color="white"
+                                cursor="pointer"
+                                value={'Редактировать'}
+                            />
+                        </Box>
+                    </form>
                 </ModalBody>
 
-                <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={onClose}>
-                        Закрыть
-                    </Button>
-                    <Button colorScheme="purple" onClick={updateData}>
-                        Подтвердить
-                    </Button>
-                </ModalFooter>
+                <ModalFooter></ModalFooter>
             </ModalContent>
         </Modal>
     )

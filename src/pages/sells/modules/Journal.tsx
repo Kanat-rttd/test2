@@ -4,9 +4,6 @@ import ListTable from '../components/ListTable'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 
-import UniversalComponent from '@/components/ui/UniversalComponent'
-// import { useURLParameters } from '@/utils/hooks/useURLParameters'
-
 interface FacilityUnit {
     id: number
     facilityUnit: string
@@ -45,7 +42,6 @@ const JournalPage = () => {
 
     return (
         <>
-            <UniversalComponent>
                 <Box
                     display="flex"
                     flexDirection="column"
@@ -109,7 +105,6 @@ const JournalPage = () => {
                     </Box>
                 </Box>
                 {/* <DistributionModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} status="0" /> */}
-            </UniversalComponent>
         </>
     )
 }

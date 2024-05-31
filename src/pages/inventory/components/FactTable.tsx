@@ -1,5 +1,5 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Table, Tbody, Tr, Th, Td, Box, IconButton } from '@chakra-ui/react'
+import { Table, Tbody, Tr, Th, Td,  IconButton } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import dayjs from 'dayjs'
 import { useState } from 'react'
@@ -120,10 +120,6 @@ const FactTable = () => {
                             </Tr>
                         ))}
                     </Tbody>
-                </Table>
-            </TableContainer>
-            <Box bottom={0} position={'absolute'} width={'100%'}>
-                <Table>
                     <Tfoot>
                         <Tr>
                             <Th fontSize={15} color={'#000'}>
@@ -139,7 +135,8 @@ const FactTable = () => {
                         </Tr>
                     </Tfoot>
                 </Table>
-            </Box>
+            </TableContainer>
+
             <EditModal
                 selectedData={selectedData}
                 isOpen={isOpen}
