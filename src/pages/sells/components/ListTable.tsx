@@ -9,6 +9,7 @@ import { deleteDispatch } from '@/utils/services/dispatch.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
+import dayjs from 'dayjs'
 
 interface DispatchData {
     data: Dispatch[]
@@ -101,13 +102,14 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
                 <Table variant="simple" width={'100%'}>
                     <Thead>
                         <Tr position={'sticky'} top={0} backgroundColor={'white'} zIndex={9}>
-                            <Th width={'10%'}>№</Th>
-                            <Th width={'20%'}>Реализатор</Th>
-                            <Th width={'20%'}>Продукт</Th>
-                            <Th width={'10%'}>Количество </Th>
-                            <Th width={'10%'}>Цена</Th>
-                            <Th width={'10%'}>Сумма</Th>
-                            <Th width={'10%'}>Действия</Th>
+                            <Th textAlign={'center'}>№</Th>
+                            <Th textAlign={'center'}>Дата</Th>
+                            <Th>Реализатор</Th>
+                            <Th>Продукт</Th>
+                            <Th>Количество </Th>
+                            <Th>Цена</Th>
+                            <Th>Сумма</Th>
+                            <Th>Действия</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -116,8 +118,9 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
                                 ?.filter((row: Dispatch) => row.dispatch == status)
                                 ?.map((row, index) => {
                                     return (
-                                        <Tr key={row.id}>
-                                            <Td>{index + 1}</Td>
+                                        <Tr textAlign={'center'} key={row.id}>
+                                            <Td textAlign={'center'}>{index + 1}</Td>
+                                            <Td textAlign={'center'}>{dayjs(row.createdAt).format('HH:mm DD.MM.YYYY')}</Td>
                                             <Td>{row.client.name}</Td>
                                             <Td>
                                                 <div
@@ -223,19 +226,20 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
                     </Tbody>
                     <Tfoot>
                         <Tr>
-                            <Th fontSize={15} color={'#000'} width={'15%'}>
+                            <Th fontSize={15} color={'#000'}>
                                 ИТОГО
                             </Th>
-                            <Th width={'20%'}></Th>
-                            <Th width={'20%'}></Th>
-                            <Th fontSize={15} color={'#000'} width={'6%'}>
+                            <Th></Th>
+                            <Th></Th>
+                            <Th></Th>
+                            <Th fontSize={15} color={'#000'}>
                                 {dispatchData?.totalQuantity}
                             </Th>
-                            <Th width={'17%'}></Th>
-                            <Th fontSize={15} color={'#000'} width={'10%'}>
+                            <Th></Th>
+                            <Th fontSize={15} color={'#000'}>
                                 {dispatchData?.totalPrice}
                             </Th>
-                            <Th width={'15%'}></Th>
+                            <Th></Th>
                         </Tr>
                     </Tfoot>
                 </Table>
