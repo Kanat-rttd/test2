@@ -15,11 +15,11 @@ import ProviderAddModal from '../components/ProviderAddModal'
 import { useState } from 'react'
 import Dialog from '@/components/Dialog'
 import { useApi } from '@/utils/services/axios'
-import { deleteProviderGoods } from '@/utils/services/providerGoods.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { ProviderType } from '@/utils/types/provider.types'
+import { deleteProvider } from '@/utils/services/provider.service'
 
 const AdminProvider = () => {
     const { loading } = useNotify()
@@ -42,7 +42,7 @@ const AdminProvider = () => {
 
     const handlerDeleteProvider = (selectedData: ProviderType | undefined) => {
         if (selectedData) {
-            const responsePromise: Promise<any> = deleteProviderGoods(selectedData.id)
+            const responsePromise: Promise<any> = deleteProvider(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {
                 mutateProviderData()

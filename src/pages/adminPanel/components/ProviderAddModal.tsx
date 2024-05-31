@@ -40,7 +40,7 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
     useEffect(() => {
         if (selectedData) {
             Object.entries(selectedData).forEach(([key, value]) => {
-                setValue(key as keyof ProviderForm, value)
+                setValue(key as keyof ProviderForm, value as string)
             })
         } else {
             reset()
@@ -59,7 +59,6 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                 onSuccess()
                 handleClose()
             })
-            reset()
         } catch (error: any) {
             setError('root', {
                 message: error.response.data.message || 'Ошибка',

@@ -1,6 +1,6 @@
 export type ProviderType = {
-    providerName: string
     id: number
+    providerName: string
     status: string
 }
 

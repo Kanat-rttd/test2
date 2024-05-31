@@ -47,7 +47,7 @@ type ModalProps = {
 
 const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps) => {
     const { loading } = useNotify()
-    const { data: providersData } = useApi<ProviderType[]>('providers')
+    const { data: providersData } = useApi<ProviderType[]>('providers?status=Активный')
     const { data: placesData } = useApi<Place[]>('place')
 
     const {
