@@ -13,10 +13,11 @@ export const createBaking = async (data: {
     malt: string
     butter: string
     temperature: string
-    time: string
+    dateTime: string
+    // time: string
     output: string
     defective: string
-    date: Date
+    // date: Date
 }) => {
     const response = await $host.post('baking', data)
     return response
@@ -32,10 +33,11 @@ export const updateBaking = async (
         malt: string
         butter: string
         temperature: string
-        time: string
+        // time: string
+        dateTime: string
         output: string
         defective: string
-        date: Date
+        // date: Date
     },
 ) => {
     const response = await $host.put(`baking/${id}`, data)

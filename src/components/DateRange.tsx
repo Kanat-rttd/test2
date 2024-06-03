@@ -26,10 +26,10 @@ const DateRange = () => {
     const [selectionRange, setSelectionRange] = useState({
         startDate: dayjs(getParam('startDate')).isValid()
             ? dayjs(getParam('startDate')).toDate()
-            : dayjs().startOf('month').toDate(),
+            : dayjs().toDate(),
         endDate: dayjs(getParam('endDate')).isValid()
             ? dayjs(getParam('endDate')).toDate()
-            : dayjs().endOf('month').toDate(),
+            : dayjs().toDate(),
     })
 
     useEffect(() => {

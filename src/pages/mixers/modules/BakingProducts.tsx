@@ -137,7 +137,7 @@ const BakingPage = () => {
                                             <Td textAlign={'center'}>{bakingRow.butter}</Td>
                                             <Td textAlign={'center'}>{bakingRow.temperature}</Td>
                                             <Td textAlign={'center'}>
-                                                {dayjs(`${bakingRow.date + bakingRow.time}`).format(
+                                                {dayjs(bakingRow.dateTime).format(
                                                     'HH:mm DD.MM.YYYY',
                                                 )}
                                             </Td>
