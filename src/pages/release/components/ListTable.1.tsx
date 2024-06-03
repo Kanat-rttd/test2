@@ -1,8 +1,19 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { IconButton, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
+import {
+    Box,
+    Button,
+    IconButton,
+    Select,
+    Table,
+    Tbody,
+    Td,
+    Th,
+    Tr,
+    useDisclosure,
+} from '@chakra-ui/react'
 import EditModal from './EditModal'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import dayjs from 'dayjs'
 import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
@@ -10,23 +21,28 @@ import { TableContainer, Thead } from '@/components/ui'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteDispatch } from '@/utils/services/dispatch.service'
 import { DispatchType } from '@/utils/types/dispatch.types'
+import DateRange from '@/components/DateRange'
 
-type Dispatch = {
+export interface ListTableProps {
+    status: string
+}
+
+export interface FacilityUnit {
+    id: number
+    facilityUnit: string
+}
+
+export type Dispatch = {
     data: DispatchType[]
     totalPrice: number
     totalQuantity: number
 }
 
-interface ListTableProps {
-    status: string
-    facilityUnit: string
-}
-
-export default function ListTable({ facilityUnit, status }: ListTableProps) {
+export default function ListTable({ status }: ListTableProps) {
     const { loading } = useNotify()
-    const { getURLs, setParam } = useURLParameters()
-
-    console.log(facilityUnit, status)
+    const { getURLs, setParam, getParam } = useURLParameters()
+    const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
+    const { onOpen } = useDisclosure()
 
     const [selectedData, setSelectedData] = useState<DispatchType>()
 
@@ -36,16 +52,17 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
     })
 
     const { data: dispatchesData, mutate: mutateDispatchesData } = useApi<Dispatch>(
-        `release?${getURLs().toString()}`,
+        `release?${getURLs().toString()}&status=${status}`,
     )
 
-    useEffect(() => {
-        setParam('status', status)
-    }, [])
     const [modal, setModal] = useState({
         isOpen: false,
         onClose: () => setModal({ ...modal, isOpen: false }),
     })
+
+    const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setParam('facilityUnit', event.target.value)
+    }
 
     const handlerDelete = (selectedData: DispatchType | undefined) => {
         if (selectedData) {
@@ -66,6 +83,35 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
 
     return (
         <>
+            <Box
+                mt={2}
+                marginBottom={'20px'}
+                height={'5%'}
+                display={'flex'}
+                justifyContent={'space-between'}
+            >
+                <Box display={'flex'} gap={'15px'} width={'100%'}>
+                    <DateRange />
+                    <Select
+                        size={'sm'}
+                        borderRadius={5}
+                        placeholder="Цех"
+                        width={'fit-content'}
+                        value={getParam('facilityUnit')}
+                        onChange={handleClientChange}
+                    >
+                        {facilityUnitsData?.map((unit, index) => (
+                            <option key={index} value={unit.id}>
+                                {unit.facilityUnit}
+                            </option>
+                        ))}
+                    </Select>
+                </Box>
+
+                <Button colorScheme="purple" onClick={onOpen} height={'32px'} p={'0 25px'}>
+                    Выдача продукции
+                </Button>
+            </Box>
             <TableContainer style={{ minHeight: '70dvh', maxHeight: '70dvh', overflowY: 'auto' }}>
                 <Table>
                     <Thead>
@@ -162,5 +208,3 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
         </>
     )
 }
-
-// export default ListTable

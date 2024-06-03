@@ -187,7 +187,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                         </Text>
                                         <Input
                                             w={'60%'}
-                                            required={(!quantity)}
+                                            required={!quantity}
                                             type="number"
                                             placeholder="Кол-во"
                                             value={quantity}

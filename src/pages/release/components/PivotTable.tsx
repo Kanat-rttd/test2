@@ -1,9 +1,10 @@
-import { Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
+import { Box, Button, Select, Table, Tbody, Td, Th, Tr, useDisclosure } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { TableContainer, Thead } from '@/components/ui'
 import { DispatchType } from '@/utils/types/dispatch.types'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
+import DateRange from '@/components/DateRange'
 
 interface PivotTableProps {
     status: string
@@ -15,11 +16,19 @@ type Dispatch = {
     totalQuantity: number
 }
 
+interface FacilityUnit {
+    id: number
+    facilityUnit: string
+}
+
 const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
-    const { getURLs } = useURLParameters()
+    const { getURLs, setParam, getParam } = useURLParameters()
     const [data, setData] = useState<DispatchType[]>([])
     const [headers, setHeaders] = useState<any[]>([])
-    const { data: dispatchesData } = useApi<Dispatch>(`release?${getURLs().toString()}`)
+    const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
+
+    const { data: dispatchesData } = useApi<Dispatch>(`release?${getURLs().toString()}&status=${status}`)
+    const { onOpen } = useDisclosure()
 
     const [dialog, setDialog] = useState({
         isOpen: false,
@@ -30,8 +39,12 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
         onClose: () => setModal({ ...modal, isOpen: false }),
     })
 
+    const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setParam('facilityUnit', event.target.value)
+    }
+
     useEffect(() => {
-        if(!dispatchesData) return
+        if (!dispatchesData) return
 
         const uniqueProductNames = [
             ...new Set(
@@ -50,6 +63,35 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
 
     return (
         <>
+            <Box
+                mt={2}
+                marginBottom={'20px'}
+                height={'5%'}
+                display={'flex'}
+                justifyContent={'space-between'}
+            >
+                <Box display={'flex'} gap={'15px'} width={'100%'}>
+                    <DateRange />
+                    <Select
+                        size={'sm'}
+                        borderRadius={5}
+                        placeholder="Цех"
+                        width={'fit-content'}
+                        value={getParam('facilityUnit')}
+                        onChange={handleClientChange}
+                    >
+                        {facilityUnitsData?.map((unit, index) => (
+                            <option key={index} value={unit.id}>
+                                {unit.facilityUnit}
+                            </option>
+                        ))}
+                    </Select>
+                </Box>
+
+                <Button colorScheme="purple" onClick={onOpen} height={'32px'} p={'0 25px'}>
+                    Выдача продукции
+                </Button>
+            </Box>
             <TableContainer style={{ minHeight: '70dvh', maxHeight: '70dvh', overflowY: 'auto' }}>
                 <Table variant="simple">
                     <Thead>

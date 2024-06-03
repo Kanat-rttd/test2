@@ -22,6 +22,7 @@ export function useURLParameters() {
         if (value) {
             newParams.set(param, value)
         }
+        
         setUrlParams(newParams, { replace: replace })
     }
 
@@ -33,8 +34,10 @@ export function useURLParameters() {
         return params
     }, [urlParams])
 
-    const setParamObject = async (paramsObject: { [key: string]: string | undefined }) => {
+    const setParamObject = (paramsObject: { [key: string]: string | undefined }) => {
         const newParams = new URLSearchParams(urlParams)
+        console.log('stated');
+        
         for (const key in paramsObject) {
             const value = paramsObject[key]
             newParams.delete(key)
