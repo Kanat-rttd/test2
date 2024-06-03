@@ -238,7 +238,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 </FormControl> */}
                                 <FormControl isInvalid={!!errors.dateTime} isRequired>
                                     <FormLabel fontWeight={'bold'}>Дата и время</FormLabel>
-                                    <input
+                                    <Input
                                         {...register('dateTime', {
                                             required: 'Поле является обязательным',
                                         })}
@@ -250,7 +250,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             padding: '0 15px',
                                         }}
                                         type="datetime-local"
-                                        defaultValue={dayjs().format('YYYY-MM-DDTHH:mm')}
+                                        defaultValue={dayjs().format('YYYY-MM-DD HH:mm')}
                                     />
                                     <FormErrorMessage>{errors.dateTime?.message}</FormErrorMessage>
                                 </FormControl>

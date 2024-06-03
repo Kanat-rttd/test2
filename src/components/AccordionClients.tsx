@@ -58,7 +58,7 @@ const AccordionClients = ({
     }
 
     if (!data || data.length === 0) {
-        return <div>Данных в находящихся в обработке пока нет</div>
+        return <div>Данных находящихся в обработке пока нет</div>
     }
 
     const handleDeleteOrder = (selectedData: OrderArrayType | undefined) => {

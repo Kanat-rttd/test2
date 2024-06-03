@@ -34,7 +34,7 @@ const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {data?.map((item, index) => (
+                    {data?.length ? data?.map((item, index) => (
                         <Tr key={index}>
                             <Td>{index + 1}</Td>
                             <Td>{item.client.name}</Td>
@@ -46,7 +46,11 @@ const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
                                 </Td>
                             ))}
                         </Tr>
-                    ))}
+                    )): (
+                        <Tr>
+                            <Th>Нет данных</Th>
+                        </Tr>
+                    )}
                 </Tbody>
                 <Tfoot>
                     <Tr>

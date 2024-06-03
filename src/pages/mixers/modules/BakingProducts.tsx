@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react'
 import BakingAddModal from '../components/BakingAddModal'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
-import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
@@ -66,151 +65,133 @@ const BakingPage = () => {
 
     return (
         <>
-            <UniversalComponent>
-                <Box p={5} mt={1}>
-                    <Box display={'flex'} justifyContent={'space-between'} width={'100%'}>
-                        <Box marginBottom={7} display={'flex'} gap={15} width={'100%'}>
-                            <DateRange />
-                            <Select
-                                placeholder="Цех"
-                                width={'17%'}
-                                size={'sm'}
-                                borderRadius={5}
-                                justifyContent={'space-between'}
-                                defaultValue={getParam('facilityUnit')}
-                                onChange={(e) => setParam('facilityUnit', e.target.value)}
-                            >
-                                {facilityUnits?.map((item, index) => (
-                                    <option key={index} value={item.id}>
-                                        {item.facilityUnit}
-                                    </option>
-                                ))}
-                            </Select>
-                        </Box>
-                        <Button
-                            size={'md'}
-                            backgroundColor={'#6B6FDB'}
-                            color={'white'}
-                            fontSize={'px'}
-                            borderRadius={'10px'}
-                            width={'15%'}
-                            onClick={() => {
-                                setSelectedBaking(undefined)
-                                onOpen()
-                            }}
+            <Box p={5} mt={1}>
+                <Box display={'flex'} justifyContent={'space-between'} width={'100%'}>
+                    <Box marginBottom={7} display={'flex'} gap={15} width={'100%'}>
+                        <DateRange />
+                        <Select
+                            placeholder="Цех"
+                            width={'17%'}
+                            size={'sm'}
+                            borderRadius={5}
+                            justifyContent={'space-between'}
+                            defaultValue={getParam('facilityUnit')}
+                            onChange={(e) => setParam('facilityUnit', e.target.value)}
                         >
-                            Добавить
-                        </Button>
-                        <BakingAddModal
-                            data={selectedBaking}
-                            isOpen={isOpen}
-                            onClose={onClose}
-                            onSuccess={handledSuccess}
-                        />
+                            {facilityUnits?.map((item, index) => (
+                                <option key={index} value={item.id}>
+                                    {item.facilityUnit}
+                                </option>
+                            ))}
+                        </Select>
                     </Box>
-                    <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                        <Table variant="simple">
-                            <Thead>
-                                <Tr>
-                                    <Th>Вид хлеба</Th>
-                                    <Th sx={styles}>Мука</Th>
-                                    <Th sx={styles}>Соль</Th>
-                                    <Th sx={styles}>Дрожжи</Th>
-                                    <Th sx={styles}>Солод</Th>
-                                    <Th sx={styles}>Масло</Th>
-                                    <Th sx={styles}>t°</Th>
-                                    <Th sx={styles}>Время и дата</Th>
-                                    <Th sx={styles}>Выход</Th>
-                                    <Th sx={styles}>Брак</Th>
-                                    <Th>Действия</Th>
-                                </Tr>
-                            </Thead>
-                            <Tbody>
-                                {bakingsData?.bakingData.map((bakingRow, index) => {
-                                    return (
-                                        <Tr key={index} textAlign={'center'}>
-                                            <Td>{bakingRow.product?.name}</Td>
-                                            <Td textAlign={'center'}>{bakingRow.flour}</Td>
-                                            <Td textAlign={'center'}>{bakingRow.salt}</Td>
-                                            <Td textAlign={'center'}>{bakingRow.yeast}</Td>
-                                            <Td textAlign={'center'}>{bakingRow.malt}</Td>
-                                            <Td textAlign={'center'}>{bakingRow.butter}</Td>
-                                            <Td textAlign={'center'}>{bakingRow.temperature}</Td>
-                                            <Td textAlign={'center'}>
-                                                {dayjs(bakingRow.dateTime).format(
-                                                    'HH:mm DD.MM.YYYY',
-                                                )}
-                                            </Td>
-                                            <Td textAlign={'center'}>{bakingRow.output}</Td>
-                                            <Td textAlign={'center'}>{bakingRow.defective}</Td>
-                                            <Td>
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        setSelectedBaking(bakingRow)
-                                                        onOpen()
-                                                    }}
-                                                    icon={<EditIcon />}
-                                                />
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        setSelectedBaking(bakingRow)
-                                                        setDialog({
-                                                            ...dialog,
-                                                            isOpen: true,
-                                                        })
-                                                    }}
-                                                    icon={<DeleteIcon />}
-                                                />
-                                            </Td>
-                                        </Tr>
-                                    )
-                                })}
-                            </Tbody>
-                            <Tfoot>
-                                <Tr>
-                                    <Th fontSize={16} fontWeight={'bold'} color={"#000"}>
-                                        Итого
-                                    </Th>
-                                    <Th sx={styles}>
-                                        {bakingsData?.totals?.totalFlour}
-                                    </Th>
-                                    <Th sx={styles}>
-                                        {bakingsData?.totals?.totalSalt}
-                                    </Th>
-                                    <Th sx={styles}>
-                                        {bakingsData?.totals?.totalYeast}
-                                    </Th>
-                                    <Th sx={styles}>
-                                        {bakingsData?.totals?.totalMalt}
-                                    </Th>
-                                    <Th sx={styles}>
-                                        {bakingsData?.totals?.totalButter}
-                                    </Th>
-                                    <Th sx={styles}></Th>
-                                    <Th sx={styles}></Th>
-                                    <Th sx={styles}>
-                                        {bakingsData?.totals?.totalOutput}
-                                    </Th>
-                                    <Th sx={styles}>
-                                        {bakingsData?.totals?.totalDefective}
-                                    </Th>
-                                    <Th sx={styles}></Th>
-                                </Tr>
-                            </Tfoot>
-                        </Table>
-                    </TableContainer>
+                    <Button
+                        size={'md'}
+                        backgroundColor={'#6B6FDB'}
+                        color={'white'}
+                        fontSize={'px'}
+                        borderRadius={'10px'}
+                        width={'15%'}
+                        onClick={() => {
+                            setSelectedBaking(undefined)
+                            onOpen()
+                        }}
+                    >
+                        Добавить
+                    </Button>
+                    <BakingAddModal
+                        data={selectedBaking}
+                        isOpen={isOpen}
+                        onClose={onClose}
+                        onSuccess={handledSuccess}
+                    />
                 </Box>
-            </UniversalComponent>
+                <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+                    <Table variant="simple">
+                        <Thead>
+                            <Tr>
+                                <Th>Вид хлеба</Th>
+                                <Th sx={styles}>Мука</Th>
+                                <Th sx={styles}>Соль</Th>
+                                <Th sx={styles}>Дрожжи</Th>
+                                <Th sx={styles}>Солод</Th>
+                                <Th sx={styles}>Масло</Th>
+                                <Th sx={styles}>t°</Th>
+                                <Th sx={styles}>Время и дата</Th>
+                                <Th sx={styles}>Выход</Th>
+                                <Th sx={styles}>Брак</Th>
+                                <Th>Действия</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {bakingsData?.bakingData.map((bakingRow, index) => {
+                                return (
+                                    <Tr key={index} textAlign={'center'}>
+                                        <Td>{bakingRow.product?.name}</Td>
+                                        <Td textAlign={'center'}>{bakingRow.flour}</Td>
+                                        <Td textAlign={'center'}>{bakingRow.salt}</Td>
+                                        <Td textAlign={'center'}>{bakingRow.yeast}</Td>
+                                        <Td textAlign={'center'}>{bakingRow.malt}</Td>
+                                        <Td textAlign={'center'}>{bakingRow.butter}</Td>
+                                        <Td textAlign={'center'}>{bakingRow.temperature}</Td>
+                                        <Td textAlign={'center'}>
+                                            {dayjs(bakingRow.dateTime).format('HH:mm DD.MM.YYYY')}
+                                        </Td>
+                                        <Td textAlign={'center'}>{bakingRow.output}</Td>
+                                        <Td textAlign={'center'}>{bakingRow.defective}</Td>
+                                        <Td>
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
+                                                onClick={() => {
+                                                    setSelectedBaking(bakingRow)
+                                                    onOpen()
+                                                }}
+                                                icon={<EditIcon />}
+                                            />
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
+                                                onClick={() => {
+                                                    setSelectedBaking(bakingRow)
+                                                    setDialog({
+                                                        ...dialog,
+                                                        isOpen: true,
+                                                    })
+                                                }}
+                                                icon={<DeleteIcon />}
+                                            />
+                                        </Td>
+                                    </Tr>
+                                )
+                            })}
+                        </Tbody>
+                        <Tfoot>
+                            <Tr>
+                                <Th fontSize={16} fontWeight={'bold'} color={'#000'}>
+                                    Итого
+                                </Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalFlour}</Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalSalt}</Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalYeast}</Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalMalt}</Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalButter}</Th>
+                                <Th sx={styles}></Th>
+                                <Th sx={styles}></Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalOutput}</Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalDefective}</Th>
+                                <Th sx={styles}></Th>
+                            </Tr>
+                        </Tfoot>
+                    </Table>
+                </TableContainer>
+            </Box>
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}

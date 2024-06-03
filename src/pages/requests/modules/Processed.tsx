@@ -29,7 +29,6 @@ const ProcessedPage = () => {
 
     return (
         <Box overflowY={'hidden'}>
-            <UniversalComponent>
                 <Box width={'100%'} p={5} mt={1}>
                     <Box mb={8} height={'5%'} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
@@ -57,7 +56,6 @@ const ProcessedPage = () => {
                         <TableData data={salesData?.filter((sale) => sale.done === 1)} />
                     </Box>
                 </Box>
-            </UniversalComponent>
         </Box>
     )
 }

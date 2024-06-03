@@ -105,7 +105,7 @@ const InvoicePage = () => {
                             minHeight: '78dvh',
                         }}
                     >
-                        {dispatchesData?.map((row, index) => {
+                        {dispatchesData?.length? dispatchesData?.map((row, index) => {
                             const overPrice = 5000
                             return (
                                 <Button
@@ -136,7 +136,7 @@ const InvoicePage = () => {
                                     </Text>
                                 </Button>
                             )
-                        })}
+                        }) : <p>Данных о накладных пока нет</p>}
                     </Box>
                 </Box>
             </Box>

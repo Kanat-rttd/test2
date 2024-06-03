@@ -2,7 +2,7 @@ import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { IconButton, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import EditModal from './EditModal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
@@ -24,7 +24,7 @@ interface ListTableProps {
 
 export default function ListTable({ facilityUnit, status }: ListTableProps) {
     const { loading } = useNotify()
-    const { getURLs } = useURLParameters()
+    const { getURLs, setParam } = useURLParameters()
 
     console.log(facilityUnit, status)
 
@@ -35,8 +35,13 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const { data: dispatchesData, mutate: mutateDispatchesData } = useApi<Dispatch>(`release?${getURLs().toString()}`)
+    const { data: dispatchesData, mutate: mutateDispatchesData } = useApi<Dispatch>(
+        `release?${getURLs().toString()}`,
+    )
 
+    useEffect(() => {
+        setParam('status', status)
+    }, [])
     const [modal, setModal] = useState({
         isOpen: false,
         onClose: () => setModal({ ...modal, isOpen: false }),
@@ -137,7 +142,12 @@ export default function ListTable({ facilityUnit, status }: ListTableProps) {
                     </Tbody>
                 </Table>
             </TableContainer>
-            <EditModal data={selectedData} isOpen={modal.isOpen} onClose={modal.onClose} onSuccess={onSuccess} />
+            <EditModal
+                data={selectedData}
+                isOpen={modal.isOpen}
+                onClose={modal.onClose}
+                onSuccess={onSuccess}
+            />
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}
