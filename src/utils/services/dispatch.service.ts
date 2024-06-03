@@ -6,8 +6,12 @@ export const getAllDispatches = async () => {
 }
 
 export const createDispatch = async (data: {
-    clientId: string
-    products: { productId: number | null; quantity: number | null }[]
+    clientId: number
+    products: {
+        productId: number | null
+        quantity: number | null
+        productPrice: number | undefined
+    }[]
     dispatch: string
 }) => {
     const response = await $host.post('release', data)
@@ -24,7 +28,7 @@ export const updateDispatchQuantity = async (
     data: {
         clientId: number
         products: { productId: number | null; quantity: number | null }[]
-    }[],
+    },
 ) => {
     const response = await $host.put(`release/${id}`, data)
     return response

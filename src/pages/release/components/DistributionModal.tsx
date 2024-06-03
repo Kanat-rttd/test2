@@ -22,22 +22,25 @@ import { ClientType } from '@/utils/types/client.type'
 import { useApi } from '@/utils/services/axios'
 import { DispatchType } from '@/utils/types/dispatch.types'
 import { CloseIcon } from '@chakra-ui/icons'
+import { Product } from '@/utils/types/product.types'
 
 interface DistributionModalProps {
     isOpen: boolean
-    onOpen: () => void
     onClose: () => void
     onSuccess: () => void
     status: string
     data: DispatchType | undefined
 }
-type ProductType = {
-    productId: number | null
-    quantity: number | null
-}
+// type ProductType = {
+//     productId: number | null
+//     quantity: number | null
+// }
 type FormType = {
     clientId: number
-    products: ProductType[]
+    products: {
+        productId: number | null
+        quantity: number | null
+    }[]
 }
 
 const DistributionModal: React.FC<DistributionModalProps> = ({
@@ -49,7 +52,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 }) => {
     const { loading } = useNotify()
     const { data: clientsData } = useApi<ClientType[]>('client?status=Активный')
-    const { data: products } = useApi<{ id: string; name: string }[]>('product?status=Активный')
+    const { data: products } = useApi<Product[]>('product?status=Активный')
 
     const {
         register,
@@ -65,7 +68,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
         control,
         name: 'products',
     })
-
+    
     useEffect(() => {
         if (data) {
             const _data = data.goodsDispatchDetails.map((order) => {
@@ -82,10 +85,19 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     }, [data])
 
     const handleConfirm: SubmitHandler<FormType> = (formData) => {
+        const createData = {
+            clientId: formData.clientId,
+            products: formData.products.map((product) => ({
+                ...product,
+                productPrice: products?.find((item) => item.id == product.productId)?.price,
+            })),
+            dispatch: status,
+        }
+
         try {
             const responsePromise: Promise<any> = data
                 ? updateDispatchQuantity(data.id, formData)
-                : createDispatch({...formData, dispatch: status})
+                : createDispatch(createData)
             loading(responsePromise)
             responsePromise.then((res) => {
                 console.log(res)
@@ -140,6 +152,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                             })}
                                             variant="filled"
                                             placeholder="Вид хлеба"
+                                            defaultValue={data && data?.goodsDispatchDetails[index].productId}
                                         >
                                             {products?.map((product) => (
                                                 <option key={product.name} value={product.id}>

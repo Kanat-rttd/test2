@@ -1,6 +1,6 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { IconButton, Table, Tbody, Td, Th, Tr, useDisclosure } from '@chakra-ui/react'
+import { IconButton, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import { useState } from 'react'
 import dayjs from 'dayjs'
 import { useApi } from '@/utils/services/axios'
@@ -25,8 +25,6 @@ export default function ListTable({ status }: ListTableProps) {
     const { loading } = useNotify()
     const { getURLs } = useURLParameters()
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
-
     const [selectedData, setSelectedData] = useState<DispatchType>()
 
     const [dialog, setDialog] = useState({
@@ -34,14 +32,14 @@ export default function ListTable({ status }: ListTableProps) {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const { data: dispatchesData, mutate: mutateDispatchesData } = useApi<Dispatch>(
-        `release?${getURLs().toString()}&status=${status}`,
-    )
-
     const [modal, setModal] = useState({
         isOpen: false,
         onClose: () => setModal({ ...modal, isOpen: false }),
     })
+
+    const { data: dispatchesData, mutate: mutateDispatchesData } = useApi<Dispatch>(
+        `release?${getURLs().toString()}&status=${status}`,
+    )
 
     const handlerDelete = (selectedData: DispatchType | undefined) => {
         if (selectedData) {
@@ -139,9 +137,8 @@ export default function ListTable({ status }: ListTableProps) {
                 </Table>
             </TableContainer>
             <DistributionModal
-                isOpen={isOpen}
-                onClose={onClose}
-                onOpen={onOpen}
+                isOpen={modal.isOpen}
+                onClose={modal.onClose}
                 data={selectedData}
                 onSuccess={onSuccess}
                 status={status}

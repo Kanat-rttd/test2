@@ -92,7 +92,6 @@ const Distribution = () => {
             <DistributionModal
                 isOpen={isOpen}
                 onClose={onClose}
-                onOpen={onOpen}
                 onSuccess={handleUpdateProduct}
                 data={undefined}
                 status="0"

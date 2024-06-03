@@ -81,7 +81,6 @@ const Refund = () => {
             <DistributionModal
                 isOpen={isOpen}
                 onClose={onClose}
-                onOpen={onOpen}
                 onSuccess={handleSuccess}
                 data={undefined}
                 status="1"
