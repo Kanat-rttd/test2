@@ -83,6 +83,7 @@ const Refund = () => {
                 onClose={onClose}
                 onOpen={onOpen}
                 onSuccess={handleSuccess}
+                data={undefined}
                 status="1"
             />
         </Box>

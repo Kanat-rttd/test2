@@ -58,7 +58,7 @@ const UniquePriceAddModal = ({
     onSuccess,
 }: UniquePriceAddModal) => {
     const { loading } = useNotify()
-    const { data: individualPrices } = useApi<individualPriceType[]>('inPrice')
+    const { data: individualPrices, mutate } = useApi<individualPriceType[]>('inPrice')
     const [products, setProducts] = useState<Product[]>([])
     // const [selectedProduct, setSelectedProduct] = useState('')
     const [clientsData, setClientsData] = useState<ClientType[]>([])
@@ -120,6 +120,7 @@ const UniquePriceAddModal = ({
                     reset()
                     handleCancel()
                     onSuccess()
+                    mutate()
                 })
                 reset()
             } else {
@@ -145,8 +146,10 @@ const UniquePriceAddModal = ({
                     reset()
                     handleCancel()
                     onSuccess()
+                    mutate()
                 })
                 reset()
+               
             }
         } catch (error: any) {
             setError('root', {
@@ -160,6 +163,9 @@ const UniquePriceAddModal = ({
     }
 
     const filteredProducts = useMemo(() => {
+        console.log('trigger');
+        console.log(individualPrices);
+        
         return products?.filter((product) => {
             if (individualPrices) {
                 return individualPrices.find((client) => {
@@ -173,7 +179,7 @@ const UniquePriceAddModal = ({
             }
             return false
         })
-    }, [products, individualPrices, selectedRelease])
+    }, [products, individualPrices, selectedRelease, isOpen])
 
     return (
         <>

@@ -6,8 +6,8 @@ export const getAllDispatches = async () => {
 }
 
 export const createDispatch = async (data: {
-    userId: string
-    products: { name: string; quantity: number; id: string }[]
+    clientId: string
+    products: { productId: number | null; quantity: number | null }[]
     dispatch: string
 }) => {
     const response = await $host.post('release', data)
@@ -21,14 +21,12 @@ export const getInvoiceData = async () => {
 
 export const updateDispatchQuantity = async (
     id: number,
-    clientId: number,
     data: {
-        id: number
-        productId: number
-        quantity: string
+        clientId: number
+        products: { productId: number | null; quantity: number | null }[]
     }[],
 ) => {
-    const response = await $host.put(`release/${id}`, { clientId, data })
+    const response = await $host.put(`release/${id}`, data)
     return response
 }
 

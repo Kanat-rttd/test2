@@ -1,14 +1,6 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import {
-    IconButton,
-    Table,
-    Tbody,
-    Td,
-    Th,
-    Tr,
-} from '@chakra-ui/react'
-import EditModal from './EditModal'
+import { IconButton, Table, Tbody, Td, Th, Tr, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
 import dayjs from 'dayjs'
 import { useApi } from '@/utils/services/axios'
@@ -17,6 +9,7 @@ import { TableContainer, Thead } from '@/components/ui'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteDispatch } from '@/utils/services/dispatch.service'
 import { DispatchType } from '@/utils/types/dispatch.types'
+import DistributionModal from './DistributionModal'
 
 export interface ListTableProps {
     status: string
@@ -31,7 +24,8 @@ type Dispatch = {
 export default function ListTable({ status }: ListTableProps) {
     const { loading } = useNotify()
     const { getURLs } = useURLParameters()
-   
+
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     const [selectedData, setSelectedData] = useState<DispatchType>()
 
@@ -48,7 +42,6 @@ export default function ListTable({ status }: ListTableProps) {
         isOpen: false,
         onClose: () => setModal({ ...modal, isOpen: false }),
     })
-
 
     const handlerDelete = (selectedData: DispatchType | undefined) => {
         if (selectedData) {
@@ -69,7 +62,6 @@ export default function ListTable({ status }: ListTableProps) {
 
     return (
         <>
-            
             <TableContainer style={{ minHeight: '70dvh', maxHeight: '70dvh', overflowY: 'auto' }}>
                 <Table>
                     <Thead>
@@ -146,11 +138,13 @@ export default function ListTable({ status }: ListTableProps) {
                     </Tbody>
                 </Table>
             </TableContainer>
-            <EditModal
+            <DistributionModal
+                isOpen={isOpen}
+                onClose={onClose}
+                onOpen={onOpen}
                 data={selectedData}
-                isOpen={modal.isOpen}
-                onClose={modal.onClose}
                 onSuccess={onSuccess}
+                status={status}
             />
             <Dialog
                 isOpen={dialog.isOpen}

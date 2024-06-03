@@ -1,6 +1,8 @@
 import {
     Box,
-    Checkbox,
+    Button,
+    FormControl,
+    FormErrorMessage,
     Input,
     Modal,
     ModalBody,
@@ -10,15 +12,16 @@ import {
     ModalHeader,
     ModalOverlay,
     Select,
-    Text,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect } from 'react'
 
-import { createDispatch } from '@/utils/services/dispatch.service'
+import { createDispatch, updateDispatchQuantity } from '@/utils/services/dispatch.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { ClientType } from '@/utils/types/client.type'
 import { useApi } from '@/utils/services/axios'
+import { DispatchType } from '@/utils/types/dispatch.types'
+import { CloseIcon } from '@chakra-ui/icons'
 
 interface DistributionModalProps {
     isOpen: boolean
@@ -26,100 +29,79 @@ interface DistributionModalProps {
     onClose: () => void
     onSuccess: () => void
     status: string
+    data: DispatchType | undefined
 }
-
-type formType = {
-    userId: number
-    products: { name: string; id: number; quantity: number }
+type ProductType = {
+    productId: number | null
+    quantity: number | null
+}
+type FormType = {
+    clientId: number
+    products: ProductType[]
 }
 
 const DistributionModal: React.FC<DistributionModalProps> = ({
+    data,
     isOpen,
     onClose,
     onSuccess,
     status,
 }) => {
-    const { loading, error } = useNotify()
+    const { loading } = useNotify()
     const { data: clientsData } = useApi<ClientType[]>('client?status=Активный')
     const { data: products } = useApi<{ id: string; name: string }[]>('product?status=Активный')
 
-    const { handleSubmit: handleSubmitForm } = useForm<formType>()
+    const {
+        register,
+        reset,
+        setValue,
+        control,
+        setError,
+        formState: { errors },
+        handleSubmit: handleSubmitForm,
+    } = useForm<FormType>()
 
-    const [recipient, setRecipient] = useState<string>('')
-    const [selectedBreads, setSelectedBreads] = useState<
-        { id: string; name: string; quantity: number }[]
-    >([])
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'products',
+    })
 
-    const handleRecipientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setRecipient(event.target.value)
-    }
-
-    const handleBreadSelection = (bread: string, id: string) => {
-        if (selectedBreads.find((item) => item.name === bread)) {
-            setSelectedBreads(
-                selectedBreads
-                    .map((item) => (item.name === bread ? null : item))
-                    .filter((item) => item !== null) as {
-                    id: string
-                    name: string
-                    quantity: number
-                }[],
-            )
+    useEffect(() => {
+        if (data) {
+            const _data = data.goodsDispatchDetails.map((order) => {
+                return {
+                    productId: Number(order.productId),
+                    quantity: Number(order.quantity),
+                }
+            })
+            setValue('clientId', Number(data.client.id))
+            setValue('products', _data)
         } else {
-            setSelectedBreads([...selectedBreads, { name: bread, id: id, quantity: 1 }])
+            reset()
         }
-    }
+    }, [data])
 
-    const handleQuantityChange = (
-        event: React.ChangeEvent<HTMLInputElement>,
-        breadName: string,
-    ) => {
-        const quantity = parseInt(event.target.value)
-        setSelectedBreads(
-            selectedBreads.map((bread) =>
-                bread.name === breadName ? { ...bread, quantity } : bread,
-            ),
-        )
-    }
-
-    const handleConfirm = () => {
-        if (selectedBreads.length < 1) {
-            error('Выберите продукт')
-            return
-        }
-        const distributionData = {
-            userId: recipient,
-            products: selectedBreads.map(({ name, id, quantity }) => ({
-                name,
-                id,
-                quantity: quantity,
-            })),
-            dispatch: status,
-        }
-
-        const responsePromise: Promise<any> = createDispatch(distributionData)
-        loading(responsePromise)
-
-        responsePromise
-            .then(() => {
-                onSuccess()
+    const handleConfirm: SubmitHandler<FormType> = (formData) => {
+        try {
+            const responsePromise: Promise<any> = data
+                ? updateDispatchQuantity(data.id, formData)
+                : createDispatch({...formData, dispatch: status})
+            loading(responsePromise)
+            responsePromise.then((res) => {
+                console.log(res)
+                reset()
                 onClose()
-                setSelectedBreads([])
-                setRecipient('')
+                onSuccess()
             })
-            .catch((error) => {
-                console.error('Error creating sale:', error)
+        } catch (error: any) {
+            setError('root', {
+                message: error.response.data.message || 'Ошибка',
             })
-    }
-
-    const handleClose = () => {
-        onClose()
-        setSelectedBreads([])
-        setRecipient('')
+        }
     }
 
     return (
-        <Modal isOpen={isOpen} onClose={handleClose}>
+        <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>{status == '0' ? 'Выдача' : 'Возврат'} продукции</ModalHeader>
@@ -129,74 +111,65 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                         onSubmit={handleSubmitForm(handleConfirm)}
                         style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                     >
-                        <Select
-                            required
-                            placeholder="Выберите получателя"
-                            width={'100%'}
-                            onChange={handleRecipientChange}
-                            value={recipient}
-                        >
-                            {clientsData?.map((client, index) => {
+                        <FormControl id="type" isRequired isInvalid={!!errors.clientId}>
+                            <Select
+                                {...register('clientId', {
+                                    required: 'Поле является обязательным',
+                                })}
+                                required
+                                placeholder="Выберите получателя"
+                                width={'100%'}
+                            >
+                                {clientsData?.map((client, index) => {
+                                    return (
+                                        <option key={index} value={Number(client.id)}>
+                                            {client.name}
+                                        </option>
+                                    )
+                                })}
+                            </Select>
+                            <FormErrorMessage>{errors.clientId?.message}</FormErrorMessage>
+                        </FormControl>
+                        <FormControl isRequired gap="1rem" display="flex" flexDirection="column">
+                            {fields.map((_, index) => {
                                 return (
-                                    <option key={index} value={client.id}>
-                                        {client.name}
-                                    </option>
-                                )
-                            })}
-                        </Select>
+                                    <Box display="flex" gap="1rem" alignItems="center" key={index}>
+                                        <Select
+                                            {...register(`products.${index}.productId`, {
+                                                required: 'Поле является обязательным',
+                                            })}
+                                            variant="filled"
+                                            placeholder="Вид хлеба"
+                                        >
+                                            {products?.map((product) => (
+                                                <option key={product.name} value={product.id}>
+                                                    {product.name}
+                                                </option>
+                                            ))}
+                                        </Select>
 
-                        <Box
-                            width={'100%'}
-                            gap={'10px'}
-                            border={'1px solid #E2E8F0'}
-                            padding={'5px'}
-                            borderRadius={'8px'}
-                            marginTop={'5px'}
-                            display={'flex'}
-                            flexWrap={'wrap'}
-                        >
-                            {products?.map((bread) => {
-                                return (
-                                    <Checkbox
-                                        w={'45%'}
-                                        p={'0 15px'}
-                                        checked={selectedBreads.some(
-                                            (item) => item.name === bread.name,
-                                        )}
-                                        onChange={() => handleBreadSelection(bread.name, bread.id)}
-                                        key={bread.name}
-                                    >
-                                        <Text>{bread.name}</Text>
-                                    </Checkbox>
-                                )
-                            })}
-                        </Box>
-
-                        <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
-                            {selectedBreads.map(({ name, quantity }, index) => {
-                                return (
-                                    <Box
-                                        width={'100%'}
-                                        display={'flex'}
-                                        gap={'10px'}
-                                        alignItems={'center'}
-                                        key={name}
-                                    >
-                                        <Text w={'40%'}>
-                                            {index + 1}. {name}
-                                        </Text>
                                         <Input
-                                            w={'60%'}
-                                            required={!quantity}
-                                            type="number"
-                                            placeholder="Кол-во"
-                                            value={quantity}
-                                            onChange={(e) => handleQuantityChange(e, name)}
+                                            {...register(`products.${index}.quantity`, {
+                                                required: 'Поле является обязательным',
+                                            })}
+                                            placeholder="Количество"
+                                        />
+                                        <CloseIcon
+                                            cursor="pointer"
+                                            onClick={() => index > 0 && remove(index)}
                                         />
                                     </Box>
                                 )
                             })}
-                        </Box>
+                            <Button
+                                onClick={() => {
+                                    append({ productId: null, quantity: null })
+                                }}
+                            >
+                                Добавить
+                            </Button>
+                        </FormControl>
+
                         <Box
                             style={{
                                 display: 'flex',

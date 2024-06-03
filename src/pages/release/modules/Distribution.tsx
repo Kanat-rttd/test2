@@ -94,6 +94,7 @@ const Distribution = () => {
                 onClose={onClose}
                 onOpen={onOpen}
                 onSuccess={handleUpdateProduct}
+                data={undefined}
                 status="0"
             />
         </Box>
