@@ -7,10 +7,11 @@ export type BakingDataType = {
     malt: string
     butter: string
     temperature: string
-    time: string
+    // time: string
     output: string
     defective: string
-    date: Date
+    dateTime: string
+    // date: Date
     product?: {
         name: string
         id: string

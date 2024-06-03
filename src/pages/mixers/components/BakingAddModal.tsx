@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 
 import { createBaking, updateBaking } from '@/utils/services/baking.service'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useApi } from '@/utils/services/axios'
 import { useForm } from 'react-hook-form'
 import { useNotify } from '@/utils/providers/ToastProvider'
@@ -43,8 +43,8 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
     } = useForm<BakingDataType>()
 
     const { data: products } = useApi<{ id: string; name: string }[]>('product?status=Активный')
-    const [startDate, setStartDate] = useState<Date>(new Date())
-    const [endDate, setEndDate] = useState<Date>(new Date())
+    // const [startDate, setStartDate] = useState<Date>(new Date())
+    // const [endDate, setEndDate] = useState<Date>(new Date())
 
     useEffect(() => {
         if (data) {
@@ -56,9 +56,9 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
         }
     }, [data, isOpen, reset])
 
-    useEffect(() => {
-        getStartEndDates()
-    }, [data])
+    // useEffect(() => {
+    //     getStartEndDates()
+    // }, [data])
 
     const sendData = (formData: BakingDataType) => {
         const responsePromise: Promise<any> = data
@@ -86,26 +86,26 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
         onClose()
     }
 
-    const getStartEndDates = () => {
-        if (data && data.date) {
-            const { date } = data
-            const parsedDate = dayjs(date, 'YYYY-MM-DD', true)
+    // const getStartEndDates = () => {
+    //     if (data && data.dateTime) {
+    //         const { dateTime } = data
+    //         const parsedDate = dayjs(dateTime, 'YYYY-MM-DDTHH:mm', true)
 
-            if (parsedDate.isValid()) {
-                const startDate = parsedDate.subtract(2, 'day').toDate()
-                const endDate = parsedDate.add(4, 'day').toDate()
-                setStartDate(startDate)
-                setEndDate(endDate)
-            } else {
-                console.error('Invalid date format:', date)
-            }
-        } else {
-            const startDate = dayjs().subtract(3, 'day').toDate()
-            const endDate = dayjs().add(3, 'day').toDate()
-            setStartDate(startDate)
-            setEndDate(endDate)
-        }
-    }
+    //         if (parsedDate.isValid()) {
+    //             const startDate = parsedDate.subtract(2, 'day').toDate()
+    //             const endDate = parsedDate.add(4, 'day').toDate()
+    //             setStartDate(startDate)
+    //             setEndDate(endDate)
+    //         } else {
+    //             console.error('Invalid date format:', dateTime)
+    //         }
+    //     } else {
+    //         const startDate = dayjs().subtract(3, 'day').toDate()
+    //         const endDate = dayjs().add(3, 'day').toDate()
+    //         setStartDate(startDate)
+    //         setEndDate(endDate)
+    //     }
+    // }
 
     return (
         <Modal isCentered isOpen={isOpen} onClose={handleModalClose}>
@@ -209,7 +209,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                         {errors.temperature?.message}
                                     </FormErrorMessage>
                                 </FormControl>
-                                <FormControl isInvalid={!!errors.date} isRequired>
+                                {/* <FormControl isInvalid={!!errors.date} isRequired>
                                     <FormLabel fontWeight={'bold'}>Дата</FormLabel>
                                     <Input
                                         {...register('date', {
@@ -223,8 +223,8 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                         max={endDate.toISOString().split('T')[0]}
                                     />
                                     <FormErrorMessage>{errors.date?.message}</FormErrorMessage>
-                                </FormControl>
-                                <FormControl isInvalid={!!errors.time} isRequired>
+                                </FormControl> */}
+                                {/* <FormControl isInvalid={!!errors.time} isRequired>
                                     <FormLabel fontWeight={'bold'}>Время</FormLabel>
                                     <Input
                                         {...register('time', {
@@ -235,6 +235,24 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                         placeholder=""
                                     />
                                     <FormErrorMessage>{errors.time?.message}</FormErrorMessage>
+                                </FormControl> */}
+                                <FormControl isInvalid={!!errors.dateTime} isRequired>
+                                    <FormLabel fontWeight={'bold'}>Дата и время</FormLabel>
+                                    <input
+                                        {...register('dateTime', {
+                                            required: 'Поле является обязательным',
+                                        })}
+                                        style={{
+                                            width: '100%',
+                                            height: '42px',
+                                            border: '1px solid #e3e3e3',
+                                            borderRadius: '5px',
+                                            padding: '0 15px',
+                                        }}
+                                        type="datetime-local"
+                                        defaultValue={dayjs().format('YYYY-MM-DDTHH:mm')}
+                                    />
+                                    <FormErrorMessage>{errors.dateTime?.message}</FormErrorMessage>
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.output} isRequired>
                                     <FormLabel fontWeight={'bold'}>Выход</FormLabel>
