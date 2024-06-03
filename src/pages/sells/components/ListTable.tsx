@@ -12,12 +12,12 @@ import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import dayjs from 'dayjs'
 
 interface DispatchData {
-    data: Dispatch[]
+    data: DispatchType[]
     totalPrice: number
     totalQuantity: number
 }
 
-interface Dispatch {
+interface DispatchType {
     id: number
     clientId: number
     createdAt: string
@@ -26,7 +26,7 @@ interface Dispatch {
         id: number
         productId: number
         quantity: number
-        price: string
+        price: number
         product: {
             name: string
             price: number
@@ -54,7 +54,7 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
     const { loading } = useNotify()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const [selectedRow, setSelectedRow] = useState<Dispatch | null>(null)
+    const [selectedRow, setSelectedRow] = useState<DispatchType | null>(null)
 
     const { data: dispatchData, mutate: mutateDispatchData } = useApi<DispatchData>('release', {
         facilityUnit,
@@ -69,7 +69,7 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
         onClose: () => setModal({ ...modal, isOpen: false }),
     })
 
-    const handleEditClick = (row: Dispatch) => {
+    const handleEditClick = (row: DispatchType) => {
         setSelectedRow(row)
         setModal({ ...modal, isOpen: true })
     }
@@ -115,7 +115,7 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
                     <Tbody>
                         {dispatchData?.data.length ? (
                             dispatchData?.data
-                                ?.filter((row: Dispatch) => row.dispatch == status)
+                                ?.filter((row: DispatchType) => row.dispatch == status)
                                 ?.map((row, index) => {
                                     return (
                                         <Tr textAlign={'center'} key={row.id}>

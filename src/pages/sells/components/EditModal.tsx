@@ -22,7 +22,7 @@ import { ClientType } from '@/utils/types/client.type'
 import { Product } from '@/utils/types/product.types'
 import { useNotify } from '@/utils/providers/ToastProvider'
 
-interface Dispatch {
+interface DispatchType {
     id: number
     clientId: number
     createdAt: string
@@ -50,7 +50,7 @@ interface Dispatch {
 interface EditModalProps {
     isOpen: boolean
     onClose: () => void
-    selectedRow: Dispatch | null
+    selectedRow: DispatchType | null
     onSuccess: () => void
 }
 

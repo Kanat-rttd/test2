@@ -1,16 +1,12 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import {
-    Box,
-    Button,
     IconButton,
-    Select,
     Table,
     Tbody,
     Td,
     Th,
     Tr,
-    useDisclosure,
 } from '@chakra-ui/react'
 import EditModal from './EditModal'
 import { useState } from 'react'
@@ -21,18 +17,12 @@ import { TableContainer, Thead } from '@/components/ui'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteDispatch } from '@/utils/services/dispatch.service'
 import { DispatchType } from '@/utils/types/dispatch.types'
-import DateRange from '@/components/DateRange'
 
 export interface ListTableProps {
     status: string
 }
 
-export interface FacilityUnit {
-    id: number
-    facilityUnit: string
-}
-
-export type Dispatch = {
+type Dispatch = {
     data: DispatchType[]
     totalPrice: number
     totalQuantity: number
@@ -40,9 +30,8 @@ export type Dispatch = {
 
 export default function ListTable({ status }: ListTableProps) {
     const { loading } = useNotify()
-    const { getURLs, setParam, getParam } = useURLParameters()
-    const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
-    const { onOpen } = useDisclosure()
+    const { getURLs } = useURLParameters()
+   
 
     const [selectedData, setSelectedData] = useState<DispatchType>()
 
@@ -60,9 +49,6 @@ export default function ListTable({ status }: ListTableProps) {
         onClose: () => setModal({ ...modal, isOpen: false }),
     })
 
-    const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setParam('facilityUnit', event.target.value)
-    }
 
     const handlerDelete = (selectedData: DispatchType | undefined) => {
         if (selectedData) {
@@ -83,35 +69,7 @@ export default function ListTable({ status }: ListTableProps) {
 
     return (
         <>
-            <Box
-                mt={2}
-                marginBottom={'20px'}
-                height={'5%'}
-                display={'flex'}
-                justifyContent={'space-between'}
-            >
-                <Box display={'flex'} gap={'15px'} width={'100%'}>
-                    <DateRange />
-                    <Select
-                        size={'sm'}
-                        borderRadius={5}
-                        placeholder="Цех"
-                        width={'fit-content'}
-                        value={getParam('facilityUnit')}
-                        onChange={handleClientChange}
-                    >
-                        {facilityUnitsData?.map((unit, index) => (
-                            <option key={index} value={unit.id}>
-                                {unit.facilityUnit}
-                            </option>
-                        ))}
-                    </Select>
-                </Box>
-
-                <Button colorScheme="purple" onClick={onOpen} height={'32px'} p={'0 25px'}>
-                    Выдача продукции
-                </Button>
-            </Box>
+            
             <TableContainer style={{ minHeight: '70dvh', maxHeight: '70dvh', overflowY: 'auto' }}>
                 <Table>
                     <Thead>
