@@ -28,6 +28,7 @@ const MobileNavbar = () => {
             display={'flex'}
             flexDirection={'row'}
             justifyContent={'space-evenly'}
+            zIndex={10}
         >
             <Box textAlign={'center'} p={5} onClick={() => navigate(SALES_REQUEST_FORM_ROUTE)}>
                 <Icon as={MySvgIcon} boxSize={8} color="red.500" />
