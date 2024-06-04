@@ -78,31 +78,26 @@ const InventoryTable = () => {
                             )
                         })}
                     </Tbody>
-                </Table>
-            </TableContainer>
-            <Box bottom={0} position={'absolute'} width={'100%'}>
-                <Table>
                     <Tfoot>
                         <Tr>
-                            <Th fontSize={15} color={'#000'} width={'9%'}>
+                            <Th fontSize={15} color={'#000'}>
                                 ИТОГО
                             </Th>
-                            <Th width={'23%'}> </Th>
-                            <Th width={'24%'}> </Th>
-                            <Th width={'18%'} fontSize={15} color={'#000'}>
-                                {' '}
+                            <Th> </Th>
+                            <Th> </Th>
+                            <Th fontSize={15} color={'#000'}>
                                 {inventoryzationData?.totalRegister}
                             </Th>
-                            <Th width={'19%'} fontSize={15} color={'#000'}>
+                            <Th fontSize={15} color={'#000'}>
                                 {inventoryzationData?.totalFact}{' '}
                             </Th>
-                            <Th width={'19%'} fontSize={15} color={'#000'}>
+                            <Th fontSize={15} color={'#000'}>
                                 {inventoryzationData?.divergence}{' '}
                             </Th>
                         </Tr>
                     </Tfoot>
                 </Table>
-            </Box>
+            </TableContainer>
         </>
     )
 }
