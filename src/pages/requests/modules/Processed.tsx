@@ -1,9 +1,5 @@
 import { Box, Select } from '@chakra-ui/react'
-// import { useState, useEffect, ChangeEvent } from 'react'
-
 import TableData from '@/components/TableData'
-// import { getByFacilityUnit } from '@/utils/services/sales.service'
-import UniversalComponent from '@/components/ui/UniversalComponent'
 import DateRange from '@/components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'

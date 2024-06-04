@@ -1,4 +1,5 @@
 export type ArrivalInputs = {
+    clientId: number
     amount: string
     date: Date
     account: string

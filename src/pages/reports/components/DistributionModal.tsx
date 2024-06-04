@@ -93,11 +93,11 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 
     const handleConfirm = () => {
         const distributionData = {
-            userId: recipient,
-            products: selectedBreads.map(({ name, id, quantity }) => ({
-                name,
-                id,
-                quantity: quantity,
+            clientId: Number(recipient),
+            products: selectedBreads.map(({ id, quantity }) => ({
+                productId: Number(id),
+                quantity: Number(quantity),
+                productPrice: undefined
             })),
             dispatch: status,
         }

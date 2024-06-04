@@ -57,17 +57,16 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
 
     const sendData = (formData: EditModalInputs) => {
         const formattedData = data?.goodsDispatchDetails.map((details, index) => ({
-            id: details.id,
-            productId: details.productId,
-            quantity: formData[`quantity_${index}`],
+            productId: Number(details.productId),
+            quantity: Number(formData[`quantity_${index}`]),
+            price: Number(details.price),
         }))
         if (data?.id == undefined || formattedData == undefined) return
         try {
-            const responsePromise: Promise<any> = updateDispatchQuantity(
-                data.id,
-                Number(formData.clientId),
-                formattedData,
-            )
+            const responsePromise: Promise<any> = updateDispatchQuantity(data.id, {
+                clientId: Number(formData.clientId),
+                products: formattedData,
+            })
             loading(responsePromise)
             console.log(responsePromise, formattedData, formData)
             responsePromise
