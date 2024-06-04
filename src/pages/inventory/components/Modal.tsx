@@ -1,4 +1,4 @@
-// import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/providers/ToastProvider'
 import { useApi } from '@/utils/services/axios'
 import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
 import {
@@ -20,6 +20,7 @@ import {
 } from '@chakra-ui/react'
 import { Controller, useForm } from 'react-hook-form'
 import Select from 'react-select'
+import { createAdjustment } from '@/utils/services/adjustment.service'
 
 type EditModalProps = {
     isOpen: boolean
@@ -28,13 +29,13 @@ type EditModalProps = {
 }
 
 type EditModalInputs = {
-    item: string
-    qty: number
-    comment: string
+    qty: string
+    Comment: string
+    item: ProviderGoodsType
 }
 
 const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
-    // const { loading } = useNotify()
+    const { loading } = useNotify()
     const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods?status=Активный')
 
     const {
@@ -42,34 +43,34 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
         handleSubmit: handleSubmitForm,
         control,
         formState: { errors },
-        // reset,
-        // setError,
+        reset,
+        setError,
     } = useForm<EditModalInputs>()
 
     const sendData = (formData: EditModalInputs) => {
         console.log(formData)
 
-        // const responsePromise: Promise<any> = create(formData)
-        // loading(responsePromise)
+        const responsePromise: Promise<any> = createAdjustment(formData)
+        loading(responsePromise)
 
-        // responsePromise
-        //     .then(() => {
-        //         reset()
-        //         onSuccess()
-        //         handleClose()
-        //     })
-        //     .catch((error) => {
-        //         console.log(error)
-        //         setError(error.response.data.field, {
-        //             message: error.response.data.message || 'Ошибка',
-        //         })
-        //     })
+        responsePromise
+            .then(() => {
+                reset()
+                // onSuccess()
+                handleClose()
+            })
+            .catch((error) => {
+                console.log(error)
+                setError(error.response.data.field, {
+                    message: error.response.data.message || 'Ошибка',
+                })
+            })
     }
 
-    // const handleClose = () => {
-    //     reset()
-    //     onClose()
-    // }
+    const handleClose = () => {
+        reset()
+        onClose()
+    }
 
     return (
         <>
@@ -93,7 +94,7 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
                                                 getOptionLabel={(option) => option.goods}
                                                 getOptionValue={(option) => `${option.id}`}
                                                 value={providerGoodsData?.find(
-                                                    (option) => option.goods == value,
+                                                    (option) => option.id == value?.id,
                                                 )}
                                                 onChange={(val) => onChange(val)}
                                                 placeholder="Товар *"
@@ -126,7 +127,7 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
                                     placeholder="Комментарий"
                                     maxLength={50}
                                     size="sm"
-                                    {...register('comment')}
+                                    {...register('Comment')}
                                     resize="none"
                                 />
                             </FormControl>

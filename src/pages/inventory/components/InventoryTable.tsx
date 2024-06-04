@@ -1,45 +1,38 @@
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
-import {
-    Table,
-    Tbody,
-    Tr,
-    Th,
-    Td,
-    Input,
-    Box,
-} from '@chakra-ui/react'
+import { Table, Tbody, Tr, Th, Td, Input, Box } from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
+import { useApi } from '@/utils/services/axios'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 type EditInput = {
     rowId: number | null
     value: number
 }
 
+interface Inventoryzation {
+    table: {
+        id: number
+        goods: string
+        unitOfMeasure: string
+        accountingQuantity: string
+        factQuantity: number
+        adjustments: number
+        discrepancy: number
+    }[]
+    totalRegister: number
+    totalFact: number
+    divergence: number
+}
+
 const InventoryTable = () => {
+    const { getURLs } = useURLParameters()
+    const { data: inventoryzationData } = useApi<Inventoryzation>(
+        `reports/inventoryzation?${getURLs().toString()}`,
+    )
+
+    console.log(inventoryzationData)
+
     const [showInput, setShowInput] = useState<EditInput>()
-    const data = {
-        table: [
-            {
-                id: 1,
-                items: 'Мука',
-                units: 'Шт.',
-                qtyRegister: 1000,
-                qtyFact: 988,
-                divergence: 12,
-            },
-            {
-                id: 2,
-                items: 'Соль',
-                units: 'Шт.',
-                qtyRegister: 500,
-                qtyFact: 470,
-                divergence: 30,
-            },
-        ],
-        totalRegister: 1500,
-        totalFact: 1458,
-        divergence: 42,
-    }
 
     return (
         <>
@@ -56,16 +49,19 @@ const InventoryTable = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {data.table.map((item) => {
+                        {inventoryzationData?.table.map((item, index) => {
                             return (
                                 <Tr key={item.id}>
-                                    <Td>{item.id}</Td>
-                                    <Td>{item.items}</Td>
-                                    <Td>{item.units}</Td>
-                                    <Td>{item.qtyRegister}</Td>
+                                    <Td>{index + 1}</Td>
+                                    <Td>{item.goods}</Td>
+                                    <Td>{item.unitOfMeasure}</Td>
+                                    <Td>{item.accountingQuantity}</Td>
                                     <Td
                                         onClick={() =>
-                                            setShowInput({ rowId: item.id, value: item.qtyFact })
+                                            setShowInput({
+                                                rowId: item.id,
+                                                value: item.factQuantity,
+                                            })
                                         }
                                     >
                                         {showInput?.rowId === item.id ? (
@@ -74,10 +70,10 @@ const InventoryTable = () => {
                                                 showInput={showInput}
                                             />
                                         ) : (
-                                            item.qtyFact
+                                            item.factQuantity
                                         )}
                                     </Td>
-                                    <Td>{item.divergence}</Td>
+                                    <Td>{item.discrepancy}</Td>
                                 </Tr>
                             )
                         })}
@@ -95,13 +91,13 @@ const InventoryTable = () => {
                             <Th width={'24%'}> </Th>
                             <Th width={'18%'} fontSize={15} color={'#000'}>
                                 {' '}
-                                {data.totalRegister}
+                                {inventoryzationData?.totalRegister}
                             </Th>
                             <Th width={'19%'} fontSize={15} color={'#000'}>
-                                {data.totalFact}{' '}
+                                {inventoryzationData?.totalFact}{' '}
                             </Th>
                             <Th width={'19%'} fontSize={15} color={'#000'}>
-                                {data.divergence}{' '}
+                                {inventoryzationData?.divergence}{' '}
                             </Th>
                         </Tr>
                     </Tfoot>
