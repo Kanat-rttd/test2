@@ -86,7 +86,7 @@ export default function ListTable({ status }: ListTableProps) {
                                             >
                                                 {row.goodsDispatchDetails.map((details) => (
                                                     <span key={details.id}>
-                                                        {details.product?.name}
+                                                        {details.product && details.product.name}
                                                     </span>
                                                 ))}
                                             </div>
@@ -139,7 +139,7 @@ export default function ListTable({ status }: ListTableProps) {
             <DistributionModal
                 isOpen={modal.isOpen}
                 onClose={modal.onClose}
-                data={selectedData}
+                data={selectedData || undefined}
                 onSuccess={onSuccess}
                 status={status}
             />
