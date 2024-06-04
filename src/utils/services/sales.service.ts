@@ -7,6 +7,7 @@ export const getAllSales = async () => {
 
 export const createSale = async (data: {
     products: { productId: number | null; orderedQuantity: number | null }[]
+    date: Date
     clientId: number
 }) => {
     const response = await $host.post('sales', data)
@@ -17,6 +18,7 @@ export const updateSale = async (
     id: number,
     data: {
         products: { productId: number | null; orderedQuantity: number | null }[]
+        date: Date
         clientId: number
     },
 ) => {

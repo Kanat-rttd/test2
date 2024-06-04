@@ -188,8 +188,9 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                                         {...register(`products.${index}.quantity`, {
                                             required: 'Поле является обязательным',
                                         })}
+                                        backgroundColor='#edf2f7'
                                         placeholder="Количество"
-                                        readOnly
+                                        disabled
                                     />
                                     <Input
                                         width="25%"

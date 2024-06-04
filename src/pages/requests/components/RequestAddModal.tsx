@@ -35,6 +35,7 @@ interface ClientAddModalProps {
 
 type FormData = {
     clientId: number
+    date: Date
     products: { productId: number | null; orderedQuantity: number | null }[]
 }
 
@@ -125,6 +126,18 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
                                 </Select>
                                 <FormErrorMessage>{errors.clientId?.message}</FormErrorMessage>
                             </FormControl>
+                            <FormControl isInvalid={!!errors.date} isRequired>
+                                <Input
+                                    {...register('date', {
+                                        required: 'Поле является обязательным',
+                                    })}
+                                    autoComplete="off"
+                                    placeholder="Смена *"
+                                    type="date"
+                                    defaultValue={new Date().toISOString().split('T')[0]}
+                                />
+                                <FormErrorMessage>{errors.date?.message}</FormErrorMessage>
+                            </FormControl>
                             <FormControl
                                 isRequired
                                 gap="1rem"
@@ -133,7 +146,12 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
                             >
                                 {fields.map((_, index) => {
                                     return (
-                                        <Box display="flex" gap="1rem" alignItems="center" key={index}>
+                                        <Box
+                                            display="flex"
+                                            gap="1rem"
+                                            alignItems="center"
+                                            key={index}
+                                        >
                                             <Select
                                                 {...register(`products.${index}.productId`, {
                                                     required: 'Поле является обязательным',
