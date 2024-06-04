@@ -30,7 +30,7 @@ interface DistributionModalProps {
     onClose: () => void
     onSuccess: () => void
     status: string
-    data?: DispatchType | undefined
+    data?: DispatchType
 }
 
 type FormType = {

@@ -32,11 +32,6 @@ export default function ListTable({ status }: ListTableProps) {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const [modal, setModal] = useState({
-        isOpen: false,
-        onClose: () => setModal({ ...modal, isOpen: false }),
-    })
-
     const { data: dispatchesData, mutate: mutateDispatchesData } = useApi<Dispatch>(
         `release?${getURLs().toString()}&status=${status}`,
     )
@@ -110,7 +105,6 @@ export default function ListTable({ status }: ListTableProps) {
                                                 marginRight={3}
                                                 onClick={() => {
                                                     setSelectedData(row)
-                                                    setModal({ ...modal, isOpen: true })
                                                 }}
                                                 icon={<EditIcon />}
                                             />
@@ -136,10 +130,10 @@ export default function ListTable({ status }: ListTableProps) {
                     </Tbody>
                 </Table>
             </TableContainer>
-           {modal.isOpen && <DistributionModal
-                isOpen={modal.isOpen}
-                onClose={modal.onClose}
-                data={selectedData || undefined}
+           {selectedData && <DistributionModal
+                isOpen={!!selectedData}
+                onClose={() => setSelectedData(undefined)}
+                data={selectedData}
                 onSuccess={onSuccess}
                 status={status}
             />}
