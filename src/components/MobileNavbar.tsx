@@ -20,11 +20,12 @@ const MobileNavbar = () => {
             position={'absolute'}
             bottom={0}
             backgroundColor={'white'}
-            dropShadow={'2px -5px 15px 0'}
+            // dropShadow={'2px -5px 15px 0'}
             borderTopLeftRadius={15}
             borderTopRightRadius={15}
+            boxShadow={'2px 2px 15px #e3e3e3'}
             width={'100%'}
-            height={'12vh'}
+            height={'14vh'}
             display={'flex'}
             flexDirection={'row'}
             justifyContent={'space-evenly'}
