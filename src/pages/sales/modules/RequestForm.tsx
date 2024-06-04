@@ -217,7 +217,7 @@ const RequestForm = () => {
                                 width={'100%'}
                                 borderRadius={'15'}
                                 textAlign={'center'}
-                                defaultValue={'Заказать'}
+                                value={'Заказать'}
                                 onClick={handleSubmit}
                                 type='submit'
                             />

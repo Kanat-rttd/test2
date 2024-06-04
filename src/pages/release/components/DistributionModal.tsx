@@ -32,10 +32,7 @@ interface DistributionModalProps {
     status: string
     data: DispatchType | undefined
 }
-// type ProductType = {
-//     productId: number | null
-//     quantity: number | null
-// }
+
 type FormType = {
     clientId: number
     products: {
@@ -90,10 +87,11 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
         const createData = {
             clientId: formData.clientId,
             products: formData.products.map((product) => ({
-                productId: product.productId,
+                productId: product.productId !== undefined ? product.productId : null,
                 quantity: Number(product.quantity),
                 productPrice: products?.find((item) => item.id == product.productId)?.price,
             })),
+
             dispatch: status,
         }
         const updateData = {
@@ -101,9 +99,9 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
             products: formData.products.map((product) => ({
                 productId: product.productId,
                 quantity: Number(product.quantity),
-                price:
-                    data?.goodsDispatchDetails?.find((item) => item.productId  == product.productId)
-                        ?.price,
+                price: data?.goodsDispatchDetails?.find(
+                    (item) => item.productId == product?.productId,
+                )?.price,
             })),
             dispatch: status,
         }
@@ -168,11 +166,16 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                             variant="filled"
                                             placeholder="Вид хлеба"
                                             defaultValue={
-                                                data && data?.goodsDispatchDetails[index].productId
+                                                data && data.goodsDispatchDetails[index]
+                                                    ? data.goodsDispatchDetails[index].productId
+                                                    : undefined
                                             }
                                         >
                                             {products?.map((product) => (
-                                                <option key={product.name} value={product.id}>
+                                                <option
+                                                    key={product.name}
+                                                    value={product.id ? product.id : undefined}
+                                                >
                                                     {product.name}
                                                 </option>
                                             ))}
@@ -186,7 +189,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                         />
                                         <CloseIcon
                                             cursor="pointer"
-                                            onClick={() => index > 0 && remove(index)}
+                                            onClick={() => index >= 0 && remove(index)}
                                         />
                                     </Box>
                                 )
