@@ -2,13 +2,13 @@ import { Box, Heading, Input, IconButton, Text, VStack, useToast } from '@chakra
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import { useDisclosure } from '@chakra-ui/react'
 import { useState, ChangeEvent } from 'react'
-import dayjs from 'dayjs'
 import BottomModal from '../components/BottomModal'
 import getUserInfo from '@/utils/helpers/getUserInfo'
 import { createSale } from '@/utils/services/sales.service'
 import SuccessPage from '../components/SuccessPage'
 import ErrorPage from '../components/ErrorPage'
 import MobileNavbar from '@/components/MobileNavbar'
+import dayjs from 'dayjs'
 
 interface Product {
     id: number
@@ -19,6 +19,7 @@ interface Product {
 
 const RequestForm = () => {
     const [selectedProducts, setSelectedProducts] = useState<Product[]>([])
+    const [selectedDate, setSelectedDate] = useState<Date>(dayjs().toDate())
     const [comment, setComment] = useState<string>('')
     const [isSuccess, setIsSuccess] = useState(false)
     const [isError, setIsError] = useState(false)
@@ -48,7 +49,7 @@ const RequestForm = () => {
 
     const handleSubmit = (): void => {
         const requestData = {
-            date: dayjs(new Date()).format('DD.MM.YYYY'),
+            date: selectedDate,
             products: selectedProducts.map((product) => ({
                 productId: product.id,
                 orderedQuantity: product.quantity,
@@ -90,7 +91,7 @@ const RequestForm = () => {
     }
 
     return (
-        <div style={{overflowY: 'auto', height: '100dvh'}}>
+        <div style={{ overflowY: 'auto', height: '100dvh' }}>
             {isSuccess ? (
                 <SuccessPage />
             ) : isError ? (
@@ -122,8 +123,12 @@ const RequestForm = () => {
                                 width={'50%'}
                                 borderRadius={'15'}
                                 name="date"
-                                defaultValue={dayjs(new Date()).format('DD.MM.YYYY')}
+                                type="date"
+                                defaultValue={dayjs(selectedDate).format('YYYY-MM-DD')}
                                 textAlign={'center'}
+                                onChange={(e) =>
+                                    setSelectedDate(new Date(e.target.value))
+                                }
                             />
                         </Box>
 

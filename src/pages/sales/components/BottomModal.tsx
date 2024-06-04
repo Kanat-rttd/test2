@@ -12,8 +12,8 @@ import {
 } from '@chakra-ui/react'
 import { CloseIcon, SearchIcon } from '@chakra-ui/icons'
 import { Slide } from '@chakra-ui/transition'
-import { getAllProducts } from '@/utils/services/product.service'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useApi } from '@/utils/services/axios'
 
 interface Product {
     id: number
@@ -27,16 +27,10 @@ const BottomModal: React.FC<{
     onClose: () => void
     handleAddProduct: (product: Product) => void
 }> = ({ isOpen, onClose, handleAddProduct }) => {
-    const [products, setProducts] = useState<Product[]>([])
     const [searchTerm, setSearchTerm] = useState('')
+    const { data: products } = useApi<Product[]>('product?status=Активный')
 
     const { getRootProps, getRadioProps } = useRadioGroup()
-
-    useEffect(() => {
-        getAllProducts().then((responseData) => {
-            setProducts(responseData)
-        })
-    }, [])
 
     return (
         <>
@@ -102,8 +96,7 @@ const BottomModal: React.FC<{
                                 </Box>
                                 <Box {...getRootProps()}>
                                     <Stack spacing={2}>
-                                        {products
-                                            .filter((product) =>
+                                        {products?.filter((product) =>
                                                 product.name
                                                     .toLowerCase()
                                                     .includes(searchTerm.toLowerCase()),
