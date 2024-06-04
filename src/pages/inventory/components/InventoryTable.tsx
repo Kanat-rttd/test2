@@ -1,8 +1,9 @@
-import { TableContainer, Tfoot, Thead } from '@/components/ui'
-import { Table, Tbody, Tr, Th, Td, Input, Box } from '@chakra-ui/react'
+
+import { Table, Tbody, Tr, Th, Td, Input } from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { TableContainer, Tfoot, Thead } from '@/components/ui'
 
 type EditInput = {
     rowId: number | null
@@ -39,44 +40,50 @@ const InventoryTable = () => {
             <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                 <Table variant="simple" width={'100%'}>
                     <Thead>
-                        <Tr position={'sticky'} top={0} backgroundColor={'white'}>
-                            <Th width={'15%'}>№</Th>
-                            <Th width={'25%'}>Товары</Th>
-                            <Th width={'15%'}>Единица измерения</Th>
-                            <Th width={'15%'}>Количество по учету</Th>
-                            <Th width={'15%'}>Количество фактическое</Th>
-                            <Th width={'15%'}>Расхождение</Th>
+                        <Tr position={'sticky'} top={0} backgroundColor={'white'} zIndex={9}>
+                            <Th>№</Th>
+                            <Th>Товары</Th>
+                            <Th>Единица измерения</Th>
+                            <Th>Количество по учету</Th>
+                            <Th>Количество фактическое</Th>
+                            <Th>Расхождение</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {inventoryzationData?.table.map((item, index) => {
-                            return (
-                                <Tr key={item.id}>
-                                    <Td>{index + 1}</Td>
-                                    <Td>{item.goods}</Td>
-                                    <Td>{item.unitOfMeasure}</Td>
-                                    <Td>{item.accountingQuantity}</Td>
-                                    <Td
-                                        onClick={() =>
-                                            setShowInput({
-                                                rowId: item.id,
-                                                value: item.factQuantity,
-                                            })
-                                        }
-                                    >
-                                        {showInput?.rowId === item.id ? (
-                                            <EditInput
-                                                setShowInput={setShowInput}
-                                                showInput={showInput}
-                                            />
-                                        ) : (
-                                            item.factQuantity
-                                        )}
-                                    </Td>
-                                    <Td>{item.discrepancy}</Td>
-                                </Tr>
-                            )
-                        })}
+                        {inventoryzationData ? (
+                            inventoryzationData.table.map((item, index) => {
+                                return (
+                                    <Tr key={item.id}>
+                                        <Td>{index + 1}</Td>
+                                        <Td>{item.goods}</Td>
+                                        <Td>{item.unitOfMeasure}</Td>
+                                        <Td>{item.accountingQuantity}</Td>
+                                        <Td
+                                            onClick={() =>
+                                                setShowInput({
+                                                    rowId: item.id,
+                                                    value: item.factQuantity,
+                                                })
+                                            }
+                                        >
+                                            {showInput?.rowId === item.id ? (
+                                                <EditInput
+                                                    setShowInput={setShowInput}
+                                                    showInput={showInput}
+                                                />
+                                            ) : (
+                                                item.factQuantity
+                                            )}
+                                        </Td>
+                                        <Td>{item.discrepancy}</Td>
+                                    </Tr>
+                                )
+                            })
+                        ) : (
+                            <Tr>
+                                <Th>Нет данных</Th>
+                            </Tr>
+                        )}
                     </Tbody>
                     <Tfoot>
                         <Tr>
@@ -89,10 +96,10 @@ const InventoryTable = () => {
                                 {inventoryzationData?.totalRegister}
                             </Th>
                             <Th fontSize={15} color={'#000'}>
-                                {inventoryzationData?.totalFact}{' '}
+                                {inventoryzationData?.totalFact}
                             </Th>
                             <Th fontSize={15} color={'#000'}>
-                                {inventoryzationData?.divergence}{' '}
+                                {inventoryzationData?.divergence}
                             </Th>
                         </Tr>
                     </Tfoot>
