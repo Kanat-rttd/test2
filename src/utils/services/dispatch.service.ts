@@ -27,7 +27,7 @@ export const updateDispatchQuantity = async (
     id: number,
     data: {
         clientId: number
-        products: { productId: number | null; quantity: number | null }[]
+        products: { productId: number | null; quantity: number | null, price: number | undefined }[]
     },
 ) => {
     const response = await $host.put(`release/${id}`, data)
