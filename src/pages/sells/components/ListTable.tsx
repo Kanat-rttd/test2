@@ -120,7 +120,9 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
                                     return (
                                         <Tr textAlign={'center'} key={row.id}>
                                             <Td textAlign={'center'}>{index + 1}</Td>
-                                            <Td textAlign={'center'}>{dayjs(row.createdAt).format('HH:mm DD.MM.YYYY')}</Td>
+                                            <Td textAlign={'center'}>
+                                                {dayjs(row.createdAt).format('HH:mm DD.MM.YYYY')}
+                                            </Td>
                                             <Td>{row.client.name}</Td>
                                             <Td>
                                                 <div
@@ -161,11 +163,7 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
                                                 >
                                                     {row.goodsDispatchDetails.map(
                                                         (details, index) => (
-                                                            <span key={index}>
-                                                                {details.price !== null
-                                                                    ? details.price
-                                                                    : details.product.price}
-                                                            </span>
+                                                            <span key={index}>{details.price}</span>
                                                         ),
                                                     )}
                                                 </div>
@@ -180,11 +178,8 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
                                                     {row.goodsDispatchDetails.map(
                                                         (details, index) => (
                                                             <span key={index}>
-                                                                {Number(
-                                                                    details.price !== null
-                                                                        ? details.price
-                                                                        : details.product.price,
-                                                                ) * Number(details.quantity)}
+                                                                {Number(details.price) *
+                                                                    Number(details.quantity)}
                                                             </span>
                                                         ),
                                                     )}

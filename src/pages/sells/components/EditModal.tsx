@@ -84,7 +84,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                 return {
                     productId: Number(detail.productId),
                     quantity: Number(detail.quantity),
-                    price: Number(detail.product.price),
+                    price: Number(detail.price),
                 }
             })
             setValue('clientId', Number(selectedRow.client.id))
