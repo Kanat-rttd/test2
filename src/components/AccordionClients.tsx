@@ -27,13 +27,9 @@ import { useURLParameters } from '@/utils/hooks/useURLParameters'
 type accorfionClientType = {
     data: OrderArrayType[]
     handleChangeStatus: (clientName: OrderArrayType) => void
-
 }
 
-const AccordionClients = ({
-    data,
-    handleChangeStatus,
-}: accorfionClientType) => {
+const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => {
     const { getURLs } = useURLParameters()
     const { loading } = useNotify()
     const { mutate: mutateSalesData } = useApi<OrderArrayType[]>(`sales?${getURLs().toString()}`)
@@ -46,12 +42,11 @@ const AccordionClients = ({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
-    
+
     // const [editModal, setEditModal] = useState({
     //     isOpen: false,
     //     onClose: () => setEditModal({ ...editModal, isOpen: false }),
     // })
-
 
     const handleConfirmClick = (clientName: OrderArrayType) => {
         handleChangeStatus(clientName)
@@ -187,7 +182,14 @@ const AccordionClients = ({
                     </AccordionItem>
                 ))}
             </Accordion>
-            <RequestAddModal isOpen={isOpen} onClose={handleClose} selectedData={selectedData} mutate={mutateSalesData}/>
+            {selectedData && (
+                <RequestAddModal
+                    isOpen={isOpen}
+                    onClose={handleClose}
+                    selectedData={selectedData}
+                    mutate={mutateSalesData}
+                />
+            )}
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}

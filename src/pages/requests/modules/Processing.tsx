@@ -10,8 +10,6 @@ import { OrderArrayType } from '@/utils/types/order.types'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import RequestAddModal from '../components/RequestAddModal'
 
-
-
 const ProcessingPage = () => {
     const { loading } = useNotify()
     const { getURLs } = useURLParameters()
@@ -68,12 +66,13 @@ const ProcessingPage = () => {
                         />
                     )}
                 </Box>
-                <RequestAddModal
-                    isOpen={isOpen}
-                    onClose={handleClose}
-                    selectedData={undefined}
-                    mutate={mutateSalesData}
-                />
+                {isOpen && (
+                    <RequestAddModal
+                        isOpen={isOpen}
+                        onClose={handleClose}
+                        mutate={mutateSalesData}
+                    />
+                )}
             </Box>
         </UniversalComponent>
     )

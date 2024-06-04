@@ -30,7 +30,7 @@ interface ClientAddModalProps {
     isOpen: boolean
     quantity?: number
     onClose: () => void
-    selectedData: OrderArrayType | undefined
+    selectedData?: OrderArrayType | undefined
     mutate: () => void
 }
 
@@ -174,10 +174,12 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
                                                 })}
                                                 placeholder="Количество"
                                             />
-                                            <CloseIcon
-                                                cursor="pointer"
-                                                onClick={() => index > 0 && remove(index)}
-                                            />
+                                            {fields.length > 1 && (
+                                                <CloseIcon
+                                                    cursor="pointer"
+                                                    onClick={() => remove(index)}
+                                                />
+                                            )}
                                         </Box>
                                     )
                                 })}
