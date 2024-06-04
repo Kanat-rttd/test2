@@ -1,4 +1,14 @@
-import { Box, Heading, Input, IconButton, Text, VStack, useToast } from '@chakra-ui/react'
+import {
+    Box,
+    Heading,
+    Input,
+    IconButton,
+    Text,
+    VStack,
+    useToast,
+    FormControl,
+    FormLabel,
+} from '@chakra-ui/react'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import { useDisclosure } from '@chakra-ui/react'
 import { useState, ChangeEvent } from 'react'
@@ -98,7 +108,7 @@ const RequestForm = () => {
                 <ErrorPage />
             ) : (
                 <>
-                    <MobileNavbar></MobileNavbar>
+                    <MobileNavbar />
                     <Box
                         display="flex"
                         flexDirection="column"
@@ -117,19 +127,20 @@ const RequestForm = () => {
                             gap={4}
                         >
                             <Heading>Заказ</Heading>
-                            <Input
-                                variant="filled"
-                                placeholder="Filled"
-                                width={'50%'}
-                                borderRadius={'15'}
-                                name="date"
-                                type="date"
-                                defaultValue={dayjs(selectedDate).format('YYYY-MM-DD')}
-                                textAlign={'center'}
-                                onChange={(e) =>
-                                    setSelectedDate(new Date(e.target.value))
-                                }
-                            />
+                            <FormControl isRequired display={"flex"} justifyContent={'center'} alignItems={'center'}>
+                                <FormLabel>Смена: </FormLabel>
+                                <Input
+                                    variant="filled"
+                                    placeholder="Filled"
+                                    width={'50%'}
+                                    borderRadius={'15'}
+                                    name="date"
+                                    type="date"
+                                    defaultValue={dayjs(selectedDate).format('YYYY-MM-DD')}
+                                    textAlign={'center'}
+                                    onChange={(e) => setSelectedDate(new Date(e.target.value))}
+                                />
+                            </FormControl>
                         </Box>
 
                         <Box>
@@ -197,7 +208,7 @@ const RequestForm = () => {
 
                         <Box textAlign={'center'} p={5}>
                             <Input
-                            mb={'80px'}
+                                mb={'80px'}
                                 variant="filled"
                                 size={'lg'}
                                 color={'white'}

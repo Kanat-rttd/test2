@@ -13,6 +13,7 @@ import {
     FormControl,
     FormErrorMessage,
     Button,
+    FormLabel,
 } from '@chakra-ui/react'
 
 import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form'
@@ -127,6 +128,7 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
                                 <FormErrorMessage>{errors.clientId?.message}</FormErrorMessage>
                             </FormControl>
                             <FormControl isInvalid={!!errors.date} isRequired>
+                                <FormLabel>Смена: </FormLabel>
                                 <Input
                                     {...register('date', {
                                         required: 'Поле является обязательным',
