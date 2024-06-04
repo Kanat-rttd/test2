@@ -127,7 +127,7 @@ const RequestForm = () => {
                             gap={4}
                         >
                             <Heading>Заказ</Heading>
-                            <FormControl isRequired display={"flex"} justifyContent={'center'} alignItems={'center'}>
+                            <FormControl display={"flex"} justifyContent={'center'} alignItems={'center'}>
                                 <FormLabel>Смена: </FormLabel>
                                 <Input
                                     variant="filled"
@@ -219,6 +219,7 @@ const RequestForm = () => {
                                 textAlign={'center'}
                                 defaultValue={'Заказать'}
                                 onClick={handleSubmit}
+                                type='submit'
                             />
                         </Box>
                     </Box>
