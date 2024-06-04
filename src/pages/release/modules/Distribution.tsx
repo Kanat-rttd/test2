@@ -89,13 +89,12 @@ const Distribution = () => {
                     </Tabs>
                 </Box>
             </Box>
-            <DistributionModal
+            {isOpen && <DistributionModal
                 isOpen={isOpen}
                 onClose={onClose}
                 onSuccess={handleUpdateProduct}
-                data={undefined}
                 status="0"
-            />
+            />}
         </Box>
     )
 }

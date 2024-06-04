@@ -30,7 +30,7 @@ interface DistributionModalProps {
     onClose: () => void
     onSuccess: () => void
     status: string
-    data: DispatchType | undefined
+    data?: DispatchType | undefined
 }
 
 type FormType = {
@@ -76,9 +76,13 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                     quantity: Number(order.quantity),
                 }
             })
+            console.log(_data);
+            
             setValue('clientId', Number(data.client.id))
             setValue('products', _data)
         } else {
+            console.log('reset');
+            
             reset()
         }
     }, [data])
@@ -187,10 +191,10 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                             })}
                                             placeholder="Количество"
                                         />
-                                        <CloseIcon
+                                       { fields.length > 1 &&  <CloseIcon
                                             cursor="pointer"
-                                            onClick={() => index >= 0 && remove(index)}
-                                        />
+                                            onClick={() =>remove(index)}
+                                        />}
                                     </Box>
                                 )
                             })}

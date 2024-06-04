@@ -136,13 +136,13 @@ export default function ListTable({ status }: ListTableProps) {
                     </Tbody>
                 </Table>
             </TableContainer>
-            <DistributionModal
+           {modal.isOpen && <DistributionModal
                 isOpen={modal.isOpen}
                 onClose={modal.onClose}
                 data={selectedData || undefined}
                 onSuccess={onSuccess}
                 status={status}
-            />
+            />}
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}
