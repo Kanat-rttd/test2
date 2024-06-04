@@ -24,7 +24,7 @@ const MobileNavbar = () => {
             borderTopLeftRadius={15}
             borderTopRightRadius={15}
             width={'100%'}
-            height={'15vh'}
+            height={'12vh'}
             display={'flex'}
             flexDirection={'row'}
             justifyContent={'space-evenly'}
