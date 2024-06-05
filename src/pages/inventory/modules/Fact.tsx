@@ -1,9 +1,7 @@
 import { Box, Button, Select, useDisclosure } from '@chakra-ui/react'
 import FactTable from '../components/FactTable'
 import FactModal from '../components/AddFactModal'
-import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useApi } from '@/utils/services/axios'
-import DateRange from '@/components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { FactInputType } from '@/utils/types/factInput.types'
 import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
@@ -28,61 +26,60 @@ const Fact = () => {
 
     return (
         <>
-            <UniversalComponent>
-                <Box width={'100%'} height={'94%'} p={5} mt={2}>
-                    <Box
-                        marginBottom={8}
-                        display={'flex'}
-                        justifyContent={'space-between'}
-                        height={'5%'}
-                    >
-                        <Box display={'flex'} gap={'15px'} width={'fit-content'} w={'100%'}>
-                            <DateRange />
-                            <Select
-                                placeholder="Товар"
-                                w={'20%'}
-                                size={'sm'}
-                                borderRadius={5}
-                                value={getParam('productId')}
-                                onChange={(e) => {
-                                    setParam('productId', e.target.value)
-                                }}
-                            >
-                                {providerGoodsData?.map((item, index) => (
-                                    <option key={index} value={item.id}>
-                                        {item.goods}
-                                    </option>
-                                ))}
-                            </Select>
+            <Box
+                display="flex"
+                flexDirection="column"
+                maxHeight={'calc(95% - 2.5rem)'}
+                height="100vh"
+                p={5}
+                mt={2}
+            >
+                <Box marginBottom={4} display={'flex'} justifyContent={'space-between'}>
+                    <Box width={'100%'} display={'flex'} gap={'15px'}>
+                        <Select
+                            placeholder="Товар"
+                            w={'20%'}
+                            size={'sm'}
+                            borderRadius={5}
+                            value={getParam('productId')}
+                            onChange={(e) => {
+                                setParam('productId', e.target.value)
+                            }}
+                        >
+                            {providerGoodsData?.map((item, index) => (
+                                <option key={index} value={item.id}>
+                                    {item.goods}
+                                </option>
+                            ))}
+                        </Select>
 
-                            <Select
-                                placeholder="Место"
-                                width={'fit-content'}
-                                w={'20%'}
-                                size={'sm'}
-                                borderRadius={5}
-                                value={getParam('place')}
-                                onChange={(e) => {
-                                    setParam('place', e.target.value)
-                                }}
-                            >
-                                {placesData?.map((item, index) => (
-                                    <option key={index} value={item.label}>
-                                        {item.label}
-                                    </option>
-                                ))}
-                            </Select>
-                        </Box>
+                        <Select
+                            placeholder="Место"
+                            width={'fit-content'}
+                            w={'20%'}
+                            size={'sm'}
+                            borderRadius={5}
+                            value={getParam('place')}
+                            onChange={(e) => {
+                                setParam('place', e.target.value)
+                            }}
+                        >
+                            {placesData?.map((item, index) => (
+                                <option key={index} value={item.label}>
+                                    {item.label}
+                                </option>
+                            ))}
+                        </Select>
+                    </Box>
 
-                        <Button colorScheme="purple" onClick={onOpen}>
-                            Добавить факт
-                        </Button>
-                    </Box>
-                    <Box height={'calc(95% - 2.5rem)'} position={'relative'}>
-                        <FactTable />
-                    </Box>
+                    <Button colorScheme="purple" onClick={onOpen}>
+                        Добавить факт
+                    </Button>
                 </Box>
-            </UniversalComponent>
+                <Box position={'relative'}>
+                    <FactTable />
+                </Box>
+            </Box>
             <FactModal isOpen={isOpen} onClose={onClose} onSuccess={successHandler} />
         </>
     )
