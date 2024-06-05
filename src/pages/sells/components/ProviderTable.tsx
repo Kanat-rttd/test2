@@ -25,7 +25,7 @@ const ProviderTable = () => {
     return (
         <>
             <UniversalComponent>
-                <Box width={'25%'} marginBottom={6}>
+                <Box width={'25%'} marginBottom={4}>
                     <Select placeholder="Реализатор" size={'sm'} borderRadius={5} width={'80%'}>
                         <option>Реализатор</option>
                     </Select>
@@ -62,7 +62,7 @@ const ProviderTable = () => {
                                     <Th color={'#000'} fontSize={15}>
                                         ИТОГО
                                     </Th>
-                                    <Th> </Th>
+                                    <Th width={'60%'}></Th>
                                     <Th color={'#000'} fontSize={15}>
                                         {calculationsData?.Total}
                                     </Th>

@@ -39,24 +39,24 @@ const MagazineTable = () => {
 
     return (
         <>
-            <Box width={'25%'} marginBottom={4}>
-                <Select
-                    name="MagazineName"
-                    placeholder="Магазин"
-                    width={'fit-content'}
-                    onChange={handleSelectChange}
-                    w={'80%'}
-                    size={'sm'}
-                    borderRadius={5}
-                >
-                    {magazinesData?.map((item, index) => (
-                        <option key={index} value={item.name}>
-                            {item.name}
-                        </option>
-                    ))}
-                </Select>
-            </Box>
             <UniversalComponent>
+                <Box width={'25%'} marginBottom={4}>
+                    <Select
+                        name="MagazineName"
+                        placeholder="Магазин"
+                        width={'fit-content'}
+                        onChange={handleSelectChange}
+                        w={'80%'}
+                        size={'sm'}
+                        borderRadius={5}
+                    >
+                        {magazinesData?.map((item, index) => (
+                            <option key={index} value={item.name}>
+                                {item.name}
+                            </option>
+                        ))}
+                    </Select>
+                </Box>
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant="simple">
                         <Thead>
@@ -88,7 +88,7 @@ const MagazineTable = () => {
                                 <Th color={'#000'} fontSize={15}>
                                     ИТОГО
                                 </Th>
-                                <Th w={'80%'}> </Th>
+                                <Th width={'60%'}> </Th>
                                 <Th color={'#000'} fontSize={15}>
                                     {magazineDebtData?.total}
                                 </Th>
