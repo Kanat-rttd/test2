@@ -24,7 +24,7 @@ const Inventory = () => {
                 p={5}
                 mt={2}
             >
-                <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
+                <Box marginBottom={4} display={'flex'} justifyContent={'space-between'}>
                     <Box width={'100%'} display={'flex'} gap={'15px'}>
                         <Select
                             placeholder="Товар"

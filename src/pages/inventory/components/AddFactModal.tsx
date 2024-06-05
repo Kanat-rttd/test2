@@ -48,6 +48,7 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
         register,
         handleSubmit: handleSubmitForm,
         control,
+        reset,
         formState: { errors },
     } = useForm<AddFactModalInputs>()
 
@@ -98,6 +99,7 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                 console.log(res)
                 onSuccess()
                 onClose()
+                reset()
             })
             .catch((error) => {
                 console.error('Error updating data:', error)
