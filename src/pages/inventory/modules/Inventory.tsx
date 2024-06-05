@@ -2,7 +2,6 @@ import { Box, Button, Select, useDisclosure } from '@chakra-ui/react'
 import InventoryTable from '../components/InventoryTable'
 import CorrectModal from '../components/Modal'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
-import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
 
@@ -27,19 +26,18 @@ const Inventory = () => {
             >
                 <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
                     <Box width={'100%'} display={'flex'} gap={'15px'}>
-                        <DateRange />
                         <Select
                             placeholder="Товар"
                             w={'20%'}
                             size={'sm'}
                             borderRadius={5}
-                            defaultValue={getParam('name')}
+                            defaultValue={getParam('productId')}
                             onChange={(e) => {
-                                setParam('name', e.target.value)
+                                setParam('productId', e.target.value)
                             }}
                         >
                             {providerGoodsData?.map((item, index) => (
-                                <option key={index} value={item.goods}>
+                                <option key={index} value={item.id}>
                                     {item.goods}
                                 </option>
                             ))}

@@ -43,9 +43,9 @@ const Fact = () => {
                                 w={'20%'}
                                 size={'sm'}
                                 borderRadius={5}
-                                value={getParam('name')}
+                                value={getParam('productId')}
                                 onChange={(e) => {
-                                    setParam('name', e.target.value)
+                                    setParam('productId', e.target.value)
                                 }}
                             >
                                 {providerGoodsData?.map((item, index) => (

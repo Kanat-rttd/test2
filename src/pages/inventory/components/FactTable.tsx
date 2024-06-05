@@ -73,12 +73,13 @@ const FactTable = () => {
                 <Table variant="simple" width={'100%'}>
                     <Thead>
                         <Tr position={'sticky'} top={0} backgroundColor={'white'}>
-                            <Th width={'10%'}>№</Th>
-                            <Th width={'30%'}>Товары</Th>
-                            <Th width={'20%'}>Единица измерения</Th>
-                            <Th width={'20%'}>Количество фактическое</Th>
-                            <Th width={'20%'}>Время изменения</Th>
-                            <Th width={'10%'}>Действия</Th>
+                            <Th>№</Th>
+                            <Th>Товары</Th>
+                            <Th>Место</Th>
+                            <Th>Единица измерения</Th>
+                            <Th>Количество фактическое</Th>
+                            <Th>Время изменения</Th>
+                            <Th>Действия</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -86,6 +87,7 @@ const FactTable = () => {
                             <Tr key={item.id}>
                                 <Td>{index + 1}</Td>
                                 <Td>{item.name}</Td>
+                                <Td>{item.place}</Td>
                                 <Td>{item.unitOfMeasure}</Td>
                                 <Td>{item.quantity}</Td>
                                 <Td>{dayjs(item.updatedAt).format('DD.MM.YYYY HH:mm')}</Td>
