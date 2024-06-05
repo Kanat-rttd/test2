@@ -10,7 +10,7 @@ const DebtTransfer = lazy(() => import('./modules/DebtTransfer'))
 
 type PageType = 'invoice' | 'debtAccounting' | 'journal' | 'debtTransfer'
 
-const sellsPage = () => {
+const SellsPage = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
     const { page, id } = useParams<{ page: PageType; id: string }>()
     const navigate = useNavigate()
@@ -35,4 +35,4 @@ const sellsPage = () => {
     return <Suspense fallback={<Loading />}>{content}</Suspense>
 }
 
-export default sellsPage
+export default SellsPage

@@ -2,6 +2,7 @@ import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import { Box, Select, Table, Tr, Td, Tbody, Th } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import { useState } from 'react'
+import UniversalComponent from '@/components/ui/UniversalComponent'
 
 interface MagazineDebtView {
     mainData: [
@@ -38,7 +39,7 @@ const MagazineTable = () => {
 
     return (
         <>
-            <Box width={'25%'} marginBottom={6}>
+            <Box width={'25%'} marginBottom={4}>
                 <Select
                     name="MagazineName"
                     placeholder="Магазин"
@@ -55,7 +56,7 @@ const MagazineTable = () => {
                     ))}
                 </Select>
             </Box>
-            <Box>
+            <UniversalComponent>
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant="simple">
                         <Thead>
@@ -95,7 +96,7 @@ const MagazineTable = () => {
                         </Tfoot>
                     </Table>
                 </TableContainer>
-            </Box>
+            </UniversalComponent>
         </>
     )
 }

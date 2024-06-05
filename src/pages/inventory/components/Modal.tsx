@@ -22,6 +22,7 @@ import { Controller, useForm } from 'react-hook-form'
 import Select from 'react-select'
 import { createAdjustment } from '@/utils/services/adjustment.service'
 import { useState } from 'react'
+import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 
 type EditModalProps = {
     isOpen: boolean
@@ -39,6 +40,7 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
     const { loading } = useNotify()
     const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods?status=Активный')
     const [selectedValue, setSelectedValue] = useState<ProviderGoodsType | null>()
+    const [isMinus, setIsMinus] = useState<boolean>(false)
 
     const {
         register,
@@ -51,8 +53,8 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
 
     const sendData = (formData: EditModalInputs) => {
         console.log(formData)
-
-        const responsePromise: Promise<any> = createAdjustment(formData)
+        const data = { ...formData, qty: isMinus ? Number(formData.qty) * -1 : Number(formData.qty)}
+        const responsePromise: Promise<any> = createAdjustment(data)
         loading(responsePromise)
 
         responsePromise
@@ -114,6 +116,9 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
 
                             <FormControl isInvalid={!!errors.qty}>
                                 <InputGroup>
+                                    <Button mr={2} onClick={() => setIsMinus(!isMinus)}>
+                                        {isMinus ? <MinusIcon width={3} /> : <AddIcon width={3}/>}
+                                    </Button>
                                     <Input
                                         {...register('qty', {
                                             required: 'Поле является обязательным',

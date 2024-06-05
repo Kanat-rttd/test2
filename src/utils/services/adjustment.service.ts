@@ -1,7 +1,7 @@
 import $host from './axios'
 
 export const createAdjustment = async (data: {
-    qty: string
+    qty: number
     Comment: string
     item: {
         id: number

@@ -36,7 +36,6 @@ export function useURLParameters() {
 
     const setParamObject = (paramsObject: { [key: string]: string | undefined }) => {
         const newParams = new URLSearchParams(urlParams)
-        console.log('stated');
         
         for (const key in paramsObject) {
             const value = paramsObject[key]

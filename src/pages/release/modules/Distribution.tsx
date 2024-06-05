@@ -73,13 +73,13 @@ const Distribution = () => {
             </Box>
             <Box width={'100%'} height={'100%'} p={5}>
                 <Box>
-                    <Tabs variant="soft-rounded" height={'100%'}  mt={'-19.5px'}>
+                    <Tabs variant="soft-rounded" height={'100%'} mt={'-19.5px'}>
                         <TabList height={'22px'}>
                             <Tab>List</Tab>
                             <Tab>Pivot</Tab>
                         </TabList>
                         <TabPanels height={'95%'}>
-                            <TabPanel height={'100%'} p={'10px 0'}>
+                            <TabPanel p={'10px 0'}>
                                 <ListTable status="0" />
                             </TabPanel>
                             <TabPanel p={'10px 0'}>

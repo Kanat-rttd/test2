@@ -125,7 +125,7 @@ const InvoicePage = () => {
                                     <Box display={'flex'} gap={10} textAlign={'start'} w={'35%'}>
                                         <Text w={'30%'} color={'gray'} fontWeight={''}>№ {row.invoiceNumber}</Text>
                                         <Text w={'44%'}>{row.clientName}</Text>
-                                        <Text w={'25%'}>{dayjs(row.createdAt).format('DD.MM.YYYY HH:mm')}</Text>
+                                        <Text w={'25%'}>{dayjs(row.createdAt).format('DD.MM.YYYY')}</Text>
                                     </Box>
                                     <Box display={'flex'} gap={20} w={'30%'}>
                                         <Text textAlign={'start'}>Сверху: {overPrice} ₸</Text>
