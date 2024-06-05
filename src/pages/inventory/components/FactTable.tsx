@@ -1,5 +1,5 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Table, Tbody, Tr, Th, Td,  IconButton } from '@chakra-ui/react'
+import { Table, Tbody, Tr, Th, Td, IconButton } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import dayjs from 'dayjs'
 import { useState } from 'react'
@@ -83,44 +83,50 @@ const FactTable = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {factInputData?.table.map((item, index) => (
-                            <Tr key={item.id}>
-                                <Td>{index + 1}</Td>
-                                <Td>{item.name}</Td>
-                                <Td>{item.place}</Td>
-                                <Td>{item.unitOfMeasure}</Td>
-                                <Td>{item.quantity}</Td>
-                                <Td>{dayjs(item.updatedAt).format('DD.MM.YYYY HH:mm')}</Td>
-                                <Td>
-                                    <IconButton
-                                        variant="outline"
-                                        size={'sm'}
-                                        colorScheme="teal"
-                                        aria-label="Send email"
-                                        marginRight={3}
-                                        onClick={() => {
-                                            handleSelected(item)
-                                        }}
-                                        icon={<EditIcon />}
-                                    />
-                                    <IconButton
-                                        variant="outline"
-                                        size={'sm'}
-                                        colorScheme="teal"
-                                        aria-label="Send email"
-                                        marginRight={3}
-                                        onClick={() => {
-                                            setSelectedData(item)
-                                            setDialog({
-                                                ...dialog,
-                                                isOpen: true,
-                                            })
-                                        }}
-                                        icon={<DeleteIcon />}
-                                    />
-                                </Td>
+                        {factInputData?.table.length > 0 ? (
+                            factInputData.table.map((item, index) => (
+                                <Tr key={item.id}>
+                                    <Td>{index + 1}</Td>
+                                    <Td>{item.name}</Td>
+                                    <Td>{item.place}</Td>
+                                    <Td>{item.unitOfMeasure}</Td>
+                                    <Td>{item.quantity}</Td>
+                                    <Td>{dayjs(item.updatedAt).format('DD.MM.YYYY HH:mm')}</Td>
+                                    <Td>
+                                        <IconButton
+                                            variant="outline"
+                                            size={'sm'}
+                                            colorScheme="teal"
+                                            aria-label="Send email"
+                                            marginRight={3}
+                                            onClick={() => {
+                                                handleSelected(item)
+                                            }}
+                                            icon={<EditIcon />}
+                                        />
+                                        <IconButton
+                                            variant="outline"
+                                            size={'sm'}
+                                            colorScheme="teal"
+                                            aria-label="Send email"
+                                            marginRight={3}
+                                            onClick={() => {
+                                                setSelectedData(item)
+                                                setDialog({
+                                                    ...dialog,
+                                                    isOpen: true,
+                                                })
+                                            }}
+                                            icon={<DeleteIcon />}
+                                        />
+                                    </Td>
+                                </Tr>
+                            ))
+                        ) : (
+                            <Tr>
+                                <Td>Нет данных</Td>
                             </Tr>
-                        ))}
+                        )}
                     </Tbody>
                     <Tfoot>
                         <Tr>
