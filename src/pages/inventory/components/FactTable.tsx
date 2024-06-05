@@ -83,8 +83,8 @@ const FactTable = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {factInputData?.table.length > 0 ? (
-                            factInputData.table.map((item, index) => (
+                        {factInputData?.table?.length  ? (
+                            factInputData?.table.map((item, index) => (
                                 <Tr key={item.id}>
                                     <Td>{index + 1}</Td>
                                     <Td>{item.name}</Td>
