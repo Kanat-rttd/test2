@@ -21,6 +21,7 @@ import {
 import { Controller, useForm } from 'react-hook-form'
 import Select from 'react-select'
 import { createAdjustment } from '@/utils/services/adjustment.service'
+import { useState } from 'react'
 
 type EditModalProps = {
     isOpen: boolean
@@ -37,6 +38,7 @@ type EditModalInputs = {
 const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
     const { loading } = useNotify()
     const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods?status=Активный')
+    const [selectedValue, setSelectedValue] = useState<ProviderGoodsType | null>()
 
     const {
         register,
@@ -96,7 +98,10 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
                                                 value={providerGoodsData?.find(
                                                     (option) => option.id == value?.id,
                                                 )}
-                                                onChange={(val) => onChange(val)}
+                                                onChange={(val) => {
+                                                    onChange(val)
+                                                    setSelectedValue(val)
+                                                }}
                                                 placeholder="Товар *"
                                                 isClearable
                                                 isSearchable
@@ -117,7 +122,9 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
                                         placeholder="Количество *"
                                         type="number"
                                     />
-                                    <InputRightAddon>кг</InputRightAddon>
+                                    <InputRightAddon>
+                                        {selectedValue ? selectedValue.unitOfMeasure : 'кг'}
+                                    </InputRightAddon>
                                 </InputGroup>
                                 <FormErrorMessage>{errors.qty?.message}</FormErrorMessage>
                             </FormControl>
