@@ -33,7 +33,7 @@ interface Purchase {
     status?: { value: number; label: string } | string | undefined
     provider: {
         id: number
-        name: string
+        providerName: string
     }
     providerGood: {
         id: number

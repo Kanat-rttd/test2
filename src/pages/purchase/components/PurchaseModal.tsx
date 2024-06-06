@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react'
 import Select from 'react-select'
 import { useApi } from '@/utils/services/axios'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { ProviderType } from '@/utils/types/provider.types'
 
 type PurchaseModalProps = {
     isOpen: boolean
@@ -53,11 +54,6 @@ interface rawMaterials {
     uom: string
 }
 
-interface Providers {
-    value: number
-    label: string
-}
-
 interface ProviderGoods {
     id: number
     providerId: number
@@ -75,6 +71,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
     const { loading } = useNotify()
 
     const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods?status=Активный')
+    const { data: providersData } = useApi<ProviderType[]>('providers?status=Активный')
 
     const [providerGoods, setProviderGoods] = useState<rawMaterials[]>([])
 
@@ -85,8 +82,6 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
 
         setProviderGoods(_providerGoods || [])
     }, [providerGoodsData])
-
-    const { data: providersData } = useApi<Providers[]>('providers')
 
     const [selectedRawMaterial, setSelectedRawMaterial] = useState<rawMaterials | null>(null)
 
@@ -136,21 +131,26 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                     const { onChange, value } = field
                                     return (
                                         <Select
-                                            options={providersData}
-                                            defaultValue={
-                                                value
-                                                    ? providersData?.filter(
-                                                          (option) => option.value == value,
-                                                      )
-                                                    : null
-                                            }
-                                            onChange={(selectedOption) => {
-                                                onChange(selectedOption?.value)
-                                            }}
-                                            placeholder="Поставщик *"
-                                            isClearable
-                                            isSearchable
-                                        />
+                                                    options={providersData}
+                                                    getOptionLabel={(option: ProviderType) =>
+                                                        option.providerName
+                                                    }
+                                                    getOptionValue={(option: ProviderType) =>
+                                                        `${option.id}`
+                                                    }
+                                                    value={providersData?.filter(
+                                                        (option) =>
+                                                            String(option.id) == String(value),
+                                                    )}
+                                                    onChange={(
+                                                        selectedOption: ProviderType | null,
+                                                    ) => {
+                                                        onChange(selectedOption?.id)
+                                                    }}
+                                                    placeholder="Поставщик *"
+                                                    isClearable
+                                                    isSearchable
+                                                />
                                     )
                                 }}
                             />

@@ -8,33 +8,13 @@ import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deletePurchase } from '@/utils/services/productPurchase.service'
+import { PurchaseType } from '@/utils/types/purchase.types'
 
 interface AllPurchases {
-    purchases: Purchase[]
+    purchases: PurchaseType[]
     totalQuantity: number
     totalSum: number
     totalDeliverySum: number
-}
-
-interface Purchase {
-    id: number
-    date: string
-    providerId: number
-    providerGoodId: number
-    quantity: number
-    price: number
-    deliverySum: number
-    totalSum: number
-    status: string
-    provider: {
-        id: number
-        name: string
-    }
-    providerGood: {
-        id: number
-        name: string
-        unitOfMeasure: string
-    }
 }
 
 interface ListTableProps {
@@ -45,10 +25,6 @@ interface ListTableProps {
 const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
     const { loading } = useNotify()
     const { getParam } = useURLParameters()
-
-    // const { data: purchasesData, mutate: mutatePurchaseData } = useApi<AllPurchases>(
-    //     `productPurchase?${getURLs().toString()}`,
-    // )
 
     const filteredPurchases = purchasesData?.purchases.filter((purchase) => {
         if (getParam('providerId') && Number(getParam('providerId')) !== purchase.provider.id) {
@@ -62,10 +38,10 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const [selectedData, setSelectedData] = useState<Purchase>()
+    const [selectedData, setSelectedData] = useState<PurchaseType>()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const handleSelected = (data: Purchase) => {
+    const handleSelected = (data: PurchaseType) => {
         setSelectedData(data)
         onOpen()
     }
@@ -74,7 +50,7 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
         mutate()
     }
 
-    const handlerDelete = (selectedData: Purchase | undefined) => {
+    const handlerDelete = (selectedData: PurchaseType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deletePurchase(selectedData.id)
             loading(responsePromise)
@@ -110,7 +86,7 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
                                 <Tr key={purchase.id}>
                                     <Td>{index + 1}</Td>
                                     <Td>{dayjs(purchase.date).format('DD.MM.YYYY')}</Td>
-                                    <Td>{purchase.provider.name}</Td>
+                                    <Td>{purchase.provider.providerName}</Td>
                                     <Td>{purchase.providerGood.name}</Td>
                                     <Td>{purchase.quantity}</Td>
                                     <Td>{purchase.price}</Td>

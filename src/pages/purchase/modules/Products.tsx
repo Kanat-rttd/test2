@@ -5,43 +5,19 @@ import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '@/components/DateRange'
 import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
-
-interface Providers {
-    value: number
-    label: string
-}
+import { ProviderType } from '@/utils/types/provider.types'
+import { PurchaseType } from '@/utils/types/purchase.types'
 
 interface AllPurchases {
-    purchases: Purchase[]
+    purchases: PurchaseType[]
     totalQuantity: number
     totalSum: number
     totalDeliverySum: number
 }
 
-interface Purchase {
-    id: number
-    date: string
-    providerId: number
-    providerGoodId: number
-    quantity: number
-    price: number
-    deliverySum: number
-    totalSum: number
-    status: string
-    provider: {
-        id: number
-        name: string
-    }
-    providerGood: {
-        id: number
-        name: string
-        unitOfMeasure: string
-    }
-}
-
 const Products = () => {
     const { getParam, setParam, getURLs } = useURLParameters()
-    const { data: providersData } = useApi<Providers[]>('providers')
+    const { data: providersData } = useApi<ProviderType[]>('providers')
     const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
 
     const { data: purchasesData, mutate: mutatePurchaseData } = useApi<AllPurchases>(
@@ -56,62 +32,57 @@ const Products = () => {
 
     return (
         <>
-                <Box width={'100%'} p={5} pt={7}>
-                    <Box
-                        display={'flex'}
-                        alignItems={'center'}
-                        justifyContent={'space-between'}
-                        mb={5}
-                    >
-                        <Box display={'flex'} gap={'15px'} mb={'5px'}>
-                            <DateRange />
-                            <Select
-                                size={'sm'}
-                                borderRadius={5}
-                                placeholder="Поставщик"
-                                value={getParam('providerId')}
-                                onChange={(event) => setParam('providerId', event.target.value)}
-                                width={'fit-content'}
-                            >
-                                {providersData?.map((provider, index) => (
-                                    <option key={`${index}`} value={provider.value}>
-                                        {provider.label}
-                                    </option>
-                                ))}
-                            </Select>
-                            <Select
-                                size={'sm'}
-                                borderRadius={5}
-                                placeholder="Товар"
-                                value={getParam('rawMaterialId')}
-                                onChange={(event) => setParam('rawMaterialId', event.target.value)}
-                                width={'fit-content'}
-                            >
-                                {providerGoodsData?.map((units) => (
-                                    <option key={units.id} value={units.id}>
-                                        {units.goods}
-                                    </option>
-                                ))}
-                            </Select>
-                            <Select
-                                placeholder="Статус"
-                                width={'fit-content'}
-                                value={getParam('paymentStatus')}
-                                size={'sm'}
-                                borderRadius={5}
-                                onChange={(e) => setParam('paymentStatus', e.target.value)}
-                            >
-                                <option value="Оплачено">Оплачено</option>
-                                <option value="Не оплачено">Не оплачено</option>
-                            </Select>
-                        </Box>
-                        <Button colorScheme="purple" onClick={onOpen}>
-                            Добавить закупки
-                        </Button>
+            <Box width={'100%'} p={5} pt={7}>
+                <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} mb={5}>
+                    <Box display={'flex'} gap={'15px'} mb={'5px'}>
+                        <DateRange />
+                        <Select
+                            size={'sm'}
+                            borderRadius={5}
+                            placeholder="Поставщик"
+                            value={getParam('providerId')}
+                            onChange={(event) => setParam('providerId', event.target.value)}
+                            width={'fit-content'}
+                        >
+                            {providersData?.map((provider, index) => (
+                                <option key={`${index}`} value={provider.id}>
+                                    {provider.providerName}
+                                </option>
+                            ))}
+                        </Select>
+                        <Select
+                            size={'sm'}
+                            borderRadius={5}
+                            placeholder="Товар"
+                            value={getParam('rawMaterialId')}
+                            onChange={(event) => setParam('rawMaterialId', event.target.value)}
+                            width={'fit-content'}
+                        >
+                            {providerGoodsData?.map((units) => (
+                                <option key={units.id} value={units.id}>
+                                    {units.goods}
+                                </option>
+                            ))}
+                        </Select>
+                        <Select
+                            placeholder="Статус"
+                            width={'fit-content'}
+                            value={getParam('paymentStatus')}
+                            size={'sm'}
+                            borderRadius={5}
+                            onChange={(e) => setParam('paymentStatus', e.target.value)}
+                        >
+                            <option value="Оплачено">Оплачено</option>
+                            <option value="Не оплачено">Не оплачено</option>
+                        </Select>
                     </Box>
-                    <ListTable purchasesData={purchasesData} mutate={mutatePurchaseData} />
+                    <Button colorScheme="purple" onClick={onOpen}>
+                        Добавить закупки
+                    </Button>
                 </Box>
-                <PurchaseModal isOpen={isOpen} onClose={onClose} onSuccess={handleAddProduct} />
+                <ListTable purchasesData={purchasesData} mutate={mutatePurchaseData} />
+            </Box>
+            <PurchaseModal isOpen={isOpen} onClose={onClose} onSuccess={handleAddProduct} />
         </>
     )
 }
