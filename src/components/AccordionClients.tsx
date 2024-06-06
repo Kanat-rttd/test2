@@ -23,6 +23,7 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteSale } from '@/utils/services/sales.service'
 import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import dayjs from 'dayjs'
 
 type accorfionClientType = {
     data: OrderArrayType[]
@@ -42,11 +43,6 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
-
-    // const [editModal, setEditModal] = useState({
-    //     isOpen: false,
-    //     onClose: () => setEditModal({ ...editModal, isOpen: false }),
-    // })
 
     const handleConfirmClick = (clientName: OrderArrayType) => {
         handleChangeStatus(clientName)
@@ -103,7 +99,13 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
                                     textAlign="left"
                                     mr={'60px'}
                                 >
-                                    <Heading size={'sm'}>{order.client.name}</Heading>
+                                    <Box display={'flex'} gap={10}>
+                                        <Heading size={'sm'}>{order.client.name}</Heading>
+                                        <Heading size={'sm'}>
+                                            Смена: {dayjs(order.date).format('DD.MM.YYYY')}
+                                        </Heading>
+                                    </Box>
+
                                     <Heading size={'sm'}>Итого: {order.totalQuantity}</Heading>
                                 </Box>
                                 <Box display={'flex'}>

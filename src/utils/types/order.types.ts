@@ -4,6 +4,7 @@ export type OrderArrayType = {
     totalQuantity: string
     createdAt: Date
     done: number
+    date: Date
     orderDetails: [
         {
             orderDetailsId: string
