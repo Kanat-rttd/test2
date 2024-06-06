@@ -150,7 +150,7 @@ const InvoicePage = () => {
                                             <Text textAlign={'start'}>Сумма: {row.totalSum} ₸</Text>
                                         </Box>
                                         <Text w={'12%'} textAlign={'start'}>
-                                            Итого: {overPrice + row.totalSum} ₸
+                                            Итого: {Number(overPrice) + row.totalSum} ₸
                                         </Text>
                                     </Button>
                                 )
