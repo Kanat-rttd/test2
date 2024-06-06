@@ -145,9 +145,9 @@ const InvoicePage = () => {
                                                 {dayjs(row.createdAt).format('DD.MM.YYYY')}
                                             </Text>
                                         </Box>
-                                        <Box display={'flex'} gap={20} w={'30%'}>
-                                            <Text textAlign={'start'}>Сверху: {overPrice} ₸</Text>
-                                            <Text textAlign={'start'}>Сумма: {row.totalSum} ₸</Text>
+                                        <Box display={'flex'} gap={20} w={'25%'} justifyContent={'space-between'}>
+                                            <Text minWidth={'40%'} textAlign={'start'}>Сверху: {overPrice} ₸</Text>
+                                            <Text minW={'60%'} textAlign={'start'}>Сумма: {row.totalSum} ₸</Text>
                                         </Box>
                                         <Text w={'12%'} textAlign={'start'}>
                                             Итого: {Number(overPrice) + row.totalSum} ₸
