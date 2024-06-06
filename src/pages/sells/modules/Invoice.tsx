@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import DateRange from '@/components/DateRange'
 // import Header from '@/components/Header'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
-// import { OverPriceType } from '@/utils/types/overPrice.types'
+import { OverPriceType } from '@/utils/types/overPrice.types'
 
 interface InvoiceData {
     createdAt: Date
@@ -65,7 +65,13 @@ const InvoicePage = () => {
     const { data: dispatchesData } = useApi<InvoiceData[]>(
         `release/invoice?${getURLs().toString()}`,
     )
-    // const { data: overPriceData } = useApi<OverPriceType[]>(`overPrice`)
+
+    const currentMonth = dayjs().month() + 1
+    const currentYear = dayjs().year()
+
+    const { data: overPriceData } = useApi<OverPriceType[]>(
+        `overPrice?month=${currentMonth}&year=${currentYear}`,
+    )
 
     const [selectedRow, setSelectedRow] = useState<InvoiceData | null>(null)
 
@@ -109,7 +115,7 @@ const InvoicePage = () => {
                     >
                         {dispatchesData?.length ? (
                             dispatchesData?.map((row, index) => {
-                                const overPrice = 5000
+                                const overPrice = overPriceData?.find(price => price.clientId == row.clientId)?.price || 0
                                 return (
                                     <Button
                                         key={index}
