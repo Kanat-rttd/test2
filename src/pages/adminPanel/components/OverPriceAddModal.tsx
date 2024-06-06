@@ -44,7 +44,6 @@ interface OverPriceAddModalProps {
 }
 
 const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddModalProps) => {
-
     const { success, error } = useNotify()
 
     const { data: clientData } = useApi<ClientType[]>('client')
@@ -60,10 +59,14 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
 
     const sendData = (formData: OverPriceInputs) => {
         if (data) {
-            updateOverprice(data.id, formData).then(() => {
-                onSuccess()
-                success('Успешно')
-            })
+            updateOverprice(data.id, formData)
+                .then(() => {
+                    onSuccess()
+                    success('Успешно')
+                })
+                .catch((err) => {
+                    error(err.response.data.error)
+                })
         } else {
             createOverprice(formData)
                 .then(() => {
@@ -71,14 +74,11 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                     success('Успешно')
                 })
                 .catch((err) => {
-                    console.error('Error:', err)
-                    error(err.response.data.message)
+                    error(err.response.data.error)
                 })
         }
         handleClose()
     }
-
-
 
     useEffect(() => {
         if (data) {
