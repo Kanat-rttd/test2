@@ -150,7 +150,7 @@ export const subMenuItems: MenuItem[] = [
     },
     {
         route: ADMIN_PROVIDER_ROUTE,
-        label: 'Поставшики',
+        label: 'Поставщики',
         path: ADMIN_ROUTE,
         allowedClasses: ['Admin'],
     },

@@ -75,6 +75,18 @@ const AdminPanel = () => {
         } else {
             console.error('No product data available to delete.')
         }
+        setSelectedData({
+            id: 0,
+            price: '',
+            clientId: 0,
+            month: '',
+            year: '',
+            isDeleted: 0,
+            client: {
+                id: 0,
+                name: '',
+            },
+        })
     }
 
     const handleClose = () => {
@@ -214,7 +226,21 @@ const AdminPanel = () => {
                     />
                     <Dialog
                         isOpen={dialog.isOpen}
-                        onClose={dialog.onClose}
+                        onClose={() => {
+                            dialog.onClose()
+                            setSelectedData({
+                                id: 0,
+                                price: '',
+                                clientId: 0,
+                                month: '',
+                                year: '',
+                                isDeleted: 0,
+                                client: {
+                                    id: 0,
+                                    name: '',
+                                },
+                            })
+                        }}
                         header="Удалить"
                         body="Вы уверены? Вы не сможете отменить это действие впоследствии."
                         actionBtn={() => {

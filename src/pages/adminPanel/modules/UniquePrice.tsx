@@ -304,13 +304,17 @@ const AdminPanel = () => {
                 />
                 <Dialog
                     isOpen={dialog.isOpen}
-                    onClose={dialog.onClose}
+                    onClose={() => {
+                        dialog.onClose()
+                        setSelectedData(undefined)
+                    }}
                     header="Удалить"
                     body="Вы уверены? Вы не сможете отменить это действие впоследствии."
                     actionBtn={() => {
                         deleteIndividualPrice(selectedData?.detail[0].individualPriceId ?? '').then(
                             () => {
                                 getIndividualPrices()
+                                setSelectedData(undefined)
                             },
                         )
                         dialog.onClose()

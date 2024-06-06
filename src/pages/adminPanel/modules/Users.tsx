@@ -63,6 +63,7 @@ const AdminPanel = () => {
         } else {
             console.error('No user data available to delete.')
         }
+        setSelectedData(undefined)
     }
 
     return (
@@ -157,7 +158,10 @@ const AdminPanel = () => {
                     />
                     <Dialog
                         isOpen={dialog.isOpen}
-                        onClose={dialog.onClose}
+                        onClose={() => {
+                            dialog.onClose()
+                            setSelectedData(undefined)
+                        }}
                         header="Удалить"
                         body="Вы уверены? Вы не сможете отменить это действие впоследствии."
                         actionBtn={() => {
