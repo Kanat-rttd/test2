@@ -26,9 +26,11 @@ import { ClientsFilter } from '@/utils/types/client.type'
 const AdminPanel = () => {
     const { getURLs, setParam } = useURLParameters()
 
-    const { data: overPriceData, isLoading, mutate: mutateOverPriceData } = useApi<OverPriceType[]>(
-        `overPrice?${getURLs().toString()}`,
-    )
+    const {
+        data: overPriceData,
+        isLoading,
+        mutate: mutateOverPriceData,
+    } = useApi<OverPriceType[]>(`overPrice?${getURLs().toString()}`)
 
     const { data: clientData } = useApi<ClientsFilter[]>('overPrice/clientFilter')
 
@@ -108,46 +110,52 @@ const AdminPanel = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {overPriceData?.map((overData, index) => {
-                                    return (
-                                        <Tr key={index}>
-                                            <Td>{index + 1}</Td>
-                                            <Td>{overData.client?.name}</Td>
-                                            <Td>{overData.price}</Td>
-                                            <Td>{overData.month}</Td>
-                                            <Td>{overData.year}</Td>
-                                            <Td>
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        setSelectedData(overData)
-                                                        onOpen()
-                                                    }}
-                                                    icon={<EditIcon />}
-                                                />
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        setSelectedData(overData)
-                                                        setDialog({
-                                                            ...dialog,
-                                                            isOpen: true,
-                                                        })
-                                                    }}
-                                                    icon={<DeleteIcon />}
-                                                />
-                                            </Td>
-                                        </Tr>
-                                    )
-                                })}
+                                {overPriceData?.length ? (
+                                    overPriceData.map((overData, index) => {
+                                        return (
+                                            <Tr key={index}>
+                                                <Td>{index + 1}</Td>
+                                                <Td>{overData.client?.name}</Td>
+                                                <Td>{overData.price}</Td>
+                                                <Td>{overData.month}</Td>
+                                                <Td>{overData.year}</Td>
+                                                <Td>
+                                                    <IconButton
+                                                        variant="outline"
+                                                        size={'sm'}
+                                                        colorScheme="teal"
+                                                        aria-label="Send email"
+                                                        marginRight={3}
+                                                        onClick={() => {
+                                                            setSelectedData(overData)
+                                                            onOpen()
+                                                        }}
+                                                        icon={<EditIcon />}
+                                                    />
+                                                    <IconButton
+                                                        variant="outline"
+                                                        size={'sm'}
+                                                        colorScheme="teal"
+                                                        aria-label="Send email"
+                                                        marginRight={3}
+                                                        onClick={() => {
+                                                            setSelectedData(overData)
+                                                            setDialog({
+                                                                ...dialog,
+                                                                isOpen: true,
+                                                            })
+                                                        }}
+                                                        icon={<DeleteIcon />}
+                                                    />
+                                                </Td>
+                                            </Tr>
+                                        )
+                                    })
+                                ) : (
+                                    <Tr>
+                                        <Td>Нет данных</Td>
+                                    </Tr>
+                                )}
                             </Tbody>
                         </Table>
                     </TableContainer>

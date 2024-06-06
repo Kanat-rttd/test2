@@ -6,6 +6,7 @@ import dayjs from 'dayjs'
 import DateRange from '@/components/DateRange'
 // import Header from '@/components/Header'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+// import { OverPriceType } from '@/utils/types/overPrice.types'
 
 interface InvoiceData {
     createdAt: Date
@@ -64,6 +65,7 @@ const InvoicePage = () => {
     const { data: dispatchesData } = useApi<InvoiceData[]>(
         `release/invoice?${getURLs().toString()}`,
     )
+    // const { data: overPriceData } = useApi<OverPriceType[]>(`overPrice`)
 
     const [selectedRow, setSelectedRow] = useState<InvoiceData | null>(null)
 
@@ -105,38 +107,51 @@ const InvoicePage = () => {
                             minHeight: '78dvh',
                         }}
                     >
-                        {dispatchesData?.length? dispatchesData?.map((row, index) => {
-                            const overPrice = 5000
-                            return (
-                                <Button
-                                    key={index}
-                                    w={'100%'}
-                                    p={8}
-                                    display={'flex'}
-                                    justifyContent={'space-between'}
-                                    border={'1px solid black'}
-                                    borderRadius={0}
-                                    onClick={() => {
-                                        onOpen()
-                                        setSelectedRow(row)
-                                    }}
-                                    marginBottom={1}
-                                >
-                                    <Box display={'flex'} gap={10} textAlign={'start'} w={'35%'}>
-                                        <Text w={'30%'} color={'gray'} fontWeight={''}>№ {row.invoiceNumber}</Text>
-                                        <Text w={'44%'}>{row.clientName}</Text>
-                                        <Text w={'25%'}>{dayjs(row.createdAt).format('DD.MM.YYYY')}</Text>
-                                    </Box>
-                                    <Box display={'flex'} gap={20} w={'30%'}>
-                                        <Text textAlign={'start'}>Сверху: {overPrice} ₸</Text>
-                                        <Text textAlign={'start'}>Сумма: {row.totalSum} ₸</Text>
-                                    </Box>
-                                    <Text w={'12%'} textAlign={'start'}>
-                                        Итого: {overPrice + row.totalSum} ₸
-                                    </Text>
-                                </Button>
-                            )
-                        }) : <p>Данных о накладных пока нет</p>}
+                        {dispatchesData?.length ? (
+                            dispatchesData?.map((row, index) => {
+                                const overPrice = 5000
+                                return (
+                                    <Button
+                                        key={index}
+                                        w={'100%'}
+                                        p={8}
+                                        display={'flex'}
+                                        justifyContent={'space-between'}
+                                        border={'1px solid black'}
+                                        borderRadius={0}
+                                        onClick={() => {
+                                            onOpen()
+                                            setSelectedRow(row)
+                                        }}
+                                        marginBottom={1}
+                                    >
+                                        <Box
+                                            display={'flex'}
+                                            gap={10}
+                                            textAlign={'start'}
+                                            w={'35%'}
+                                        >
+                                            <Text w={'30%'} color={'gray'} fontWeight={''}>
+                                                № {row.invoiceNumber}
+                                            </Text>
+                                            <Text w={'44%'}>{row.clientName}</Text>
+                                            <Text w={'25%'}>
+                                                {dayjs(row.createdAt).format('DD.MM.YYYY')}
+                                            </Text>
+                                        </Box>
+                                        <Box display={'flex'} gap={20} w={'30%'}>
+                                            <Text textAlign={'start'}>Сверху: {overPrice} ₸</Text>
+                                            <Text textAlign={'start'}>Сумма: {row.totalSum} ₸</Text>
+                                        </Box>
+                                        <Text w={'12%'} textAlign={'start'}>
+                                            Итого: {overPrice + row.totalSum} ₸
+                                        </Text>
+                                    </Button>
+                                )
+                            })
+                        ) : (
+                            <p>Данных о накладных пока нет</p>
+                        )}
                     </Box>
                 </Box>
             </Box>
