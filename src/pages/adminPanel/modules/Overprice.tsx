@@ -11,20 +11,21 @@ import {
     IconButton,
 } from '@chakra-ui/react'
 import OverPriceAddModal from '../components/OverPriceAddModal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Dialog from '@/components/Dialog'
 import { useApi } from '@/utils/services/axios'
 import { deleteOverprice } from '@/utils/services/overprice.service'
-import DateRange from '@/components/DateRange'
 import { TableContainer, Thead } from '@/components/ui'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { OverPriceType } from '@/utils/types/overPrice.types'
 import { ClientsFilter } from '@/utils/types/client.type'
+import dayjs from 'dayjs'
+import { monthData } from '@/utils/constants/month.consts'
 
 const AdminPanel = () => {
-    const { getURLs, setParam } = useURLParameters()
+    const { getURLs, setParam, getParam, setParamObject } = useURLParameters()
 
     const {
         data: overPriceData,
@@ -33,6 +34,27 @@ const AdminPanel = () => {
     } = useApi<OverPriceType[]>(`overPrice?${getURLs().toString()}`)
 
     const { data: clientData } = useApi<ClientsFilter[]>('overPrice/clientFilter')
+    const [years, setYears] = useState<number[]>([])
+    const startYear = 2022
+
+    useEffect(() => {
+        setParamObject({
+            month: getParam('month') ? getParam('month') : dayjs().format('M'),
+            year: getParam('year') ? getParam('year') : dayjs().format('YYYY'),
+        })
+        getYearsArray(startYear)
+    }, [])
+
+    const getYearsArray = (startYear: number) => {
+        const currentYear = new Date().getFullYear()
+        const years = []
+
+        for (let year = startYear; year <= currentYear; year++) {
+            years.push(year)
+        }
+
+        setYears(years)
+    }
 
     const { onOpen, isOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<OverPriceType>()
@@ -71,12 +93,12 @@ const AdminPanel = () => {
             <UniversalComponent>
                 <Box display="flex" flexDirection="column" p={5}>
                     <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
-                        <Box display={'flex'} gap={'15px'} width={'fit-content'} mt={2}>
+                        <Box width={'100%'} display={'flex'} gap={'15px'} mt={2}>
                             <Select
                                 size={'sm'}
                                 borderRadius={5}
                                 placeholder="Имя"
-                                width={'100%'}
+                                width={'20%'}
                                 name="name"
                                 onChange={handleSelectChange}
                             >
@@ -87,7 +109,32 @@ const AdminPanel = () => {
                                 ))}
                             </Select>
 
-                            <DateRange />
+                            <Select
+                                size={'sm'}
+                                w={'20%'}
+                                borderRadius={5}
+                                value={getParam('month')}
+                                onChange={(e) => setParam('month', e.target.value)}
+                            >
+                                {monthData.map((opt) => (
+                                    <option key={opt.id} value={opt.id}>
+                                        {opt.name}
+                                    </option>
+                                ))}
+                            </Select>
+                            <Select
+                                size={'sm'}
+                                w={'20%'}
+                                borderRadius={5}
+                                value={getParam('year')}
+                                onChange={(e) => setParam('year', e.target.value)}
+                            >
+                                {years.map((opt) => (
+                                    <option key={opt} value={opt}>
+                                        {opt}
+                                    </option>
+                                ))}
+                            </Select>
                         </Box>
 
                         <Button colorScheme="purple" onClick={onOpen}>
