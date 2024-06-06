@@ -43,7 +43,7 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
-
+    
     const handleConfirmClick = (clientName: OrderArrayType) => {
         handleChangeStatus(clientName)
     }
