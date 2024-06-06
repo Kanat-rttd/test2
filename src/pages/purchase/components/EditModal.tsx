@@ -20,27 +20,7 @@ import { updatePurchase } from '@/utils/services/productPurchase.service'
 import { useState, useEffect } from 'react'
 import { useApi } from '@/utils/services/axios'
 import dayjs from 'dayjs'
-
-interface Purchase {
-    id: number
-    date: string
-    providerId: number
-    providerGoodId: number
-    quantity: number
-    price: number
-    deliverySum: number
-    totalSum: number
-    status?: { value: number; label: string } | string | undefined
-    provider: {
-        id: number
-        providerName: string
-    }
-    providerGood: {
-        id: number
-        name: string
-        unitOfMeasure: string
-    }
-}
+import { PurchaseType } from '@/utils/types/purchase.types'
 
 interface rawMaterials {
     value: number
@@ -57,7 +37,7 @@ type EditModalProps = {
     isOpen: boolean
     onClose: () => void
     onSuccess: () => void
-    selectedData: Purchase | undefined
+    selectedData: PurchaseType | undefined
 }
 
 interface ProviderGoods {
@@ -103,12 +83,12 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
         formState: { errors },
         setValue,
         reset,
-    } = useForm<Purchase>()
+    } = useForm<PurchaseType>()
 
     useEffect(() => {
         if (selectedData) {
             Object.entries(selectedData).forEach(([key, value]) => {
-                setValue(key as keyof Purchase, value)
+                setValue(key as keyof PurchaseType, value)
             })
             setValue('date', dayjs(selectedData.date).format('YYYY-MM-DD'))
         } else {
@@ -121,7 +101,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
         { value: 2, label: 'Не оплачено' },
     ]
 
-    const updateData = (formData: Purchase) => {
+    const updateData = (formData: PurchaseType) => {
         const purchaseId = selectedData?.id?.toString() ?? ''
         updatePurchase(purchaseId, formData)
             .then(() => {

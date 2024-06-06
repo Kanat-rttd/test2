@@ -21,31 +21,12 @@ import Select from 'react-select'
 import { useApi } from '@/utils/services/axios'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { ProviderType } from '@/utils/types/provider.types'
+import { PurchaseType } from '@/utils/types/purchase.types'
 
 type PurchaseModalProps = {
     isOpen: boolean
     onClose: () => void
     onSuccess: () => void
-}
-
-interface Purchase {
-    id: number
-    date: Date
-    providerId: number
-    providerGoodId: number
-    quantity: number
-    price: number
-    deliverySum: number
-    totalSum: number
-    status?: { value: number; label: string } | string | undefined
-    provider: {
-        id: number
-        name: string
-    }
-    rawMaterial: {
-        id: number
-        name: string
-    }
 }
 
 interface rawMaterials {
@@ -91,16 +72,14 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
         control,
         formState: { errors },
         reset,
-    } = useForm<Purchase>()
+    } = useForm<PurchaseType>()
 
     const status = [
         { value: 1, label: 'Оплачено' },
         { value: 2, label: 'Не оплачено' },
     ]
 
-    const sendData = (formData: Purchase) => {
-        console.log(formData)
-
+    const sendData = (formData: PurchaseType) => {
         const response: Promise<any> = createPurchase(formData)
         loading(response)
         response

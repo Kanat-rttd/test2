@@ -9,7 +9,7 @@ export const createPurchase = async (data: {
     quantity: number
     price: number
     deliverySum: number
-    date: Date
+    date: Date | string
     providerId: number
     providerGoodId: number
     status?: { value: number; label: string } | string | undefined
