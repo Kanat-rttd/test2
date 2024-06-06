@@ -23,13 +23,20 @@ const DateRange = () => {
     const { setParamObject, getParam } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    let targetDate
+    if (dayjs().isBefore(dayjs().startOf('day').add(14, 'hour'))) {
+        targetDate = dayjs()
+    } else {
+        targetDate = dayjs().add(1, 'day')
+    }
+
     const [selectionRange, setSelectionRange] = useState({
         startDate: dayjs(getParam('startDate')).isValid()
             ? dayjs(getParam('startDate')).toDate()
-            : dayjs().toDate(),
+            : targetDate.toDate(),
         endDate: dayjs(getParam('endDate')).isValid()
             ? dayjs(getParam('endDate')).toDate()
-            : dayjs().toDate(),
+            : targetDate.toDate(),
     })
 
     useEffect(() => {
@@ -37,7 +44,7 @@ const DateRange = () => {
             startDate: dayjs(selectionRange.startDate).format('YYYY-MM-DD'),
             endDate: dayjs(selectionRange.endDate).format('YYYY-MM-DD'),
         })
-    }, [])
+    }, [selectionRange])
 
     const handleConfirmDate = () => {
         onClose()
