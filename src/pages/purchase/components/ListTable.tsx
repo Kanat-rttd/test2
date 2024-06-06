@@ -81,48 +81,54 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {filteredPurchases?.map((purchase, index) => {
-                            return (
-                                <Tr key={purchase.id}>
-                                    <Td>{index + 1}</Td>
-                                    <Td>{dayjs(purchase.date).format('DD.MM.YYYY')}</Td>
-                                    <Td>{purchase.provider.providerName}</Td>
-                                    <Td>{purchase.providerGood.name}</Td>
-                                    <Td>{purchase.quantity}</Td>
-                                    <Td>{purchase.price}</Td>
-                                    <Td>{purchase.totalSum}</Td>
-                                    <Td>{purchase.deliverySum}</Td>
-                                    <Td>{purchase.status}</Td>
-                                    <Td>
-                                        <IconButton
-                                            variant="outline"
-                                            size={'sm'}
-                                            colorScheme="teal"
-                                            aria-label="Send email"
-                                            marginRight={3}
-                                            onClick={() => {
-                                                handleSelected(purchase)
-                                            }}
-                                            icon={<EditIcon />}
-                                        />
-                                        <IconButton
-                                            variant="outline"
-                                            size={'sm'}
-                                            colorScheme="teal"
-                                            aria-label="Send email"
-                                            onClick={() => {
-                                                setSelectedData(purchase)
-                                                setDialog({
-                                                    ...dialog,
-                                                    isOpen: true,
-                                                })
-                                            }}
-                                            icon={<DeleteIcon />}
-                                        />
-                                    </Td>
-                                </Tr>
-                            )
-                        })}
+                        {filteredPurchases?.length ? (
+                            filteredPurchases.map((purchase, index) => {
+                                return (
+                                    <Tr key={purchase.id}>
+                                        <Td>{index + 1}</Td>
+                                        <Td>{dayjs(purchase.date).format('DD.MM.YYYY')}</Td>
+                                        <Td>{purchase.provider.providerName}</Td>
+                                        <Td>{purchase.providerGood.name}</Td>
+                                        <Td>{purchase.quantity}</Td>
+                                        <Td>{purchase.price}</Td>
+                                        <Td>{purchase.totalSum}</Td>
+                                        <Td>{purchase.deliverySum}</Td>
+                                        <Td>{purchase.status}</Td>
+                                        <Td>
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                marginRight={3}
+                                                onClick={() => {
+                                                    handleSelected(purchase)
+                                                }}
+                                                icon={<EditIcon />}
+                                            />
+                                            <IconButton
+                                                variant="outline"
+                                                size={'sm'}
+                                                colorScheme="teal"
+                                                aria-label="Send email"
+                                                onClick={() => {
+                                                    setSelectedData(purchase)
+                                                    setDialog({
+                                                        ...dialog,
+                                                        isOpen: true,
+                                                    })
+                                                }}
+                                                icon={<DeleteIcon />}
+                                            />
+                                        </Td>
+                                    </Tr>
+                                )
+                            })
+                        ) : (
+                            <Tr>
+                                <Td>Нет данных</Td>
+                            </Tr>
+                        )}
                     </Tbody>
                     <Tfoot>
                         <Tr>

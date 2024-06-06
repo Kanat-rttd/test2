@@ -60,15 +60,21 @@ const Debt = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {purchasesData?.data.map((item, index) => {
-                                return (
-                                    <Tr key={item.providerId}>
-                                        <Td>{index + 1}</Td>
-                                        <Td>{item.provider.name}</Td>
-                                        <Td>{item.totalDebt}</Td>
-                                    </Tr>
-                                )
-                            })}
+                            {purchasesData?.data.length ? (
+                                purchasesData.data.map((item, index) => {
+                                    return (
+                                        <Tr key={item.providerId}>
+                                            <Td>{index + 1}</Td>
+                                            <Td>{item.provider.name}</Td>
+                                            <Td>{item.totalDebt}</Td>
+                                        </Tr>
+                                    )
+                                })
+                            ) : (
+                                <Tr>
+                                    <Td>Нет данных</Td>
+                                </Tr>
+                            )}
                         </Tbody>
                         <Tfoot>
                             <Tr>
