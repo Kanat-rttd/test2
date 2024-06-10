@@ -79,7 +79,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
         if (data) {
             console.log(data)
 
-            setValue('contragentId', data.client.id.toString())
+            setValue('contragentId', data.contragent.id.toString())
             data.goodsDispatchDetails.forEach((details, index) => {
                 setValue(`quantity_${index}`, details.quantity.toString())
             })
