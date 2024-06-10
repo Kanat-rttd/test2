@@ -3,9 +3,21 @@ import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import Arrival from '../components/Arrival'
 import Consumption from '../components/Consumption'
 import Transfer from '../components/Transfer'
+import { useState } from 'react'
+import { useApi } from '@/utils/services/axios'
 // import Drawler from '@/components/Menu'
 
+interface Category {
+    id: number
+    name: string
+    type: string
+}
+
 const Input = () => {
+    const [selectedType, setSelectedType] = useState<string>('Приход')
+    const { data: categoriesData } = useApi<Category[] | undefined>(
+        `financeCategories?type=${selectedType.toString()}`,
+    )
     return (
         <>
             {/* <Box
@@ -37,16 +49,16 @@ const Input = () => {
                     >
                         <Tabs>
                             <TabList justifyContent={'center'}>
-                                <Tab>Приход</Tab>
-                                <Tab>Расход</Tab>
+                                <Tab onClick={() => setSelectedType('Приход')}>Приход</Tab>
+                                <Tab onClick={() => setSelectedType('Расход')}>Расход</Tab>
                                 <Tab>Перевод</Tab>
                             </TabList>
                             <TabPanels>
                                 <TabPanel display={'flex'} flexDirection={'column'} gap={'15px'}>
-                                    <Arrival />
+                                    <Arrival categoriesData={categoriesData} />
                                 </TabPanel>
                                 <TabPanel display={'flex'} flexDirection={'column'} gap={'15px'}>
-                                    <Consumption />
+                                    <Consumption categoriesData={categoriesData} />
                                 </TabPanel>
                                 <TabPanel display={'flex'} flexDirection={'column'} gap={'15px'}>
                                     <Transfer />

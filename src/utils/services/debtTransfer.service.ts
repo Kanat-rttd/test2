@@ -4,8 +4,8 @@ export const createDebtTransfer = async (data: {
     summa: string
     date: Date
     comment: string
-    fromProvider: number
-    toMagazine: number
+    from: number
+    to: number
     invoiceNumber: number
 }) => {
     const response = await $host.post('debtTransfer', data)

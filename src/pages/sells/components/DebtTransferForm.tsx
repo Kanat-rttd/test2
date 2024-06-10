@@ -3,6 +3,7 @@ import {
     Divider,
     FormControl,
     FormErrorMessage,
+    FormLabel,
     Heading,
     Input,
     Textarea,
@@ -12,6 +13,7 @@ import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
 import { createDebtTransfer } from '@/utils/services/debtTransfer.service'
 import { useApi } from '@/utils/services/axios'
+import classes from '../index.module.css'
 
 interface Client {
     id: number
@@ -23,9 +25,9 @@ interface Client {
 }
 
 interface DebtTransferInputs {
-    fromProvider: number
+    from: number
+    to: number
     summa: string
-    toMagazine: number
     date: Date
     invoiceNumber: number
     comment: string
@@ -125,25 +127,19 @@ const DebtTransferForm = () => {
                         Перевод долга
                     </Heading>
                     <Divider></Divider>
-                    {/* <FormControl isInvalid={!!errors.fromProvider}>
-                        <Input
-                            maxLength={20}
-                            {...register('fromProvider', {
-                                required: 'Поле является обязательным',
-                            })}
-                            autoComplete="off"
-                            placeholder="От Реализаторов *"
-                            type="string"
-                        />
-                        <FormErrorMessage>{errors.fromProvider?.message}</FormErrorMessage>
-                    </FormControl> */}
                     <form
                         onSubmit={handleSubmitForm(sendData)}
                         style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                     >
-                        <FormControl isInvalid={!!errors.fromProvider}>
+                        <FormControl
+                            isInvalid={!!errors.from}
+                            isRequired
+                            display={'flex'}
+                            width={'100%'}
+                        >
+                            <FormLabel width={'13%'}>От:</FormLabel>
                             <Controller
-                                name="fromProvider"
+                                name="from"
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -163,30 +159,26 @@ const DebtTransferForm = () => {
                                                     setSelectedProvider(selectedOption.name)
                                                 }
                                             }}
-                                            placeholder="Реализатор *"
+                                            placeholder=""
                                             isClearable
                                             isSearchable
+                                            className={classes.select}
                                         />
                                     )
                                 }}
                             />
-                            <FormErrorMessage>{errors.fromProvider?.message}</FormErrorMessage>
+                            <FormErrorMessage>{errors.from?.message}</FormErrorMessage>
                         </FormControl>
 
-                        <FormControl isInvalid={!!errors.summa}>
-                            <Input
-                                maxLength={20}
-                                {...register('summa', { required: 'Поле является обязательным' })}
-                                autoComplete="off"
-                                placeholder="Сумма *"
-                                type="number"
-                            />
-                            <FormErrorMessage>{errors.summa?.message}</FormErrorMessage>
-                        </FormControl>
-
-                        <FormControl isInvalid={!!errors.toMagazine}>
+                        <FormControl
+                            isInvalid={!!errors.to}
+                            isRequired
+                            display={'flex'}
+                            width={'100%'}
+                        >
+                            <FormLabel width={'13%'}>Кому:</FormLabel>
                             <Controller
-                                name="toMagazine"
+                                name="to"
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -211,14 +203,26 @@ const DebtTransferForm = () => {
                                                     onChange(selectedOption.id)
                                                 }
                                             }}
-                                            placeholder="К магазинам *"
+                                            placeholder=""
                                             isClearable
                                             isSearchable
+                                            className={classes.select}
                                         />
                                     )
                                 }}
                             />
-                            <FormErrorMessage>{errors.toMagazine?.message}</FormErrorMessage>
+                            <FormErrorMessage>{errors.to?.message}</FormErrorMessage>
+                        </FormControl>
+
+                        <FormControl isInvalid={!!errors.summa}>
+                            <Input
+                                maxLength={20}
+                                {...register('summa', { required: 'Поле является обязательным' })}
+                                autoComplete="off"
+                                placeholder="Сумма *"
+                                type="number"
+                            />
+                            <FormErrorMessage>{errors.summa?.message}</FormErrorMessage>
                         </FormControl>
 
                         <FormControl variant={'floating'} isInvalid={!!errors.date}>

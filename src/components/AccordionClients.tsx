@@ -99,8 +99,8 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
                                     textAlign="left"
                                     mr={'60px'}
                                 >
-                                    <Box display={'flex'} gap={10}>
-                                        <Heading size={'sm'}>{order.client.name}</Heading>
+                                    <Box display={'flex'} gap={10} width={'60%'}>
+                                        <Heading size={'sm'} minWidth={'20%'}>{order.client.name}</Heading>
                                         <Heading size={'sm'}>
                                             Смена: {dayjs(order.date).format('DD.MM.YYYY')}
                                         </Heading>

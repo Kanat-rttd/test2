@@ -37,10 +37,15 @@ const formatOptionLabel = (option: ContragentType) => (
     </div>
 )
 
-const Arrival = () => {
+type ArrivalProps = {
+    categoriesData: Category[] | undefined
+}
+
+const Consumption = ({categoriesData} : ArrivalProps ) => {
     const { loading } = useNotify()
+
     const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=Активный')
-    const { data: categoriesData } = useApi<Category[]>('financeCategories')
+    // const { data: categoriesData } = useApi<Category[]>(`financeCategories`)
 
     const {
         register,
@@ -198,4 +203,4 @@ const Arrival = () => {
     )
 }
 
-export default Arrival
+export default Consumption

@@ -41,6 +41,8 @@ const MenuAccordion = () => {
     const userInfo = getUserInfo()
 
     const parsedClass = JSON.parse(String(userInfo?.class))
+    console.log(parsedClass);
+    
 
     const filteredMenuItems = menuItems.filter((item) => {
         return (

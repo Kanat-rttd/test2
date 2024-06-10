@@ -70,17 +70,23 @@ interface InvoiceData {
 }
 
 const formatOptionLabel = (option: ContragentType) => (
-    <div  style={{display: 'flex', justifyContent: 'space-between'}}>
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span>{option.contragentName}</span>
         <span style={{ marginLeft: '50px', color: '#bfbdbd' }}> {option.type}</span>
     </div>
 )
 
-const Arrival = () => {
+type ArrivalProps = {
+    categoriesData: Category[] | undefined
+}
+
+const Arrival = ({categoriesData} : ArrivalProps ) => {
     const { loading } = useNotify()
+
     const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
-    const { data: categoriesData } = useApi<Category[]>('financeCategories')
+    // const { data: categoriesData } = useApi<Category[]>(`financeCategories?${getURLs().toString()}`)
     const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=Активный')
+
 
     const {
         register,

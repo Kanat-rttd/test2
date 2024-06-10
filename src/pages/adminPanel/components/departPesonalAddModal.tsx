@@ -29,7 +29,7 @@ interface DepartPesonalAddModalProps {
 }
 
 const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonalAddModalProps) => {
-    const { loading } = useNotify()
+    const { success, error } = useNotify()
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>('mixers')
     const {
         register,
@@ -54,19 +54,19 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
         const responsePromise: Promise<any> = data
             ? updateDepartPersonal(data.id, formData)
             : createDepartPersonal(formData)
-        loading(responsePromise)
 
         responsePromise
-            .then(() => {
+            .then((res) => {
                 reset()
                 onSuccess()
                 handleClose()
+                success(res.data.message)
             })
-            .catch((error) => {
-                console.log(error)
-                setError(error.response.data.field, {
-                    message: error.response.data.message || 'Ошибка',
+            .catch((err) => {
+                setError(err.response.data.field, {
+                    message: err.response.data.error || 'Ошибка',
                 })
+                error(err.response.data.error)
             })
     }
 

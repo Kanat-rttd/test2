@@ -55,7 +55,6 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                 onSuccess()
                 handleClose()
             })
-            reset()
         } catch (error: any) {
             setError('root', {
                 message: error.response.data.message || 'Ошибка',
