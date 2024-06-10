@@ -25,7 +25,7 @@ import { ClientType } from '@/utils/types/client.type'
 import { monthData } from '@/utils/constants/month.consts'
 
 const defaultValues = {
-    clientId: 0,
+    contragentId: 0,
     month: '',
     year: '',
     price: '',
@@ -82,7 +82,7 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
 
     useEffect(() => {
         if (data) {
-            setValue('clientId', data.clientId)
+            setValue('contragentId', data.contragentId)
             setValue('month', data.month)
             setValue('year', data.year)
             setValue('price', data.price)
@@ -102,9 +102,9 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                     <ModalHeader>{data ? 'Редактировать' : 'Добавить'} Сверху</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
-                        <FormControl isInvalid={!!errors.clientId}>
+                        <FormControl isInvalid={!!errors.contragentId}>
                             <Controller
-                                name="clientId"
+                                name="contragentId"
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -129,7 +129,7 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                                     )
                                 }}
                             />
-                            <FormErrorMessage>{errors.clientId?.message}</FormErrorMessage>
+                            <FormErrorMessage>{errors.contragentId?.message}</FormErrorMessage>
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.month}>

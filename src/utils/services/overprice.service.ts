@@ -6,7 +6,7 @@ export const getAllOverprices = async () => {
 }
 
 export const createOverprice = async (data: {
-    clientId: number
+    contragentId: number
     month: string
     year: string
     price: string
@@ -20,7 +20,7 @@ export const createOverprice = async (data: {
 
 export const updateOverprice = async (
     id: number,
-    data: { clientId: number; month: string; year: string; price: string },
+    data: { contragentId: number; month: string; year: string; price: string },
 ) => {
     const response = await $host.put(`overPrice/${id}`, data)
     return response

@@ -1,7 +1,7 @@
 export type OverPriceType = {
     id: number
     price: string
-    clientId: number
+    contragentId: number
     month: string
     year: string
     isDeleted: number
@@ -12,7 +12,7 @@ export type OverPriceType = {
 }
 
 export type OverPriceInputs = {
-    clientId: number
+    contragentId: number
     month: string
     year: string
     price: string

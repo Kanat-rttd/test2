@@ -78,7 +78,7 @@ const AdminPanel = () => {
         setSelectedData({
             id: 0,
             price: '',
-            clientId: 0,
+            contragentId: 0,
             month: '',
             year: '',
             isDeleted: 0,
@@ -231,7 +231,7 @@ const AdminPanel = () => {
                             setSelectedData({
                                 id: 0,
                                 price: '',
-                                clientId: 0,
+                                contragentId: 0,
                                 month: '',
                                 year: '',
                                 isDeleted: 0,
