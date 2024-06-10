@@ -24,7 +24,7 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 
 interface DispatchType {
     id: number
-    clientId: number
+    contragentId: number
     createdAt: string
     dispatch: string
     goodsDispatchDetails: {
@@ -55,7 +55,7 @@ interface EditModalProps {
 }
 
 type FormData = {
-    clientId: number
+    contragentId: number
     products: { productId: number; quantity: number; price: number }[]
 }
 
@@ -87,7 +87,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                     price: Number(detail.price),
                 }
             })
-            setValue('clientId', Number(selectedRow.client.id))
+            setValue('contragentId', Number(selectedRow.client.id))
             setValue('products', data)
         } else {
             reset()
@@ -125,7 +125,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                     >
                         <FormControl>
                             <Select
-                                {...register('clientId', {
+                                {...register('contragentId', {
                                     required: 'Поле является обязательным',
                                 })}
                                 variant="filled"

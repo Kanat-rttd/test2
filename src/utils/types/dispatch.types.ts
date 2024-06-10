@@ -1,6 +1,6 @@
 export type DispatchType = {
     id: number
-    clientId: number
+    contragentId: number
     createdAt: Date
     dispatch: number
     goodsDispatchDetails: {

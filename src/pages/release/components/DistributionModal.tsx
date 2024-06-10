@@ -76,7 +76,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                     quantity: Number(order.quantity),
                 }
             })
-            setValue('contragentId', Number(data.client.id))
+            setValue('contragentId', Number(data))
             setValue('products', _data)
         } else {
             reset()
