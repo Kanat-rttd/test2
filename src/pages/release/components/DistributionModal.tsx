@@ -18,12 +18,12 @@ import { useEffect } from 'react'
 import { createDispatch, updateDispatchQuantity } from '@/utils/services/dispatch.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
-import { ClientType } from '@/utils/types/client.type'
 import { mutate, useApi } from '@/utils/services/axios'
 import { DispatchType } from '@/utils/types/dispatch.types'
 import { CloseIcon } from '@chakra-ui/icons'
 import { Product } from '@/utils/types/product.types'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { ContragentType } from '@/utils/types/contragent.types'
 
 interface DistributionModalProps {
     isOpen: boolean
@@ -50,7 +50,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 }) => {
     const { getURLs } = useURLParameters()
     const { loading } = useNotify()
-    const { data: clientsData } = useApi<ClientType[]>('client?status=Активный')
+    const { data: clientsData } = useApi<ContragentType[]>('contragent?type=реализатор&status=Активный')
     const { data: products } = useApi<Product[]>('product?status=Активный')
 
     const {
@@ -148,7 +148,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                 {clientsData?.map((client, index) => {
                                     return (
                                         <option key={index} value={Number(client.id)}>
-                                            {client.name}
+                                            {client.contragentName}
                                         </option>
                                     )
                                 })}

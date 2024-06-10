@@ -16,19 +16,15 @@ import {
     Select,
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { updateDispatchQuantity } from '@/utils/services/dispatch.service'
 import { DispatchType } from '@/utils/types/dispatch.types'
 import { useNotify } from '@/utils/providers/ToastProvider'
-import { getAllClients } from '@/utils/services/client.service'
+import { useApi } from '@/utils/services/axios'
+import { ContragentType } from '@/utils/types/contragent.types'
 
 interface EditModalInputs {
     [key: string]: string
-}
-
-interface Client {
-    id: number
-    name: string
 }
 
 interface EditModalProps {
@@ -40,7 +36,7 @@ interface EditModalProps {
 
 const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess }) => {
     const { loading } = useNotify()
-    const [clientsData, setClientsData] = useState<Client[]>([])
+    const {data: clientsData} = useApi<ContragentType[]>('contragent?type=реализатор&status=Активный')
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -48,12 +44,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
         setValue,
         setError,
     } = useForm<EditModalInputs>()
-
-    useEffect(() => {
-        getAllClients({ name: '', telegrammId: '', status: '' }).then((responseData) => {
-            setClientsData(responseData)
-        })
-    }, [])
 
     const sendData = (formData: EditModalInputs) => {
         const formattedData = data?.goodsDispatchDetails.map((details, index) => ({
@@ -64,7 +54,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
         if (data?.id == undefined || formattedData == undefined) return
         try {
             const responsePromise: Promise<any> = updateDispatchQuantity(data.id, {
-                clientId: Number(formData.clientId),
+                contragentId: Number(formData.contragentId),
                 products: formattedData,
             })
             loading(responsePromise)
@@ -89,7 +79,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
         if (data) {
             console.log(data)
 
-            setValue('clientId', data.client.id.toString())
+            setValue('contragentId', data.client.id.toString())
             data.goodsDispatchDetails.forEach((details, index) => {
                 setValue(`quantity_${index}`, details.quantity.toString())
             })
@@ -105,7 +95,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
                 <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
                     <FormControl isInvalid={!!errors.name}>
                         <Select
-                            {...register('clientId', {
+                            {...register('contragentId', {
                                 required: 'Поле является обязательным',
                             })}
                             placeholder="Имя *"
@@ -114,7 +104,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
                             {clientsData?.map((client, index) => {
                                 return (
                                     <option key={index} value={client.id}>
-                                        {client.name}
+                                        {client.contragentName}
                                     </option>
                                 )
                             })}
