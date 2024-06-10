@@ -82,9 +82,9 @@ const AdminPanel = () => {
             month: '',
             year: '',
             isDeleted: 0,
-            client: {
+            contragent: {
                 id: 0,
-                name: '',
+                contragentName: '',
             },
         })
     }
@@ -174,7 +174,7 @@ const AdminPanel = () => {
                                         return (
                                             <Tr key={index}>
                                                 <Td>{index + 1}</Td>
-                                                <Td>{overData.client?.name}</Td>
+                                                <Td>{overData.contragent?.contragentName}</Td>
                                                 <Td>{overData.price}</Td>
                                                 <Td>{overData.month}</Td>
                                                 <Td>{overData.year}</Td>
@@ -235,9 +235,9 @@ const AdminPanel = () => {
                                 month: '',
                                 year: '',
                                 isDeleted: 0,
-                                client: {
+                                contragent: {
                                     id: 0,
-                                    name: '',
+                                    contragentName: '',
                                 },
                             })
                         }}

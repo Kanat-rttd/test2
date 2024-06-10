@@ -5,9 +5,9 @@ export type OverPriceType = {
     month: string
     year: string
     isDeleted: number
-    client: {
+    contragent: {
         id: number
-        name: string
+        contragentName: string
     }
 }
 

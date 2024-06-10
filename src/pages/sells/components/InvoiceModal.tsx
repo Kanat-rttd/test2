@@ -23,7 +23,7 @@ import jsPDF from 'jspdf'
 
 interface InvoiceData {
     createdAt: Date
-    clientId: number
+    contragentId: number
     clientName: string
     invoiceNumber: number
     totalProducts: {
@@ -36,7 +36,7 @@ interface InvoiceData {
     totalSum: number
     dispatches: {
         id: number
-        clientId: number
+        contragentId: number
         createdAt: Date
         dispatch: number
         goodsDispatchDetails: {
@@ -54,9 +54,9 @@ interface InvoiceData {
                 }
             }
         }[]
-        client: {
+        contragent: {
             id: number
-            name: string
+            contragentName: string
         }
     }[]
 }

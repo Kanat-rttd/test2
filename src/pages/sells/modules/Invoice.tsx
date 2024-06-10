@@ -9,7 +9,7 @@ import { OverPriceType } from '@/utils/types/overPrice.types'
 
 interface InvoiceData {
     createdAt: Date
-    clientId: number
+    contragentId: number
     clientName: string
     invoiceNumber: number
     totalProducts: {
@@ -22,7 +22,7 @@ interface InvoiceData {
     totalSum: number
     dispatches: {
         id: number
-        clientId: number
+        contragentId: number
         createdAt: Date
         dispatch: number
         goodsDispatchDetails: {
@@ -40,9 +40,9 @@ interface InvoiceData {
                 }
             }
         }[]
-        client: {
+        contragent: {
             id: number
-            name: string
+            contragentName: string
         }
     }[]
 }
@@ -114,7 +114,7 @@ const InvoicePage = () => {
                     >
                         {dispatchesData?.length ? (
                             dispatchesData?.map((row, index) => {
-                                const overPrice = overPriceData?.find(price => price.clientId == row.clientId)?.price || 0
+                                const overPrice = overPriceData?.find(price => price.contragentId == row.contragentId)?.price || 0
                                 return (
                                     <Button
                                         key={index}
