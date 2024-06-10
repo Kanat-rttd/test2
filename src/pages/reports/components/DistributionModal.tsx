@@ -93,7 +93,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 
     const handleConfirm = () => {
         const distributionData = {
-            clientId: Number(recipient),
+            contragentId: Number(recipient),
             products: selectedBreads.map(({ id, quantity }) => ({
                 productId: Number(id),
                 quantity: Number(quantity),

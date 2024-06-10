@@ -19,7 +19,7 @@ interface DispatchData {
 
 interface DispatchType {
     id: number
-    clientId: number
+    contragentId: number
     createdAt: string
     dispatch: string
     goodsDispatchDetails: {
