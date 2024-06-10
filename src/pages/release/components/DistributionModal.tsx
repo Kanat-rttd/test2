@@ -34,7 +34,7 @@ interface DistributionModalProps {
 }
 
 type FormType = {
-    clientId: number
+    contragentId: number
     products: {
         productId: number | null
         quantity: number | null
@@ -76,7 +76,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                     quantity: Number(order.quantity),
                 }
             })
-            setValue('clientId', Number(data.client.id))
+            setValue('contragentId', Number(data.client.id))
             setValue('products', _data)
         } else {
             reset()
@@ -85,7 +85,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 
     const handleConfirm: SubmitHandler<FormType> = (formData) => {
         const createData = {
-            clientId: formData.clientId,
+            contragentId: formData.contragentId,
             products: formData.products.map((product) => ({
                 productId: product.productId !== undefined ? product.productId : null,
                 quantity: Number(product.quantity),
@@ -95,7 +95,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
             dispatch: status,
         }
         const updateData = {
-            clientId: formData.clientId,
+            contragentId: formData.contragentId,
             products: formData.products.map((product) => ({
                 productId: product.productId,
                 quantity: Number(product.quantity),
@@ -136,9 +136,9 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                         onSubmit={handleSubmitForm(handleConfirm)}
                         style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                     >
-                        <FormControl id="type" isRequired isInvalid={!!errors.clientId}>
+                        <FormControl id="type" isRequired isInvalid={!!errors.contragentId}>
                             <Select
-                                {...register('clientId', {
+                                {...register('contragentId', {
                                     required: 'Поле является обязательным',
                                 })}
                                 required
@@ -153,7 +153,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                     )
                                 })}
                             </Select>
-                            <FormErrorMessage>{errors.clientId?.message}</FormErrorMessage>
+                            <FormErrorMessage>{errors.contragentId?.message}</FormErrorMessage>
                         </FormControl>
                         <FormControl isRequired gap="1rem" display="flex" flexDirection="column">
                             {fields.map((_, index) => {

@@ -6,7 +6,7 @@ export const getAllDispatches = async () => {
 }
 
 export const createDispatch = async (data: {
-    clientId: number
+    contragentId: number
     products: {
         productId: number | null
         quantity: number | null
@@ -26,7 +26,7 @@ export const getInvoiceData = async () => {
 export const updateDispatchQuantity = async (
     id: number,
     data: {
-        clientId: number
+        contragentId: number
         products: { productId: number | null; quantity: number | null, price: number | undefined }[]
     },
 ) => {
@@ -37,7 +37,7 @@ export const updateDispatchQuantity = async (
 export const updateDispatchPrice = async (
     id: number,
     data: {
-        clientId: number
+        contragentId: number
         products: { productId: number; quantity: number; price: number }[]
     },
 ) => {
