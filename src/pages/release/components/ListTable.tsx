@@ -74,7 +74,7 @@ export default function ListTable({ status }: ListTableProps) {
                                 return (
                                     <Tr key={row.id}>
                                         <Td>{index + 1}</Td>
-                                        <Td>{row.client.name}</Td>
+                                        <Td>{row.contragent.contragentName}</Td>
                                         <Td>
                                             <div
                                                 style={{ display: 'flex', flexDirection: 'column' }}

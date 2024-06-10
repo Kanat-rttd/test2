@@ -17,8 +17,8 @@ export type DispatchType = {
             }
         }
     }[]
-    client: {
+    contragent: {
         id: number
-        name: string
+        contragentName: string
     }
 }

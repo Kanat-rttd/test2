@@ -70,8 +70,10 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
                             .map((row, index) => (
                                 <Tr key={row.id}>
                                     <Td>{index + 1}</Td>
-                                    <Td>{row.client.name}</Td>
+                                    <Td>{row.contragent.contragentName}</Td>
                                     {headers.map((header, index) => {
+                                        console.log(row.contragent.contragentName);
+                                        
                                         const quantity = row.goodsDispatchDetails.find(
                                             (detail) => detail.product.name === header.bread,
                                         )?.quantity
