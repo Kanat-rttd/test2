@@ -15,6 +15,8 @@ import { createDebtTransfer } from '@/utils/services/debtTransfer.service'
 import { useApi } from '@/utils/services/axios'
 import classes from '../index.module.css'
 import { ContragentType } from '@/utils/types/contragent.types'
+import { MagazineType } from '@/utils/types/magazine.type'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 interface DebtTransferInputs {
     from: number
@@ -23,17 +25,6 @@ interface DebtTransferInputs {
     date: Date
     invoiceNumber: number
     comment: string
-}
-
-interface Magazines {
-    id: number
-    name: string
-    clientId: number
-    status: string
-    client: {
-        id: number
-        name: string
-    }
 }
 
 interface InvoiceData {
@@ -77,9 +68,10 @@ interface InvoiceData {
 }
 
 const DebtTransferForm = () => {
+    const { loading } = useNotify()
     const [selectedProvider, setSelectedProvider] = useState<ContragentType | null>(null)
 
-    const { data: magazinesData } = useApi<Magazines[]>('magazines?status=Активный')
+    const { data: magazinesData } = useApi<MagazineType[]>('magazines?status=Активный')
     const { data: contragentsMagazinesData } = useApi<ContragentType[]>(
         'contragent?status=Активный&type=магазин',
     )
@@ -109,7 +101,9 @@ const DebtTransferForm = () => {
     }, [selectedProvider])
 
     const sendData = (formData: DebtTransferInputs) => {
-        createDebtTransfer(formData)
+        const responsePromise:Promise<any> = createDebtTransfer(formData)
+        loading(responsePromise)
+        responsePromise
             .then(() => {
                 reset()
             })
