@@ -23,8 +23,7 @@ const ProcessingPage = () => {
         const responsePromise: Promise<any> = setDoneStatus(clientName.id)
         loading(responsePromise)
         responsePromise
-            .then((res) => {
-                console.log(res)
+            .then(() => {
                 mutateSalesData()
             })
             .catch((error) => {

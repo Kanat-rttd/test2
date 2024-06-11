@@ -101,8 +101,7 @@ const Arrival = ({categoriesData} : ArrivalProps ) => {
         const responsePromise: Promise<any> = createArrival(formData)
         loading(responsePromise)
         responsePromise
-            .then((res) => {
-                console.log(res)
+            .then(() => {
                 reset()
                 setValue('amount', '')
             })

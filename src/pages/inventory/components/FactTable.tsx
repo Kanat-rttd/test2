@@ -63,7 +63,6 @@ const FactTable = () => {
     }
 
     const successHandler = () => {
-        console.log('success')
         mutateFactInput()
     }
 

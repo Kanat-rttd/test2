@@ -81,8 +81,7 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
                 ? updateSale(selectedData.id, formData)
                 : createSale(formData)
             loading(responsePromise)
-            responsePromise.then((res) => {
-                console.log(res)
+            responsePromise.then(() => {
                 mutate()
                 reset()
                 onClose()

@@ -171,8 +171,6 @@ const AdminPanel = () => {
                             <Tbody>
                                 {overPriceData?.length ? (
                                     overPriceData.map((overData, index) => {
-                                        console.log(overData);
-                                        
                                         return (
                                             <Tr key={index}>
                                                 <Td>{index + 1}</Td>

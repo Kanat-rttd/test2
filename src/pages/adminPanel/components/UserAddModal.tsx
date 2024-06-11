@@ -69,7 +69,6 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                 handleClose()
             })
             .catch((error) => {
-                console.log(error)
                 setError(error.response.data.field, {
                     message: error.response.data.message || 'Ошибка',
                 })

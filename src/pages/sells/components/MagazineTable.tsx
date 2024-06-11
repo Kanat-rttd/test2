@@ -27,8 +27,6 @@ const MagazineTable = () => {
     const { data: magazineDebtData } = useApi<MagazineDebtView>('reports/magazineDebt', filters)
     const { data: magazinesData } = useApi<MagazineData[]>('magazines')
 
-    console.log(magazinesData)
-
     const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = event.target
         setFilters((prevFilters) => ({

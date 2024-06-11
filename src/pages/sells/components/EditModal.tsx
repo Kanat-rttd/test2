@@ -99,8 +99,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
         try {
             const responsePromise: Promise<any> = updateDispatchPrice(selectedRow.id, formData)
             loading(responsePromise)
-            responsePromise.then((res) => {
-                console.log(res)
+            responsePromise.then(() => {
                 reset()
                 onSuccess()
                 onClose()

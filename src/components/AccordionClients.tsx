@@ -124,8 +124,6 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
                                             onClick={(event) => {
                                                 event.stopPropagation()
                                                 setSelectedData(order)
-                                                console.log(order)
-
                                                 onOpen()
                                             }}
                                         />

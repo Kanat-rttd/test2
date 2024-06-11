@@ -196,7 +196,6 @@ const DebtTransferForm = () => {
                                             onChange={(selectedOption: ContragentType | null) => {
                                                 onChange(selectedOption?.id)
                                                 setSelectedProvider(selectedOption)
-                                                console.log(selectedOption)
                                             }}
                                             placeholder=""
                                             isClearable

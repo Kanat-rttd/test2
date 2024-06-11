@@ -20,7 +20,6 @@ const Fact = () => {
     const { data: placesData } = useApi<Place[]>('place')
 
     const successHandler = () => {
-        console.log('success')
         mutateFactInput()
     }
 

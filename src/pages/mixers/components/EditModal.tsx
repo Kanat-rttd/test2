@@ -60,8 +60,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
             shiftTime: formData[`quantity_${index}`],
         }))
 
-        console.log(formattedData)
-
         const responsePromise: Promise<any> = updateShiftAccounting(shiftAccountigId, formattedData)
         loading(responsePromise)
         responsePromise

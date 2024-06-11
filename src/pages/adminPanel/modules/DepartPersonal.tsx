@@ -39,8 +39,6 @@ const AdminPanel = () => {
         status: selectedStatus,
     })
 
-    console.log(departPersonalData)
-
     const handleClose = () => {
         onClose()
         setSelectedData(undefined)

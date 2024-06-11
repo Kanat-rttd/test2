@@ -66,11 +66,6 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
         }
     }, [data, isOpen, reset])
 
-    useEffect(() => {
-        console.log(selectedFacilityUnit)
-        console.log(departPersonalData, selectedPersonals)
-    }, [selectedFacilityUnit])
-
     const handleConfirm = () => {
         const date = getValues('date')
 
@@ -88,8 +83,6 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                 hours,
             })),
         }
-
-        console.log(distributionData)
 
         const responsePromise: Promise<any> = createShiftAccounting(distributionData)
         loading(responsePromise)
@@ -204,8 +197,6 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                             user.bakingFacilityUnit.id ===
                                             Number(selectedFacilityUnit)
                                         ) {
-                                            console.log(user.name)
-
                                             return (
                                                 <Checkbox
                                                     w={'45%'}

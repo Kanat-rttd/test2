@@ -36,8 +36,6 @@ const Drawler = () => {
 
     const userInfo = getUserInfo()
 
-    console.log(userInfo)
-
     const filteredMenuItems = menuItems.filter((item) => {
         return (
             userInfo?.class && item.allowedClasses && item.allowedClasses.includes(userInfo.class)

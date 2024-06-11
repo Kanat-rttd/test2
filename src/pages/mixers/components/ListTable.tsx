@@ -75,7 +75,6 @@ export default function ListTable({ shiftAccounting, mutate }: ListTableProps) {
 
     const handlerDeleteShiftAccounting = (selectedData: ShiftAccountingType | undefined) => {
         if (selectedData) {
-            console.log(selectedData)
             const responsePromise: Promise<any> = deleteShiftAccounting(selectedData.id)
             loading(responsePromise)
             responsePromise.then(() => {

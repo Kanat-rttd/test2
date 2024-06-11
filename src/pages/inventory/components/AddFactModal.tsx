@@ -42,8 +42,6 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
     const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods?status=Активный')
     const { data: placesData } = useApi<Place[]>('place')
 
-    console.log(placesData)
-
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -73,7 +71,6 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                 if (key !== 'place' && formData[key as keyof AddFactModalInputs] !== '') {
                     const index = Number(key.split('_')[1])
                     const material = providerGoodsData && providerGoodsData[index]
-                    // console.log(material)
                     if (material) {
                         acc.push({
                             id: material.id,
@@ -91,12 +88,10 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
 
         if (formattedData.length == 0 || !formattedData) return
 
-        // console.log(formattedData)
         const responsePromise: Promise<any> = createFactInput(formattedData)
         loading(responsePromise)
         responsePromise
-            .then((res) => {
-                console.log(res)
+            .then(() => {
                 onSuccess()
                 onClose()
                 reset()

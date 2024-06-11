@@ -52,7 +52,6 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
     } = useForm<EditModalInputs>()
 
     const sendData = (formData: EditModalInputs) => {
-        console.log(formData)
         const data = { ...formData, qty: isMinus ? Number(formData.qty) * -1 : Number(formData.qty)}
         const responsePromise: Promise<any> = createAdjustment(data)
         loading(responsePromise)
@@ -64,7 +63,6 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
                 handleClose()
             })
             .catch((error) => {
-                console.log(error)
                 setError(error.response.data.field, {
                     message: error.response.data.message || 'Ошибка',
                 })

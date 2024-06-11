@@ -163,9 +163,6 @@ const UniquePriceAddModal = ({
     }
 
     const filteredProducts = useMemo(() => {
-        console.log('trigger');
-        console.log(individualPrices);
-        
         return products?.filter((product) => {
             if (individualPrices) {
                 return individualPrices.find((client) => {

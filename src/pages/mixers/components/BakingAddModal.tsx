@@ -74,7 +74,6 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                 onClose()
             })
             .catch((error) => {
-                console.log(error)
                 setError(error.response.data.field, {
                     message: error.response.data.message || 'Ошибка',
                 })

@@ -58,7 +58,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
                 products: formattedData,
             })
             loading(responsePromise)
-            console.log(responsePromise, formattedData, formData)
             responsePromise
                 .then(() => {
                     onClose()
@@ -77,8 +76,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
 
     useEffect(() => {
         if (data) {
-            console.log(data)
-
             setValue('contragentId', data.contragent.id.toString())
             data.goodsDispatchDetails.forEach((details, index) => {
                 setValue(`quantity_${index}`, details.quantity.toString())

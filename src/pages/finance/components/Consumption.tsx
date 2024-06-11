@@ -60,8 +60,7 @@ const Consumption = ({categoriesData} : ArrivalProps ) => {
         const responsePromise: Promise<any> = createConsumption(formData)
         loading(responsePromise)
         responsePromise
-            .then((res) => {
-                console.log(res)
+            .then(() => {
                 reset()
                 setValue('amount', '')
             })

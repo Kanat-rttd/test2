@@ -62,8 +62,6 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
         selectedData?.providerGood.unitOfMeasure,
     )
 
-    console.log(selectedData)
-
     useEffect(() => {
         const _providerGoods = providerGoodsData?.map((item) => {
             return { label: item.goods, value: item.id, uom: item.unitOfMeasure }

@@ -229,8 +229,6 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                                 (option) => option?.label === value,
                                             )}
                                             onChange={(val: any) => {
-                                                console.log(val)
-
                                                 return onChange(val)
                                             }}
                                             placeholder="Статус *"

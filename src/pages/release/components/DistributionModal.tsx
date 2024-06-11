@@ -111,8 +111,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                 ? updateDispatchQuantity(data.id, updateData)
                 : createDispatch(createData)
             loading(responsePromise)
-            responsePromise.then((res) => {
-                console.log(res)
+            responsePromise.then(() => {
                 reset()
                 onClose()
                 onSuccess()
