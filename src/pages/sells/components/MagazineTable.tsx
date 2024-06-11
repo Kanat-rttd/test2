@@ -53,45 +53,53 @@ const MagazineTable = () => {
                     ))}
                 </Select>
             </Box>
-            <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                <Table variant="simple">
-                    <Thead>
-                        <Tr>
-                            <Th>№</Th>
-                            <Th>Магазин</Th>
-                            <Th>Сумма долга</Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {magazineDebtData?.mainData.length ? (
-                            magazineDebtData?.mainData.map((item, index) => {
-                                return (
-                                    <Tr key={index}>
-                                        <Td>{index + 1}</Td>
-                                        <Td>{item.MagazineName}</Td>
-                                        <Td>{item.Debit}</Td>
-                                    </Tr>
-                                )
-                            })
-                        ) : (
+            <Box
+                style={
+                    magazineDebtData?.mainData && magazineDebtData?.mainData.length >= 7
+                        ? { height: '100dvh' }
+                        : {}
+                }
+            >
+                <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+                    <Table variant="simple">
+                        <Thead>
                             <Tr>
-                                <Td>Нет данных</Td>
+                                <Th>№</Th>
+                                <Th>Магазин</Th>
+                                <Th>Сумма долга</Th>
                             </Tr>
-                        )}
-                    </Tbody>
-                    <Tfoot>
-                        <Tr>
-                            <Th color={'#000'} fontSize={15}>
-                                ИТОГО
-                            </Th>
-                            <Th width={'60%'}> </Th>
-                            <Th color={'#000'} fontSize={15}>
-                                {magazineDebtData?.total}
-                            </Th>
-                        </Tr>
-                    </Tfoot>
-                </Table>
-            </TableContainer>
+                        </Thead>
+                        <Tbody>
+                            {magazineDebtData?.mainData.length ? (
+                                magazineDebtData?.mainData.map((item, index) => {
+                                    return (
+                                        <Tr key={index}>
+                                            <Td>{index + 1}</Td>
+                                            <Td>{item.MagazineName}</Td>
+                                            <Td>{item.Debit}</Td>
+                                        </Tr>
+                                    )
+                                })
+                            ) : (
+                                <Tr>
+                                    <Td>Нет данных</Td>
+                                </Tr>
+                            )}
+                        </Tbody>
+                        <Tfoot>
+                            <Tr>
+                                <Th color={'#000'} fontSize={15}>
+                                    ИТОГО
+                                </Th>
+                                <Th width={'60%'}> </Th>
+                                <Th color={'#000'} fontSize={15}>
+                                    {magazineDebtData?.total}
+                                </Th>
+                            </Tr>
+                        </Tfoot>
+                    </Table>
+                </TableContainer>
+            </Box>
         </>
     )
 }

@@ -28,7 +28,14 @@ const ProviderTable = () => {
                     <option>Реализатор</option>
                 </Select>
             </Box>
-            <Box>
+
+            <Box
+                style={
+                    calculationsData?.Data && calculationsData.Data.length >= 7
+                        ? { height: '100dvh' }
+                        : {}
+                }
+            >
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant="simple">
                         <Thead>

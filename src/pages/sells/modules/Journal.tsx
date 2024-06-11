@@ -48,7 +48,6 @@ const JournalPage = () => {
             >
                 <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
                     <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                        {/* <DateRangePicker></DateRangePicker> */}
                         <DateRange />
                         <Select
                             placeholder="Цех"
