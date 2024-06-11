@@ -103,8 +103,8 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
     const { data: overPriceData } = useApi<OverPriceType[]>(
         `overPrice?month=${currentMonth}&year=${currentYear}`,
     )
-    const overPrice = overPriceData?.find(price => price.contragentId == selectedRow?.contragentId)?.price || 0
-
+    const overPrice =
+        overPriceData?.find((price) => price.contragentId == selectedRow?.contragentId)?.price || 0
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -133,7 +133,13 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                 borderWidth={'2px'}
                                 orientation="horizontal"
                             />
-                            <Box display={'flex'} justifyContent={'space-between'} pt={1} p={2} pb={3}>
+                            <Box
+                                display={'flex'}
+                                justifyContent={'space-between'}
+                                pt={1}
+                                p={2}
+                                pb={3}
+                            >
                                 <Box
                                     display={'flex'}
                                     justifyContent={'space-between'}
@@ -200,8 +206,12 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                 <Text>________</Text>
                             </Box>
                             <Box display={'flex'} flexDirection={'column'}>
-                                <Text marginLeft={'auto'} fontWeight={'bold'}>Сверху: {overPrice}</Text>
-                                <Text marginLeft={'auto'} fontWeight={'bold'}>Всего: {selectedRow?.totalSum} тг</Text>
+                                <Text marginLeft={'auto'} fontWeight={'bold'}>
+                                    Сверху: {overPrice} тг
+                                </Text>
+                                <Text marginLeft={'auto'} fontWeight={'bold'}>
+                                    Всего: {Number(selectedRow?.totalSum) + Number(overPrice)} тг
+                                </Text>
                             </Box>
                         </Box>
                     </Box>

@@ -8,21 +8,13 @@ import {
     Input,
     Textarea,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
 import { createDebtTransfer } from '@/utils/services/debtTransfer.service'
 import { useApi } from '@/utils/services/axios'
 import classes from '../index.module.css'
-
-interface Client {
-    id: number
-    name: string
-    surname: string
-    contact: string
-    telegrammId: string
-    status: number
-}
+import { ContragentType } from '@/utils/types/contragent.types'
 
 interface DebtTransferInputs {
     from: number
@@ -85,12 +77,18 @@ interface InvoiceData {
 }
 
 const DebtTransferForm = () => {
-    const [selectedProvider, setSelectedProvider] = useState<string | null>(null)
+    const [selectedProvider, setSelectedProvider] = useState<ContragentType | null>(null)
 
-    // const { data: debtTransfer } = useApi('debtTransfer')
     const { data: magazinesData } = useApi<Magazines[]>('magazines?status=Активный')
-    const { data: clientsData } = useApi<Client[]>('client?status=Активный')
+    const { data: contragentsMagazinesData } = useApi<ContragentType[]>(
+        'contragent?status=Активный&type=магазин',
+    )
+    const { data: clientsData } = useApi<ContragentType[]>(
+        'contragent?status=Активный&type=реализатор',
+    )
     const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
+    const [contragents, setContragents] = useState<ContragentType[]>([])
+    const [filteredContragents, setFilteredContragents] = useState<ContragentType[] | undefined>([])
 
     const {
         register,
@@ -100,6 +98,16 @@ const DebtTransferForm = () => {
         reset,
     } = useForm<DebtTransferInputs>()
 
+    useEffect(() => {
+        if (clientsData && contragentsMagazinesData) {
+            setContragents([...clientsData, ...contragentsMagazinesData])
+        }
+    }, [clientsData, contragentsMagazinesData])
+
+    useEffect(() => {
+        setFilteredContragents(getFilteredContragents())
+    }, [selectedProvider])
+
     const sendData = (formData: DebtTransferInputs) => {
         createDebtTransfer(formData)
             .then(() => {
@@ -108,6 +116,35 @@ const DebtTransferForm = () => {
             .catch((error) => {
                 console.error('Error creating sale:', error)
             })
+    }
+
+    const getFilteredContragents = () => {
+        let _filteredContragents
+
+        if (selectedProvider?.type == 'реализатор') {
+            const filteredMagazines = magazinesData?.filter(
+                (option) => option.clientId == selectedProvider.mainId,
+            )
+
+            _filteredContragents =
+                filteredMagazines?.map((option) => {
+                    return contragentsMagazinesData?.find((item) => {
+                        return item.mainId == option.id ? item : undefined
+                    })
+                }) || []
+        } else if (selectedProvider?.type == 'магазин') {
+            _filteredContragents = (magazinesData?.flatMap((option) => {
+                if (selectedProvider.mainId == option.id) {
+                    return (
+                        clientsData?.filter((item) => {
+                            return item.mainId == option.clientId
+                        }) || []
+                    )
+                }
+                return []
+            }) || []) as ContragentType[]
+        }
+        return _filteredContragents as ContragentType[]
     }
 
     return (
@@ -146,18 +183,20 @@ const DebtTransferForm = () => {
                                     const { onChange, value } = field
                                     return (
                                         <Select
-                                            options={clientsData}
-                                            getOptionLabel={(option: Client) => option.name}
-                                            getOptionValue={(option: Client) => `${option.id}`}
-                                            value={clientsData?.filter(
+                                            options={contragents}
+                                            getOptionLabel={(option: ContragentType) =>
+                                                option.contragentName
+                                            }
+                                            getOptionValue={(option: ContragentType) =>
+                                                `${option.id}`
+                                            }
+                                            value={contragents?.filter(
                                                 (option) => String(option.id) == String(value),
                                             )}
-                                            // onChange={(val: Account) => onChange(val?.name)}
-                                            onChange={(selectedOption: Client | null) => {
-                                                if (selectedOption) {
-                                                    onChange(selectedOption.id)
-                                                    setSelectedProvider(selectedOption.name)
-                                                }
+                                            onChange={(selectedOption: ContragentType | null) => {
+                                                onChange(selectedOption?.id)
+                                                setSelectedProvider(selectedOption)
+                                                console.log(selectedOption)
                                             }}
                                             placeholder=""
                                             isClearable
@@ -183,25 +222,24 @@ const DebtTransferForm = () => {
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
                                     const { onChange, value } = field
-                                    const filteredMagazines = magazinesData?.filter(
-                                        (option) => option.client.name == selectedProvider,
-                                    )
                                     return (
                                         <Select
-                                            options={filteredMagazines}
-                                            getOptionLabel={(option: Magazines) => option.name}
-                                            getOptionValue={(option: Magazines) => `${option.id}`}
+                                            options={filteredContragents}
+                                            getOptionLabel={(option: ContragentType) =>
+                                                option.contragentName
+                                            }
+                                            getOptionValue={(option: ContragentType) =>
+                                                `${option.id}`
+                                            }
                                             value={
                                                 value
-                                                    ? filteredMagazines?.filter(
-                                                          (option) => option.id == value,
+                                                    ? filteredContragents?.filter(
+                                                          (option) => option?.id == value,
                                                       )
                                                     : null
                                             }
-                                            onChange={(selectedOption: Magazines | null) => {
-                                                if (selectedOption) {
-                                                    onChange(selectedOption.id)
-                                                }
+                                            onChange={(selectedOption: ContragentType | null) => {
+                                                onChange(selectedOption?.id)
                                             }}
                                             placeholder=""
                                             isClearable
@@ -230,6 +268,7 @@ const DebtTransferForm = () => {
                                 {...register('date', { required: 'Поле является обязательным' })}
                                 autoComplete="off"
                                 placeholder="Дата"
+                                defaultValue={new Date().toISOString().split('T')[0]}
                                 type="date"
                             />
                         </FormControl>
