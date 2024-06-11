@@ -2,7 +2,6 @@ import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import { Box, Select, Table, Tr, Td, Tbody, Th } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import { useState } from 'react'
-import UniversalComponent from '@/components/ui/UniversalComponent'
 
 interface MagazineDebtView {
     mainData: [
@@ -37,64 +36,62 @@ const MagazineTable = () => {
 
     return (
         <>
-            <UniversalComponent>
-                <Box width={'25%'} marginBottom={4}>
-                    <Select
-                        name="MagazineName"
-                        placeholder="Магазин"
-                        width={'fit-content'}
-                        onChange={handleSelectChange}
-                        w={'80%'}
-                        size={'sm'}
-                        borderRadius={5}
-                    >
-                        {magazinesData?.map((item, index) => (
-                            <option key={index} value={item.name}>
-                                {item.name}
-                            </option>
-                        ))}
-                    </Select>
-                </Box>
-                <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                    <Table variant="simple">
-                        <Thead>
+            <Box width={'25%'} marginBottom={4}>
+                <Select
+                    name="MagazineName"
+                    placeholder="Магазин"
+                    width={'fit-content'}
+                    onChange={handleSelectChange}
+                    w={'80%'}
+                    size={'sm'}
+                    borderRadius={5}
+                >
+                    {magazinesData?.map((item, index) => (
+                        <option key={index} value={item.name}>
+                            {item.name}
+                        </option>
+                    ))}
+                </Select>
+            </Box>
+            <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+                <Table variant="simple">
+                    <Thead>
+                        <Tr>
+                            <Th>№</Th>
+                            <Th>Магазин</Th>
+                            <Th>Сумма долга</Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {magazineDebtData?.mainData.length ? (
+                            magazineDebtData?.mainData.map((item, index) => {
+                                return (
+                                    <Tr key={index}>
+                                        <Td>{index + 1}</Td>
+                                        <Td>{item.MagazineName}</Td>
+                                        <Td>{item.Debit}</Td>
+                                    </Tr>
+                                )
+                            })
+                        ) : (
                             <Tr>
-                                <Th>№</Th>
-                                <Th>Магазин</Th>
-                                <Th>Сумма долга</Th>
+                                <Td>Нет данных</Td>
                             </Tr>
-                        </Thead>
-                        <Tbody>
-                            {magazineDebtData?.mainData.length ? (
-                                magazineDebtData?.mainData.map((item, index) => {
-                                    return (
-                                        <Tr key={index}>
-                                            <Td>{index + 1}</Td>
-                                            <Td>{item.MagazineName}</Td>
-                                            <Td>{item.Debit}</Td>
-                                        </Tr>
-                                    )
-                                })
-                            ) : (
-                                <Tr>
-                                    <Td>Нет данных</Td>
-                                </Tr>
-                            )}
-                        </Tbody>
-                        <Tfoot>
-                            <Tr>
-                                <Th color={'#000'} fontSize={15}>
-                                    ИТОГО
-                                </Th>
-                                <Th width={'60%'}> </Th>
-                                <Th color={'#000'} fontSize={15}>
-                                    {magazineDebtData?.total}
-                                </Th>
-                            </Tr>
-                        </Tfoot>
-                    </Table>
-                </TableContainer>
-            </UniversalComponent>
+                        )}
+                    </Tbody>
+                    <Tfoot>
+                        <Tr>
+                            <Th color={'#000'} fontSize={15}>
+                                ИТОГО
+                            </Th>
+                            <Th width={'60%'}> </Th>
+                            <Th color={'#000'} fontSize={15}>
+                                {magazineDebtData?.total}
+                            </Th>
+                        </Tr>
+                    </Tfoot>
+                </Table>
+            </TableContainer>
         </>
     )
 }

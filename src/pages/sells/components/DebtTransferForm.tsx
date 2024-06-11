@@ -286,11 +286,8 @@ const DebtTransferForm = () => {
                                                 (option) =>
                                                     String(option.invoiceNumber) == String(value),
                                             )}
-                                            // onChange={(val: Account) => onChange(val?.name)}
                                             onChange={(selectedOption: InvoiceData | null) => {
-                                                if (selectedOption) {
-                                                    onChange(selectedOption.invoiceNumber)
-                                                }
+                                                    onChange(selectedOption?.invoiceNumber)
                                             }}
                                             placeholder="Номер накладной *"
                                             isClearable
