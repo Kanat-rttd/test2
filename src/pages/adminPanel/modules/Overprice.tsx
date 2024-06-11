@@ -34,6 +34,7 @@ const AdminPanel = () => {
     } = useApi<OverPriceType[]>(`overPrice?${getURLs().toString()}`)
 
     const { data: clientData } = useApi<ClientsFilter[]>('overPrice/clientFilter')
+    
     const [years, setYears] = useState<number[]>([])
     const startYear = 2022
 
@@ -95,8 +96,7 @@ const AdminPanel = () => {
     }
 
     const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const { name, value } = event.target
-        console.log(name, value)
+        const { value } = event.target
         setParam('name', value)
     }
 
@@ -115,8 +115,8 @@ const AdminPanel = () => {
                                 onChange={handleSelectChange}
                             >
                                 {clientData?.map((client, index) => (
-                                    <option key={index} value={client.client.name}>
-                                        {client.client.name}
+                                    <option key={index} value={client.contragent.contragentName}>
+                                        {client.contragent.contragentName}
                                     </option>
                                 ))}
                             </Select>
@@ -171,6 +171,8 @@ const AdminPanel = () => {
                             <Tbody>
                                 {overPriceData?.length ? (
                                     overPriceData.map((overData, index) => {
+                                        console.log(overData);
+                                        
                                         return (
                                             <Tr key={index}>
                                                 <Td>{index + 1}</Td>

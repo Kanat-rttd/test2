@@ -20,11 +20,13 @@ import { DownloadIcon } from '@chakra-ui/icons'
 import dayjs from 'dayjs'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+import { useApi } from '@/utils/services/axios'
+import { OverPriceType } from '@/utils/types/overPrice.types'
 
 interface InvoiceData {
     createdAt: Date
     contragentId: number
-    clientName: string
+    contragentName: string
     invoiceNumber: number
     totalProducts: {
         id: number
@@ -95,6 +97,15 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
         })
     }
 
+    const currentMonth = dayjs().month() + 1
+    const currentYear = dayjs().year()
+
+    const { data: overPriceData } = useApi<OverPriceType[]>(
+        `overPrice?month=${currentMonth}&year=${currentYear}`,
+    )
+    const overPrice = overPriceData?.find(price => price.contragentId == selectedRow?.contragentId)?.price || 0
+
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay overflow={'hidden'} />
@@ -137,7 +148,7 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                     justifyContent={'space-between'}
                                 >
                                     <Text></Text>
-                                    <Text>{selectedRow?.clientName}</Text>
+                                    <Text>{selectedRow?.contragentName}</Text>
                                 </Box>
                             </Box>
                             <Divider
@@ -189,7 +200,7 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                 <Text>________</Text>
                             </Box>
                             <Box display={'flex'} flexDirection={'column'}>
-                                <Text marginLeft={'auto'} fontWeight={'bold'}>Сверху: 5000 тг</Text>
+                                <Text marginLeft={'auto'} fontWeight={'bold'}>Сверху: {overPrice}</Text>
                                 <Text marginLeft={'auto'} fontWeight={'bold'}>Всего: {selectedRow?.totalSum} тг</Text>
                             </Box>
                         </Box>

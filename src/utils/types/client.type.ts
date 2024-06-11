@@ -8,9 +8,9 @@ export type ClientType = {
 }
 
 export type ClientsFilter = {
-    clientId: number
-    client: {
+    contragentId: number
+    contragent: {
         id: number
-        name: string
+        contragentName: string
     }
 }

@@ -21,8 +21,8 @@ import { useApi } from '@/utils/services/axios'
 import { createOverprice, updateOverprice } from '@/utils/services/overprice.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { OverPriceInputs, OverPriceType } from '@/utils/types/overPrice.types'
-import { ClientType } from '@/utils/types/client.type'
 import { monthData } from '@/utils/constants/month.consts'
+import { ContragentType } from '@/utils/types/contragent.types'
 
 const defaultValues = {
     contragentId: 0,
@@ -46,7 +46,7 @@ interface OverPriceAddModalProps {
 const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddModalProps) => {
     const { success, error } = useNotify()
 
-    const { data: clientData } = useApi<ClientType[]>('client')
+    const { data: clientData } = useApi<ContragentType[]>('contragent?type=реализатор&status=Активный')
 
     const {
         register,
@@ -112,12 +112,12 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                                     return (
                                         <Select
                                             options={clientData}
-                                            getOptionLabel={(option: ClientType) => option.name}
-                                            getOptionValue={(option: ClientType) => `${option.id}`}
+                                            getOptionLabel={(option: ContragentType) => option.contragentName}
+                                            getOptionValue={(option: ContragentType) => `${option.id}`}
                                             value={clientData?.filter(
-                                                (option: ClientType) => Number(option.id) == value,
+                                                (option: ContragentType) => Number(option.id) == value,
                                             )}
-                                            onChange={(selectedOption: ClientType | null) => {
+                                            onChange={(selectedOption: ContragentType | null) => {
                                                 if (selectedOption) {
                                                     onChange(selectedOption.id)
                                                 }

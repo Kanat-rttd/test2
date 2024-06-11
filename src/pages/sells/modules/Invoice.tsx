@@ -6,11 +6,12 @@ import dayjs from 'dayjs'
 import DateRange from '@/components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { OverPriceType } from '@/utils/types/overPrice.types'
+import { ContragentType } from '@/utils/types/contragent.types'
 
 interface InvoiceData {
     createdAt: Date
     contragentId: number
-    clientName: string
+    contragentName: string
     invoiceNumber: number
     totalProducts: {
         id: number
@@ -47,23 +48,25 @@ interface InvoiceData {
     }[]
 }
 
-interface Client {
-    id: number
-    name: string
-    surname: string
-    contact: string
-    telegrammId: string
-    status: string
-}
+// interface Client {
+//     id: number
+//     name: string
+//     surname: string
+//     contact: string
+//     telegrammId: string
+//     status: string
+// }
 
 const InvoicePage = () => {
     const { setParam, getURLs } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const { data: clientsData } = useApi<Client[]>('client')
+    const { data: clientsData } = useApi<ContragentType[]>('contragent?type=реализатор&status=Активный')
     const { data: dispatchesData } = useApi<InvoiceData[]>(
         `release/invoice?${getURLs().toString()}`,
     )
+    console.log(dispatchesData);
+    
 
     const currentMonth = dayjs().month() + 1
     const currentYear = dayjs().year()
@@ -96,7 +99,7 @@ const InvoicePage = () => {
                             >
                                 {clientsData?.map((client, index) => (
                                     <option key={index} value={client.id}>
-                                        {client.name}
+                                        {client.contragentName}
                                     </option>
                                 ))}
                             </Select>
@@ -139,7 +142,7 @@ const InvoicePage = () => {
                                             <Text w={'30%'} color={'gray'} fontWeight={''}>
                                                 № {row.invoiceNumber}
                                             </Text>
-                                            <Text w={'44%'}>{row.clientName}</Text>
+                                            <Text w={'44%'}>{row.contragentName}</Text>
                                             <Text w={'25%'}>
                                                 {dayjs(row.createdAt).format('DD.MM.YYYY')}
                                             </Text>
