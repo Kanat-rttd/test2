@@ -63,6 +63,7 @@ const Consumption = ({categoriesData} : ArrivalProps ) => {
             .then(() => {
                 reset()
                 setValue('amount', '')
+                setValue('comment', '')
             })
             .catch((error) => {
                 console.error('Error creating sale:', error)

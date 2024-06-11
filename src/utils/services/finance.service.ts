@@ -76,7 +76,7 @@ export const createTransfer = async (data: {
     toAccount: string
     date: Date
     comment: string
-    amount: string
+    amount: number
 }) => {
     const requestData = {
         data: data,

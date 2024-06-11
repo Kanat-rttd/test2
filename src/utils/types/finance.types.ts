@@ -11,7 +11,7 @@ export type ArrivalInputs = {
 
 export type TransferInputs = {
     fromAccount: string
-    amount: string
+    amount: number
     toAccount: string
     date: Date
     comment: string

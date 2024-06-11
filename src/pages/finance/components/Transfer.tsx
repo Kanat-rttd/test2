@@ -36,7 +36,7 @@ const Transfer = () => {
         loading(responsePromise)
         responsePromise
             .then(() => {
-               reset()
+                reset()
             })
             .catch((error) => {
                 console.error('Error creating sale:', error)
@@ -47,8 +47,10 @@ const Transfer = () => {
         <Box display={'flex'} flexDirection={'column'} gap={4}>
             <FormControl isInvalid={!!errors.amount}>
                 <Input
+                    {...register('amount', {
+                        required: 'Поле является обязательным',
+                        })}
                     maxLength={20}
-                    {...register('amount', { required: 'Поле является обязательным' })}
                     autoComplete="off"
                     placeholder="Сумма *"
                     type="number"
