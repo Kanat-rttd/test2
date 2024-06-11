@@ -41,9 +41,9 @@ interface DispatchType {
             }
         }
     }[]
-    client: {
+    contragent: {
         id: number
-        name: string
+        contragentName: string
     }
 }
 
@@ -87,7 +87,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                     price: Number(detail.price),
                 }
             })
-            setValue('contragentId', Number(selectedRow.client.id))
+            setValue('contragentId', Number(selectedRow.contragent.id))
             setValue('products', data)
         } else {
             reset()

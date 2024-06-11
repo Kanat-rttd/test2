@@ -1,8 +1,8 @@
 import { Box, Select } from '@chakra-ui/react'
-import { useState } from 'react'
 import ListTable from '../components/ListTable'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface FacilityUnit {
     id: number
@@ -31,13 +31,10 @@ interface Product {
 }
 
 const JournalPage = () => {
+    const {setParam} = useURLParameters()
     const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
     const { data: clientsData } = useApi<Client[]>('client')
     const { data: productData } = useApi<Product[]>('product')
-
-    const [selectedFacilityUnit, setFacilityUnit] = useState('')
-    const [selectedClient, setClient] = useState('')
-    const [selectedProduct, setProduct] = useState('')
 
     return (
         <>
@@ -58,7 +55,7 @@ const JournalPage = () => {
                             width={'90%'}
                             size={'sm'}
                             borderRadius={5}
-                            onChange={(e) => setFacilityUnit(e.target.value)}
+                            onChange={(e) => setParam('facilityUnit', e.target.value)}
                         >
                             {facilityUnitsData?.map((unit, index) => (
                                 <option key={index} value={unit.id}>
@@ -71,7 +68,7 @@ const JournalPage = () => {
                             width={'90%'}
                             size={'sm'}
                             borderRadius={5}
-                            onChange={(e) => setClient(e.target.value)}
+                            onChange={(e) => setParam('client', e.target.value)}
                         >
                             {clientsData?.map((client, index) => (
                                 <option key={index} value={client.name}>
@@ -84,7 +81,7 @@ const JournalPage = () => {
                             width={'90%'}
                             size={'sm'}
                             borderRadius={5}
-                            onChange={(e) => setProduct(e.target.value)}
+                            onChange={(e) => setParam('product', e.target.value)}
                         >
                             {productData?.map((product, index) => (
                                 <option key={index} value={product.name}>
@@ -95,12 +92,7 @@ const JournalPage = () => {
                     </Box>
                 </Box>
                 <Box position={'relative'}>
-                    <ListTable
-                        facilityUnit={selectedFacilityUnit}
-                        client={selectedClient}
-                        product={selectedProduct}
-                        status="0"
-                    />
+                    <ListTable />
                 </Box>
             </Box>
             {/* <DistributionModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} status="0" /> */}

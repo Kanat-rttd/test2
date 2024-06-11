@@ -36,33 +36,20 @@ interface DispatchType {
             }
         }
     }[]
-    client: {
+    contragent: {
         id: number
-        name: string
+        contragentName: string
     }
 }
 
-interface ListTableProps {
-    facilityUnit: string
-    client: string
-    product: string
-    status: string
-}
-
-const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, status }) => {
-    const { getParam } = useURLParameters()
+const ListTable: React.FC = () => {
+    const { getURLs } = useURLParameters()
     const { loading } = useNotify()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const [selectedRow, setSelectedRow] = useState<DispatchType | null>(null)
 
-    const { data: dispatchData, mutate: mutateDispatchData } = useApi<DispatchData>('release', {
-        facilityUnit,
-        client,
-        product,
-        startDate: String(getParam('startDate')),
-        endDate: String(getParam('endDate')),
-    })
+    const { data: dispatchData, mutate: mutateDispatchData } = useApi<DispatchData>(`release?${getURLs().toString()}&status=0`)
 
     const [modal, setModal] = useState({
         isOpen: false,
@@ -123,7 +110,7 @@ const ListTable: React.FC<ListTableProps> = ({ facilityUnit, client, product, st
                                             <Td textAlign={'center'}>
                                                 {dayjs(row.createdAt).format('HH:mm DD.MM.YYYY')}
                                             </Td>
-                                            <Td>{row.client.name}</Td>
+                                            <Td>{row.contragent.contragentName}</Td>
                                             <Td>
                                                 <div
                                                     style={{
