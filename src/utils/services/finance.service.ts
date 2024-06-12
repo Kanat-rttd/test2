@@ -22,7 +22,7 @@ export const getReportData = async () => {
 
 export const createArrival = async (data: {
     account: string
-    amount: string
+    amount: number | undefined
     financeCategoryId: string
     contragentId: number
     comment: string
@@ -40,7 +40,7 @@ export const createInvoiceArrival = async (
     invoiceNumber: number | undefined,
     data: {
         account: string
-        amount: string
+        amount: number
         financeCategoryId: string
         contragentId: number
         comment: string
@@ -58,7 +58,7 @@ export const createInvoiceArrival = async (
 
 export const createConsumption = async (data: {
     account: string
-    amount: string
+    amount: number | undefined
     financeCategoryId: string
     contragentId: number
     comment: string

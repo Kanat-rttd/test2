@@ -1,6 +1,6 @@
 export type ArrivalInputs = {
     clientId: number
-    amount: string
+    amount: number | undefined
     date: Date
     account: string
     financeCategoryId: string
