@@ -24,7 +24,7 @@ import GoodsAddModal from '../components/GoodsAddModal'
 import { ProviderType } from '@/utils/types/provider.types'
 
 const AdminGoods = () => {
-    const { loading } = useNotify()
+    const { error, success } = useNotify()
     const [selectedStatus, setSelectedStatus] = useState('')
     const [dialog, setDialog] = useState({
         isOpen: false,
@@ -34,7 +34,7 @@ const AdminGoods = () => {
     const { data: providerGoodsData, isLoading } = useApi<ProviderGoodsType[]>('providerGoods', {
         status: selectedStatus,
     })
-    const { data: providerData, } = useApi<ProviderType[]>('providers')
+    const { data: providerData } = useApi<ProviderType[]>('providers')
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<ProviderGoodsType>()
@@ -46,10 +46,14 @@ const AdminGoods = () => {
     const handlerDeleteProvider = (selectedData: ProviderGoodsType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteProviderGoods(selectedData.id)
-            loading(responsePromise)
-            responsePromise.then(() => {
-                mutate(`providerGoods?status=${selectedStatus}`)
-            })
+            responsePromise
+                .then((res) => {
+                    mutate(`providerGoods?status=${selectedStatus}`)
+                    success(res.data.message)
+                })
+                .catch((err) => {
+                    error(err.response.data.error)
+                })
         } else {
             console.error('No user data available to delete.')
         }
@@ -96,8 +100,8 @@ const AdminGoods = () => {
                             <Thead>
                                 <Tr>
                                     <Th>№</Th>
-                                    <Th>Поставщик</Th>
                                     <Th>Товары</Th>
+                                    <Th>Поставщик</Th>
                                     <Th>Единица измерения</Th>
                                     <Th>Место</Th>
                                     <Th>Статус</Th>
@@ -109,14 +113,16 @@ const AdminGoods = () => {
                                     const placesLabels = JSON.parse(String(item.place)).map(
                                         (place: { label: string }) => place.label,
                                     )
-                                    const providerName = providerData?.find((provider) => provider.id == item.providerId)
+                                    const providerName = providerData?.find(
+                                        (provider) => provider.id == item.providerId,
+                                    )
                                     const placesString = placesLabels.join(', ')
 
                                     return (
                                         <Tr key={index}>
                                             <Td>{index + Number(1)}</Td>
-                                            <Td>{providerName?.providerName}</Td>
                                             <Td>{item.goods}</Td>
+                                            <Td>{providerName?.providerName}</Td>
                                             <Td>{item.unitOfMeasure}</Td>
                                             <Td>{placesString}</Td>
                                             <Td>{item.status}</Td>

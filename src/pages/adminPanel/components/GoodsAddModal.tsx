@@ -46,7 +46,7 @@ type ModalProps = {
 }
 
 const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps) => {
-    const { loading } = useNotify()
+    const { success, error } = useNotify()
     const { data: providersData } = useApi<ProviderType[]>('providers?status=Активный')
     const { data: placesData } = useApi<Place[]>('place')
 
@@ -56,7 +56,6 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
         control,
         formState: { errors },
         setValue,
-        setError,
         reset,
     } = useForm<ProviderInputs>()
 
@@ -72,23 +71,20 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
     }, [selectedData, isOpen, reset])
 
     const sendData = (formData: ProviderInputs) => {
-        try {
-            const responsePromise: Promise<any> = selectedData
-                ? updateProviderGoods(selectedData.id, formData)
-                : createProviderGoods(formData)
-            loading(responsePromise)
+        const responsePromise: Promise<any> = selectedData
+            ? updateProviderGoods(selectedData.id, formData)
+            : createProviderGoods(formData)
 
-            responsePromise.then(() => {
+        responsePromise
+            .then((res) => {
                 reset()
                 onSuccess()
                 handleClose()
+                success(res.data.message)
             })
-            reset()
-        } catch (error: any) {
-            setError('root', {
-                message: error.response.data.message || 'Ошибка',
+            .catch((err) => {
+                error(err.response.data.error)
             })
-        }
     }
 
     const handleClose = () => {

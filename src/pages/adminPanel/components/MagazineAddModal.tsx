@@ -60,7 +60,7 @@ const status = [
 
 const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalProps) => {
     const { data: clientsData } = useApi<ClientType[]>('client')
-    const { loading } = useNotify()
+    const { success, error } = useNotify()
 
     const {
         register,
@@ -83,23 +83,23 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
     }, [data, isOpen, reset])
 
     const sendData = (formData: MagazinesModalInput) => {
-        try {
-            const responsePromise: Promise<any> = data
-                ? updateMagazine(data.id, formData)
-                : createMagazine(formData)
-            loading(responsePromise)
+        const responsePromise: Promise<any> = data
+            ? updateMagazine(data.id, formData)
+            : createMagazine(formData)
 
-            responsePromise.then(() => {
+        responsePromise
+            .then((res) => {
                 reset()
                 onSuccess()
                 onClose()
+                success(res.data.message)
             })
-            reset()
-        } catch (error: any) {
-            setError('root', {
-                message: error.response.data.message || 'Ошибка',
+            .catch((err) => {
+                setError(err.response.data.field, {
+                    message: err.response.data.error || 'Ошибка',
+                })
+                error(err.response.data.error)
             })
-        }
     }
 
     return (
@@ -138,7 +138,9 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                                             return (
                                                 <Select
                                                     options={clientsData}
-                                                    getOptionLabel={(option: ClientType) => option.name}
+                                                    getOptionLabel={(option: ClientType) =>
+                                                        option.name
+                                                    }
                                                     getOptionValue={(option: ClientType) =>
                                                         `${option.id}`
                                                     }
@@ -146,7 +148,9 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                                                         (option) =>
                                                             String(option.id) == String(value),
                                                     )}
-                                                    onChange={(selectedOption: ClientType | null) => {
+                                                    onChange={(
+                                                        selectedOption: ClientType | null,
+                                                    ) => {
                                                         if (selectedOption) {
                                                             onChange(selectedOption.id)
                                                         }
@@ -168,7 +172,11 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                                         })}
                                     >
                                         {status.map((item) => {
-                                            return <option key={item.name} value={item.name}>{item.name}</option>
+                                            return (
+                                                <option key={item.name} value={item.name}>
+                                                    {item.name}
+                                                </option>
+                                            )
                                         })}
                                     </ChakraSelect>
                                     <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
@@ -192,8 +200,7 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                             </form>
                         </Stack>
                     </ModalBody>
-                    <ModalFooter gap={3}>
-                    </ModalFooter>
+                    <ModalFooter gap={3}></ModalFooter>
                 </ModalContent>
             </Modal>
         </>

@@ -32,8 +32,10 @@ import { TableContainer } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { individualPriceType } from '@/utils/types/individualPrice.types'
 import { UniquePriceType } from '@/utils/types/uniquePrice.types'
+import { useNotify } from '@/utils/providers/ToastProvider'
 
 const AdminPanel = () => {
+    const { success, error } = useNotify()
     const { data: individualPrices } = useApi<individualPriceType[]>('inPrice')
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<UniquePriceType | undefined>(undefined)
@@ -312,11 +314,14 @@ const AdminPanel = () => {
                     body="Вы уверены? Вы не сможете отменить это действие впоследствии."
                     actionBtn={() => {
                         deleteIndividualPrice(selectedData?.detail[0].individualPriceId ?? '').then(
-                            () => {
+                            (res) => {
                                 getIndividualPrices()
                                 setSelectedData(undefined)
+                                success(res.data.message)
                             },
-                        )
+                        ).catch((err) => {
+                            error(err.response.data.error)
+                        })
                         dialog.onClose()
                     }}
                     actionText="Удалить"

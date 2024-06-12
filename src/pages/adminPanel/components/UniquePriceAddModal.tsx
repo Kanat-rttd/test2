@@ -57,7 +57,7 @@ const UniquePriceAddModal = ({
     onClose,
     onSuccess,
 }: UniquePriceAddModal) => {
-    const { loading } = useNotify()
+    const { error, success } = useNotify()
     const { data: individualPrices, mutate } = useApi<individualPriceType[]>('inPrice')
     const [products, setProducts] = useState<Product[]>([])
     // const [selectedProduct, setSelectedProduct] = useState('')
@@ -66,7 +66,6 @@ const UniquePriceAddModal = ({
     const {
         register,
         handleSubmit: handleSubmitForm,
-        setError,
         setValue,
         formState: { errors },
         reset,
@@ -80,7 +79,7 @@ const UniquePriceAddModal = ({
 
     useEffect(() => {
         if (data && data.detail.length > 0) {
-            const firstDetail = data.detail[0];
+            const firstDetail = data.detail[0]
             Object.entries(firstDetail).forEach(([key, value]) => {
                 setValue(key as keyof UniquePriceDetail, value)
             })
@@ -115,14 +114,14 @@ const UniquePriceAddModal = ({
                     ],
                 }
                 const responsePromise: Promise<any> = createIndividualPrice(newData)
-                loading(responsePromise)
-                responsePromise.then(() => {
+                responsePromise.then((res) => {
                     reset()
                     handleCancel()
                     onSuccess()
                     mutate()
+                    success(res.data.message)
+                    reset()
                 })
-                reset()
             } else {
                 newData = {
                     clientId:
@@ -141,20 +140,20 @@ const UniquePriceAddModal = ({
                     newData.clientId,
                     newData,
                 )
-                loading(responsePromise)
-                responsePromise.then(() => {
+                responsePromise.then((res) => {
                     reset()
                     handleCancel()
                     onSuccess()
                     mutate()
+                    success(res.data.message)
+                    reset()
                 })
-                reset()
-               
             }
-        } catch (error: any) {
-            setError('root', {
-                message: error.response.data.message || 'Ошибка',
-            })
+        } catch (err: any) {
+            // setError('root', {
+            //     message: error.response.data.message || 'Ошибка',
+            // })
+            error(err.response.data.message)
         }
     }
 
@@ -176,7 +175,7 @@ const UniquePriceAddModal = ({
             }
             return false
         })
-    }, [products, individualPrices, selectedRelease, isOpen])
+    }, [products, individualPrices, selectedRelease, isOpen, data])
 
     return (
         <>
@@ -251,8 +250,7 @@ const UniquePriceAddModal = ({
                             </Box>
                         </Stack>
                     </ModalBody>
-                    <ModalFooter gap={3}>
-                    </ModalFooter>
+                    <ModalFooter gap={3}></ModalFooter>
                 </ModalContent>
             </Modal>
         </>

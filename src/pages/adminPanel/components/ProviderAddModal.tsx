@@ -26,14 +26,13 @@ type ModalProps = {
 }
 
 const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps) => {
-    const { loading } = useNotify()
+    const { success, error } = useNotify()
 
     const {
         register,
         handleSubmit: handleSubmitForm,
         formState: { errors },
         setValue,
-        setError,
         reset,
     } = useForm<ProviderForm>()
 
@@ -48,22 +47,20 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
     }, [selectedData, isOpen, reset])
 
     const sendData = (formData: ProviderForm) => {
-        try {
-            const responsePromise: Promise<any> = selectedData
-                ? updateProvider(selectedData.id, formData)
-                : createProvider(formData)
-            loading(responsePromise)
+        const responsePromise: Promise<any> = selectedData
+            ? updateProvider(selectedData.id, formData)
+            : createProvider(formData)
 
-            responsePromise.then(() => {
+        responsePromise
+            .then((res) => {
                 reset()
                 onSuccess()
                 handleClose()
+                success(res.data.message)
             })
-        } catch (error: any) {
-            setError('root', {
-                message: error.response.data.message || 'Ошибка',
+            .catch((err) => {
+                error(err.response.data.error)
             })
-        }
     }
 
     const handleClose = () => {

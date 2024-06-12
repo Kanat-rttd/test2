@@ -31,7 +31,7 @@ interface UserAddModalProps {
 }
 
 const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) => {
-    const { loading } = useNotify()
+    const { success, error } = useNotify()
 
     const {
         register,
@@ -39,7 +39,6 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
         control,
         getValues,
         setValue,
-        setError,
         formState: { errors },
         reset,
     } = useForm<User>()
@@ -60,18 +59,18 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
             ? updateUser(data.id, formData)
             : createUser(formData)
 
-        loading(responsePromise)
-
         responsePromise
-            .then(() => {
+            .then((res) => {
                 reset()
                 onSuccess()
                 handleClose()
+                success(res.data.message)
             })
-            .catch((error) => {
-                setError(error.response.data.field, {
-                    message: error.response.data.message || 'Ошибка',
-                })
+            .catch((err) => {
+                // setError(err.response.data.field, {
+                //     message: err.response.data.message || 'Ошибка',
+                // })
+                error(err.response.data.error)
             })
     }
 

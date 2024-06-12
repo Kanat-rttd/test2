@@ -22,7 +22,7 @@ import { ProviderType } from '@/utils/types/provider.types'
 import { deleteProvider } from '@/utils/services/provider.service'
 
 const AdminProvider = () => {
-    const { loading } = useNotify()
+    const { error, success } = useNotify()
     const [selectedStatus, setSelectedStatus] = useState('')
     const [dialog, setDialog] = useState({
         isOpen: false,
@@ -43,9 +43,11 @@ const AdminProvider = () => {
     const handlerDeleteProvider = (selectedData: ProviderType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteProvider(selectedData.id)
-            loading(responsePromise)
-            responsePromise.then(() => {
+            responsePromise.then((res) => {
                 mutateProviderData()
+                success(res.data.message)
+            }).catch((err) =>{
+                error(err.response.data.error)
             })
         } else {
             console.error('No user data available to delete.')

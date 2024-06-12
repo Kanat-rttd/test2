@@ -35,7 +35,6 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
         register,
         handleSubmit: handleSubmitForm,
         setValue,
-        setError,
         formState: { errors },
         reset,
     } = useForm<DepartPersonalType>()
@@ -63,9 +62,9 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
                 success(res.data.message)
             })
             .catch((err) => {
-                setError(err.response.data.field, {
-                    message: err.response.data.error || 'Ошибка',
-                })
+                // setError(err.response.data.field, {
+                //     message: err.response.data.error || 'Ошибка',
+                // })
                 error(err.response.data.error)
             })
     }
