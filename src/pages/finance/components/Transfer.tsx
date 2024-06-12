@@ -4,17 +4,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { TransferInputs } from '@/utils/types/finance.types'
 import { createTransfer } from '@/utils/services/finance.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
-
-const account = [
-    {
-        id: 1,
-        name: 'Счёт 1',
-    },
-    {
-        id: 2,
-        name: 'Счёт 2',
-    },
-]
+import { useApi } from '@/utils/services/axios'
 
 interface Account {
     id: number
@@ -23,6 +13,7 @@ interface Account {
 
 const Transfer = () => {
     const { loading } = useNotify()
+    const {data: accounts} = useApi<Account[]>('financeAccount')
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -77,10 +68,10 @@ const Transfer = () => {
                         const { onChange, value } = field
                         return (
                             <Select
-                                options={account}
+                                options={accounts}
                                 getOptionValue={(option: Account) => `${option.id}`}
                                 getOptionLabel={(option: Account) => option.name}
-                                value={account?.filter((option) => String(option.name) == value)}
+                                value={accounts?.filter((option) => String(option.name) == value)}
                                 onChange={(selectedOption: Account | null) => {
                                     if (selectedOption) {
                                         onChange(selectedOption.name)
@@ -105,10 +96,10 @@ const Transfer = () => {
                         const { onChange, value } = field
                         return (
                             <Select
-                                options={account}
+                                options={accounts}
                                 getOptionValue={(option: Account) => `${option.id}`}
                                 getOptionLabel={(option: Account) => option.name}
-                                value={account?.filter((option) => String(option.name) == value)}
+                                value={accounts?.filter((option) => String(option.name) == value)}
                                 onChange={(selectedOption: Account | null) => {
                                     if (selectedOption) {
                                         onChange(selectedOption.name)
