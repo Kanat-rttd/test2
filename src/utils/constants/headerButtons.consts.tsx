@@ -28,7 +28,7 @@ import {
     // RELEASE_ROUTE,
     RELEASE_DISTRIBUTION_ROUTE,
     RELEASE_REFUND_ROUTE,
-    RELEASE_REPORT_ROUTE,
+    // RELEASE_REPORT_ROUTE,
 
     // FINANCE_ROUTE,
     FINANCE_INPUT_ROUTE,
@@ -455,36 +455,11 @@ export const headerButtons: headerButton[] = [
                 label: 'Отчет по продукции',
                 isCurrentPage: true,
             },
-            {
-                puth: RELEASE_REPORT_ROUTE,
-                label: 'Отчет по реализации',
-                isCurrentPage: false,
-            },
-            {
-                puth: VISIT_REPORT_ROUTE,
-                label: 'Отчет по посещению',
-                isCurrentPage: false,
-            },
-            {
-                puth: RECONCILIATION_REPORT_ROUTE,
-                label: 'Акт сверки',
-                isCurrentPage: false,
-            },
-        ],
-    },
-    {
-        currentPage: RELEASE_REPORT_ROUTE,
-        buttonsData: [
-            {
-                puth: BREAD_REPORT_ROUTE,
-                label: 'Отчет по продукции',
-                isCurrentPage: false,
-            },
-            {
-                puth: RELEASE_REPORT_ROUTE,
-                label: 'Отчет по реализации',
-                isCurrentPage: true,
-            },
+            // {
+            //     puth: RELEASE_REPORT_ROUTE,
+            //     label: 'Отчет по реализации',
+            //     isCurrentPage: false,
+            // },
             {
                 puth: VISIT_REPORT_ROUTE,
                 label: 'Отчет по посещению',
@@ -497,6 +472,31 @@ export const headerButtons: headerButton[] = [
             },
         ],
     },
+    // {
+    //     currentPage: RELEASE_REPORT_ROUTE,
+    //     buttonsData: [
+    //         {
+    //             puth: BREAD_REPORT_ROUTE,
+    //             label: 'Отчет по продукции',
+    //             isCurrentPage: false,
+    //         },
+    //         {
+    //             puth: RELEASE_REPORT_ROUTE,
+    //             label: 'Отчет по реализации',
+    //             isCurrentPage: true,
+    //         },
+    //         {
+    //             puth: VISIT_REPORT_ROUTE,
+    //             label: 'Отчет по посещению',
+    //             isCurrentPage: false,
+    //         },
+    //         {
+    //             puth: RECONCILIATION_REPORT_ROUTE,
+    //             label: 'Акт сверки',
+    //             isCurrentPage: false,
+    //         },
+    //     ],
+    // },
     {
         currentPage: VISIT_REPORT_ROUTE,
         buttonsData: [
@@ -505,11 +505,11 @@ export const headerButtons: headerButton[] = [
                 label: 'Отчет по продукции',
                 isCurrentPage: false,
             },
-            {
-                puth: RELEASE_REPORT_ROUTE,
-                label: 'Отчет по реализации',
-                isCurrentPage: false,
-            },
+            // {
+            //     puth: RELEASE_REPORT_ROUTE,
+            //     label: 'Отчет по реализации',
+            //     isCurrentPage: false,
+            // },
             {
                 puth: VISIT_REPORT_ROUTE,
                 label: 'Отчет по посещению',
@@ -530,11 +530,11 @@ export const headerButtons: headerButton[] = [
                 label: 'Отчет по продукции',
                 isCurrentPage: false,
             },
-            {
-                puth: RELEASE_REPORT_ROUTE,
-                label: 'Отчет по реализации',
-                isCurrentPage: false,
-            },
+            // {
+            //     puth: RELEASE_REPORT_ROUTE,
+            //     label: 'Отчет по реализации',
+            //     isCurrentPage: false,
+            // },
             {
                 puth: VISIT_REPORT_ROUTE,
                 label: 'Отчет по посещению',

@@ -42,7 +42,7 @@ import {
     ADMIN_DEPART_PERSONAL_ROUTE,
     REPORT_ROUTE,
     BREAD_REPORT_ROUTE,
-    RELEASE_REPORT_ROUTE,
+    // RELEASE_REPORT_ROUTE,
     VISIT_REPORT_ROUTE,
     RECONCILIATION_REPORT_ROUTE,
 } from './routes.consts'
@@ -305,12 +305,12 @@ export const subMenuItems: MenuItem[] = [
         path: REPORT_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },
-    {
-        route: RELEASE_REPORT_ROUTE,
-        label: 'Отчет по реализации',
-        path: REPORT_ROUTE,
-        allowedClasses: ['Admin', 'Client'],
-    },
+    // {
+    //     route: RELEASE_REPORT_ROUTE,
+    //     label: 'Отчет по реализации',
+    //     path: REPORT_ROUTE,
+    //     allowedClasses: ['Admin', 'Client'],
+    // },
     {
         route: VISIT_REPORT_ROUTE,
         label: 'Отчет по посещению',
