@@ -40,7 +40,7 @@ export const createInvoiceArrival = async (
     invoiceNumber: number | undefined,
     data: {
         account: string
-        amount: number
+        amount: number | undefined
         financeCategoryId: string
         contragentId: number
         comment: string
