@@ -64,7 +64,7 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
         handleSubmit: handleSubmitForm,
         control,
         formState: { errors },
-        // reset,
+        reset,
     } = useForm<ArrivalInputs>()
 
     const sendData = (formData: ArrivalInputs) => {
@@ -74,6 +74,7 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
                 mutate(`finance/${invoiceNumber}`)
                 mutate('finance/totals')
                 mutate('release/invoice')
+                reset()
             })
             .catch((error) => {
                 console.error('Error creating sale:', error)

@@ -62,7 +62,7 @@ const Consumption = ({categoriesData} : ArrivalProps ) => {
         responsePromise
             .then(() => {
                 reset()
-                setValue('amount', undefined)
+                setValue('amount', null)
                 setValue('comment', '')
             })
             .catch((error) => {

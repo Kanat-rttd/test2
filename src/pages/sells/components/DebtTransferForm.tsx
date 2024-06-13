@@ -101,7 +101,7 @@ const DebtTransferForm = () => {
     }, [selectedProvider])
 
     const sendData = (formData: DebtTransferInputs) => {
-        const responsePromise:Promise<any> = createDebtTransfer(formData)
+        const responsePromise: Promise<any> = createDebtTransfer(formData)
         loading(responsePromise)
         responsePromise
             .then(() => {
@@ -114,11 +114,13 @@ const DebtTransferForm = () => {
 
     const getFilteredContragents = () => {
         let _filteredContragents
+        console.log(selectedProvider?.mainId)
 
         if (selectedProvider?.type == 'реализатор') {
             const filteredMagazines = magazinesData?.filter(
                 (option) => option.clientId == selectedProvider.mainId,
             )
+            console.log(filteredMagazines)
 
             _filteredContragents =
                 filteredMagazines?.map((option) => {
@@ -126,6 +128,7 @@ const DebtTransferForm = () => {
                         return item.mainId == option.id ? item : undefined
                     })
                 }) || []
+            console.log(_filteredContragents)
         } else if (selectedProvider?.type == 'магазин') {
             _filteredContragents = (magazinesData?.flatMap((option) => {
                 if (selectedProvider.mainId == option.id) {
@@ -137,6 +140,7 @@ const DebtTransferForm = () => {
                 }
                 return []
             }) || []) as ContragentType[]
+            console.log(_filteredContragents)
         }
         return _filteredContragents as ContragentType[]
     }
@@ -287,7 +291,7 @@ const DebtTransferForm = () => {
                                                     String(option.invoiceNumber) == String(value),
                                             )}
                                             onChange={(selectedOption: InvoiceData | null) => {
-                                                    onChange(selectedOption?.invoiceNumber)
+                                                onChange(selectedOption?.invoiceNumber)
                                             }}
                                             placeholder="Номер накладной *"
                                             isClearable

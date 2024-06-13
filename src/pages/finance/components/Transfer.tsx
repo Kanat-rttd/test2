@@ -20,6 +20,7 @@ const Transfer = () => {
         control,
         formState: { errors },
         reset,
+        setValue,
     } = useForm<TransferInputs>()
 
     const sendData = (formData: TransferInputs) => {
@@ -28,9 +29,11 @@ const Transfer = () => {
         responsePromise
             .then(() => {
                 reset()
+                setValue('amount', null)
+                setValue('comment', '')
             })
             .catch((error) => {
-                console.error('Error creating sale:', error)
+                console.error('Error creating transfer:', error)
             })
     }
 
