@@ -3,7 +3,7 @@ import { useApi } from '@/utils/services/axios'
 import DateRange from '../../../components/DateRange'
 import dayjs from 'dayjs'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
-import { TableContainer, Thead } from '@/components/ui'
+import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
 import { useEffect, useState } from 'react'
 
@@ -19,7 +19,7 @@ interface DepartPersonal {
 type FilteredData = {
     date: Date
     personals: {
-        personalName: string
+        personalName: string 
         totalQuantity: number
     }[]
 }
@@ -71,22 +71,20 @@ const VisitView = () => {
             return entry
         }
 
-        visitViewData?.forEach((item) => {
-            const dateEntry = findOrCreateDateEntry(item.date)
-            item.shiftAccountingDetails.forEach((detail) => {
-                const { name } = detail.departPersonal
-                let personalEntry = dateEntry.personals.find(
-                    (person) => person.personalName === name,
-                )
+        visitViewData?.forEach(item => {
+            const dateEntry = findOrCreateDateEntry(item.date);
+            item.shiftAccountingDetails.forEach(detail => {
+                const { name } = detail.departPersonal;
+                let personalEntry = dateEntry.personals.find(person => person.personalName === name);
                 if (!personalEntry) {
-                    personalEntry = { personalName: name, totalQuantity: 0 }
-                    dateEntry.personals.push(personalEntry)
+                    personalEntry = { personalName: name, totalQuantity: 0 };
+                    dateEntry.personals.push(personalEntry);
                 }
-                personalEntry.totalQuantity += detail.shiftTime
-            })
-        })
-
-        result.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                personalEntry.totalQuantity += detail.shiftTime;
+            });
+        });
+        
+        result.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
         return result
     }
@@ -94,6 +92,15 @@ const VisitView = () => {
     useEffect(() => {
         setFilteredData(getFilteredData())
     }, [personalNames, dates])
+
+    const getColumnTotal = (productName: string) => {
+        return visitViewData?.reduce((total, item) => {
+            const product = item.shiftAccountingDetails.find(
+                (product) => product.departPersonal.name === productName,
+            )
+            return total + (Number(product?.shiftTime) || 0)
+        }, 0)
+    }
 
     return (
         <Box>
@@ -125,31 +132,50 @@ const VisitView = () => {
                                     <Th>№</Th>
                                     <Th>Дата</Th>
                                     {personalNames.map((personalName, index) => (
-                                        <Th key={index}>{personalName}</Th>
+                                        <Th key={index} textAlign={'center'}>{personalName}</Th>
                                     ))}
                                 </Tr>
                             </Thead>
                             <Tbody>
                                 {filteredData?.length ? (
                                     filteredData?.map((entry, index) => (
-                                        <Tr key={index}>
-                                            <Td>{index + 1}</Td>
-                                            <Td>{dayjs(entry.date).format('DD.MM.YYYY')}</Td>
-                                            {personalNames.map((name, indx) => (
-                                                <Td key={indx}>
-                                                    {entry.personals.find(
-                                                        (person) => person.personalName === name,
-                                                    )?.totalQuantity || 0}
-                                                </Td>
-                                            ))}
-                                        </Tr>
-                                    ))
+                                            <Tr key={index}>
+                                                <Td>{index + 1}</Td>
+                                                <Td>{dayjs(entry.date).format('DD.MM.YYYY')}</Td>
+                                                {personalNames.map((name, indx) => (
+                                                    <Td key={indx} textAlign={'center'}>
+                                                        {entry.personals.find(
+                                                            (person) =>
+                                                                person.personalName === name,
+                                                        )?.totalQuantity || 0}
+                                                    </Td>
+                                                ))}
+                                            </Tr>
+                                        ))
                                 ) : (
                                     <Tr>
                                         <Td>Нет данных</Td>
                                     </Tr>
                                 )}
                             </Tbody>
+                            <Tfoot>
+                        <Tr>
+                            <Th color={'#000'} fontSize={15} fontWeight={'bold'}>
+                                Итого
+                            </Th>
+                            <Th></Th>
+                            {personalNames.map((personalName, productIndex) => (
+                                <Th
+                                    fontSize={15}
+                                    color={'#000'}
+                                    key={productIndex}
+                                    textAlign={'center'}
+                                >
+                                    {getColumnTotal(personalName)}
+                                </Th>
+                            ))}
+                        </Tr>
+                    </Tfoot>
                         </Table>
                     </TableContainer>
                 </Box>

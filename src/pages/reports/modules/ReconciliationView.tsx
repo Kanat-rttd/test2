@@ -2,7 +2,7 @@ import { Box, Select, Th, Tr, Tbody, Table, Td } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '../../../components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
-import { TableContainer, Thead } from '@/components/ui'
+import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 
@@ -16,15 +16,24 @@ interface Client {
 }
 
 type ReconciliationType = {
-    adjustedDate: Date
-    ClientName: string
-    Sales: number
-    Returns: number
-    Overhead: number
-    Expenses: number
-    Payments: number
-    Credit: number
-    Debt: number
+    reportData: {
+        adjustedDate: Date
+        ClientName: string
+        Sales: number
+        Returns: number
+        Overhead: number
+        Expenses: number
+        Payments: number
+        Credit: number
+        Debt: number
+    }[]
+    totalSales: number
+    totalReturns: number
+    totalOverhead: number
+    totalExpenses: number
+    totalPayments: number
+    totalCredit: number
+    totalDebt: number
 }
 
 type FilteredDataType = {
@@ -45,7 +54,7 @@ type ReportType = {
 
 const ReconciliationView = () => {
     const { getURLs, getParam, setParam } = useURLParameters()
-    const { data: reconciliationViewData } = useApi<ReconciliationType[]>(
+    const { data: reconciliationViewData } = useApi<ReconciliationType>(
         `reports/reconciliation?${getURLs().toString()}`,
     )
     const { data: clientsData } = useApi<Client[]>('client')
@@ -55,7 +64,7 @@ const ReconciliationView = () => {
 
     const getUniqDates = () => {
         const uniqDates = new Set<Date>()
-        reconciliationViewData?.forEach((item) => {
+        reconciliationViewData?.reportData.forEach((item) => {
             uniqDates.add(item.adjustedDate)
         })
         return [...uniqDates]
@@ -65,33 +74,37 @@ const ReconciliationView = () => {
         setDates(getUniqDates())
     }, [reconciliationViewData])
 
-    const groupedData: FilteredDataType[] = dates.map(date => {
-        const filteredReports = reconciliationViewData?.filter(item => item.adjustedDate === date);
-        const groupedReport: ReportType | undefined = filteredReports?.reduce((acc, item) => {
-            acc.Sales += item.Sales;
-            acc.Returns += item.Returns;
-            acc.Overhead += Number(item.Overhead);
-            acc.Expenses += Number(item.Expenses);
-            acc.Payments += Number(item.Payments);
-            acc.Credit += Number(item.Credit);
-            acc.Debt += Number(item.Debt);
-            return acc;
-        }, {
-            ClientName: '',
-            Sales: 0,
-            Returns: 0,
-            Overhead: 0,
-            Expenses: 0,
-            Payments: 0,
-            Credit: 0,
-            Debt: 0
-        });
-        return { date: new Date(date), reportData: groupedReport };
-    });
-    
+    const groupedData: FilteredDataType[] = dates.map((date) => {
+        const filteredReports = reconciliationViewData?.reportData.filter(
+            (item) => item.adjustedDate === date,
+        )
+        const groupedReport: ReportType | undefined = filteredReports?.reduce(
+            (acc, item) => {
+                acc.Sales += item.Sales
+                acc.Returns += item.Returns
+                acc.Overhead += Number(item.Overhead)
+                acc.Expenses += Number(item.Expenses)
+                acc.Payments += Number(item.Payments)
+                acc.Credit += Number(item.Credit)
+                acc.Debt += Number(item.Debt)
+                return acc
+            },
+            {
+                ClientName: '',
+                Sales: 0,
+                Returns: 0,
+                Overhead: 0,
+                Expenses: 0,
+                Payments: 0,
+                Credit: 0,
+                Debt: 0,
+            },
+        )
+        return { date: new Date(date), reportData: groupedReport }
+    })
 
     const getFilteredData = () => {
-        return groupedData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        return groupedData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     }
 
     useEffect(() => {
@@ -155,6 +168,32 @@ const ReconciliationView = () => {
                                     </Tr>
                                 )}
                             </Tbody>
+                            <Tfoot>
+                                <Tr>
+                                    <Th fontSize={15} color={'#000'}>
+                                        ИТОГО
+                                    </Th>
+                                    <Th></Th>
+                                    <Th fontSize={15} color={'#000'}>
+                                        {reconciliationViewData?.totalSales}
+                                    </Th>
+                                    <Th fontSize={15} color={'#000'}>
+                                        {reconciliationViewData?.totalExpenses}
+                                    </Th>
+                                    <Th fontSize={15} color={'#000'}>
+                                        {reconciliationViewData?.totalCredit}
+                                    </Th>
+                                    <Th fontSize={15} color={'#000'}>
+                                        {reconciliationViewData?.totalPayments}
+                                    </Th>
+                                    <Th fontSize={15} color={'#000'}>
+                                        {reconciliationViewData?.totalOverhead}
+                                    </Th>
+                                    <Th fontSize={15} color={'#000'}>
+                                        {reconciliationViewData?.totalDebt}
+                                    </Th>
+                                </Tr>
+                            </Tfoot>
                         </Table>
                     </TableContainer>
                 </Box>

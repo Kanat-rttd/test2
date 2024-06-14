@@ -87,7 +87,7 @@ const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
                                 <Td>{index + 1}</Td>
                                 <Td>{dayjs(item.date).format('DD.MM.YYYY')}</Td>
                                 {Array.from(uniqPersonal).map((productName, productIndex) => (
-                                    <Td width={'20%'} textAlign={'center'} key={productIndex}>
+                                    <Td textAlign={'center'} key={productIndex}>
                                         {item.shiftAccountingDetails.find(
                                             (prod) => prod.departPersonal.name === productName,
                                         )?.shiftTime || ''}
@@ -98,16 +98,16 @@ const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
                     </Tbody>
                     <Tfoot>
                         <Tr>
-                            <Th w={'16.4%'} color={'#000'} fontSize={15} fontWeight={'bold'}>
+                            <Th color={'#000'} fontSize={15} fontWeight={'bold'}>
                                 Итого
                             </Th>
-                            <Th w={'77%'}></Th>
+                            <Th></Th>
                             {Array.from(uniqPersonal).map((productName, productIndex) => (
                                 <Th
                                     fontSize={15}
                                     color={'#000'}
-                                    width={'27%'}
                                     key={productIndex}
+                                    textAlign={'center'}
                                 >
                                     {getColumnTotal(productName)}
                                 </Th>

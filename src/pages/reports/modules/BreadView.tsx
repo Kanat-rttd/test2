@@ -3,10 +3,15 @@ import { Box, Select, Td, Th, Tr, Tbody, Table } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '../../../components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
-import { TableContainer, Thead } from '@/components/ui'
+import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import dayjs from 'dayjs'
 
 interface BreadViewData {
+    reportData: ReportDataType[]
+    totals: { name: string; totalQuantity: number }[]
+}
+
+type ReportDataType = {
     contragentName: string
     name: string
     adjustedDate: Date
@@ -32,7 +37,7 @@ type FilteredData = {
 
 const BreadView = () => {
     const { getURLs, setParam, getParam } = useURLParameters()
-    const { data: breadViewData } = useApi<BreadViewData[]>(`reports/sales?${getURLs().toString()}`)
+    const { data: breadViewData } = useApi<BreadViewData>(`reports/sales?${getURLs().toString()}`)
     const { data: clientsData } = useApi<Client[]>('client')
     const [productsNames, setProductsNames] = useState<string[]>([])
     const [dates, setDates] = useState<Date[]>([])
@@ -40,7 +45,7 @@ const BreadView = () => {
 
     const getUniqDates = () => {
         const uniqDates = new Set<Date>()
-        breadViewData?.forEach((item) => {
+        breadViewData?.reportData?.forEach((item) => {
             uniqDates.add(item.adjustedDate)
         })
         return [...uniqDates]
@@ -48,18 +53,18 @@ const BreadView = () => {
 
     const getProductsNames = () => {
         const productNames = new Set<string>()
-        breadViewData?.forEach((entry) => {
+        breadViewData?.reportData?.forEach((entry) => {
             productNames.add(entry.name)
         })
         return [...productNames]
     }
 
     const getFilteredProducts = (): FilteredData[] => {
-        if (!breadViewData) return []
+        if (!breadViewData?.reportData) return []
 
         const groupedData: { [date: string]: { productName: string; totalQuantity: number }[] } = {}
 
-        breadViewData.forEach((entry) => {
+        breadViewData.reportData.forEach((entry) => {
             const dateKey = dayjs(entry.adjustedDate).format('DD.MM.YYYY')
             if (!groupedData[dateKey]) {
                 groupedData[dateKey] = []
@@ -131,20 +136,44 @@ const BreadView = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {filteredProducts?.length ? filteredProducts?.map((entry, index) => (
-                                    <Tr key={index}>
-                                        <Td>{index + 1}</Td>
-                                        <Td>{entry.date}</Td>
-                                        {productsNames.map((name, productIndex) => (
-                                            <Td key={productIndex}>
-                                                {entry.products.find(
-                                                    (prod) => prod.productName === name,
-                                                )?.totalQuantity || 0}
-                                            </Td>
-                                        ))}
+                                {filteredProducts?.length ? (
+                                    filteredProducts?.map((entry, index) => (
+                                        <Tr key={index}>
+                                            <Td>{index + 1}</Td>
+                                            <Td>{entry.date}</Td>
+                                            {productsNames.map((name, productIndex) => (
+                                                <Td key={productIndex}>
+                                                    {entry.products.find(
+                                                        (prod) => prod.productName === name,
+                                                    )?.totalQuantity || 0}
+                                                </Td>
+                                            ))}
+                                        </Tr>
+                                    ))
+                                ) : (
+                                    <Tr>
+                                        <Td>Нет данных</Td>
                                     </Tr>
-                                )): <Tr><Td>Нет данных</Td></Tr>}
+                                )}
                             </Tbody>
+                            <Tfoot>
+                                <Tr>
+                                    <Th fontSize={15} color={'#000'}>
+                                        ИТОГО
+                                    </Th>
+                                    <Th></Th>
+                                    {productsNames.map((productName, index) => {
+                                        const total = breadViewData?.totals.find(
+                                            (item) => item.name === productName,
+                                        )?.totalQuantity
+                                        return (
+                                            <Th key={index} fontSize={15} color={'#000'}>
+                                                {total}
+                                            </Th>
+                                        )
+                                    })}
+                                </Tr>
+                            </Tfoot>
                         </Table>
                     </TableContainer>
                 </Box>
