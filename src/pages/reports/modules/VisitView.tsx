@@ -19,7 +19,7 @@ interface DepartPersonal {
 type FilteredData = {
     date: Date
     personals: {
-        personalName: string 
+        personalName: string
         totalQuantity: number
     }[]
 }
@@ -54,10 +54,6 @@ const VisitView = () => {
         return [...uniqDates]
     }
 
-    const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setParam('personal', event.target.value)
-    }
-
     useEffect(() => {
         setPersonalNames(getPersonalNames())
         setDates(getUniqDates())
@@ -75,20 +71,22 @@ const VisitView = () => {
             return entry
         }
 
-        visitViewData?.forEach(item => {
-            const dateEntry = findOrCreateDateEntry(item.date);
-            item.shiftAccountingDetails.forEach(detail => {
-                const { name } = detail.departPersonal;
-                let personalEntry = dateEntry.personals.find(person => person.personalName === name);
+        visitViewData?.forEach((item) => {
+            const dateEntry = findOrCreateDateEntry(item.date)
+            item.shiftAccountingDetails.forEach((detail) => {
+                const { name } = detail.departPersonal
+                let personalEntry = dateEntry.personals.find(
+                    (person) => person.personalName === name,
+                )
                 if (!personalEntry) {
-                    personalEntry = { personalName: name, totalQuantity: 0 };
-                    dateEntry.personals.push(personalEntry);
+                    personalEntry = { personalName: name, totalQuantity: 0 }
+                    dateEntry.personals.push(personalEntry)
                 }
-                personalEntry.totalQuantity += detail.shiftTime;
-            });
-        });
-        
-        result.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+                personalEntry.totalQuantity += detail.shiftTime
+            })
+        })
+
+        result.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
         return result
     }
@@ -108,7 +106,7 @@ const VisitView = () => {
                             borderRadius={5}
                             width={'fit-content'}
                             value={getParam('personal')}
-                            onChange={handleClientChange}
+                            onChange={(e) => setParam('personal', e.target.value)}
                         >
                             <option value="">Все клиенты</option>
                             {departPersonalData?.map((personal) => (
@@ -134,19 +132,18 @@ const VisitView = () => {
                             <Tbody>
                                 {filteredData?.length ? (
                                     filteredData?.map((entry, index) => (
-                                            <Tr key={index}>
-                                                <Td>{index + 1}</Td>
-                                                <Td>{dayjs(entry.date).format('DD.MM.YYYY')}</Td>
-                                                {personalNames.map((name, indx) => (
-                                                    <Td key={indx}>
-                                                        {entry.personals.find(
-                                                            (person) =>
-                                                                person.personalName === name,
-                                                        )?.totalQuantity || 0}
-                                                    </Td>
-                                                ))}
-                                            </Tr>
-                                        ))
+                                        <Tr key={index}>
+                                            <Td>{index + 1}</Td>
+                                            <Td>{dayjs(entry.date).format('DD.MM.YYYY')}</Td>
+                                            {personalNames.map((name, indx) => (
+                                                <Td key={indx}>
+                                                    {entry.personals.find(
+                                                        (person) => person.personalName === name,
+                                                    )?.totalQuantity || 0}
+                                                </Td>
+                                            ))}
+                                        </Tr>
+                                    ))
                                 ) : (
                                     <Tr>
                                         <Td>Нет данных</Td>
