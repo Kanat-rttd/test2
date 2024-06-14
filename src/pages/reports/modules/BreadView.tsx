@@ -1,17 +1,16 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Box, Select, Td, Th, Tr, Tbody, Table } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '../../../components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Thead } from '@/components/ui'
+import dayjs from 'dayjs'
 
-interface breadViewData {
-    Date: string
-    Products: {
-        quantity: number
-        clientName: string
-        productName: string
-    }[]
+interface BreadViewData {
+    contragentName: string
+    name: string
+    adjustedDate: Date
+    SalesQuantity: number
 }
 
 interface Client {
@@ -23,51 +22,79 @@ interface Client {
     status: string
 }
 
+type FilteredData = {
+    date: string
+    products: {
+        productName: string
+        totalQuantity: number
+    }[]
+}
+
 const BreadView = () => {
-    const { getURLs } = useURLParameters()
-    const { data: breadViewData } = useApi<breadViewData[]>(`reports/bread?${getURLs().toString()}`)
+    const { getURLs, setParam, getParam } = useURLParameters()
+    const { data: breadViewData } = useApi<BreadViewData[]>(`reports/sales?${getURLs().toString()}`)
     const { data: clientsData } = useApi<Client[]>('client')
+    const [productsNames, setProductsNames] = useState<string[]>([])
+    const [dates, setDates] = useState<Date[]>([])
+    const [filteredProducts, setFilteredProducts] = useState<FilteredData[] | undefined>([])
 
-    const [selectedClient, setSelectedClient] = useState('')
-
-    const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedClient(event.target.value)
+    const getUniqDates = () => {
+        const uniqDates = new Set<Date>()
+        breadViewData?.forEach((item) => {
+            uniqDates.add(item.adjustedDate)
+        })
+        return [...uniqDates]
     }
 
-    const getProductNames = () => {
+    const getProductsNames = () => {
         const productNames = new Set<string>()
         breadViewData?.forEach((entry) => {
-            entry.Products.forEach((product) => {
-                productNames.add(product.productName)
-            })
+            productNames.add(entry.name)
         })
         return [...productNames]
     }
 
-    const filteredData = breadViewData
-        ?.map((entry) => ({
-            Date: entry.Date,
-            Products: entry.Products.filter(
-                (product) => selectedClient === '' || product.clientName === selectedClient,
-            ),
-        }))
-        .filter((entry) => entry.Products.length > 0)
+    const getFilteredProducts = (): FilteredData[] => {
+        if (!breadViewData) return []
 
-    const sumProductQuantityForDate = (date: string, productName: string) => {
-        let sum = 0
-        filteredData?.forEach((entry) => {
-            if (entry.Date === date) {
-                entry.Products.forEach((product) => {
-                    if (product.productName === productName) {
-                        sum += product.quantity
-                    }
+        const groupedData: { [date: string]: { productName: string; totalQuantity: number }[] } = {}
+
+        breadViewData.forEach((entry) => {
+            const dateKey = dayjs(entry.adjustedDate).format('DD.MM.YYYY')
+            if (!groupedData[dateKey]) {
+                groupedData[dateKey] = []
+            }
+            const existingProductIndex = groupedData[dateKey].findIndex(
+                (productEntry) => productEntry.productName === entry.name,
+            )
+            if (existingProductIndex === -1) {
+                groupedData[dateKey].push({
+                    productName: entry.name,
+                    totalQuantity: Number(entry.SalesQuantity),
                 })
+            } else {
+                groupedData[dateKey][existingProductIndex].totalQuantity += Number(
+                    entry.SalesQuantity,
+                )
             }
         })
-        return sum
+
+        const result: FilteredData[] = Object.keys(groupedData).map((date) => ({
+            date,
+            products: groupedData[date],
+        }))
+
+        return result
     }
 
-    const productNames = getProductNames()
+    useEffect(() => {
+        setDates(getUniqDates())
+        setProductsNames(getProductsNames())
+    }, [breadViewData])
+
+    useEffect(() => {
+        setFilteredProducts(getFilteredProducts())
+    }, [productsNames, dates])
 
     return (
         <Box>
@@ -79,8 +106,8 @@ const BreadView = () => {
                             size={'sm'}
                             borderRadius={5}
                             width={'fit-content'}
-                            value={selectedClient}
-                            onChange={handleClientChange}
+                            value={getParam('contragentName')}
+                            onChange={(e) => setParam('contragentName', e.target.value)}
                         >
                             <option value="">Все клиенты</option>
                             {clientsData?.map((client) => (
@@ -98,23 +125,25 @@ const BreadView = () => {
                                 <Tr>
                                     <Th>№</Th>
                                     <Th>Дата</Th>
-                                    {[...productNames].map((productName, index) => (
-                                        <Th key={index}>{productName}</Th>
+                                    {productsNames.map((product, index) => (
+                                        <Th key={index}>{product}</Th>
                                     ))}
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {filteredData?.map((entry, index) => (
+                                {filteredProducts?.length ? filteredProducts?.map((entry, index) => (
                                     <Tr key={index}>
                                         <Td>{index + 1}</Td>
-                                        <Td>{entry.Date}</Td>
-                                        {productNames.map((productName, idx) => (
-                                            <Td key={idx}>
-                                                {sumProductQuantityForDate(entry.Date, productName)}
+                                        <Td>{entry.date}</Td>
+                                        {productsNames.map((name, productIndex) => (
+                                            <Td key={productIndex}>
+                                                {entry.products.find(
+                                                    (prod) => prod.productName === name,
+                                                )?.totalQuantity || 0}
                                             </Td>
                                         ))}
                                     </Tr>
-                                ))}
+                                )): <Tr><Td>Нет данных</Td></Tr>}
                             </Tbody>
                         </Table>
                     </TableContainer>

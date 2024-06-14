@@ -25,9 +25,9 @@ interface Client {
 
 const ReconciliationView = () => {
     const { getURLs } = useURLParameters()
-    const { data: breadViewData } = useApi<breadViewData[]>(`reports/bread?${getURLs().toString()}`)
+    const { data: reconciliationViewData } = useApi<breadViewData[]>(`reports/reconciliation?${getURLs().toString()}`)
     const { data: clientsData } = useApi<Client[]>('client')
-    console.log(breadViewData)
+    console.log(reconciliationViewData)
 
     const [selectedClient, setSelectedClient] = useState('')
 

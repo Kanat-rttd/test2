@@ -4,13 +4,8 @@ import DateRange from '../../../components/DateRange'
 import dayjs from 'dayjs'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Thead } from '@/components/ui'
-
-interface visitViewData {
-    Date: string
-    personalId: number
-    personalName: string
-    totalHours: string
-}
+import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
+import { useEffect, useState } from 'react'
 
 interface DepartPersonal {
     id: number
@@ -21,34 +16,86 @@ interface DepartPersonal {
     fixSalary: string
 }
 
+type FilteredData = {
+    date: Date
+    personals: {
+        personalName: string 
+        totalQuantity: number
+    }[]
+}
+
 const VisitView = () => {
     const { getURLs, setParam, getParam } = useURLParameters()
 
-    const { data: visitViewData } = useApi<visitViewData[]>(`reports/time?${getURLs().toString()}`)
+    const { data: visitViewData } = useApi<ShiftAccountingType[]>(
+        `shiftAccounting?${getURLs().toString()}`,
+    )
     const { data: departPersonalData } = useApi<DepartPersonal[]>('departPersonal')
 
+    const [personalNames, setPersonalNames] = useState<string[]>([])
+    const [dates, setDates] = useState<Date[]>([])
+    const [filteredData, setFilteredData] = useState<FilteredData[] | undefined>([])
 
     const getPersonalNames = () => {
-        const personalNames = new Set<string>()
-        visitViewData?.forEach((entry) => {
-            personalNames.add(entry.personalName)
+        const uniqPersonal = new Set<string>()
+        visitViewData?.forEach((shift) => {
+            shift.shiftAccountingDetails.forEach((detail) => {
+                uniqPersonal.add(detail.departPersonal.name)
+            })
         })
-        return [...personalNames]
+        return [...uniqPersonal]
+    }
+
+    const getUniqDates = () => {
+        const uniqDates = new Set<Date>()
+        visitViewData?.forEach((item) => {
+            uniqDates.add(item.date)
+        })
+        return [...uniqDates]
     }
 
     const handleClientChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setParam('personalName', event.target.value)
+        setParam('personal', event.target.value)
     }
 
-    const personalNames = getPersonalNames()
+    useEffect(() => {
+        setPersonalNames(getPersonalNames())
+        setDates(getUniqDates())
+    }, [visitViewData])
 
-    const groupedDataByDate: { [key: string]: visitViewData[] } = {}
-    visitViewData?.forEach((item) => {
-        if (!groupedDataByDate[item.Date]) {
-            groupedDataByDate[item.Date] = []
+    const getFilteredData = () => {
+        const result: FilteredData[] = []
+
+        const findOrCreateDateEntry = (date: Date) => {
+            let entry = result.find((item) => item.date === date)
+            if (!entry) {
+                entry = { date, personals: [] }
+                result.push(entry)
+            }
+            return entry
         }
-        groupedDataByDate[item.Date].push(item)
-    })
+
+        visitViewData?.forEach(item => {
+            const dateEntry = findOrCreateDateEntry(item.date);
+            item.shiftAccountingDetails.forEach(detail => {
+                const { name } = detail.departPersonal;
+                let personalEntry = dateEntry.personals.find(person => person.personalName === name);
+                if (!personalEntry) {
+                    personalEntry = { personalName: name, totalQuantity: 0 };
+                    dateEntry.personals.push(personalEntry);
+                }
+                personalEntry.totalQuantity += detail.shiftTime;
+            });
+        });
+        
+        result.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+        return result
+    }
+
+    useEffect(() => {
+        setFilteredData(getFilteredData())
+    }, [personalNames, dates])
 
     return (
         <Box>
@@ -60,12 +107,12 @@ const VisitView = () => {
                             size={'sm'}
                             borderRadius={5}
                             width={'fit-content'}
-                            value={getParam('personalName')}
+                            value={getParam('personal')}
                             onChange={handleClientChange}
                         >
                             <option value="">Все клиенты</option>
                             {departPersonalData?.map((personal) => (
-                                <option key={personal.id} value={personal.name}>
+                                <option key={personal.id} value={personal.id}>
                                     {personal.name}
                                 </option>
                             ))}
@@ -79,25 +126,32 @@ const VisitView = () => {
                                 <Tr>
                                     <Th>№</Th>
                                     <Th>Дата</Th>
-                                    {[...personalNames].map((personalName, index) => (
+                                    {personalNames.map((personalName, index) => (
                                         <Th key={index}>{personalName}</Th>
                                     ))}
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {Object.keys(groupedDataByDate).map((date, index) => (
-                                    <Tr key={index}>
-                                        <Td>{index + 1}</Td>
-                                        <Td>{dayjs(date).format('DD.MM.YYYY')}</Td>
-                                        {[...personalNames].map((personalName, innerIndex) => (
-                                            <Td key={innerIndex}>
-                                                {groupedDataByDate[date].find(
-                                                    (data) => data.personalName === personalName,
-                                                )?.totalHours || ''}
-                                            </Td>
-                                        ))}
+                                {filteredData?.length ? (
+                                    filteredData?.map((entry, index) => (
+                                            <Tr key={index}>
+                                                <Td>{index + 1}</Td>
+                                                <Td>{dayjs(entry.date).format('DD.MM.YYYY')}</Td>
+                                                {personalNames.map((name, indx) => (
+                                                    <Td key={indx}>
+                                                        {entry.personals.find(
+                                                            (person) =>
+                                                                person.personalName === name,
+                                                        )?.totalQuantity || 0}
+                                                    </Td>
+                                                ))}
+                                            </Tr>
+                                        ))
+                                ) : (
+                                    <Tr>
+                                        <Td>Нет данных</Td>
                                     </Tr>
-                                ))}
+                                )}
                             </Tbody>
                         </Table>
                     </TableContainer>
