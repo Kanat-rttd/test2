@@ -90,7 +90,7 @@ const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
                                     <Td textAlign={'center'} key={productIndex}>
                                         {item.shiftAccountingDetails.find(
                                             (prod) => prod.departPersonal.name === productName,
-                                        )?.shiftTime || ''}
+                                        )?.shiftTime || 0}
                                     </Td>
                                 ))}
                             </Tr>
