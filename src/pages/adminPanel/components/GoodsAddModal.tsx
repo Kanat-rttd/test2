@@ -24,6 +24,7 @@ import { ProviderType } from '@/utils/types/provider.types'
 interface ProviderGoods {
     id: number
     providerId: number
+    goodsCategoryId: number
     goods: string
     unitOfMeasure: string
     place: { label: string }[]
@@ -45,9 +46,15 @@ type ModalProps = {
     onSuccess: () => void
 }
 
+type GoodsCategory ={
+    id: number
+    category: string
+}
+
 const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps) => {
     const { success, error } = useNotify()
     const { data: providersData } = useApi<ProviderType[]>('providers?status=Активный')
+    const { data: goodsCategories } = useApi<GoodsCategory[]>('goodsCategories')
     const { data: placesData } = useApi<Place[]>('place')
 
     const {
@@ -58,6 +65,9 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
         setValue,
         reset,
     } = useForm<ProviderInputs>()
+
+    console.log(goodsCategories);
+    
 
     useEffect(() => {
         if (selectedData) {
@@ -136,7 +146,7 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                                     ) => {
                                                         onChange(selectedOption?.id)
                                                     }}
-                                                    placeholder="Поставщик *"
+                                                    placeholder="Выберите поставщика *"
                                                     isClearable
                                                     isSearchable
                                                 />
@@ -147,7 +157,40 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                         {errors.providerId?.message}
                                     </FormErrorMessage>
                                 </FormControl>
-
+                                <FormControl isInvalid={!!errors.goodsCategoryId}>
+                                    <Controller
+                                        name="goodsCategoryId"
+                                        control={control}
+                                        rules={{ required: 'Поле является обязательным' }}
+                                        render={({ field }) => {
+                                            const { onChange, value } = field
+                                            return (
+                                                <Select
+                                                    options={goodsCategories}
+                                                    getOptionLabel={(option: GoodsCategory) =>
+                                                        option.category
+                                                    }
+                                                    getOptionValue={(option: GoodsCategory) =>
+                                                        `${option.id}`
+                                                    }
+                                                    value={goodsCategories?.filter(
+                                                        (option) =>
+                                                            String(option.id) == String(value),
+                                                    )}
+                                                    onChange={(
+                                                        selectedOption: GoodsCategory | null,
+                                                    ) => {
+                                                        onChange(selectedOption?.id)
+                                                    }}
+                                                    placeholder="Выберите категорию товара *"
+                                                    isClearable
+                                                    isSearchable
+                                                />
+                                            )
+                                        }}
+                                    />
+                                    <FormErrorMessage>{errors.bakery?.message}</FormErrorMessage>
+                                    </FormControl>
                                 <FormControl isInvalid={!!errors.goods}>
                                     <Input
                                         maxLength={20}
@@ -155,7 +198,7 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                             required: 'Поле является обязательным',
                                         })}
                                         autoComplete="off"
-                                        placeholder="Товары *"
+                                        placeholder="Товар *"
                                         type="text"
                                     />
                                     <FormErrorMessage>{errors.goods?.message}</FormErrorMessage>
@@ -195,7 +238,7 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                                         label: val.label,
                                                     }))}
                                                     onChange={(val) => onChange(val)}
-                                                    placeholder="Место *"
+                                                    placeholder="Выберите место *"
                                                     isClearable
                                                     isSearchable
                                                 />

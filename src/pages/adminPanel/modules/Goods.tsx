@@ -23,9 +23,15 @@ import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
 import GoodsAddModal from '../components/GoodsAddModal'
 import { ProviderType } from '@/utils/types/provider.types'
 
+type GoodsCategory = {
+    id: number
+    category: string
+}
+
 const AdminGoods = () => {
     const { error, success } = useNotify()
     const [selectedStatus, setSelectedStatus] = useState('')
+    const { data: goodsCategories } = useApi<GoodsCategory[]>('goodsCategories')
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
@@ -100,7 +106,8 @@ const AdminGoods = () => {
                             <Thead>
                                 <Tr>
                                     <Th>№</Th>
-                                    <Th>Товары</Th>
+                                    <Th>Товар</Th>
+                                    <Th>Категория товара</Th>
                                     <Th>Поставщик</Th>
                                     <Th>Единица измерения</Th>
                                     <Th>Место</Th>
@@ -122,6 +129,14 @@ const AdminGoods = () => {
                                         <Tr key={index}>
                                             <Td>{index + Number(1)}</Td>
                                             <Td>{item.goods}</Td>
+                                            <Td>
+                                                {
+                                                    goodsCategories?.find(
+                                                        (category) =>
+                                                            category.id == item.goodsCategoryId,
+                                                    )?.category
+                                                }
+                                            </Td>
                                             <Td>{providerName?.providerName}</Td>
                                             <Td>{item.unitOfMeasure}</Td>
                                             <Td>{placesString}</Td>

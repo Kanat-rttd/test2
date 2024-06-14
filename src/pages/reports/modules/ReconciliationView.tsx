@@ -65,9 +65,6 @@ const ReconciliationView = () => {
         setDates(getUniqDates())
     }, [reconciliationViewData])
 
-    console.log(dates)
-    console.log(reconciliationViewData)
-
     const groupedData: FilteredDataType[] = dates.map(date => {
         const filteredReports = reconciliationViewData?.filter(item => item.adjustedDate === date);
         const groupedReport: ReportType | undefined = filteredReports?.reduce((acc, item) => {
@@ -100,8 +97,6 @@ const ReconciliationView = () => {
     useEffect(() => {
         setFilteredData(getFilteredData())
     }, [dates])
-
-    console.log(filteredData)
 
     return (
         <Box>

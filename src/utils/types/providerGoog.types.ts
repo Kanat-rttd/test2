@@ -1,6 +1,7 @@
 export type ProviderGoodsType = {
     id: number
     providerId: number
+    goodsCategoryId: number
     goods: string
     unitOfMeasure: string
     place: { label: string }[]
@@ -14,6 +15,7 @@ export type ProviderGoodsType = {
 export type ProviderInputs = {
     id: number
     providerId: number
+    goodsCategoryId: number
     goods: string
     unitOfMeasure: string
     bakery: { label: string }[]
