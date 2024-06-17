@@ -10,6 +10,7 @@ import {
     FINANCE_ROUTE,
     PURCHASE_ROUTE,
     INVENTORY_ROUTE,
+    INVENTORY_HISTORY_ROUTE,
     SELLS_ROUTE,
     REPORT_ROUTE,
 } from './constants/routes.consts'
@@ -26,6 +27,7 @@ import ReleasePage from '@/pages/release'
 import FinancePage from '@/pages/finance'
 import PurchasePage from '@/pages/purchase'
 import InventoryPage from '@/pages/inventory'
+import InventoryHistoryPage from '@/pages/inventory/modules/AdjustmentsHictory'
 import SellsPage from '@/pages/sells'
 import Reports from '@/pages/reports'
 
@@ -79,6 +81,11 @@ export const publicRoutes = [
     {
         path: INVENTORY_ROUTE,
         Component: InventoryPage,
+        Loader: Loading,
+    },
+    {
+        path: INVENTORY_HISTORY_ROUTE,
+        Component: InventoryHistoryPage,
         Loader: Loading,
     },
     {

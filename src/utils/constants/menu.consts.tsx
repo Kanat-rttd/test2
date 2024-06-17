@@ -29,6 +29,7 @@ import {
     PURCHASE_DEBT_ROUTE,
     INVENTORY_ROUTE,
     INVENTORY_DETAILS_ROUTE,
+    INVENTORY_HISTORY_ROUTE,
     ADMIN_PROVIDER_ROUTE,
     ADMIN_GOODS_ROUTE,
     INVENTORY_FACT_ROUTE,
@@ -296,6 +297,12 @@ export const subMenuItems: MenuItem[] = [
     {
         route: INVENTORY_DETAILS_ROUTE,
         label: 'Инвентаризация',
+        path: INVENTORY_ROUTE,
+        allowedClasses: ['Admin', 'Client'],
+    },
+    {
+        route: INVENTORY_HISTORY_ROUTE,
+        label: 'История нвентаризации',
         path: INVENTORY_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },

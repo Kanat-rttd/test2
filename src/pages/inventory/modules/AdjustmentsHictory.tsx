@@ -1,27 +1,17 @@
 import { Table, Tr, Th, Tbody, Td, Box, Select } from '@chakra-ui/react'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
+import { useApi } from '@/utils/services/axios'
+import dayjs from 'dayjs'
 
-const data = [
-    {
-        id: 1,
-        name: 'Мука',
-        remainOnTheBeginning: 100,
-        expense: 500,
-        arrival: 500,
-        remainOnTheEnd: 100,
-    },
-    {
-        id: 2,
-        name: 'Картошка',
-        remainOnTheBeginning: 100,
-        expense: 500,
-        arrival: 500,
-        remainOnTheEnd: 100,
-    },
-]
+type AdjustmentType = {
+    quantity: number
+    providerGoodId: number
+    createdAt: Date
+}
 
-const RemainRawMaterials = () => {
+const AdjustmentsHictory = () => {
+    const { data: adjustmentData } = useApi<AdjustmentType[]>('adjustment')
     return (
         <>
             <UniversalComponent>
@@ -39,23 +29,18 @@ const RemainRawMaterials = () => {
                             <Thead>
                                 <Tr>
                                     <Th>№</Th>
-                                    <Th>Название</Th>
-                                    <Th>Остаток на начало</Th>
-                                    <Th>Расход</Th>
-                                    <Th>Приход</Th>
-                                    <Th>Остаток на конец</Th>
+                                    <Th>Дата</Th>
+                                    <Th>Товар</Th>
+                                    <Th>Количество</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {data.map((product, index) => {
+                                {adjustmentData?.map((item, index) => {
                                     return (
                                         <Tr key={index}>
-                                            <Td>{product.id}</Td>
-                                            <Td>{product.name}</Td>
-                                            <Td>{product.remainOnTheBeginning}</Td>
-                                            <Td>{product.expense}</Td>
-                                            <Td>{product.arrival}</Td>
-                                            <Td>{product.remainOnTheEnd}</Td>
+                                            <Td>{dayjs(item.createdAt).format('DD.MM.YYYY')}</Td>
+                                            <Td>{item.providerGoodId}</Td>
+                                            <Td>{item.quantity}</Td>
                                         </Tr>
                                     )
                                 })}
@@ -64,9 +49,7 @@ const RemainRawMaterials = () => {
                                 <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>
                                     <Td>Итого</Td>
                                     <Td></Td>
-                                    <Td>100</Td>
-                                    <Td>100</Td>
-                                    <Td>100</Td>
+                                    <Td></Td>
                                     <Td>100</Td>
                                 </Tr>
                             </Tfoot>
@@ -78,4 +61,4 @@ const RemainRawMaterials = () => {
     )
 }
 
-export default RemainRawMaterials
+export default AdjustmentsHictory

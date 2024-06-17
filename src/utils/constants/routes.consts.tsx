@@ -43,6 +43,7 @@ export const PURCHASE_DEBT_ROUTE = '/purchase/debt'
 export const INVENTORY_ROUTE = '/inventory/:page'
 export const INVENTORY_FACT_ROUTE = '/inventory/fact'
 export const INVENTORY_DETAILS_ROUTE = '/inventory/details'
+export const INVENTORY_HISTORY_ROUTE = '/inventory/history'
 
 export const SELLS_ROUTE = '/sells/:page'
 export const SELLS_JOURNAL_ROUTE = '/sells/journal'

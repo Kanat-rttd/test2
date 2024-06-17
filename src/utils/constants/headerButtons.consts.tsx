@@ -42,6 +42,7 @@ import {
     // INVENTORY_ROUTE,
     INVENTORY_DETAILS_ROUTE,
     INVENTORY_FACT_ROUTE,
+    INVENTORY_HISTORY_ROUTE,
 
     // SELLS_ROUTE,
     SELLS_JOURNAL_ROUTE,
@@ -145,7 +146,7 @@ export const headerButtons: headerButton[] = [
                 label: 'Поставщики',
                 isCurrentPage: true,
             },
-             {
+            {
                 puth: ADMIN_GOODS_ROUTE,
                 label: 'Товары',
                 isCurrentPage: false,
@@ -160,7 +161,7 @@ export const headerButtons: headerButton[] = [
                 label: 'Поставщики',
                 isCurrentPage: false,
             },
-             {
+            {
                 puth: ADMIN_GOODS_ROUTE,
                 label: 'Товары',
                 isCurrentPage: true,
@@ -560,6 +561,11 @@ export const headerButtons: headerButton[] = [
                 label: 'Инвентаризация',
                 isCurrentPage: false,
             },
+            {
+                puth: INVENTORY_HISTORY_ROUTE,
+                label: 'История нвентаризации',
+                isCurrentPage: false,
+            },
         ],
     },
     {
@@ -573,6 +579,31 @@ export const headerButtons: headerButton[] = [
             {
                 puth: INVENTORY_DETAILS_ROUTE,
                 label: 'Инвентаризация',
+                isCurrentPage: true,
+            },
+            {
+                puth: INVENTORY_HISTORY_ROUTE,
+                label: 'История нвентаризации',
+                isCurrentPage: false,
+            },
+        ],
+    },
+    {
+        currentPage: INVENTORY_HISTORY_ROUTE,
+        buttonsData: [
+            {
+                puth: INVENTORY_FACT_ROUTE,
+                label: 'Ввод факт',
+                isCurrentPage: false,
+            },
+            {
+                puth: INVENTORY_DETAILS_ROUTE,
+                label: 'Инвентаризация',
+                isCurrentPage: false,
+            },
+            {
+                puth: INVENTORY_HISTORY_ROUTE,
+                label: 'История нвентаризации',
                 isCurrentPage: true,
             },
         ],
