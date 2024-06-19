@@ -124,7 +124,7 @@ const BakingPage = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {bakingsData?.bakingData.map((bakingRow, index) => {
+                            {bakingsData?.bakingData.length ? bakingsData?.bakingData.map((bakingRow, index) => {
                                 return (
                                     <Tr key={index} textAlign={'center'}>
                                         <Td>{bakingRow.product?.name}</Td>
@@ -170,22 +170,22 @@ const BakingPage = () => {
                                         </Td>
                                     </Tr>
                                 )
-                            })}
+                            }) : <Tr><Td>Нет данных</Td></Tr>}
                         </Tbody>
                         <Tfoot>
                             <Tr>
                                 <Th fontSize={16} fontWeight={'bold'} color={'#000'}>
                                     Итого
                                 </Th>
-                                <Th sx={styles}>{bakingsData?.totals?.totalFlour}</Th>
-                                <Th sx={styles}>{bakingsData?.totals?.totalSalt}</Th>
-                                <Th sx={styles}>{bakingsData?.totals?.totalYeast}</Th>
-                                <Th sx={styles}>{bakingsData?.totals?.totalMalt}</Th>
-                                <Th sx={styles}>{bakingsData?.totals?.totalButter}</Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalFlour || 0}</Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalSalt || 0}</Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalYeast || 0}</Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalMalt || 0}</Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalButter || 0}</Th>
                                 <Th sx={styles}></Th>
                                 <Th sx={styles}></Th>
-                                <Th sx={styles}>{bakingsData?.totals?.totalOutput}</Th>
-                                <Th sx={styles}>{bakingsData?.totals?.totalDefective}</Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalOutput || 0}</Th>
+                                <Th sx={styles}>{bakingsData?.totals?.totalDefective || 0}</Th>
                                 <Th sx={styles}></Th>
                             </Tr>
                         </Tfoot>
