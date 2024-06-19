@@ -41,7 +41,7 @@ const MenuAccordion = () => {
     const userInfo = getUserInfo()
 
     const parsedClass = JSON.parse(String(userInfo?.class))
-    
+
     const filteredMenuItems = menuItems.filter((item) => {
         return (
             parsedClass[0].label &&
@@ -50,8 +50,8 @@ const MenuAccordion = () => {
         )
     })
 
-    console.log(filteredMenuItems);
-    
+    console.log(filteredMenuItems)
+    console.log(parsedClass)
 
     const handleNavigate = (route: string) => {
         setIsDrawerOpen(false)
@@ -80,7 +80,7 @@ const MenuAccordion = () => {
 
                             <DrawerBody display="flex" p={2} gap="0.5rem" flexDirection="column">
                                 <Accordion allowMultiple>
-                                    {menuItems.map((MenuItem, index) => (
+                                    {filteredMenuItems.map((MenuItem, index) => (
                                         <Fragment key={index}>
                                             <AccordionItem key={MenuItem.label}>
                                                 <h2>
