@@ -23,7 +23,7 @@ import { MagazineType } from '@/utils/types/magazine.type'
 import { ClientType } from '@/utils/types/client.type'
 
 const AdminPanel = () => {
-    const { loading } = useNotify()
+    const { success, error } = useNotify()
     const [filters, setFilters] = useState({ name: '', clientId: '', status: '' })
     const { data: magazinesDataForSelect } = useApi<MagazineType[]>('magazines')
 
@@ -45,12 +45,14 @@ const AdminPanel = () => {
     const deleteMagazine = (selectedData: MagazineType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteMagazines(selectedData.id)
-            loading(responsePromise)
-            responsePromise.then(() => {
+            
+            responsePromise.then((res) => {
                 mutateMagazinesData()
+                success(res.data.message)
             })
         } else {
             console.error('No user data available to delete.')
+            error('Произошла ошибка')
         }
     }
 
