@@ -64,12 +64,12 @@ export const menuItems: MenuItem[] = [
     {
         route: ADMIN_ROUTE,
         label: 'Админ панель',
-        allowedClasses: ['Admin'],
+        allowedClasses: ['Админ'],
     },
     {
         route: MIXERS_ROUTE,
         label: 'Производство',
-        allowedClasses: ['Admin', 'Client'],
+        allowedClasses: ['Админ', 'Производство'],
     },
     // {
     //     route: REQUEST_ROUTE,
@@ -84,12 +84,12 @@ export const menuItems: MenuItem[] = [
     {
         route: SALES_ROUTE,
         label: 'Продажи',
-        allowedClasses: ['Admin', 'Client'],
+        allowedClasses: ['Админ', 'Продажи'],
     },
     {
         route: PURCHASE_ROUTE,
         label: 'Закуп',
-        allowedClasses: ['Admin', 'Client'],
+        allowedClasses: ['Админ', 'Закуп'],
     },
     // {
     //     route: RELEASE_ROUTE,
@@ -99,17 +99,17 @@ export const menuItems: MenuItem[] = [
     {
         route: FINANCE_ROUTE,
         label: 'Финансы',
-        allowedClasses: ['Admin'],
+        allowedClasses: ['Админ', 'Финансы'],
     },
     {
         route: REPORT_ROUTE,
         label: 'Отчеты',
-        allowedClasses: ['Admin'],
+        allowedClasses: ['Админ', 'Отчеты'],
     },
     {
         route: INVENTORY_ROUTE,
         label: 'Инвентаризация',
-        allowedClasses: ['Admin', 'Client'],
+        allowedClasses: ['Админ', 'Инвентаризация'],
     },
     // {
     //     route: SELLS_ROUTE,
