@@ -12,6 +12,7 @@ type AdjustmentType = {
 
 const AdjustmentsHictory = () => {
     const { data: adjustmentData } = useApi<AdjustmentType[]>('adjustment')
+  
     return (
         <>
             <UniversalComponent>
@@ -35,15 +36,23 @@ const AdjustmentsHictory = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {adjustmentData?.map((item, index) => {
-                                    return (
-                                        <Tr key={index}>
-                                            <Td>{dayjs(item.createdAt).format('DD.MM.YYYY')}</Td>
-                                            <Td>{item.providerGoodId}</Td>
-                                            <Td>{item.quantity}</Td>
-                                        </Tr>
-                                    )
-                                })}
+                                {adjustmentData?.length ? (
+                                    adjustmentData?.map((item, index) => {
+                                        return (
+                                            <Tr key={index}>
+                                                <Td>
+                                                    {dayjs(item.createdAt).format('DD.MM.YYYY')}
+                                                </Td>
+                                                <Td>{item.providerGoodId}</Td>
+                                                <Td>{item.quantity}</Td>
+                                            </Tr>
+                                        )
+                                    })
+                                ) : (
+                                    <Tr>
+                                        <Td>Нет данных</Td>
+                                    </Tr>
+                                )}
                             </Tbody>
                             <Tfoot>
                                 <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>

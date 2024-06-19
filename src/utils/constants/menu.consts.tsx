@@ -302,7 +302,7 @@ export const subMenuItems: MenuItem[] = [
     },
     {
         route: INVENTORY_HISTORY_ROUTE,
-        label: 'История нвентаризации',
+        label: 'История корректировок',
         path: INVENTORY_ROUTE,
         allowedClasses: ['Admin', 'Client'],
     },

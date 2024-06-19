@@ -16,7 +16,7 @@ import {
     FormLabel,
 } from '@chakra-ui/react'
 
-import { useForm, SubmitHandler, useFieldArray } from 'react-hook-form'
+import { useForm, SubmitHandler, useFieldArray, Controller } from 'react-hook-form'
 import { OrderArrayType } from '@/utils/types/order.types'
 import { createSale, updateSale } from '@/utils/services/sales.service'
 import { ClientType } from '@/utils/types/client.type'
@@ -43,7 +43,9 @@ type FormData = {
 const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddModalProps) => {
     const { loading } = useNotify()
     const { data: clients } = useApi<ClientType[]>('client?status=Активный')
-    const { data: products } = useApi<Product[]>('product?status=Активный')
+    const { data: productsData } = useApi<Product[]>('product?status=Активный')
+
+    // const [selectedProductIds, setSelectedProductIds] = useState<number[]>([])
 
     const {
         register,
@@ -74,6 +76,17 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
             reset()
         }
     }, [selectedData])
+
+    useEffect(() => {
+        console.log(fields)
+
+        // const productsIds = fields
+        //     ?.map((product) => Number(product.productId))
+        //     .filter((product) => product != 0)
+        // console.log(productsIds)
+
+        // setSelectedProductIds(productsIds)
+    }, [fields])
 
     const addRequest: SubmitHandler<FormData> = (formData) => {
         try {
@@ -153,19 +166,47 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
                                             alignItems="center"
                                             key={index}
                                         >
-                                            <Select
-                                                {...register(`products.${index}.productId`, {
-                                                    required: 'Поле является обязательным',
-                                                })}
-                                                variant="filled"
-                                                placeholder="Вид хлеба"
-                                            >
-                                                {products?.map((product) => (
-                                                    <option key={product.name} value={product.id}>
-                                                        {product.name}
-                                                    </option>
-                                                ))}
-                                            </Select>
+                                            <Controller
+                                                name={`products.${index}.productId`}
+                                                control={control}
+                                                rules={{ required: 'Поле является обязательным' }}
+                                                render={({ field }) => {
+                                                    const { onChange, value } = field
+                                                    const selectedProductId =
+                                                        value !== null ? String(value) : ''
+
+                                                    return (
+                                                        <Select
+                                                            value={selectedProductId}
+                                                            onChange={(selectedOption) => {
+                                                                onChange(selectedOption)
+                                                            }}
+                                                            variant="filled"
+                                                            placeholder="Выберите продукт"
+                                                        >
+                                                            {productsData
+                                                                ?.filter((item) => {
+                                                                    const products = fields.filter(
+                                                                        (_, i) => index > i,
+                                                                    )
+                                                                    return !products.find(
+                                                                        (product) =>
+                                                                            product.productId ==
+                                                                            item.id,
+                                                                    )
+                                                                })
+                                                                .map((product) => (
+                                                                    <option
+                                                                        key={product.name}
+                                                                        value={product.id}
+                                                                    >
+                                                                        {product.name}
+                                                                    </option>
+                                                                ))}
+                                                        </Select>
+                                                    )
+                                                }}
+                                            />
 
                                             <Input
                                                 {...register(`products.${index}.orderedQuantity`, {

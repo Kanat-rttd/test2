@@ -563,7 +563,7 @@ export const headerButtons: headerButton[] = [
             },
             {
                 puth: INVENTORY_HISTORY_ROUTE,
-                label: 'История нвентаризации',
+                label: 'История корректировок',
                 isCurrentPage: false,
             },
         ],
@@ -583,7 +583,7 @@ export const headerButtons: headerButton[] = [
             },
             {
                 puth: INVENTORY_HISTORY_ROUTE,
-                label: 'История нвентаризации',
+                label: 'История корректировок',
                 isCurrentPage: false,
             },
         ],
@@ -603,7 +603,7 @@ export const headerButtons: headerButton[] = [
             },
             {
                 puth: INVENTORY_HISTORY_ROUTE,
-                label: 'История нвентаризации',
+                label: 'История корректировок',
                 isCurrentPage: true,
             },
         ],
