@@ -37,7 +37,7 @@ type EditModalInputs = {
 }
 
 const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
-    const { loading } = useNotify()
+    const { success, error } = useNotify()
     const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods?status=Активный')
     const [selectedValue, setSelectedValue] = useState<ProviderGoodsType | null>()
     const [isMinus, setIsMinus] = useState<boolean>(false)
@@ -48,24 +48,20 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
         control,
         formState: { errors },
         reset,
-        setError,
     } = useForm<EditModalInputs>()
 
     const sendData = (formData: EditModalInputs) => {
         const data = { ...formData, qty: isMinus ? Number(formData.qty) * -1 : Number(formData.qty)}
         const responsePromise: Promise<any> = createAdjustment(data)
-        loading(responsePromise)
-
         responsePromise
-            .then(() => {
+            .then((res) => {
                 reset()
                 // onSuccess()
                 handleClose()
+                success(res.data.message)
             })
-            .catch((error) => {
-                setError(error.response.data.field, {
-                    message: error.response.data.message || 'Ошибка',
-                })
+            .catch(() => {
+                error('Произошла ошибка')
             })
     }
 
@@ -126,7 +122,7 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
                                         type="number"
                                     />
                                     <InputRightAddon>
-                                        {selectedValue ? selectedValue.unitOfMeasure : 'кг'}
+                                        {selectedValue ? selectedValue.goodsCategory.unitOfMeasure : 'кг'}
                                     </InputRightAddon>
                                 </InputGroup>
                                 <FormErrorMessage>{errors.qty?.message}</FormErrorMessage>

@@ -19,13 +19,29 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 import { mutate } from 'swr'
 import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
-import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
 import GoodsAddModal from '../components/GoodsAddModal'
 import { ProviderType } from '@/utils/types/provider.types'
 
 type GoodsCategory = {
     id: number
     category: string
+}
+
+interface ProviderGoods {
+    id: number
+    providerId: number
+    goodsCategoryId: number
+    goodsCategory: {
+        id: number
+        unitOfMeasure: string
+    }
+    goods: string
+    place: { label: string }[]
+    status: string
+    provider: {
+        id: number
+        name: string
+    }
 }
 
 const AdminGoods = () => {
@@ -37,19 +53,19 @@ const AdminGoods = () => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const { data: providerGoodsData, isLoading } = useApi<ProviderGoodsType[]>('providerGoods', {
+    const { data: providerGoodsData, isLoading } = useApi<ProviderGoods[]>('providerGoods', {
         status: selectedStatus,
     })
     const { data: providerData } = useApi<ProviderType[]>('providers')
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [selectedData, setSelectedData] = useState<ProviderGoodsType>()
+    const [selectedData, setSelectedData] = useState<ProviderGoods>()
 
     const handleSelectChange = (status: string) => {
         setSelectedStatus(status)
     }
 
-    const handlerDeleteProvider = (selectedData: ProviderGoodsType | undefined) => {
+    const handlerDeleteProvider = (selectedData: ProviderGoods | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteProviderGoods(selectedData.id)
             responsePromise
@@ -138,7 +154,7 @@ const AdminGoods = () => {
                                                 }
                                             </Td>
                                             <Td>{providerName?.providerName}</Td>
-                                            <Td>{item.unitOfMeasure}</Td>
+                                            <Td>{item.goodsCategory.unitOfMeasure}</Td>
                                             <Td>{placesString}</Td>
                                             <Td>{item.status}</Td>
                                             <Td sx={{ width: '5%' }}>
