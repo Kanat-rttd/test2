@@ -23,7 +23,7 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import { ReleaserType } from '@/utils/types/releaser.types'
 
 const AdminPanel = () => {
-    const { loading } = useNotify()
+    const { success, error } = useNotify()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<ReleaserType | undefined>(undefined)
     const [filters, setFilters] = useState({ name: '', telegrammId: '', status: '' })
@@ -65,12 +65,15 @@ const AdminPanel = () => {
     const deleteUser = (selectedData: ReleaserType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteClient(selectedData.id)
-            loading(responsePromise)
-            responsePromise.then(() => {
+            responsePromise.then((res) => {
                 mutateClientsData()
+                success(res.data.message)
+            }).catch(() => {
+                error('Произошла ошибка')
             })
         } else {
             console.error('No releaser data available to delete.')
+
         }
         setSelectedData(undefined)
     }

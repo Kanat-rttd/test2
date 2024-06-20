@@ -30,7 +30,7 @@ interface ReleaseAddModalProps {
 }
 
 const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose, onSuccess }) => {
-    const { loading } = useNotify()
+    const { success, error } = useNotify()
 
     const {
         register,
@@ -38,28 +38,25 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
         control,
         setValue,
         getValues,
-        setError,
         formState: { errors },
         reset,
     } = useForm<ReleaserType>()
 
     const sendData = (formData: ReleaserType) => {
-        try {
-            const responsePromise: Promise<any> = data
-                ? updateClient(data.id, formData)
-                : createClient(formData)
-            loading(responsePromise)
-
-            responsePromise.then(() => {
+        const responsePromise: Promise<any> = data
+            ? updateClient(data.id, formData)
+            : createClient(formData)
+        responsePromise
+            .then((res) => {
                 reset()
                 onSuccess()
                 handleClose()
+                success(res.data.message)
             })
-        } catch (error: any) {
-            setError('root', {
-                message: error.response.data.message || 'Ошибка',
+            .catch((err: any) => {
+                console.log(err.response)
+                error(err.response.data.message || 'Ошибка')
             })
-        }
     }
 
     useEffect(() => {
