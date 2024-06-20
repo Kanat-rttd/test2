@@ -138,14 +138,14 @@ export const subMenuItems: MenuItem[] = [
         allowedClasses: ['Admin'],
     },
     {
-        route: ADMIN_PRODUCTS_ROUTE,
-        label: 'Продукты',
+        route: ADMIN_UNIQUEPRICE_ROUTE,
+        label: 'Уникальные цены',
         path: ADMIN_ROUTE,
         allowedClasses: ['Admin'],
     },
     {
-        route: ADMIN_UNIQUEPRICE_ROUTE,
-        label: 'Уникальные цены',
+        route: ADMIN_PRODUCTS_ROUTE,
+        label: 'Продукты',
         path: ADMIN_ROUTE,
         allowedClasses: ['Admin'],
     },
