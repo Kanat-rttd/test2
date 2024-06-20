@@ -52,7 +52,7 @@ type MenuItem = {
     route: string
     label: string
     path?: string
-    allowedClasses?: string[]
+    allowedClasses: string[]
 }
 
 export const menuItems: MenuItem[] = [

@@ -42,16 +42,17 @@ const MenuAccordion = () => {
 
     const parsedClass = JSON.parse(String(userInfo?.class))
 
-    const filteredMenuItems = menuItems.filter((item) => {
-        return (
-            parsedClass[0].label &&
-            item.allowedClasses &&
-            item.allowedClasses.includes(parsedClass[0].label)
-        )
-    })
+    // const filteredMenuItems = menuItems.filter((item) => {
+    //     return (
+    //         parsedClass[0].label &&
+    //         item.allowedClasses &&
+    //         item.allowedClasses.includes(parsedClass[0].label)
+    //     )
+    // })
 
-    console.log(filteredMenuItems)
-    console.log(parsedClass)
+    const filteredMenuItems = menuItems.filter((item: { allowedClasses: string[] }) => {
+        return parsedClass.some((cls: { label: string }) => item.allowedClasses.includes(cls.label))
+    })
 
     const handleNavigate = (route: string) => {
         setIsDrawerOpen(false)
