@@ -17,6 +17,7 @@ import classes from '../index.module.css'
 import { ContragentType } from '@/utils/types/contragent.types'
 import { MagazineType } from '@/utils/types/magazine.type'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface DebtTransferInputs {
     from: number
@@ -29,8 +30,7 @@ interface DebtTransferInputs {
 
 interface InvoiceData {
     createdAt: Date
-    clientId: number
-    clientName: string
+    contragentId: number
     invoiceNumber: number
     totalProducts: {
         id: number
@@ -69,6 +69,7 @@ interface InvoiceData {
 
 const DebtTransferForm = () => {
     const { loading } = useNotify()
+    const { getParam, setParam } = useURLParameters()
     const [selectedProvider, setSelectedProvider] = useState<ContragentType | null>(null)
 
     const { data: magazinesData } = useApi<MagazineType[]>('magazines?status=Активный')
@@ -78,10 +79,12 @@ const DebtTransferForm = () => {
     const { data: clientsData } = useApi<ContragentType[]>(
         'contragent?status=Активный&type=реализатор',
     )
-    const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
+    const { data: dispatchesData } = useApi<InvoiceData[]>(
+        `release/invoice?${getParam('contragentId')}`,
+    )
     const [contragents, setContragents] = useState<ContragentType[]>([])
-    const [filteredContragents, setFilteredContragents] = useState<ContragentType[] | undefined>([])
-
+    const [filteredContragents, setFilteredContragents] = useState<ContragentType[] | undefined>([]) 
+       
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -110,39 +113,25 @@ const DebtTransferForm = () => {
             .catch((error) => {
                 console.error('Error creating sale:', error)
             })
+            setParam('contragentId', '')
     }
 
     const getFilteredContragents = () => {
-        let _filteredContragents
-        console.log(selectedProvider?.mainId)
-
-        if (selectedProvider?.type == 'реализатор') {
-            const filteredMagazines = magazinesData?.filter(
-                (option) => option.clientId == selectedProvider.mainId,
-            )
-            console.log(filteredMagazines)
-
-            _filteredContragents =
-                filteredMagazines?.map((option) => {
-                    return contragentsMagazinesData?.find((item) => {
-                        return item.mainId == option.id ? item : undefined
-                    })
-                }) || []
-            console.log(_filteredContragents)
-        } else if (selectedProvider?.type == 'магазин') {
-            _filteredContragents = (magazinesData?.flatMap((option) => {
-                if (selectedProvider.mainId == option.id) {
-                    return (
-                        clientsData?.filter((item) => {
-                            return item.mainId == option.clientId
-                        }) || []
-                    )
-                }
-                return []
-            }) || []) as ContragentType[]
-            console.log(_filteredContragents)
+        if(magazinesData == undefined){
+            return;
         }
-        return _filteredContragents as ContragentType[]
+
+        if (selectedProvider?.type == 'реализатор' && contragentsMagazinesData != undefined) {
+            const magazinesIds = magazinesData.filter((magazine) => magazine.clientId == selectedProvider.mainId).map((magazine) => magazine.id);
+            const contragents : ContragentType[]  = contragentsMagazinesData.filter((contragent) => magazinesIds.includes(contragent.mainId));
+            setParam('contragentId', selectedProvider.id.toString())
+            return contragents;
+        } else if (selectedProvider?.type == 'магазин' && clientsData != undefined) {
+            const clientIds = magazinesData.filter((magazine) => magazine.id == selectedProvider.mainId).map((magazine) => magazine.clientId);
+            const contragents : ContragentType[] = clientsData.filter((client) => clientIds.includes(client.mainId)); 
+            setParam('contragentId', contragents[0].id.toString())
+            return contragents;
+        }
     }
 
     return (
@@ -279,7 +268,7 @@ const DebtTransferForm = () => {
                                     const { onChange, value } = field
                                     return (
                                         <Select
-                                            options={dispatchesData}
+                                            options={dispatchesData?.filter((item) => item.contragentId == Number(getParam('contragentId')))}
                                             getOptionLabel={(option: InvoiceData) =>
                                                 String(option.invoiceNumber)
                                             }

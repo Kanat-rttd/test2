@@ -76,7 +76,7 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                             id: material.id,
                             name: material.goods,
                             place: formData.place,
-                            unitOfMeasure: material.unitOfMeasure,
+                            unitOfMeasure: material.goodsCategory.unitOfMeasure,
                             quantity: Number(formData[key as keyof AddFactModalInputs]),
                         })
                     }
@@ -163,7 +163,7 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                                                     type="text"
                                                 />
                                                 <InputRightAddon>
-                                                    {item.unitOfMeasure}
+                                                    {item.goodsCategory.unitOfMeasure}
                                                 </InputRightAddon>
                                             </InputGroup>
                                             <FormErrorMessage>

@@ -68,7 +68,6 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
         control,
         formState: { errors },
         setValue,
-        setError,
         reset,
     } = useForm<MagazinesModalInput>()
 
@@ -95,10 +94,9 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                 success(res.data.message)
             })
             .catch((err) => {
-                setError(err.response.data.field, {
-                    message: err.response.data.error || 'Ошибка',
-                })
-                error(err.response.data.error)
+                console.log(err);
+                
+                error(err.response.data.message)
             })
     }
 

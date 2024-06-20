@@ -18,11 +18,11 @@ import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteDepartPersonal } from '@/utils/services/departPersonal.service'
 import { TableContainer, Thead } from '@/components/ui'
-import DepartPersonalModal from '../components/departPesonalAddModal'
+import DepartPersonalModal from '../components/DepartPesonalAddModal'
 import { DepartPersonalType } from '@/utils/types/departPersonal.types'
 
 const AdminPanel = () => {
-    const { loading } = useNotify()
+    const { success, error } = useNotify()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<DepartPersonalType | undefined>(undefined)
     const [selectedStatus, setSelectedStatus] = useState<string>('')
@@ -55,12 +55,13 @@ const AdminPanel = () => {
     const deleteUser = (selectedData: DepartPersonalType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteDepartPersonal(selectedData.id)
-            loading(responsePromise)
-            responsePromise.then(() => {
+            responsePromise.then((res) => {
                 mutateDepartPersonal()
+                success(res.data.message)
             })
         } else {
             console.error('No user data available to delete.')
+            error('Произошла ошибка')
         }
         setSelectedData(undefined)
     }

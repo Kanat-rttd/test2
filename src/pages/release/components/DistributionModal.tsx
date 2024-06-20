@@ -17,7 +17,7 @@ import { useEffect } from 'react'
 
 import { createDispatch, updateDispatchQuantity } from '@/utils/services/dispatch.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
-import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { mutate, useApi } from '@/utils/services/axios'
 import { DispatchType } from '@/utils/types/dispatch.types'
 import { CloseIcon } from '@chakra-ui/icons'
@@ -50,7 +50,9 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 }) => {
     const { getURLs } = useURLParameters()
     const { loading } = useNotify()
-    const { data: clientsData } = useApi<ContragentType[]>('contragent?type=реализатор&status=Активный')
+    const { data: clientsData } = useApi<ContragentType[]>(
+        'contragent?type=реализатор&status=Активный',
+    )
     const { data: products } = useApi<Product[]>('product?status=Активный')
 
     const {
@@ -158,27 +160,47 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                             {fields.map((_, index) => {
                                 return (
                                     <Box display="flex" gap="1rem" alignItems="center" key={index}>
-                                        <Select
-                                            {...register(`products.${index}.productId`, {
-                                                required: 'Поле является обязательным',
-                                            })}
-                                            variant="filled"
-                                            placeholder="Вид хлеба"
-                                            defaultValue={
-                                                data && data.goodsDispatchDetails[index]
-                                                    ? data.goodsDispatchDetails[index].productId
-                                                    : undefined
-                                            }
-                                        >
-                                            {products?.map((product) => (
-                                                <option
-                                                    key={product.name}
-                                                    value={product.id ? product.id : undefined}
-                                                >
-                                                    {product.name}
-                                                </option>
-                                            ))}
-                                        </Select>
+                                        <Controller
+                                            name={`products.${index}.productId`}
+                                            control={control}
+                                            rules={{ required: 'Поле является обязательным' }}
+                                            render={({ field }) => {
+                                                const { onChange, value } = field
+                                                const selectedProductId =
+                                                    value !== null ? String(value) : ''
+
+                                                return (
+                                                    <Select
+                                                        value={selectedProductId}
+                                                        onChange={(selectedOption) => {
+                                                            onChange(selectedOption)
+                                                        }}
+                                                        variant="filled"
+                                                        placeholder="Выберите продукт"
+                                                    >
+                                                        {products
+                                                            ?.filter((item) => {
+                                                                const products = fields.filter(
+                                                                    (_, i) => index > i,
+                                                                )
+                                                                return !products.find(
+                                                                    (product) =>
+                                                                        product.productId ==
+                                                                        item.id,
+                                                                )
+                                                            })
+                                                            .map((product) => (
+                                                                <option
+                                                                    key={product.name}
+                                                                    value={product.id}
+                                                                >
+                                                                    {product.name}
+                                                                </option>
+                                                            ))}
+                                                    </Select>
+                                                )
+                                            }}
+                                        />
 
                                         <Input
                                             {...register(`products.${index}.quantity`, {
@@ -186,10 +208,12 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                             })}
                                             placeholder="Количество"
                                         />
-                                       { fields.length > 1 &&  <CloseIcon
-                                            cursor="pointer"
-                                            onClick={() =>remove(index)}
-                                        />}
+                                        {fields.length > 1 && (
+                                            <CloseIcon
+                                                cursor="pointer"
+                                                onClick={() => remove(index)}
+                                            />
+                                        )}
                                     </Box>
                                 )
                             })}

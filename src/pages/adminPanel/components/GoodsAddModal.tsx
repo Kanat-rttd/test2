@@ -25,8 +25,11 @@ interface ProviderGoods {
     id: number
     providerId: number
     goodsCategoryId: number
+    goodsCategory: {
+        id: number
+        unitOfMeasure: string
+    }
     goods: string
-    unitOfMeasure: string
     place: { label: string }[]
     status: string
     provider: {
@@ -202,21 +205,6 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                         type="text"
                                     />
                                     <FormErrorMessage>{errors.goods?.message}</FormErrorMessage>
-                                </FormControl>
-
-                                <FormControl isInvalid={!!errors.unitOfMeasure}>
-                                    <Input
-                                        maxLength={20}
-                                        {...register('unitOfMeasure', {
-                                            required: 'Поле является обязательным',
-                                        })}
-                                        autoComplete="off"
-                                        placeholder="Единица измерения *"
-                                        type="text"
-                                    />
-                                    <FormErrorMessage>
-                                        {errors.unitOfMeasure?.message}
-                                    </FormErrorMessage>
                                 </FormControl>
 
                                 <FormControl isInvalid={!!errors.bakery}>
