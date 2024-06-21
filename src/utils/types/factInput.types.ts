@@ -1,13 +1,17 @@
 export type FactInputType = {
-    table: FactInputTableData[]
+    data: FactInputTableData[]
     totalFact: number
 }
 
 export type FactInputTableData = {
     id: number
-    name: string
+    goodsCategoryId: number
+    goodsCategory: {
+        id: number
+        category: string
+        unitOfMeasure: string
+    }
     place: string
-    unitOfMeasure: string
     quantity: number
     updatedAt: string
 }
