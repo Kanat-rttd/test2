@@ -13,6 +13,8 @@ import {
     FormControl,
     FormErrorMessage,
     FormLabel,
+    InputGroup,
+    InputRightAddon,
 } from '@chakra-ui/react'
 
 import { createBaking, updateBaking } from '@/utils/services/baking.service'
@@ -142,57 +144,102 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.flour} isRequired>
                                     <FormLabel fontWeight={'bold'}>Мука</FormLabel>
-                                    <Input
-                                        {...register('flour', {
-                                            required: 'Поле является обязательным',
-                                        })}
-                                        type="number"
-                                        step="any"
-                                    />
+                                    <InputGroup>
+                                        <Input
+                                            {...register('flour', {
+                                                required: 'Поле является обязательным',
+                                            })}
+                                            type="number"
+                                            step="any"
+                                        />
+                                        <InputRightAddon
+                                            w={'15%'}
+                                            display={'flex'}
+                                            justifyContent={'center'}
+                                        >
+                                            кг
+                                        </InputRightAddon>
+                                    </InputGroup>
                                     <FormErrorMessage>{errors.flour?.message}</FormErrorMessage>
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.salt} isRequired>
                                     <FormLabel fontWeight={'bold'}>Соль</FormLabel>
-                                    <Input
-                                        {...register('salt', {
-                                            required: 'Поле является обязательным',
-                                        })}
-                                        type="number"
-                                        step="any"
-                                    />
+                                    <InputGroup>
+                                        <Input
+                                            {...register('salt', {
+                                                required: 'Поле является обязательным',
+                                            })}
+                                            type="number"
+                                            step="any"
+                                        />
+                                        <InputRightAddon
+                                            w={'15%'}
+                                            display={'flex'}
+                                            justifyContent={'center'}
+                                        >
+                                            кг
+                                        </InputRightAddon>
+                                    </InputGroup>
                                     <FormErrorMessage>{errors.salt?.message}</FormErrorMessage>
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.yeast} isRequired>
                                     <FormLabel fontWeight={'bold'}>Дрожжи</FormLabel>
-                                    <Input
-                                        {...register('yeast', {
-                                            required: 'Поле является обязательным',
-                                        })}
-                                        type="number"
-                                        step="any"
-                                    />
+                                    <InputGroup>
+                                        <Input
+                                            {...register('yeast', {
+                                                required: 'Поле является обязательным',
+                                            })}
+                                            type="number"
+                                            step="any"
+                                        />
+                                        <InputRightAddon
+                                            w={'15%'}
+                                            display={'flex'}
+                                            justifyContent={'center'}
+                                        >
+                                            кг
+                                        </InputRightAddon>
+                                    </InputGroup>
                                     <FormErrorMessage>{errors.yeast?.message}</FormErrorMessage>
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.malt} isRequired>
                                     <FormLabel fontWeight={'bold'}>Солод</FormLabel>
-                                    <Input
-                                        {...register('malt', {
-                                            required: 'Поле является обязательным',
-                                        })}
-                                        type="number"
-                                        step="any"
-                                    />
+                                    <InputGroup>
+                                        <Input
+                                            {...register('malt', {
+                                                required: 'Поле является обязательным',
+                                            })}
+                                            type="number"
+                                            step="any"
+                                        />
+                                        <InputRightAddon
+                                            w={'15%'}
+                                            display={'flex'}
+                                            justifyContent={'center'}
+                                        >
+                                            кг
+                                        </InputRightAddon>
+                                    </InputGroup>
                                     <FormErrorMessage>{errors.malt?.message}</FormErrorMessage>
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.butter} isRequired>
                                     <FormLabel fontWeight={'bold'}>Масло</FormLabel>
-                                    <Input
-                                        {...register('butter', {
-                                            required: 'Поле является обязательным',
-                                        })}
-                                        type="number"
-                                        step="any"
-                                    />
+                                    <InputGroup>
+                                        <Input
+                                            {...register('butter', {
+                                                required: 'Поле является обязательным',
+                                            })}
+                                            type="number"
+                                            step="any"
+                                        />
+                                        <InputRightAddon
+                                            w={'15%'}
+                                            display={'flex'}
+                                            justifyContent={'center'}
+                                        >
+                                            кг
+                                        </InputRightAddon>
+                                    </InputGroup>
                                     <FormErrorMessage>{errors.butter?.message}</FormErrorMessage>
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.temperature} isRequired>
@@ -208,33 +255,6 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                         {errors.temperature?.message}
                                     </FormErrorMessage>
                                 </FormControl>
-                                {/* <FormControl isInvalid={!!errors.date} isRequired>
-                                    <FormLabel fontWeight={'bold'}>Дата</FormLabel>
-                                    <Input
-                                        {...register('date', {
-                                            required: 'Поле является обязательным',
-                                        })}
-                                        autoComplete="off"
-                                        placeholder="Дата *"
-                                        type="date"
-                                        defaultValue={new Date().toISOString().split('T')[0]}
-                                        min={startDate.toISOString().split('T')[0]}
-                                        max={endDate.toISOString().split('T')[0]}
-                                    />
-                                    <FormErrorMessage>{errors.date?.message}</FormErrorMessage>
-                                </FormControl> */}
-                                {/* <FormControl isInvalid={!!errors.time} isRequired>
-                                    <FormLabel fontWeight={'bold'}>Время</FormLabel>
-                                    <Input
-                                        {...register('time', {
-                                            required: 'Поле является обязательным',
-                                        })}
-                                        type="time"
-                                        name="time"
-                                        placeholder=""
-                                    />
-                                    <FormErrorMessage>{errors.time?.message}</FormErrorMessage>
-                                </FormControl> */}
                                 <FormControl isInvalid={!!errors.dateTime} isRequired>
                                     <FormLabel fontWeight={'bold'}>Дата и время</FormLabel>
                                     <Input
