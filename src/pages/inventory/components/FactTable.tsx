@@ -10,7 +10,7 @@ import { deleteFactInput } from '@/utils/services/factInput.service'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useNotify } from '@/utils/providers/ToastProvider'
-import { FactInputType } from '@/utils/types/factInput.types'
+import { FactInputTableData, FactInputType } from '@/utils/types/factInput.types'
 
 const FactTable = () => {
     const { loading } = useNotify()
@@ -21,14 +21,7 @@ const FactTable = () => {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const handleSelected = (data: {
-        id: number
-        name: string
-        place: string
-        unitOfMeasure: string
-        quantity: number
-        updatedAt: string
-    }) => {
+    const handleSelected = (data: FactInputTableData) => {
         setSelectedData(data)
         onOpen()
     }
@@ -39,14 +32,7 @@ const FactTable = () => {
     })
 
     const [selectedData, setSelectedData] = useState<
-        | {
-              id: number
-              name: string
-              place: string
-              unitOfMeasure: string
-              quantity: number
-              updatedAt: string
-          }
+        | FactInputTableData
         | undefined
     >(undefined)
 
@@ -82,13 +68,13 @@ const FactTable = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {factInputData?.table?.length  ? (
-                            factInputData?.table.map((item, index) => (
+                        {factInputData?.data?.length  ? (
+                            factInputData?.data.map((item, index) => (
                                 <Tr key={item.id}>
                                     <Td>{index + 1}</Td>
-                                    <Td>{item.name}</Td>
+                                    <Td>{item.goodsCategory.category}</Td>
                                     <Td>{item.place}</Td>
-                                    <Td>{item.unitOfMeasure}</Td>
+                                    <Td>{item.goodsCategory.unitOfMeasure}</Td>
                                     <Td>{item.quantity}</Td>
                                     <Td>{dayjs(item.updatedAt).format('DD.MM.YYYY HH:mm')}</Td>
                                     <Td>

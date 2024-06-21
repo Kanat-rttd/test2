@@ -102,6 +102,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                     price: Number(detail.price),
                 }
             })
+            console.log(selectedRow.contragent.id)
             setValue('contragentId', Number(selectedRow.contragent.id))
             setValue('products', data)
         } else {
