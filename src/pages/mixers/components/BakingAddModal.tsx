@@ -45,22 +45,17 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
     } = useForm<BakingDataType>()
 
     const { data: products } = useApi<{ id: string; name: string }[]>('product?status=Активный')
-    // const [startDate, setStartDate] = useState<Date>(new Date())
-    // const [endDate, setEndDate] = useState<Date>(new Date())
 
     useEffect(() => {
         if (data) {
             Object.entries(data).forEach(([key, value]) => {
                 setValue(key as keyof BakingDataType, value)
             })
+            setValue('dateTime', dayjs(data.dateTime).format('YYYY-MM-DD HH:mm'))
         } else {
             reset()
         }
     }, [data, isOpen, reset])
-
-    // useEffect(() => {
-    //     getStartEndDates()
-    // }, [data])
 
     const sendData = (formData: BakingDataType) => {
         const responsePromise: Promise<any> = data
@@ -86,27 +81,6 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
         reset()
         onClose()
     }
-
-    // const getStartEndDates = () => {
-    //     if (data && data.dateTime) {
-    //         const { dateTime } = data
-    //         const parsedDate = dayjs(dateTime, 'YYYY-MM-DDTHH:mm', true)
-
-    //         if (parsedDate.isValid()) {
-    //             const startDate = parsedDate.subtract(2, 'day').toDate()
-    //             const endDate = parsedDate.add(4, 'day').toDate()
-    //             setStartDate(startDate)
-    //             setEndDate(endDate)
-    //         } else {
-    //             console.error('Invalid date format:', dateTime)
-    //         }
-    //     } else {
-    //         const startDate = dayjs().subtract(3, 'day').toDate()
-    //         const endDate = dayjs().add(3, 'day').toDate()
-    //         setStartDate(startDate)
-    //         setEndDate(endDate)
-    //     }
-    // }
 
     return (
         <Modal isCentered isOpen={isOpen} onClose={handleModalClose}>
@@ -269,7 +243,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             padding: '0 15px',
                                         }}
                                         type="datetime-local"
-                                        defaultValue={dayjs().format('YYYY-MM-DD HH:mm')}
+                                        defaultValue={data ? dayjs(data.dateTime).format('YYYY-MM-DD HH:mm') : dayjs().format('YYYY-MM-DD HH:mm')}
                                     />
                                     <FormErrorMessage>{errors.dateTime?.message}</FormErrorMessage>
                                 </FormControl>
