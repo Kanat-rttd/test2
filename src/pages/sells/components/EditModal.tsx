@@ -131,7 +131,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                                 })}
                                 variant="filled"
                                 placeholder="Имя клиента"
-                                disabled
+                                // disabled
                             >
                                 {clients?.map((client) => (
                                     <option key={client.name} value={client.id}>
