@@ -101,6 +101,9 @@ const MenuAccordion = () => {
                                                     ({ route, label, path }, index) =>
                                                         path === MenuItem.route && (
                                                             <AccordionPanel
+                                                                onClick={() =>
+                                                                    handleNavigate(route)
+                                                                }
                                                                 pb={4}
                                                                 ml={'20px'}
                                                                 key={index}
@@ -110,9 +113,7 @@ const MenuAccordion = () => {
                                                                     variant="ghost"
                                                                     width={'60%'}
                                                                     lineHeight={'20px'}
-                                                                    onClick={() =>
-                                                                        handleNavigate(route)
-                                                                    }
+                                                                   
                                                                 >
                                                                     {label}
                                                                 </Link>
