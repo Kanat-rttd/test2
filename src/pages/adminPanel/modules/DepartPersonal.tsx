@@ -31,6 +31,8 @@ const AdminPanel = () => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
+    console.log('tst')
+
     const {
         data: departPersonalData,
         isLoading,
