@@ -22,6 +22,7 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { createFactInput } from '@/utils/services/factInput.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { CloseIcon } from '@chakra-ui/icons'
+import { useState } from 'react'
 
 type AddFactModalInputs = {
     place: string
@@ -51,6 +52,7 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
     const { loading } = useNotify()
     const { data: goodsCategoriesData } = useApi<GoodsCategoryType[]>('goodsCategories')
     const { data: placesData } = useApi<Place[]>('place')
+    const [selectedUnitsOfMeasure, setSelectedUnitsOfMeasure] = useState<string[]>([])
 
     const {
         register,
@@ -156,6 +158,23 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                                                         )}
                                                         onChange={(selectedOption) => {
                                                             onChange(selectedOption?.id)
+                                                            const selectedUnitOfMeasure =
+                                                                goodsCategoriesData?.find(
+                                                                    (category) =>
+                                                                        category.id ===
+                                                                        selectedOption?.id,
+                                                                )?.unitOfMeasure || ''
+                                                                
+                                                            setSelectedUnitsOfMeasure(
+                                                                (prevUnitsOfMeasure) => {
+                                                                    const newUnitsOfMeasure = [
+                                                                        ...prevUnitsOfMeasure,
+                                                                    ]
+                                                                    newUnitsOfMeasure[index] =
+                                                                        selectedUnitOfMeasure
+                                                                    return newUnitsOfMeasure
+                                                                },
+                                                            )
                                                         }}
                                                         placeholder="Категория"
                                                         isSearchable
@@ -171,14 +190,12 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                                                 })}
                                                 placeholder="Количество"
                                             />
-                                            <InputRightAddon w={'25%'} display={'flex'} justifyContent={'center'}>
-                                                {
-                                                    goodsCategoriesData?.find(
-                                                        (category) =>
-                                                            category.id ===
-                                                            fields[index].goodsCategoryId,
-                                                    )?.unitOfMeasure || 'кг'
-                                                }
+                                            <InputRightAddon
+                                                w={'25%'}
+                                                display={'flex'}
+                                                justifyContent={'center'}
+                                            >
+                                                {selectedUnitsOfMeasure[index] || ''}
                                             </InputRightAddon>
                                         </InputGroup>
                                         {fields.length > 1 && (

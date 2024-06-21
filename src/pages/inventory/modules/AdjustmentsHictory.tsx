@@ -6,8 +6,13 @@ import dayjs from 'dayjs'
 
 type AdjustmentType = {
     quantity: number
-    providerGoodId: number
+    goodsCategoryId: number
     createdAt: Date
+    goodsCategory: {
+        id: number
+        category: string
+        unitOfMeaseure: string
+    }
 }
 
 const AdjustmentsHictory = () => {
@@ -40,10 +45,11 @@ const AdjustmentsHictory = () => {
                                     adjustmentData?.map((item, index) => {
                                         return (
                                             <Tr key={index}>
+                                                <Td>{index +1}</Td>
                                                 <Td>
                                                     {dayjs(item.createdAt).format('DD.MM.YYYY')}
                                                 </Td>
-                                                <Td>{item.providerGoodId}</Td>
+                                                <Td>{item.goodsCategory.category}</Td>
                                                 <Td>{item.quantity}</Td>
                                             </Tr>
                                         )
