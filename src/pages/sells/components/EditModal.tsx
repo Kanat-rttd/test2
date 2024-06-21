@@ -18,7 +18,7 @@ import {
 import { updateDispatchPrice } from '@/utils/services/dispatch.service'
 import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { useApi } from '@/utils/services/axios'
-import { ClientType } from '@/utils/types/client.type'
+// import { ClientType } from '@/utils/types/client.type'
 import { Product } from '@/utils/types/product.types'
 import { useNotify } from '@/utils/providers/ToastProvider'
 
@@ -47,6 +47,15 @@ interface DispatchType {
     }
 }
 
+interface Contragents {
+    id: number
+    contragentName: string
+    mainId: number
+    type: string
+    status: string
+    isDeleted: boolean
+}
+
 interface EditModalProps {
     isOpen: boolean
     onClose: () => void
@@ -61,7 +70,11 @@ type FormData = {
 
 const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onSuccess }) => {
     const { loading } = useNotify()
-    const { data: clients } = useApi<ClientType[]>('client')
+    // const { data: clients } = useApi<ClientType[]>('client')
+
+    const { data: contragents } = useApi<Contragents[]>('contragent')
+    console.log(contragents)
+
     const { data: products } = useApi<Product[]>('product')
 
     console.log(selectedRow)
@@ -132,9 +145,9 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                                 variant="filled"
                                 placeholder="Имя клиента"
                             >
-                                {clients?.map((client) => (
-                                    <option key={client.name} value={client.id}>
-                                        {client.name}
+                                {contragents?.map((client) => (
+                                    <option key={client.contragentName} value={client.id}>
+                                        {client.contragentName}
                                     </option>
                                 ))}
                             </Select>
