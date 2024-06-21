@@ -63,7 +63,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
     }, [selectedData])
 
     const updateData = (formData: AddFactModalInputs) => {
-        const name = selectedData?.name || ''
+        const name = selectedData?.goodsCategory.category || ''
         const id = selectedData?.id || 0
         const quantity = parseFloat(formData.quantity)
 
@@ -131,7 +131,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                             alignItems={'center'}
                             justifyContent={'space-between'}
                         >
-                            <Text>{selectedData?.name}</Text>
+                            <Text>{selectedData?.goodsCategory.category}</Text>
                             <FormControl isInvalid={!!errors.quantity} width={'70%'}>
                                 <InputGroup>
                                     <Input
@@ -142,7 +142,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                         placeholder="Количество. *"
                                         type="string"
                                     />
-                                    <InputRightAddon>{selectedData?.unitOfMeasure}</InputRightAddon>
+                                    <InputRightAddon>{selectedData?.goodsCategory.unitOfMeasure}</InputRightAddon>
                                 </InputGroup>
                                 <FormErrorMessage>{errors.quantity?.message}</FormErrorMessage>
                             </FormControl>
