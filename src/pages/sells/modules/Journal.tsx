@@ -31,10 +31,12 @@ interface Product {
 }
 
 const JournalPage = () => {
-    const {setParam} = useURLParameters()
+    const { setParam } = useURLParameters()
     const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
     const { data: clientsData } = useApi<Client[]>('client')
     const { data: productData } = useApi<Product[]>('product')
+
+    console.log('test')
 
     return (
         <>
