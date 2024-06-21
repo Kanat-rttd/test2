@@ -49,15 +49,16 @@ type ModalProps = {
     onSuccess: () => void
 }
 
-type GoodsCategory ={
+type GoodsCategoryType ={
     id: number
     category: string
+    unitOfMeasure: string
 }
 
 const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps) => {
     const { success, error } = useNotify()
     const { data: providersData } = useApi<ProviderType[]>('providers?status=Активный')
-    const { data: goodsCategories } = useApi<GoodsCategory[]>('goodsCategories')
+    const { data: goodsCategories } = useApi<GoodsCategoryType[]>('goodsCategories')
     const { data: placesData } = useApi<Place[]>('place')
 
     const {
@@ -170,10 +171,10 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                             return (
                                                 <Select
                                                     options={goodsCategories}
-                                                    getOptionLabel={(option: GoodsCategory) =>
+                                                    getOptionLabel={(option: GoodsCategoryType) =>
                                                         option.category
                                                     }
-                                                    getOptionValue={(option: GoodsCategory) =>
+                                                    getOptionValue={(option: GoodsCategoryType) =>
                                                         `${option.id}`
                                                     }
                                                     value={goodsCategories?.filter(
@@ -181,7 +182,7 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                                             String(option.id) == String(value),
                                                     )}
                                                     onChange={(
-                                                        selectedOption: GoodsCategory | null,
+                                                        selectedOption: GoodsCategoryType | null,
                                                     ) => {
                                                         onChange(selectedOption?.id)
                                                     }}

@@ -11,20 +11,25 @@ import {
     FormErrorMessage,
     InputGroup,
     Input,
-    Text,
     Box,
     InputRightAddon,
 } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
+import classes from '../index.module.css'
 
 import Select from 'react-select'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { createFactInput } from '@/utils/services/factInput.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
-import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
+import { CloseIcon } from '@chakra-ui/icons'
 
-interface AddFactModalInputs {
-    [key: string]: string
+type AddFactModalInputs = {
+    place: string
+    details: {
+        goodsCategoryId: number | null
+        quantity: number | null
+        unitOfMeasure: string | null
+    }[]
 }
 
 interface Place {
@@ -36,10 +41,15 @@ type FactModalProps = {
     onClose: () => void
     onSuccess: () => void
 }
+type GoodsCategoryType = {
+    id: number
+    category: string
+    unitOfMeasure: string
+}
 
 const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
     const { loading } = useNotify()
-    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods?status=Активный')
+    const { data: goodsCategoriesData } = useApi<GoodsCategoryType[]>('goodsCategories')
     const { data: placesData } = useApi<Place[]>('place')
 
     const {
@@ -50,45 +60,13 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
         formState: { errors },
     } = useForm<AddFactModalInputs>()
 
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'details',
+    })
+
     const sendData = (formData: AddFactModalInputs) => {
-        const formattedData: {
-            id: number
-            name: string
-            place: string
-            unitOfMeasure: string
-            quantity: number
-        }[] = Object.keys(formData).reduce(
-            (
-                acc: {
-                    id: number
-                    name: string
-                    place: string
-                    unitOfMeasure: string
-                    quantity: number
-                }[],
-                key,
-            ) => {
-                if (key !== 'place' && formData[key as keyof AddFactModalInputs] !== '') {
-                    const index = Number(key.split('_')[1])
-                    const material = providerGoodsData && providerGoodsData[index]
-                    if (material) {
-                        acc.push({
-                            id: material.id,
-                            name: material.goods,
-                            place: formData.place,
-                            unitOfMeasure: material.goodsCategory.unitOfMeasure,
-                            quantity: Number(formData[key as keyof AddFactModalInputs]),
-                        })
-                    }
-                }
-                return acc
-            },
-            [],
-        )
-
-        if (formattedData.length == 0 || !formattedData) return
-
-        const responsePromise: Promise<any> = createFactInput(formattedData)
+        const responsePromise: Promise<any> = createFactInput(formData)
         loading(responsePromise)
         responsePromise
             .then(() => {
@@ -125,9 +103,7 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                                                 (option) => String(option.label) == value,
                                             )}
                                             onChange={(selectedOption: Place | null) => {
-                                                if (selectedOption) {
-                                                    onChange(selectedOption.label)
-                                                }
+                                                onChange(selectedOption?.label)
                                             }}
                                             placeholder="Место *"
                                             isClearable
@@ -138,9 +114,97 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                             />
                             <FormErrorMessage>{errors.place?.message}</FormErrorMessage>
                         </FormControl>
-
-                        {providerGoodsData &&
-                            providerGoodsData.map((item, index) => {
+                        <FormControl
+                            mt={3}
+                            w={'100%'}
+                            display={'flex'}
+                            flexDirection={'column'}
+                            gap={3}
+                        >
+                            {fields.map((_, index) => {
+                                return (
+                                    <Box display="flex" gap={2} alignItems="center" key={index}>
+                                        <Controller
+                                            name={`details.${index}.goodsCategoryId`}
+                                            control={control}
+                                            rules={{ required: 'Поле является обязательным' }}
+                                            render={({ field }) => {
+                                                const { onChange, value } = field
+                                                return (
+                                                    <Select
+                                                        options={goodsCategoriesData?.filter(
+                                                            (item) => {
+                                                                const category = fields.filter(
+                                                                    (_, i) => index > i,
+                                                                )
+                                                                return !category.find(
+                                                                    (category) =>
+                                                                        category.goodsCategoryId ==
+                                                                        item.id,
+                                                                )
+                                                            },
+                                                        )}
+                                                        getOptionLabel={(
+                                                            option: GoodsCategoryType,
+                                                        ) => option.category}
+                                                        getOptionValue={(
+                                                            option: GoodsCategoryType,
+                                                        ) => `${option.id}`}
+                                                        value={goodsCategoriesData?.filter(
+                                                            (option) =>
+                                                                String(option.id) == String(value),
+                                                        )}
+                                                        onChange={(selectedOption) => {
+                                                            onChange(selectedOption?.id)
+                                                        }}
+                                                        placeholder="Категория"
+                                                        isSearchable
+                                                        className={classes.select}
+                                                    />
+                                                )
+                                            }}
+                                        />
+                                        <InputGroup>
+                                            <Input
+                                                {...register(`details.${index}.quantity`, {
+                                                    required: 'Поле является обязательным',
+                                                })}
+                                                placeholder="Количество"
+                                            />
+                                            <InputRightAddon w={'25%'} display={'flex'} justifyContent={'center'}>
+                                                {
+                                                    goodsCategoriesData?.find(
+                                                        (category) =>
+                                                            category.id ===
+                                                            fields[index].goodsCategoryId,
+                                                    )?.unitOfMeasure || 'кг'
+                                                }
+                                            </InputRightAddon>
+                                        </InputGroup>
+                                        {fields.length > 1 && (
+                                            <CloseIcon
+                                                ml={2}
+                                                cursor="pointer"
+                                                onClick={() => remove(index)}
+                                            />
+                                        )}
+                                    </Box>
+                                )
+                            })}
+                            <Button
+                                onClick={() => {
+                                    append({
+                                        goodsCategoryId: null,
+                                        quantity: null,
+                                        unitOfMeasure: '',
+                                    })
+                                }}
+                            >
+                                Добавить
+                            </Button>
+                        </FormControl>
+                        {/* {goodsCategoriesData &&
+                            goodsCategoriesData.map((item, index) => {
                                 return (
                                     <Box
                                         display={'flex'}
@@ -172,7 +236,7 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                                         </FormControl>
                                     </Box>
                                 )
-                            })}
+                            })} */}
                     </Box>
                 </ModalBody>
 

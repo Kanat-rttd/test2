@@ -7,11 +7,13 @@ export const getAllFactInputs = async () => {
 
 export const createFactInput = async (
     data: {
-        id: number
         place: string
-        unitOfMeasure: string
-        quantity: number
-    }[],
+        details: {
+            goodsCategoryId: number | null
+            quantity: number | null
+            unitOfMeasure: string | null
+        }[]
+    },
 ) => {
     const response = await $host.post('factInput', data)
     return response
