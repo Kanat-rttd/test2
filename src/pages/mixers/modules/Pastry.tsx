@@ -12,7 +12,7 @@ interface FacilityUnit {
 }
 
 const MixersPage = () => {
-    const { getURLs, getParam, setParam } = useURLParameters()
+    const { getURLs, getParam } = useURLParameters()
 
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
     const { data: salesData } = useApi<OrderArrayType[]>(`sales?${getURLs().toString()}`)
