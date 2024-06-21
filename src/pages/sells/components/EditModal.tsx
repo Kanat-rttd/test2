@@ -64,6 +64,8 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
     const { data: clients } = useApi<ClientType[]>('client')
     const { data: products } = useApi<Product[]>('product')
 
+    console.log(selectedRow)
+
     const {
         register,
         reset,
@@ -187,7 +189,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                                         {...register(`products.${index}.quantity`, {
                                             required: 'Поле является обязательным',
                                         })}
-                                        backgroundColor='#edf2f7'
+                                        backgroundColor="#edf2f7"
                                         placeholder="Количество"
                                         disabled
                                     />
