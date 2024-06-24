@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom'
 import { menuItems, subMenuItems } from '../utils/constants/menu.consts'
 import getUserInfo from '@/utils/helpers/getUserInfo'
 import { LOGIN_ROUTE } from '@/utils/constants/routes.consts'
+import classes from './styles.module.css'
 
 /**
  * Custom navigation menu
@@ -104,16 +105,14 @@ const MenuAccordion = () => {
                                                                 onClick={() =>
                                                                     handleNavigate(route)
                                                                 }
-                                                                pb={4}
                                                                 ml={'20px'}
                                                                 key={index}
+                                                                className={classes.accordionItemlink}
                                                             >
                                                                 <Link
                                                                     key={route}
                                                                     variant="ghost"
                                                                     width={'60%'}
-                                                                    lineHeight={'20px'}
-                                                                   
                                                                 >
                                                                     {label}
                                                                 </Link>

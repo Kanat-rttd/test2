@@ -15,3 +15,11 @@
     gap: 0.5rem;
     flex-direction: column;
 }
+
+.accordionItemlink{
+    height: 45px;
+}
+.accordionItemlink:hover{
+    background-color: rgba(0, 0, 0, 0.055);
+    cursor: pointer;
+}
