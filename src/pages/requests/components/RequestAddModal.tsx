@@ -25,6 +25,7 @@ import { useApi } from '@/utils/services/axios'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { useEffect } from 'react'
 import { CloseIcon } from '@chakra-ui/icons'
+import InputNumber from '@/components/shared/NumberInput'
 
 interface ClientAddModalProps {
     isOpen: boolean
@@ -207,8 +208,7 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
                                                     )
                                                 }}
                                             />
-
-                                            <Input
+                                            <InputNumber
                                                 {...register(`products.${index}.orderedQuantity`, {
                                                     required: 'Поле является обязательным',
                                                 })}
