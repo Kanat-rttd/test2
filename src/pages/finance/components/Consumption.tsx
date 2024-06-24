@@ -6,6 +6,7 @@ import { createConsumption } from '@/utils/services/finance.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { ContragentType } from '@/utils/types/contragent.types'
 import { useApi } from '@/utils/services/axios'
+import InputNumber from '@/components/shared/NumberInput'
 
 const account = [
     {
@@ -72,18 +73,10 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
     return (
         <>
             <FormControl isInvalid={!!errors.amount}>
-                <Input
+                <InputNumber
                     maxLength={20}
                     {...register('amount', { required: 'Поле является обязательным' })}
-                    autoComplete="off"
                     placeholder="Сумма *"
-                    type="number"
-                    min="0"
-                    onKeyDown={(e) => {
-                        if (e.key === '-') {
-                            e.preventDefault()
-                        }
-                    }}
                 />
                 <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
             </FormControl>

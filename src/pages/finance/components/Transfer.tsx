@@ -5,6 +5,7 @@ import { TransferInputs } from '@/utils/types/finance.types'
 import { createTransfer } from '@/utils/services/finance.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { useApi } from '@/utils/services/axios'
+import InputNumber from '@/components/shared/NumberInput'
 
 interface Account {
     id: number
@@ -13,7 +14,7 @@ interface Account {
 
 const Transfer = () => {
     const { loading } = useNotify()
-    const {data: accounts} = useApi<Account[]>('financeAccount')
+    const { data: accounts } = useApi<Account[]>('financeAccount')
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -40,14 +41,12 @@ const Transfer = () => {
     return (
         <Box display={'flex'} flexDirection={'column'} gap={4}>
             <FormControl isInvalid={!!errors.amount}>
-                <Input
+                <InputNumber
+                    maxLength={20}
                     {...register('amount', {
                         required: 'Поле является обязательным',
-                        })}
-                    maxLength={20}
-                    autoComplete="off"
+                    })}
                     placeholder="Сумма *"
-                    type="number"
                 />
                 <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
             </FormControl>
