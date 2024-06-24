@@ -207,6 +207,12 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                                 required: 'Поле является обязательным',
                                             })}
                                             placeholder="Количество"
+                                            min="0"
+                                            onKeyDown={(e) => {
+                                                if (e.key === '-') {
+                                                    e.preventDefault()
+                                                }
+                                            }}
                                         />
                                         {fields.length > 1 && (
                                             <CloseIcon

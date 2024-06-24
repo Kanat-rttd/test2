@@ -46,7 +46,9 @@ interface OverPriceAddModalProps {
 const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddModalProps) => {
     const { success, error } = useNotify()
 
-    const { data: clientData } = useApi<ContragentType[]>('contragent?type=реализатор&status=Активный')
+    const { data: clientData } = useApi<ContragentType[]>(
+        'contragent?type=реализатор&status=Активный',
+    )
 
     const {
         register,
@@ -112,10 +114,15 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                                     return (
                                         <Select
                                             options={clientData}
-                                            getOptionLabel={(option: ContragentType) => option.contragentName}
-                                            getOptionValue={(option: ContragentType) => `${option.id}`}
+                                            getOptionLabel={(option: ContragentType) =>
+                                                option.contragentName
+                                            }
+                                            getOptionValue={(option: ContragentType) =>
+                                                `${option.id}`
+                                            }
                                             value={clientData?.filter(
-                                                (option: ContragentType) => Number(option.id) == value,
+                                                (option: ContragentType) =>
+                                                    Number(option.id) == value,
                                             )}
                                             onChange={(selectedOption: ContragentType | null) => {
                                                 if (selectedOption) {
@@ -179,6 +186,12 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                                     autoComplete="off"
                                     placeholder="Год *"
                                     type="number"
+                                    min="0"
+                                    onKeyDown={(e) => {
+                                        if (e.key === '-') {
+                                            e.preventDefault()
+                                        }
+                                    }}
                                 />
                             </InputGroup>
                             <FormErrorMessage>{errors.year?.message}</FormErrorMessage>
@@ -193,6 +206,12 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                                     autoComplete="off"
                                     placeholder="Сверху *"
                                     type="number"
+                                    min="0"
+                                    onKeyDown={(e) => {
+                                        if (e.key === '-') {
+                                            e.preventDefault()
+                                        }
+                                    }}
                                 />
                                 <InputRightAddon>тг</InputRightAddon>
                             </InputGroup>

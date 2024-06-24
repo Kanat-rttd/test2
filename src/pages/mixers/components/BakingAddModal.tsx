@@ -124,7 +124,12 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                                 required: 'Поле является обязательным',
                                             })}
                                             type="number"
-                                            step="any"
+                                            min="0"
+                                            onKeyDown={(e) => {
+                                                if (e.key === '-') {
+                                                    e.preventDefault()
+                                                }
+                                            }}
                                         />
                                         <InputRightAddon
                                             w={'15%'}
@@ -144,7 +149,12 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                                 required: 'Поле является обязательным',
                                             })}
                                             type="number"
-                                            step="any"
+                                            min="0"
+                                            onKeyDown={(e) => {
+                                                if (e.key === '-') {
+                                                    e.preventDefault()
+                                                }
+                                            }}
                                         />
                                         <InputRightAddon
                                             w={'15%'}
@@ -164,7 +174,12 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                                 required: 'Поле является обязательным',
                                             })}
                                             type="number"
-                                            step="any"
+                                            min="0"
+                                            onKeyDown={(e) => {
+                                                if (e.key === '-') {
+                                                    e.preventDefault()
+                                                }
+                                            }}
                                         />
                                         <InputRightAddon
                                             w={'15%'}
@@ -184,7 +199,12 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                                 required: 'Поле является обязательным',
                                             })}
                                             type="number"
-                                            step="any"
+                                            min="0"
+                                            onKeyDown={(e) => {
+                                                if (e.key === '-') {
+                                                    e.preventDefault()
+                                                }
+                                            }}
                                         />
                                         <InputRightAddon
                                             w={'15%'}
@@ -204,7 +224,12 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                                 required: 'Поле является обязательным',
                                             })}
                                             type="number"
-                                            step="any"
+                                            min="0"
+                                            onKeyDown={(e) => {
+                                                if (e.key === '-') {
+                                                    e.preventDefault()
+                                                }
+                                            }}
                                         />
                                         <InputRightAddon
                                             w={'15%'}
@@ -223,7 +248,12 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             required: 'Поле является обязательным',
                                         })}
                                         type="number"
-                                        step="any"
+                                        min="0"
+                                        onKeyDown={(e) => {
+                                            if (e.key === '-') {
+                                                e.preventDefault()
+                                            }
+                                        }}
                                     />
                                     <FormErrorMessage>
                                         {errors.temperature?.message}
@@ -243,7 +273,11 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             padding: '0 15px',
                                         }}
                                         type="datetime-local"
-                                        defaultValue={data ? dayjs(data.dateTime).format('YYYY-MM-DD HH:mm') : dayjs().format('YYYY-MM-DD HH:mm')}
+                                        defaultValue={
+                                            data
+                                                ? dayjs(data.dateTime).format('YYYY-MM-DD HH:mm')
+                                                : dayjs().format('YYYY-MM-DD HH:mm')
+                                        }
                                     />
                                     <FormErrorMessage>{errors.dateTime?.message}</FormErrorMessage>
                                 </FormControl>
@@ -254,7 +288,12 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             required: 'Поле является обязательным',
                                         })}
                                         type="number"
-                                        step="any"
+                                        min="0"
+                                        onKeyDown={(e) => {
+                                            if (e.key === '-') {
+                                                e.preventDefault()
+                                            }
+                                        }}
                                     />
                                     <FormErrorMessage>{errors.output?.message}</FormErrorMessage>
                                 </FormControl>
@@ -265,7 +304,12 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             required: 'Поле является обязательным',
                                         })}
                                         type="number"
-                                        step="any"
+                                        min="0"
+                                        onKeyDown={(e) => {
+                                            if (e.key === '-') {
+                                                e.preventDefault()
+                                            }
+                                        }}
                                     />
                                     <FormErrorMessage>{errors.defective?.message}</FormErrorMessage>
                                 </FormControl>

@@ -120,6 +120,12 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
                                     type="number"
                                     name="price"
                                     placeholder="Цена"
+                                    min="0"
+                                    onKeyDown={(e) => {
+                                        if (e.key === '-') {
+                                            e.preventDefault()
+                                        }
+                                    }}
                                 />
                                 <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
                             </FormControl>
@@ -131,6 +137,12 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
                                     type="number"
                                     name="costPrice"
                                     placeholder="Себестоимость"
+                                    min="0"
+                                    onKeyDown={(e) => {
+                                        if (e.key === '-') {
+                                            e.preventDefault()
+                                        }
+                                    }}
                                 />
                                 <FormErrorMessage>{errors.costPrice?.message}</FormErrorMessage>
                             </FormControl>

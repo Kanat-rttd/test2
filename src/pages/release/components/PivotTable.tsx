@@ -65,20 +65,30 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {data
-                            .sort((a, b) => a.id - b.id)
-                            .map((row, index) => (
-                                <Tr key={row.id}>
-                                    <Td>{index + 1}</Td>
-                                    <Td>{row.contragent.contragentName}</Td>
-                                    {headers.map((header, index) => {
-                                        const quantity = row.goodsDispatchDetails.find(
-                                            (detail) => detail.product.name === header.bread,
-                                        )?.quantity
-                                        return <Td key={index}>{quantity}</Td>
-                                    })}
-                                </Tr>
-                            ))}
+                        {data.length ? (
+                            data
+                                .sort((a, b) => a.id - b.id)
+                                .map((row, index) => (
+                                    <Tr key={row.id}>
+                                        <Td>{index + 1}</Td>
+                                        <Td>{row.contragent.contragentName}</Td>
+                                        {headers.map((header, index) => {
+                                            const quantity = row.goodsDispatchDetails.find(
+                                                (detail) => detail.product.name === header.bread,
+                                            )?.quantity
+                                            return <Td key={index}>{quantity}</Td>
+                                        })}
+                                    </Tr>
+                                ))
+                        ) : (
+                            <Tr>
+                                <Td>Нет данных</Td>
+                                <Td></Td>
+                                {headers.map((_, index) => (
+                                    <Th key={index}></Th>
+                                ))}
+                            </Tr>
+                        )}
                     </Tbody>
                 </Table>
             </TableContainer>

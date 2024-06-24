@@ -222,8 +222,14 @@ const UniquePriceAddModal = ({
                                                 {...register('price', {
                                                     required: 'Поле является обязательным',
                                                 })}
-                                                type="number"
                                                 placeholder="Цена"
+                                                type="number"
+                                                min="0"
+                                                onKeyDown={(e) => {
+                                                    if (e.key === '-') {
+                                                        e.preventDefault();
+                                                    }
+                                                }}
                                             />
                                             <InputRightAddon>₸</InputRightAddon>
                                         </InputGroup>

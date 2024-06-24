@@ -252,6 +252,12 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                                             handleHoursChange(e, name)
                                                         }
                                                     }}
+                                                    min="0"
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === '-') {
+                                                            e.preventDefault()
+                                                        }
+                                                    }}
                                                 />
                                             </Box>
                                         )
