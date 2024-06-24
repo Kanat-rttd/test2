@@ -21,6 +21,7 @@ import { useState, useEffect } from 'react'
 import { useApi } from '@/utils/services/axios'
 import dayjs from 'dayjs'
 import { PurchaseType } from '@/utils/types/purchase.types'
+import InputNumber from '@/components/shared/NumberInput'
 
 interface rawMaterials {
     value: number
@@ -185,13 +186,11 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
 
                         <FormControl isInvalid={!!errors.quantity}>
                             <InputGroup>
-                                <Input
+                                <InputNumber
                                     {...register('quantity', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    autoComplete="off"
                                     placeholder="Количество *"
-                                    type="number"
                                 />
                                 <InputRightAddon>{selectedRawMaterial}</InputRightAddon>
                             </InputGroup>
@@ -199,23 +198,19 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.price}>
-                            <Input
+                            <InputNumber
                                 {...register('price', { required: 'Поле является обязательным' })}
-                                autoComplete="off"
                                 placeholder="Цена *"
-                                type="number"
                             />
                             <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.deliverySum}>
-                            <Input
+                            <InputNumber
                                 {...register('deliverySum', {
                                     required: 'Поле является обязательным',
                                 })}
-                                autoComplete="off"
                                 placeholder="Сумма доставки *"
-                                type="number"
                             />
                             <FormErrorMessage>{errors.deliverySum?.message}</FormErrorMessage>
                         </FormControl>

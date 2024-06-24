@@ -22,6 +22,7 @@ import { useApi } from '@/utils/services/axios'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { ProviderType } from '@/utils/types/provider.types'
 import { PurchaseType } from '@/utils/types/purchase.types'
+import InputNumber from '@/components/shared/NumberInput'
 
 type PurchaseModalProps = {
     isOpen: boolean
@@ -110,26 +111,23 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                     const { onChange, value } = field
                                     return (
                                         <Select
-                                                    options={providersData}
-                                                    getOptionLabel={(option: ProviderType) =>
-                                                        option.providerName
-                                                    }
-                                                    getOptionValue={(option: ProviderType) =>
-                                                        `${option.id}`
-                                                    }
-                                                    value={providersData?.filter(
-                                                        (option) =>
-                                                            String(option.id) == String(value),
-                                                    )}
-                                                    onChange={(
-                                                        selectedOption: ProviderType | null,
-                                                    ) => {
-                                                        onChange(selectedOption?.id)
-                                                    }}
-                                                    placeholder="Поставщик *"
-                                                    isClearable
-                                                    isSearchable
-                                                />
+                                            options={providersData}
+                                            getOptionLabel={(option: ProviderType) =>
+                                                option.providerName
+                                            }
+                                            getOptionValue={(option: ProviderType) =>
+                                                `${option.id}`
+                                            }
+                                            value={providersData?.filter(
+                                                (option) => String(option.id) == String(value),
+                                            )}
+                                            onChange={(selectedOption: ProviderType | null) => {
+                                                onChange(selectedOption?.id)
+                                            }}
+                                            placeholder="Поставщик *"
+                                            isClearable
+                                            isSearchable
+                                        />
                                     )
                                 }}
                             />
@@ -167,13 +165,11 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
 
                         <FormControl isInvalid={!!errors.quantity}>
                             <InputGroup>
-                                <Input
+                                <InputNumber
                                     {...register('quantity', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    autoComplete="off"
                                     placeholder="Количество *"
-                                    type="number"
                                 />
                                 <InputRightAddon>{selectedRawMaterial?.uom}</InputRightAddon>
                             </InputGroup>
@@ -181,23 +177,19 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.price}>
-                            <Input
+                            <InputNumber
                                 {...register('price', { required: 'Поле является обязательным' })}
-                                autoComplete="off"
                                 placeholder="Цена *"
-                                type="number"
                             />
                             <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.deliverySum}>
-                            <Input
+                            <InputNumber
                                 {...register('deliverySum', {
                                     required: 'Поле является обязательным',
                                 })}
-                                autoComplete="off"
                                 placeholder="Сумма доставки *"
-                                type="number"
                             />
                             <FormErrorMessage>{errors.deliverySum?.message}</FormErrorMessage>
                         </FormControl>
