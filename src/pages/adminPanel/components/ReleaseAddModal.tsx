@@ -21,6 +21,7 @@ import PhoneInput from '@/components/shared/PhoneInput'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import StatusSelect from '@/components/shared/StatusSelect'
 import { ReleaserType } from '@/utils/types/releaser.types'
+import InputNumber from '@/components/shared/NumberInput'
 
 interface ReleaseAddModalProps {
     data: ReleaserType | undefined
@@ -142,7 +143,7 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                     </FormControl>
                     <FormControl isInvalid={!!errors.telegrammId}>
                         <InputGroup>
-                            <Input
+                            <InputNumber
                                 {...register('telegrammId', {
                                     required: 'Поле является обязательным',
                                     maxLength: {
@@ -155,9 +156,7 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                                             'Некорректный Телеграм ID. Используйте только цифры',
                                     },
                                 })}
-                                autoComplete="off"
                                 placeholder="Телеграм ID *"
-                                type="number"
                             />
                         </InputGroup>
                         <FormErrorMessage>{errors.telegrammId?.message}</FormErrorMessage>

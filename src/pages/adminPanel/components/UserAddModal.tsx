@@ -6,7 +6,6 @@ import {
     ModalBody,
     ModalFooter,
     ModalOverlay,
-    InputGroup,
     Input,
     FormControl,
     FormErrorMessage,
@@ -22,6 +21,7 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 import { User } from '@/utils/types/user.types'
 import PasswordInput from '@/components/shared/PasswordInput'
 import StatusSelect from '@/components/shared/StatusSelect'
+import InputNumber from '@/components/shared/NumberInput'
 
 interface UserAddModalProps {
     data: User | undefined
@@ -198,20 +198,16 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.fixSalary}>
-                                <InputGroup>
-                                    <Input
-                                        {...register('fixSalary', {
-                                            required: 'Поле является обязательным',
-                                            maxLength: {
-                                                value: 10,
-                                                message: 'Максимальная длина 10 символов',
-                                            },
-                                        })}
-                                        autoComplete="off"
-                                        placeholder="Фикс ЗП. *"
-                                        type="number"
-                                    />
-                                </InputGroup>
+                                <InputNumber
+                                    {...register('fixSalary', {
+                                        required: 'Поле является обязательным',
+                                        maxLength: {
+                                            value: 10,
+                                            message: 'Максимальная длина 10 символов',
+                                        },
+                                    })}
+                                    placeholder="Фикс ЗП. *"
+                                />
                                 <FormErrorMessage>{errors.fixSalary?.message}</FormErrorMessage>
                             </FormControl>
 

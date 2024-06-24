@@ -29,9 +29,8 @@ interface Account {
     name: string
 }
 
-
 const formatOptionLabel = (option: ContragentType) => (
-    <div  style={{display: 'flex', justifyContent: 'space-between'}}>
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span>{option.contragentName}</span>
         <span style={{ marginLeft: '50px', color: '#bfbdbd' }}> {option.type}</span>
     </div>
@@ -41,7 +40,7 @@ type ArrivalProps = {
     categoriesData: Category[] | undefined
 }
 
-const Consumption = ({categoriesData} : ArrivalProps ) => {
+const Consumption = ({ categoriesData }: ArrivalProps) => {
     const { loading } = useNotify()
 
     const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=Активный')
@@ -51,7 +50,7 @@ const Consumption = ({categoriesData} : ArrivalProps ) => {
         register,
         handleSubmit: handleSubmitForm,
         control,
-        setValue, 
+        setValue,
         formState: { errors },
         reset,
     } = useForm<ArrivalInputs>()
@@ -79,6 +78,12 @@ const Consumption = ({categoriesData} : ArrivalProps ) => {
                     autoComplete="off"
                     placeholder="Сумма *"
                     type="number"
+                    min="0"
+                    onKeyDown={(e) => {
+                        if (e.key === '-') {
+                            e.preventDefault()
+                        }
+                    }}
                 />
                 <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
             </FormControl>
@@ -152,7 +157,7 @@ const Consumption = ({categoriesData} : ArrivalProps ) => {
             </FormControl>
 
             <FormControl isInvalid={!!errors.contragentId}>
-            <Controller
+                <Controller
                     name="contragentId"
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}

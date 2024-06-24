@@ -60,7 +60,6 @@ const RequestForm = () => {
     const clientId = Number(userInfo?.userId) || null
 
     const handleSubmit = (): void => {
-        debugger
         const requestData = {
             date: selectedDate,
             products: selectedProducts.map((product) => ({
@@ -178,6 +177,7 @@ const RequestForm = () => {
                                                 backgroundColor={'gray.100'}
                                                 value={product.quantity || ''}
                                                 onChange={(e) => handleQuantityChange(index, e)}
+                                                min="0"
                                             />
                                             <IconButton
                                                 bg={'transparent'}

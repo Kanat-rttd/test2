@@ -80,13 +80,12 @@ type ArrivalProps = {
     categoriesData: Category[] | undefined
 }
 
-const Arrival = ({categoriesData} : ArrivalProps ) => {
+const Arrival = ({ categoriesData }: ArrivalProps) => {
     const { loading } = useNotify()
 
     const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
     // const { data: categoriesData } = useApi<Category[]>(`financeCategories?${getURLs().toString()}`)
     const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=Активный')
-
 
     const {
         register,
@@ -120,6 +119,12 @@ const Arrival = ({categoriesData} : ArrivalProps ) => {
                     autoComplete="off"
                     placeholder="Сумма *"
                     type="number"
+                    min="0"
+                    onKeyDown={(e) => {
+                        if (e.key === '-') {
+                            e.preventDefault()
+                        }
+                    }}
                 />
                 <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
             </FormControl>

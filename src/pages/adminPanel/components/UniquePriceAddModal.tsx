@@ -29,6 +29,7 @@ import { useForm } from 'react-hook-form'
 import { ClientType } from '@/utils/types/client.type'
 import { UniquePriceDetail, UniquePriceType } from '@/utils/types/uniquePrice.types'
 import { individualPriceType } from '@/utils/types/individualPrice.types'
+import InputNumber from '@/components/shared/NumberInput'
 
 interface Product {
     id: string
@@ -218,18 +219,11 @@ const UniquePriceAddModal = ({
                                     </FormControl>
                                     <FormControl isInvalid={!!errors.price}>
                                         <InputGroup>
-                                            <Input
+                                            <InputNumber
                                                 {...register('price', {
                                                     required: 'Поле является обязательным',
                                                 })}
                                                 placeholder="Цена"
-                                                type="number"
-                                                min="0"
-                                                onKeyDown={(e) => {
-                                                    if (e.key === '-') {
-                                                        e.preventDefault();
-                                                    }
-                                                }}
                                             />
                                             <InputRightAddon>₸</InputRightAddon>
                                         </InputGroup>

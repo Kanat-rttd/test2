@@ -20,6 +20,7 @@ import StatusSelect from '@/components/shared/StatusSelect'
 import { DepartPersonalType } from '@/utils/types/departPersonal.types'
 import { FacilityUnit } from '@/utils/types/product.types'
 import { useApi } from '@/utils/services/axios'
+import InputNumber from '@/components/shared/NumberInput'
 
 interface DepartPesonalAddModalProps {
     data: DepartPersonalType | undefined
@@ -153,20 +154,16 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.fixSalary}>
-                                <InputGroup>
-                                    <Input
-                                        {...register('fixSalary', {
-                                            required: 'Поле является обязательным',
-                                            maxLength: {
-                                                value: 10,
-                                                message: 'Максимальная длина 10 символов',
-                                            },
-                                        })}
-                                        autoComplete="off"
-                                        placeholder="Фикс ЗП. *"
-                                        type="number"
-                                    />
-                                </InputGroup>
+                                <InputNumber
+                                    {...register('fixSalary', {
+                                        required: 'Поле является обязательным',
+                                        maxLength: {
+                                            value: 10,
+                                            message: 'Максимальная длина 10 символов',
+                                        },
+                                    })}
+                                    placeholder="Фикс ЗП. *"
+                                />
                                 <FormErrorMessage>{errors.fixSalary?.message}</FormErrorMessage>
                             </FormControl>
                             <Box

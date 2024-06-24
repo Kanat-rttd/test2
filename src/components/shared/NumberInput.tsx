@@ -1,25 +1,23 @@
-import { Input, InputGroup, InputLeftAddon } from '@chakra-ui/react'
+import { Input, InputGroup } from '@chakra-ui/react'
 import { ForwardedRef, forwardRef } from 'react'
 
 /**
- * Phone input with +7 prefix
+ * Input type number
  */
 
-type PhoneInputProps = {
-    value: string
-    onChange: (val: string) => void
+type NumberInputProps = {
+    placeholder: string
 }
-const PhoneInput = forwardRef(
-    ({ value, onChange }: PhoneInputProps, ref: ForwardedRef<HTMLInputElement>) => {
+const InputNumber = forwardRef(
+    ({ placeholder, ...props }: NumberInputProps, ref: ForwardedRef<HTMLInputElement>) => {
         return (
             <InputGroup size="md">
-                <InputLeftAddon>+7</InputLeftAddon>
                 <Input
+                    {...props}
                     ref={ref}
                     type="number"
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                    placeholder="707 110 10 10 *"
+                    autoComplete="off"
+                    placeholder={placeholder}
                     min="0"
                     onKeyDown={(e) => {
                         if (e.key === '-') {
@@ -41,4 +39,4 @@ const PhoneInput = forwardRef(
     },
 )
 
-export default PhoneInput
+export default InputNumber

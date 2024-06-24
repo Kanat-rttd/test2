@@ -8,7 +8,6 @@ import {
     ModalOverlay,
     Button,
     InputGroup,
-    Input,
     FormControl,
     FormErrorMessage,
     InputRightAddon,
@@ -23,6 +22,7 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 import { OverPriceInputs, OverPriceType } from '@/utils/types/overPrice.types'
 import { monthData } from '@/utils/constants/month.consts'
 import { ContragentType } from '@/utils/types/contragent.types'
+import InputNumber from '@/components/shared/NumberInput'
 
 const defaultValues = {
     contragentId: 0,
@@ -170,48 +170,30 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.year}>
-                            <InputGroup>
-                                <Input
-                                    {...register('year', {
-                                        required: 'Поле является обязательным',
-                                        minLength: {
-                                            value: 4,
-                                            message: 'Некорректный год.',
-                                        },
-                                        maxLength: {
-                                            value: 4,
-                                            message: 'Некорректный год.',
-                                        },
-                                    })}
-                                    autoComplete="off"
-                                    placeholder="Год *"
-                                    type="number"
-                                    min="0"
-                                    onKeyDown={(e) => {
-                                        if (e.key === '-') {
-                                            e.preventDefault()
-                                        }
-                                    }}
-                                />
-                            </InputGroup>
+                            <InputNumber
+                                {...register('year', {
+                                    required: 'Поле является обязательным',
+                                    minLength: {
+                                        value: 4,
+                                        message: 'Некорректный год.',
+                                    },
+                                    maxLength: {
+                                        value: 4,
+                                        message: 'Некорректный год.',
+                                    },
+                                })}
+                                placeholder="Год *"
+                            />
                             <FormErrorMessage>{errors.year?.message}</FormErrorMessage>
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.price}>
                             <InputGroup>
-                                <Input
+                                <InputNumber
                                     {...register('price', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    autoComplete="off"
                                     placeholder="Сверху *"
-                                    type="number"
-                                    min="0"
-                                    onKeyDown={(e) => {
-                                        if (e.key === '-') {
-                                            e.preventDefault()
-                                        }
-                                    }}
                                 />
                                 <InputRightAddon>тг</InputRightAddon>
                             </InputGroup>

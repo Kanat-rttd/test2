@@ -19,6 +19,7 @@ import { getAllBakingFacilityUnits } from '@/utils/services/bakingFacilityUnits.
 import { useForm } from 'react-hook-form'
 import { FacilityUnit, Product, ProductForSend } from '@/utils/types/product.types'
 import StatusSelect from '@/components/shared/StatusSelect'
+import InputNumber from '@/components/shared/NumberInput'
 
 interface ProductAddModalProps {
     data: Product | undefined
@@ -113,19 +114,11 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
                                 </FormErrorMessage>
                             </FormControl>
                             <FormControl isInvalid={!!errors.price}>
-                                <Input
+                                <InputNumber
                                     {...register('price', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    type="number"
-                                    name="price"
                                     placeholder="Цена"
-                                    min="0"
-                                    onKeyDown={(e) => {
-                                        if (e.key === '-') {
-                                            e.preventDefault()
-                                        }
-                                    }}
                                 />
                                 <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
                             </FormControl>
