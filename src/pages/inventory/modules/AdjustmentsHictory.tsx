@@ -36,7 +36,7 @@ const AdjustmentsHictory = () => {
                                 <Tr>
                                     <Th>№</Th>
                                     <Th>Дата</Th>
-                                    <Th>Товар</Th>
+                                    <Th>Категория товара</Th>
                                     <Th>Количество</Th>
                                 </Tr>
                             </Thead>

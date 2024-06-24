@@ -36,10 +36,16 @@ type EditModalInputs = {
     item: ProviderGoodsType
 }
 
+type GoodsCategoryType = {
+    id: number
+    category: string
+    unitOfMeasure: string
+}
+
 const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
     const { success, error } = useNotify()
-    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods?status=Активный')
-    const [selectedValue, setSelectedValue] = useState<ProviderGoodsType | null>()
+    const { data: goodsCategoriesData } = useApi<GoodsCategoryType[]>('goodsCategories')
+    const [selectedValue, setSelectedValue] = useState<GoodsCategoryType | null>()
     const [isMinus, setIsMinus] = useState<boolean>(false)
 
     const {
@@ -88,10 +94,10 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
                                         const { onChange, value } = field
                                         return (
                                             <Select
-                                                options={providerGoodsData || []}
-                                                getOptionLabel={(option) => option.goods}
+                                                options={goodsCategoriesData || []}
+                                                getOptionLabel={(option) => option.category}
                                                 getOptionValue={(option) => `${option.id}`}
-                                                value={providerGoodsData?.find(
+                                                value={goodsCategoriesData?.find(
                                                     (option) => option.id == value?.id,
                                                 )}
                                                 onChange={(val) => {
@@ -122,7 +128,7 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
                                         type="number"
                                     />
                                     <InputRightAddon>
-                                        {selectedValue ? selectedValue.goodsCategory.unitOfMeasure : 'кг'}
+                                        {selectedValue ? selectedValue.unitOfMeasure : 'кг'}
                                     </InputRightAddon>
                                 </InputGroup>
                                 <FormErrorMessage>{errors.qty?.message}</FormErrorMessage>
