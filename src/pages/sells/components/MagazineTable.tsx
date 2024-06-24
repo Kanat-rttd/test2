@@ -22,6 +22,7 @@ interface MagazineData {
 
 const MagazineTable = () => {
     const [filters, setFilters] = useState({ MagazineName: '' })
+    let count = 0
 
     const { data: magazineDebtData } = useApi<MagazineDebtView>('reports/magazineDebt', filters)
     const { data: magazinesData } = useApi<MagazineData[]>('magazines')
@@ -55,7 +56,7 @@ const MagazineTable = () => {
             </Box>
             <Box
                 style={
-                    magazineDebtData?.mainData && magazineDebtData?.mainData.length >= 7
+                    magazineDebtData?.mainData && magazineDebtData?.mainData.length >= 8
                         ? { height: '100dvh' }
                         : {}
                 }
@@ -73,6 +74,7 @@ const MagazineTable = () => {
                             {magazineDebtData?.mainData.length ? (
                                 magazineDebtData?.mainData.map((item, index) => {
                                     if (Number(item.Debit) != 0) {
+                                        count += 1
                                         return (
                                             <Tr key={index}>
                                                 <Td>{index + 1}</Td>
