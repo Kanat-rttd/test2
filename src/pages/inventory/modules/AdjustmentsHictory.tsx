@@ -1,5 +1,5 @@
 import { Table, Tr, Th, Tbody, Td, Box, Select } from '@chakra-ui/react'
-import { TableContainer, Tfoot, Thead } from '@/components/ui'
+import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useApi } from '@/utils/services/axios'
 import dayjs from 'dayjs'
@@ -60,14 +60,6 @@ const AdjustmentsHictory = () => {
                                     </Tr>
                                 )}
                             </Tbody>
-                            <Tfoot>
-                                <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>
-                                    <Td>Итого</Td>
-                                    <Td></Td>
-                                    <Td></Td>
-                                    <Td>100</Td>
-                                </Tr>
-                            </Tfoot>
                         </Table>
                     </TableContainer>
                 </Box>

@@ -1,17 +1,14 @@
 import Dialog from '@/components/Dialog'
-// import Drawler from '@/components/Menu'
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
 import { Box, Table, Tbody, Td, Text, Th, Tr, useDisclosure } from '@chakra-ui/react'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DateRange from '../../../components/DateRange'
 import IsMobile from '@/utils/helpers/isMobile'
-// import useSWR from 'swr'
-// import { getAllFinances } from '@/utils/services/finance.service'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
 import { TableContainer, Thead } from '@/components/ui'
-// import Header from '@/components/layout/Header'
+import UniversalComponent from '@/components/ui/UniversalComponent'
 
 export type History = {
     date: Date
@@ -45,26 +42,35 @@ const History = () => {
     const [sortOrder, setSortOrder] = useState('asc')
     const [isHovered, setIsHovered] = useState(false)
 
-    const { data } = useApi<Finance[]>(`finance?${getURLs().toString()}`)
+    const { data: financeData } = useApi<Finance[]>(`finance?${getURLs().toString()}`)
 
     const [selectedData, setSelectedData] = useState<History | null>(null)
+    const [data, setData] = useState<Finance[] | undefined>(undefined)
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const sortData = (order: string) => {
-        // const sorted = data.slice().sort((a, b) => {
-        //     const dateA = new Date(a.date)
-        //     const dateB = new Date(b.date)
+    useEffect(() => {
+        if(financeData) {
+            setData(financeData)
+        }
+    }, [financeData])
 
-        //     if (order === 'asc') {
-        //         return dateA.getTime() - dateB.getTime()
-        //     } else {
-        //         return dateB.getTime() - dateA.getTime()
-        //     }
-        // })
+    const sortData = (order: string) => {
+        const sorted = financeData?.slice().sort((a, b) => {
+            const dateA = new Date(a.date)
+            const dateB = new Date(b.date)
+
+            if (order === 'asc') {
+                return dateA.getTime() - dateB.getTime()
+            } else {
+                return dateB.getTime() - dateA.getTime()
+            }
+        })
 
         setSortOrder(order)
-        // setData(sorted)
+        setData(sorted)
     }
+
+    
 
     const handleMouseEnter = () => {
         setIsHovered(true)
@@ -81,65 +87,61 @@ const History = () => {
 
     return (
         <>
-            {/* <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                alignItems={'center'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                height={'60px'}
-                p={'0 1rem'}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
-                </Box>
-                <Avatar bg="teal.500" />
-            </Box> */}
-            {/* <Header/> */}
             <Box display="flex" flexDirection="column" gap="1rem" padding={IsMobile() ? 0 : 5}>
-                <Box width={'250px'}>
+                <Box width={'250px'} mt={2} mb={1}>
                     <DateRange />
                 </Box>
-                <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                    <Table variant="simple">
-                        <Thead>
-                            <Tr>
-                                <Th
-                                    onClick={() => sortData(sortOrder === 'asc' ? 'desc' : 'asc')}
-                                    style={{
-                                        cursor: 'pointer',
-                                        color: isHovered ? '#CCC' : 'black',
-                                        transition: 'color 0.2s',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                    }}
-                                    onMouseEnter={handleMouseEnter}
-                                    onMouseLeave={handleMouseLeave}
+
+                <UniversalComponent>
+                    <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+                        <Table variant="simple" width={'100%'}>
+                            <Thead>
+                                <Tr
+                                    position={'sticky'}
+                                    top={0}
+                                    backgroundColor={'white'}
+                                    zIndex={9}
                                 >
-                                    Дата{' '}
-                                    {sortOrder === 'asc' ? (
-                                        <ChevronDownIcon boxSize={6} />
-                                    ) : (
-                                        <ChevronUpIcon boxSize={6} />
-                                    )}
-                                </Th>
-                                <Th>Счёт</Th>
-                                <Th>Категория</Th>
-                                <Th>Сумма</Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {data?.map((transaction, index) => (
-                                <Tr key={index} onClick={() => handleDelete(transaction)}>
-                                    <Td>{dayjs(transaction.date).format('DD.MM.YYYY')}</Td>
-                                    <Td>{transaction.account}</Td>
-                                    <Td>{transaction.financeCategory.name}</Td>
-                                    <Td>{transaction.amount}</Td>
+                                    <Th
+                                        onClick={() =>
+                                            sortData(sortOrder === 'asc' ? 'desc' : 'asc')
+                                        }
+                                        style={{
+                                            cursor: 'pointer',
+                                            color: isHovered ? '#CCC' : 'black',
+                                            transition: 'color 0.2s',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                        }}
+                                        onMouseEnter={handleMouseEnter}
+                                        onMouseLeave={handleMouseLeave}
+                                    >
+                                        Дата
+                                        {sortOrder === 'asc' ? (
+                                            <ChevronDownIcon boxSize={6} />
+                                        ) : (
+                                            <ChevronUpIcon boxSize={6} />
+                                        )}
+                                    </Th>
+                                    <Th>Счёт</Th>
+                                    <Th>Категория</Th>
+                                    <Th>Сумма</Th>
                                 </Tr>
-                            ))}
-                        </Tbody>
-                    </Table>
-                </TableContainer>
+                            </Thead>
+                            <Tbody>
+                                {data?.map((transaction, index) => (
+                                    <Tr key={index} onClick={() => handleDelete(transaction)}>
+                                        <Td>{dayjs(transaction.date).format('DD.MM.YYYY')}</Td>
+                                        <Td>{transaction.account}</Td>
+                                        <Td>{transaction.financeCategory.name}</Td>
+                                        <Td>{transaction.amount}</Td>
+                                    </Tr>
+                                ))}
+                            </Tbody>
+                        </Table>
+                    </TableContainer>
+                </UniversalComponent>
+
                 <Dialog
                     isOpen={isOpen}
                     onClose={onClose}
