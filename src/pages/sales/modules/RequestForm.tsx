@@ -19,12 +19,13 @@ import SuccessPage from '../components/SuccessPage'
 import ErrorPage from '../components/ErrorPage'
 import MobileNavbar from '@/components/MobileNavbar'
 import dayjs from 'dayjs'
+import classes from '../index.module.css'
 
 interface Product {
     id: number
     name: string
     price: number
-    quantity: number
+    quantity: number | undefined
 }
 
 const RequestForm = () => {
@@ -39,7 +40,7 @@ const RequestForm = () => {
     const userInfo = getUserInfo()
 
     const handleAddProduct = (product: Product): void => {
-        setSelectedProducts([...selectedProducts, { ...product, quantity: 0 }])
+        setSelectedProducts([...selectedProducts, { ...product, quantity: undefined }])
         onClose()
     }
 
@@ -51,7 +52,8 @@ const RequestForm = () => {
 
     const handleQuantityChange = (index: number, event: ChangeEvent<HTMLInputElement>): void => {
         const updatedProducts = [...selectedProducts]
-        updatedProducts[index].quantity = parseInt(event.target.value)
+        updatedProducts[index].quantity =
+            event.target.value !== '' ? parseInt(event.target.value) : undefined
         setSelectedProducts(updatedProducts)
     }
 
@@ -127,7 +129,11 @@ const RequestForm = () => {
                             gap={4}
                         >
                             <Heading>Заказ</Heading>
-                            <FormControl display={"flex"} justifyContent={'center'} alignItems={'center'}>
+                            <FormControl
+                                display={'flex'}
+                                justifyContent={'center'}
+                                alignItems={'center'}
+                            >
                                 <FormLabel>Смена: </FormLabel>
                                 <Input
                                     variant="filled"
@@ -147,22 +153,29 @@ const RequestForm = () => {
                             <VStack spacing={2}>
                                 {selectedProducts.map((product, index) => (
                                     <Box
+                                        // w={'40%'}
                                         key={index}
                                         p={5}
                                         display={'flex'}
                                         flexDirection={'row'}
                                         alignItems={'center'}
                                         borderBottom={'2px solid #E2E2E2'}
+                                        className={classes.inputsContainer}
                                     >
-                                        <Box width={'60%'}>
-                                            {' '}
-                                            <Text fontWeight={'bold'}>{product.name}</Text>{' '}
+                                        <Box width={'40%'}>
+                                            <Text fontWeight={'bold'}>{product.name}</Text>
                                         </Box>
-                                        <Box display={'flex'} flexDirection={'row'} width={'40%'}>
+                                        <Box
+                                            display={'flex'}
+                                            width={'60%'}
+                                            justifyContent={'space-between'}
+                                        >
                                             <Input
+                                                w={'85%'}
                                                 variant="filled"
                                                 borderRadius={15}
                                                 name="quantity"
+                                                placeholder="Количество"
                                                 backgroundColor={'gray.100'}
                                                 value={product.quantity}
                                                 onChange={(e) => handleQuantityChange(index, e)}
@@ -172,7 +185,6 @@ const RequestForm = () => {
                                                 color={'gray'}
                                                 size={'md'}
                                                 aria-label="remove item"
-                                                marginRight={3}
                                                 icon={<CloseIcon />}
                                                 onClick={() => handleRemoveProduct(index)}
                                             />
@@ -219,7 +231,7 @@ const RequestForm = () => {
                                 textAlign={'center'}
                                 value={'Заказать'}
                                 onClick={handleSubmit}
-                                type='submit'
+                                type="submit"
                             />
                         </Box>
                     </Box>
