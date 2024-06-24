@@ -24,6 +24,7 @@ import { CloseIcon } from '@chakra-ui/icons'
 import { Product } from '@/utils/types/product.types'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { ContragentType } from '@/utils/types/contragent.types'
+import InputNumber from '@/components/shared/NumberInput'
 
 interface DistributionModalProps {
     isOpen: boolean
@@ -201,18 +202,11 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                                 )
                                             }}
                                         />
-
-                                        <Input
+                                        <InputNumber
                                             {...register(`products.${index}.quantity`, {
                                                 required: 'Поле является обязательным',
                                             })}
                                             placeholder="Количество"
-                                            min="0"
-                                            onKeyDown={(e) => {
-                                                if (e.key === '-') {
-                                                    e.preventDefault()
-                                                }
-                                            }}
                                         />
                                         {fields.length > 1 && (
                                             <CloseIcon
