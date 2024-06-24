@@ -49,7 +49,7 @@ const History = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     useEffect(() => {
-        if(financeData) {
+        if (financeData) {
             setData(financeData)
         }
     }, [financeData])
@@ -69,8 +69,6 @@ const History = () => {
         setSortOrder(order)
         setData(sorted)
     }
-
-    
 
     const handleMouseEnter = () => {
         setIsHovered(true)
@@ -129,14 +127,23 @@ const History = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {data?.map((transaction, index) => (
-                                    <Tr key={index} onClick={() => handleDelete(transaction)}>
-                                        <Td>{dayjs(transaction.date).format('DD.MM.YYYY')}</Td>
-                                        <Td>{transaction.account}</Td>
-                                        <Td>{transaction.financeCategory.name}</Td>
-                                        <Td>{transaction.amount}</Td>
+                                {data?.length ? (
+                                    data?.map((transaction, index) => (
+                                        <Tr key={index} onClick={() => handleDelete(transaction)}>
+                                            <Td>{dayjs(transaction.date).format('DD.MM.YYYY')}</Td>
+                                            <Td>{transaction.account}</Td>
+                                            <Td>{transaction.financeCategory.name}</Td>
+                                            <Td>{transaction.amount}</Td>
+                                        </Tr>
+                                    ))
+                                ) : (
+                                    <Tr>
+                                        <Td>Нет данных</Td>
+                                        <Td></Td>
+                                        <Td></Td>
+                                        <Td></Td>
                                     </Tr>
-                                ))}
+                                )}
                             </Tbody>
                         </Table>
                     </TableContainer>
