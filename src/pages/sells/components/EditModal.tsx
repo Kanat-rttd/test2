@@ -21,6 +21,7 @@ import { useApi } from '@/utils/services/axios'
 // import { ClientType } from '@/utils/types/client.type'
 import { Product } from '@/utils/types/product.types'
 import { useNotify } from '@/utils/providers/ToastProvider'
+import InputNumber from '@/components/shared/NumberInput'
 
 interface DispatchType {
     id: number
@@ -202,12 +203,11 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                                         {...register(`products.${index}.quantity`, {
                                             required: 'Поле является обязательным',
                                         })}
-                                        backgroundColor="#edf2f7"
                                         placeholder="Количество"
                                         disabled
+                                        backgroundColor="#edf2f7"
                                     />
-                                    <Input
-                                        width="25%"
+                                    <InputNumber
                                         {...register(`products.${index}.price`, {
                                             required: 'Поле является обязательным',
                                         })}

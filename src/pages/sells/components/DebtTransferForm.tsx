@@ -18,6 +18,7 @@ import { ContragentType } from '@/utils/types/contragent.types'
 import { MagazineType } from '@/utils/types/magazine.type'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import InputNumber from '@/components/shared/NumberInput'
 
 interface DebtTransferInputs {
     from: number
@@ -83,8 +84,8 @@ const DebtTransferForm = () => {
         `release/invoice?${getParam('contragentId')}`,
     )
     const [contragents, setContragents] = useState<ContragentType[]>([])
-    const [filteredContragents, setFilteredContragents] = useState<ContragentType[] | undefined>([]) 
-       
+    const [filteredContragents, setFilteredContragents] = useState<ContragentType[] | undefined>([])
+
     const {
         register,
         handleSubmit: handleSubmitForm,
@@ -113,24 +114,32 @@ const DebtTransferForm = () => {
             .catch((error) => {
                 console.error('Error creating sale:', error)
             })
-            setParam('contragentId', '')
+        setParam('contragentId', '')
     }
 
     const getFilteredContragents = () => {
-        if(magazinesData == undefined){
-            return;
+        if (magazinesData == undefined) {
+            return
         }
 
         if (selectedProvider?.type == 'реализатор' && contragentsMagazinesData != undefined) {
-            const magazinesIds = magazinesData.filter((magazine) => magazine.clientId == selectedProvider.mainId).map((magazine) => magazine.id);
-            const contragents : ContragentType[]  = contragentsMagazinesData.filter((contragent) => magazinesIds.includes(contragent.mainId));
+            const magazinesIds = magazinesData
+                .filter((magazine) => magazine.clientId == selectedProvider.mainId)
+                .map((magazine) => magazine.id)
+            const contragents: ContragentType[] = contragentsMagazinesData.filter((contragent) =>
+                magazinesIds.includes(contragent.mainId),
+            )
             setParam('contragentId', selectedProvider.id.toString())
-            return contragents;
+            return contragents
         } else if (selectedProvider?.type == 'магазин' && clientsData != undefined) {
-            const clientIds = magazinesData.filter((magazine) => magazine.id == selectedProvider.mainId).map((magazine) => magazine.clientId);
-            const contragents : ContragentType[] = clientsData.filter((client) => clientIds.includes(client.mainId)); 
+            const clientIds = magazinesData
+                .filter((magazine) => magazine.id == selectedProvider.mainId)
+                .map((magazine) => magazine.clientId)
+            const contragents: ContragentType[] = clientsData.filter((client) =>
+                clientIds.includes(client.mainId),
+            )
             setParam('contragentId', contragents[0].id.toString())
-            return contragents;
+            return contragents
         }
     }
 
@@ -239,12 +248,10 @@ const DebtTransferForm = () => {
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.summa}>
-                            <Input
+                            <InputNumber
                                 maxLength={20}
                                 {...register('summa', { required: 'Поле является обязательным' })}
-                                autoComplete="off"
                                 placeholder="Сумма *"
-                                type="number"
                             />
                             <FormErrorMessage>{errors.summa?.message}</FormErrorMessage>
                         </FormControl>
@@ -268,7 +275,11 @@ const DebtTransferForm = () => {
                                     const { onChange, value } = field
                                     return (
                                         <Select
-                                            options={dispatchesData?.filter((item) => item.contragentId == Number(getParam('contragentId')))}
+                                            options={dispatchesData?.filter(
+                                                (item) =>
+                                                    item.contragentId ==
+                                                    Number(getParam('contragentId')),
+                                            )}
                                             getOptionLabel={(option: InvoiceData) =>
                                                 String(option.invoiceNumber)
                                             }

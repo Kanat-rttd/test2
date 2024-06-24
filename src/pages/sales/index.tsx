@@ -9,7 +9,7 @@ const OrderHistory = lazy(() => import('./modules/OrderHistory'))
 
 type PageType = 'user' | 'history' | 'requestForm'
 
-const salesPage = () => {
+const SalesPage = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
     const { page, id } = useParams<{ page: PageType; id: string }>()
     const navigate = useNavigate()
@@ -33,4 +33,4 @@ const salesPage = () => {
     return <Suspense fallback={<Loading />}>{content}</Suspense>
 }
 
-export default salesPage
+export default SalesPage

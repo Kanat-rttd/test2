@@ -7,6 +7,7 @@ import useSWR, { mutate } from 'swr'
 import { getAllClients } from '@/utils/services/client.service'
 import { getAllFinancesCategories } from '@/utils/services/financeCategories.service'
 import { useApi } from '@/utils/services/axios'
+import InputNumber from '@/components/shared/NumberInput'
 
 const account = [
     {
@@ -68,7 +69,6 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
     } = useForm<ArrivalInputs>()
 
     const sendData = (formData: ArrivalInputs) => {
-
         createInvoiceArrival(invoiceNumber, formData)
             .then(() => {
                 mutate(`finance/${invoiceNumber}`)
@@ -86,12 +86,10 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
             <Box height={'100%'} display={'flex'} flexDirection={'column'}>
                 <Box display={'flex'} flexDirection={'column'} gap={'15px'} flex={1}>
                     <FormControl isInvalid={!!errors.amount}>
-                        <Input
+                        <InputNumber
                             maxLength={20}
                             {...register('amount', { required: 'Поле является обязательным' })}
-                            autoComplete="off"
                             placeholder="Сумма *"
-                            type="number"
                         />
                         <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
                     </FormControl>
