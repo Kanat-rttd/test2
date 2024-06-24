@@ -42,7 +42,9 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 }) => {
     const { loading, error } = useNotify()
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
-    const { data: departPersonalData } = useApi<DepartPersonalType[]>('departPersonal?status=Активный')
+    const { data: departPersonalData } = useApi<DepartPersonalType[]>(
+        'departPersonal?status=Активный',
+    )
 
     const [selectedFacilityUnit, setSelectedFacilityUnit] = useState<string>('')
     const [selectedPersonals, setSelectedPersonals] = useState<DepartPersonalNames[]>([])
@@ -129,6 +131,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 
     const handleHoursChange = (event: React.ChangeEvent<HTMLInputElement>, breadName: string) => {
         const hours = parseInt(event.target.value)
+
         setSelectedPersonals(
             selectedPersonals.map((bread) =>
                 bread.name === breadName ? { ...bread, hours } : bread,
@@ -237,8 +240,18 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                                     required={hours > 1}
                                                     type="number"
                                                     placeholder="Кол-во"
-                                                    value={hours}
-                                                    onChange={(e) => handleHoursChange(e, name)}
+                                                    value={isNaN(hours) ? '' : hours.toString()}
+                                                    onChange={(e) => {
+                                                        const newValue = e.target.value
+                                                        if (
+                                                            newValue === '' ||
+                                                            (!isNaN(parseInt(newValue)) &&
+                                                                parseInt(newValue) >= 0 &&
+                                                                parseInt(newValue) <= 24)
+                                                        ) {
+                                                            handleHoursChange(e, name)
+                                                        }
+                                                    }}
                                                 />
                                             </Box>
                                         )
