@@ -24,6 +24,7 @@ import { useForm } from 'react-hook-form'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { BakingDataType } from '@/utils/types/baking.types'
 import dayjs from 'dayjs'
+import InputNumber from '@/components/shared/NumberInput'
 
 interface ClientAddModalProps {
     data?: BakingDataType | null
@@ -119,17 +120,11 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 <FormControl isInvalid={!!errors.flour} isRequired>
                                     <FormLabel fontWeight={'bold'}>Мука</FormLabel>
                                     <InputGroup>
-                                        <Input
+                                        <InputNumber
                                             {...register('flour', {
                                                 required: 'Поле является обязательным',
                                             })}
-                                            type="number"
-                                            min="0"
-                                            onKeyDown={(e) => {
-                                                if (e.key === '-') {
-                                                    e.preventDefault()
-                                                }
-                                            }}
+                                            placeholder=""
                                         />
                                         <InputRightAddon
                                             w={'15%'}
@@ -144,17 +139,11 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 <FormControl isInvalid={!!errors.salt} isRequired>
                                     <FormLabel fontWeight={'bold'}>Соль</FormLabel>
                                     <InputGroup>
-                                        <Input
+                                        <InputNumber
                                             {...register('salt', {
                                                 required: 'Поле является обязательным',
                                             })}
-                                            type="number"
-                                            min="0"
-                                            onKeyDown={(e) => {
-                                                if (e.key === '-') {
-                                                    e.preventDefault()
-                                                }
-                                            }}
+                                            placeholder=""
                                         />
                                         <InputRightAddon
                                             w={'15%'}
@@ -169,17 +158,11 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 <FormControl isInvalid={!!errors.yeast} isRequired>
                                     <FormLabel fontWeight={'bold'}>Дрожжи</FormLabel>
                                     <InputGroup>
-                                        <Input
+                                        <InputNumber
                                             {...register('yeast', {
                                                 required: 'Поле является обязательным',
                                             })}
-                                            type="number"
-                                            min="0"
-                                            onKeyDown={(e) => {
-                                                if (e.key === '-') {
-                                                    e.preventDefault()
-                                                }
-                                            }}
+                                            placeholder=""
                                         />
                                         <InputRightAddon
                                             w={'15%'}
@@ -194,17 +177,11 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 <FormControl isInvalid={!!errors.malt} isRequired>
                                     <FormLabel fontWeight={'bold'}>Солод</FormLabel>
                                     <InputGroup>
-                                        <Input
+                                        <InputNumber
                                             {...register('malt', {
                                                 required: 'Поле является обязательным',
                                             })}
-                                            type="number"
-                                            min="0"
-                                            onKeyDown={(e) => {
-                                                if (e.key === '-') {
-                                                    e.preventDefault()
-                                                }
-                                            }}
+                                            placeholder=""
                                         />
                                         <InputRightAddon
                                             w={'15%'}
@@ -219,17 +196,11 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 <FormControl isInvalid={!!errors.butter} isRequired>
                                     <FormLabel fontWeight={'bold'}>Масло</FormLabel>
                                     <InputGroup>
-                                        <Input
+                                        <InputNumber
                                             {...register('butter', {
                                                 required: 'Поле является обязательным',
                                             })}
-                                            type="number"
-                                            min="0"
-                                            onKeyDown={(e) => {
-                                                if (e.key === '-') {
-                                                    e.preventDefault()
-                                                }
-                                            }}
+                                            placeholder=""
                                         />
                                         <InputRightAddon
                                             w={'15%'}
@@ -243,17 +214,11 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.temperature} isRequired>
                                     <FormLabel fontWeight={'bold'}>T</FormLabel>
-                                    <Input
+                                    <InputNumber
                                         {...register('temperature', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        type="number"
-                                        min="0"
-                                        onKeyDown={(e) => {
-                                            if (e.key === '-') {
-                                                e.preventDefault()
-                                            }
-                                        }}
+                                        placeholder=""
                                     />
                                     <FormErrorMessage>
                                         {errors.temperature?.message}
@@ -283,37 +248,24 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.output} isRequired>
                                     <FormLabel fontWeight={'bold'}>Выход</FormLabel>
-                                    <Input
+                                    <InputNumber
                                         {...register('output', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        type="number"
-                                        min="0"
-                                        onKeyDown={(e) => {
-                                            if (e.key === '-') {
-                                                e.preventDefault()
-                                            }
-                                        }}
+                                        placeholder=""
                                     />
                                     <FormErrorMessage>{errors.output?.message}</FormErrorMessage>
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.defective} isRequired>
                                     <FormLabel fontWeight={'bold'}>Брак</FormLabel>
-                                    <Input
+                                    <InputNumber
                                         {...register('defective', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        type="number"
-                                        min="0"
-                                        onKeyDown={(e) => {
-                                            if (e.key === '-') {
-                                                e.preventDefault()
-                                            }
-                                        }}
+                                        placeholder=""
                                     />
                                     <FormErrorMessage>{errors.defective?.message}</FormErrorMessage>
                                 </FormControl>
-
                                 <Box
                                     style={{
                                         display: 'flex',
