@@ -16,15 +16,25 @@ import { TableContainer, Thead } from '@/components/ui'
 export type History = {
     date: Date
     account: string
-    category: string
     amount: string
+    financeCategory: {
+        id: number
+        name: string
+        type: string
+    }
+    financeCategoryId: number
 }
 
 interface Finance {
     id: number
     amount: string
     date: Date
-    category: string
+    financeCategory: {
+        id: number
+        name: string
+        type: string
+    }
+    financeCategoryId: number
     clientId: number
     account: string
     comment: string
@@ -123,7 +133,7 @@ const History = () => {
                                 <Tr key={index} onClick={() => handleDelete(transaction)}>
                                     <Td>{dayjs(transaction.date).format('DD.MM.YYYY')}</Td>
                                     <Td>{transaction.account}</Td>
-                                    <Td>{transaction.category}</Td>
+                                    <Td>{transaction.financeCategory.name}</Td>
                                     <Td>{transaction.amount}</Td>
                                 </Tr>
                             ))}
@@ -147,7 +157,7 @@ const History = () => {
                                 <strong>Сумма:</strong> {selectedData?.amount}
                             </Text>
                             <Text>
-                                <strong>Категория:</strong> {selectedData?.category}
+                                <strong>Категория:</strong> {selectedData?.financeCategory.name}
                             </Text>
                         </>
                     }
