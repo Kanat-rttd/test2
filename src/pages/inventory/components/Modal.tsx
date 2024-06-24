@@ -13,7 +13,6 @@ import {
     FormControl,
     FormErrorMessage,
     InputGroup,
-    Input,
     InputRightAddon,
     Box,
     Textarea,
@@ -23,6 +22,7 @@ import Select from 'react-select'
 import { createAdjustment } from '@/utils/services/adjustment.service'
 import { useState } from 'react'
 import { AddIcon, MinusIcon } from '@chakra-ui/icons'
+import InputNumber from '@/components/shared/NumberInput'
 
 type EditModalProps = {
     isOpen: boolean
@@ -57,7 +57,10 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
     } = useForm<EditModalInputs>()
 
     const sendData = (formData: EditModalInputs) => {
-        const data = { ...formData, qty: isMinus ? Number(formData.qty) * -1 : Number(formData.qty)}
+        const data = {
+            ...formData,
+            qty: isMinus ? Number(formData.qty) * -1 : Number(formData.qty),
+        }
         const responsePromise: Promise<any> = createAdjustment(data)
         responsePromise
             .then((res) => {
@@ -117,15 +120,13 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
                             <FormControl isInvalid={!!errors.qty}>
                                 <InputGroup>
                                     <Button mr={2} onClick={() => setIsMinus(!isMinus)}>
-                                        {isMinus ? <MinusIcon width={3} /> : <AddIcon width={3}/>}
+                                        {isMinus ? <MinusIcon width={3} /> : <AddIcon width={3} />}
                                     </Button>
-                                    <Input
+                                    <InputNumber
                                         {...register('qty', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        autoComplete="off"
                                         placeholder="Количество *"
-                                        type="number"
                                     />
                                     <InputRightAddon>
                                         {selectedValue ? selectedValue.unitOfMeasure : 'кг'}
