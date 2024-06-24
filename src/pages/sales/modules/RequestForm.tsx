@@ -22,10 +22,10 @@ import dayjs from 'dayjs'
 import classes from '../index.module.css'
 
 interface Product {
-    id: number
+    id: number | null
     name: string
     price: number
-    quantity: number | undefined
+    quantity: number | null
 }
 
 const RequestForm = () => {
@@ -40,7 +40,7 @@ const RequestForm = () => {
     const userInfo = getUserInfo()
 
     const handleAddProduct = (product: Product): void => {
-        setSelectedProducts([...selectedProducts, { ...product, quantity: undefined }])
+        setSelectedProducts([...selectedProducts, { ...product, quantity: null }])
         onClose()
     }
 
@@ -53,19 +53,19 @@ const RequestForm = () => {
     const handleQuantityChange = (index: number, event: ChangeEvent<HTMLInputElement>): void => {
         const updatedProducts = [...selectedProducts]
         updatedProducts[index].quantity =
-            event.target.value !== '' ? parseInt(event.target.value) : undefined
+            event.target.value !== '' ? parseInt(event.target.value) : null
         setSelectedProducts(updatedProducts)
     }
 
     const clientId = Number(userInfo?.userId) || null
 
     const handleSubmit = (): void => {
+        debugger
         const requestData = {
             date: selectedDate,
             products: selectedProducts.map((product) => ({
                 productId: product.id,
                 orderedQuantity: product.quantity,
-                price: product.price,
             })),
             comment: comment,
             clientId: Number(clientId),
@@ -153,7 +153,6 @@ const RequestForm = () => {
                             <VStack spacing={2}>
                                 {selectedProducts.map((product, index) => (
                                     <Box
-                                        // w={'40%'}
                                         key={index}
                                         p={5}
                                         display={'flex'}
@@ -177,7 +176,7 @@ const RequestForm = () => {
                                                 name="quantity"
                                                 placeholder="Количество"
                                                 backgroundColor={'gray.100'}
-                                                value={product.quantity}
+                                                value={product.quantity || ''}
                                                 onChange={(e) => handleQuantityChange(index, e)}
                                             />
                                             <IconButton

@@ -6,7 +6,7 @@ export const getAllSales = async () => {
 }
 
 export const createSale = async (data: {
-    products: { productId: number | null; orderedQuantity: number | undefined }[]
+    products: { productId: number | null; orderedQuantity: number | null }[]
     date: Date
     clientId: number
 }) => {
