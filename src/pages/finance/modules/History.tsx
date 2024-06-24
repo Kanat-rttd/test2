@@ -1,6 +1,6 @@
 import Dialog from '@/components/Dialog'
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
-import { Box, Table, Tbody, Td, Text, Th, Tr, useDisclosure } from '@chakra-ui/react'
+import { Box, Select, Table, Tbody, Td, Text, Th, Tr, useDisclosure } from '@chakra-ui/react'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import DateRange from '../../../components/DateRange'
@@ -37,12 +37,26 @@ interface Finance {
     comment: string
 }
 
+interface Category {
+    id: number
+    name: string
+    type: string
+}
+
+interface Account {
+    id: number
+    name: string
+}
+
+
 const History = () => {
-    const { getURLs } = useURLParameters()
+    const { getURLs, setParam, getParam } = useURLParameters()
     const [sortOrder, setSortOrder] = useState('asc')
     const [isHovered, setIsHovered] = useState(false)
 
     const { data: financeData } = useApi<Finance[]>(`finance?${getURLs().toString()}`)
+    const { data: categoriesData } = useApi<Category[] | undefined>(`financeCategories`)
+    const {data: accounts} = useApi<Account[]>('financeAccount')
 
     const [selectedData, setSelectedData] = useState<History | null>(null)
     const [data, setData] = useState<Finance[] | undefined>(undefined)
@@ -86,8 +100,36 @@ const History = () => {
     return (
         <>
             <Box display="flex" flexDirection="column" gap="1rem" padding={IsMobile() ? 0 : 5}>
-                <Box width={'250px'} mt={2} mb={1}>
+                <Box width={'55%'} gap={'15px'} mt={2} mb={1} display={'flex'}>
                     <DateRange />
+                    <Select
+                        placeholder="Все счета"
+                        width={'90%'}
+                        size={'sm'}
+                        borderRadius={5}
+                        value={getParam('accountName')}
+                        onChange={(e) => setParam('accountName', e.target.value)}
+                    >
+                        {accounts?.map((account, index) => (
+                            <option key={index} value={account.name}>
+                                {account.name}
+                            </option>
+                        ))}
+                    </Select>
+                    <Select
+                        placeholder="Все категории"
+                        width={'90%'}
+                        size={'sm'}
+                        borderRadius={5}
+                        value={getParam('categoryId')}
+                        onChange={(e) => setParam('categoryId', e.target.value)}
+                    >
+                        {categoriesData?.map((category, index) => (
+                            <option key={index} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </Select>
                 </Box>
 
                 <UniversalComponent>
@@ -95,12 +137,14 @@ const History = () => {
                         <Table variant="simple" width={'100%'}>
                             <Thead>
                                 <Tr
+                                w={'100%'}
                                     position={'sticky'}
                                     top={0}
                                     backgroundColor={'white'}
                                     zIndex={9}
                                 >
                                     <Th
+                                    w={'25%'}
                                         onClick={() =>
                                             sortData(sortOrder === 'asc' ? 'desc' : 'asc')
                                         }
@@ -121,9 +165,9 @@ const History = () => {
                                             <ChevronUpIcon boxSize={6} />
                                         )}
                                     </Th>
-                                    <Th>Счёт</Th>
-                                    <Th>Категория</Th>
-                                    <Th>Сумма</Th>
+                                    <Th w={'20%'}>Счёт</Th>
+                                    <Th w={'30%'}>Категория</Th>
+                                    <Th w={'25%'}>Сумма</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>

@@ -5,7 +5,6 @@ import Consumption from '../components/Consumption'
 import Transfer from '../components/Transfer'
 import { useState } from 'react'
 import { useApi } from '@/utils/services/axios'
-// import Drawler from '@/components/Menu'
 
 interface Category {
     id: number
@@ -20,20 +19,6 @@ const Input = () => {
     )
     return (
         <>
-            {/* <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                alignItems={'center'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                height={'60px'}
-                p={'0 1rem'}
-            >
-                <Box width={'100%'}>
-                    <Drawler></Drawler>
-                </Box>
-                <Avatar bg="teal.500" />
-            </Box> */}
             <Box display={'flex'} width={'100%'} justifyContent={'center'} marginTop={3}>
                 <Box
                     height={'100%'}
