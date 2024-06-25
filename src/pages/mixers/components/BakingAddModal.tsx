@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react'
 
 import { createBaking, updateBaking } from '@/utils/services/baking.service'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useApi } from '@/utils/services/axios'
 import { useForm } from 'react-hook-form'
 import { useNotify } from '@/utils/providers/ToastProvider'
@@ -34,6 +34,12 @@ interface ClientAddModalProps {
     onSuccess: () => void
 }
 
+type GoodsCategoryType = {
+    id: number
+    category: string
+    unitOfMeasure: string
+}
+
 const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProps) => {
     const { loading } = useNotify()
     const {
@@ -46,6 +52,27 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
     } = useForm<BakingDataType>()
 
     const { data: products } = useApi<{ id: string; name: string }[]>('product?status=Активный')
+    const { data: goodsCategoriesData } = useApi<GoodsCategoryType[]>('goodsCategories')
+    const [bakingGoods, setBakingProducts] = useState<
+        {
+            goodsCategoryId: number
+            quantity: number | undefined
+        }[]
+    >([])
+    const productsNames = ['Мука', 'Соль', 'Дрожжи', 'Солод', 'Масло']
+
+    useEffect(() => {
+        if (!goodsCategoriesData) return
+        const _bakingGoods = goodsCategoriesData
+            .filter((item) => productsNames.includes(item.category))
+            .map((item) => ({
+                goodsCategoryId: item.id,
+                quantity: undefined,
+            }))
+        setBakingProducts(_bakingGoods)
+    }, [goodsCategoriesData])
+
+    console.log(bakingGoods)
 
     useEffect(() => {
         if (data) {
@@ -60,8 +87,8 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
 
     const sendData = (formData: BakingDataType) => {
         const responsePromise: Promise<any> = data
-            ? updateBaking(data.id, formData)
-            : createBaking(formData)
+            ? updateBaking(data.id, { ...formData, bakingDetails: bakingGoods })
+            : createBaking({ ...formData, bakingDetails: bakingGoods })
 
         loading(responsePromise)
 
@@ -117,101 +144,72 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                     </Select>
                                     <FormErrorMessage>{errors.breadType?.message}</FormErrorMessage>
                                 </FormControl>
-                                <FormControl isInvalid={!!errors.flour} isRequired>
-                                    <FormLabel fontWeight={'bold'}>Мука</FormLabel>
-                                    <InputGroup>
-                                        <InputNumber
-                                            {...register('flour', {
-                                                required: 'Поле является обязательным',
-                                            })}
-                                            placeholder=""
-                                        />
-                                        <InputRightAddon
-                                            w={'15%'}
-                                            display={'flex'}
-                                            justifyContent={'center'}
-                                        >
-                                            кг
-                                        </InputRightAddon>
-                                    </InputGroup>
-                                    <FormErrorMessage>{errors.flour?.message}</FormErrorMessage>
-                                </FormControl>
-                                <FormControl isInvalid={!!errors.salt} isRequired>
-                                    <FormLabel fontWeight={'bold'}>Соль</FormLabel>
-                                    <InputGroup>
-                                        <InputNumber
-                                            {...register('salt', {
-                                                required: 'Поле является обязательным',
-                                            })}
-                                            placeholder=""
-                                        />
-                                        <InputRightAddon
-                                            w={'15%'}
-                                            display={'flex'}
-                                            justifyContent={'center'}
-                                        >
-                                            кг
-                                        </InputRightAddon>
-                                    </InputGroup>
-                                    <FormErrorMessage>{errors.salt?.message}</FormErrorMessage>
-                                </FormControl>
-                                <FormControl isInvalid={!!errors.yeast} isRequired>
-                                    <FormLabel fontWeight={'bold'}>Дрожжи</FormLabel>
-                                    <InputGroup>
-                                        <InputNumber
-                                            {...register('yeast', {
-                                                required: 'Поле является обязательным',
-                                            })}
-                                            placeholder=""
-                                        />
-                                        <InputRightAddon
-                                            w={'15%'}
-                                            display={'flex'}
-                                            justifyContent={'center'}
-                                        >
-                                            кг
-                                        </InputRightAddon>
-                                    </InputGroup>
-                                    <FormErrorMessage>{errors.yeast?.message}</FormErrorMessage>
-                                </FormControl>
-                                <FormControl isInvalid={!!errors.malt} isRequired>
-                                    <FormLabel fontWeight={'bold'}>Солод</FormLabel>
-                                    <InputGroup>
-                                        <InputNumber
-                                            {...register('malt', {
-                                                required: 'Поле является обязательным',
-                                            })}
-                                            placeholder=""
-                                        />
-                                        <InputRightAddon
-                                            w={'15%'}
-                                            display={'flex'}
-                                            justifyContent={'center'}
-                                        >
-                                            кг
-                                        </InputRightAddon>
-                                    </InputGroup>
-                                    <FormErrorMessage>{errors.malt?.message}</FormErrorMessage>
-                                </FormControl>
-                                <FormControl isInvalid={!!errors.butter} isRequired>
-                                    <FormLabel fontWeight={'bold'}>Масло</FormLabel>
-                                    <InputGroup>
-                                        <InputNumber
-                                            {...register('butter', {
-                                                required: 'Поле является обязательным',
-                                            })}
-                                            placeholder=""
-                                        />
-                                        <InputRightAddon
-                                            w={'15%'}
-                                            display={'flex'}
-                                            justifyContent={'center'}
-                                        >
-                                            кг
-                                        </InputRightAddon>
-                                    </InputGroup>
-                                    <FormErrorMessage>{errors.butter?.message}</FormErrorMessage>
-                                </FormControl>
+                                {bakingGoods.map((item, index) => {
+                                    return (
+                                        <Box key={index}>
+                                            <FormLabel fontWeight={'bold'}>
+                                                {
+                                                    goodsCategoriesData?.find(
+                                                        (category) =>
+                                                            category.id === item.goodsCategoryId,
+                                                    )?.category
+                                                }
+                                            </FormLabel>
+                                            <InputGroup>
+                                                <Input
+                                                    isRequired
+                                                    type="number"
+                                                    autoComplete="off"
+                                                    placeholder="Количество"
+                                                    min="0"
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === '-') {
+                                                            e.preventDefault()
+                                                        }
+                                                        if (e.key === 'e') {
+                                                            e.preventDefault()
+                                                        }
+                                                        if (
+                                                            e.key === 'ArrowUp' ||
+                                                            e.key === 'ArrowDown'
+                                                        ) {
+                                                            e.preventDefault()
+                                                        }
+                                                    }}
+                                                    onChange={(e) => {
+                                                        const newValue = Number(e.target.value)
+                                                        const updatedBakingGoods = bakingGoods.map(
+                                                            (item, idx) => {
+                                                                if (idx === index) {
+                                                                    return {
+                                                                        ...item,
+                                                                        quantity: newValue,
+                                                                    }
+                                                                }
+                                                                return item
+                                                            },
+                                                        )
+                                                        setBakingProducts(updatedBakingGoods)
+                                                    }}
+                                                />
+                                                <InputRightAddon
+                                                    w={'15%'}
+                                                    display={'flex'}
+                                                    justifyContent={'center'}
+                                                >
+                                                    {
+                                                        goodsCategoriesData?.find(
+                                                            (category) =>
+                                                                category.id ===
+                                                                item.goodsCategoryId,
+                                                        )?.unitOfMeasure
+                                                    }
+                                                </InputRightAddon>
+                                            </InputGroup>
+                                        </Box>
+                                    )
+                                })}
+
                                 <FormControl isInvalid={!!errors.temperature} isRequired>
                                     <FormLabel fontWeight={'bold'}>T</FormLabel>
                                     <InputNumber

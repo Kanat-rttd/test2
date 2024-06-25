@@ -1,3 +1,4 @@
+import { PathString } from 'react-hook-form'
 import $host from './axios'
 
 export const getAllBakings = async () => {
@@ -7,17 +8,14 @@ export const getAllBakings = async () => {
 
 export const createBaking = async (data: {
     breadType: string
-    flour: string
-    salt: string
-    yeast: string
-    malt: string
-    butter: string
     temperature: string
     dateTime: string
-    // time: string
     output: string
     defective: string
-    // date: Date
+    bakingDetails: {
+        goodsCategoryId: number
+        quantity: number | undefined
+    }[]
 }) => {
     const response = await $host.post('baking', data)
     return response
@@ -26,24 +24,20 @@ export const createBaking = async (data: {
 export const updateBaking = async (
     id: number,
     data: {
-        breadType: string
-        flour: string
-        salt: string
-        yeast: string
-        malt: string
-        butter: string
+        breadType: PathString
         temperature: string
-        // time: string
         dateTime: string
         output: string
         defective: string
-        // date: Date
+        bakingDetails: {
+            goodsCategoryId: number
+            quantity: number | undefined
+        }[]
     },
 ) => {
     const response = await $host.put(`baking/${id}`, data)
     return response
 }
-
 
 export const deleteBaking = async (id: number) => {
     const response = await $host.delete(`baking/${id}`)

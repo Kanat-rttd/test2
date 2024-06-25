@@ -128,11 +128,11 @@ const BakingPage = () => {
                                 return (
                                     <Tr key={index} textAlign={'center'}>
                                         <Td>{bakingRow.product?.name}</Td>
-                                        <Td textAlign={'center'}>{bakingRow.flour}</Td>
+                                        {/* <Td textAlign={'center'}>{bakingRow.flour}</Td>
                                         <Td textAlign={'center'}>{bakingRow.salt}</Td>
                                         <Td textAlign={'center'}>{bakingRow.yeast}</Td>
                                         <Td textAlign={'center'}>{bakingRow.malt}</Td>
-                                        <Td textAlign={'center'}>{bakingRow.butter}</Td>
+                                        <Td textAlign={'center'}>{bakingRow.butter}</Td> */}
                                         <Td textAlign={'center'}>{bakingRow.temperature}</Td>
                                         <Td textAlign={'center'}>
                                             {dayjs(bakingRow.dateTime).format('HH:mm DD.MM.YYYY')}

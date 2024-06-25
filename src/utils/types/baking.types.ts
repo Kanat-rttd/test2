@@ -1,21 +1,20 @@
 export type BakingDataType = {
     id: number
     breadType: string
-    flour: string
-    salt: string
-    yeast: string
-    malt: string
-    butter: string
     temperature: string
-    // time: string
     output: string
     defective: string
     dateTime: string
-    // date: Date
+    bakingDetails: BakingDetailType[]
     product?: {
         name: string
         id: string
     }
+}
+
+export type BakingDetailType = {
+    goodsCategoryId: number
+    quantity: number | undefined
 }
 
 export type BakingType = {
