@@ -236,7 +236,7 @@ const RequestForm = () => {
                     </Box>
                 </>
             )}
-            <BottomModal isOpen={isOpen} onClose={onClose} handleAddProduct={handleAddProduct} />
+            <BottomModal isOpen={isOpen} onClose={onClose} handleAddProduct={handleAddProduct} selectedProducts={selectedProducts} />
         </div>
     )
 }

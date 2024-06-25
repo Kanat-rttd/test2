@@ -12,26 +12,42 @@ import {
 } from '@chakra-ui/react'
 import { CloseIcon, SearchIcon } from '@chakra-ui/icons'
 import { Slide } from '@chakra-ui/transition'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useApi } from '@/utils/services/axios'
 
 interface Product {
-    id: number
+    id: number | null
     name: string
     price: number
-    quantity: number
+    quantity: number | null
 }
 
 const BottomModal: React.FC<{
     isOpen: boolean
     onClose: () => void
     handleAddProduct: (product: Product) => void
-}> = ({ isOpen, onClose, handleAddProduct }) => {
+    selectedProducts: Product[]
+}> = ({ isOpen, onClose, handleAddProduct, selectedProducts }) => {
     const [searchTerm, setSearchTerm] = useState('')
     const { data: products } = useApi<Product[]>('product?status=Активный')
+    const [filterdProducts, setFilteredProducts] = useState<Product[] | undefined>([])
+    const [selectedProductsIds, setSelectedProductsIds] = useState<number[]>([])
 
     const { getRootProps, getRadioProps } = useRadioGroup()
+    
+    useEffect(() => {
+        setSelectedProductsIds(selectedProducts.map((product) => Number(product.id)))
+    }, [selectedProducts])
 
+    useEffect(() => {
+        setFilteredProducts(products?.filter((product) => !selectedProductsIds.includes(Number(product.id))))
+    }, [selectedProductsIds])
+
+    useEffect(() => {
+        if(!products) return
+        setFilteredProducts(products)
+    }, [products])
+    
     return (
         <>
             {isOpen && (
@@ -96,7 +112,7 @@ const BottomModal: React.FC<{
                                 </Box>
                                 <Box {...getRootProps()}>
                                     <Stack spacing={2}>
-                                        {products?.filter((product) =>
+                                        {filterdProducts?.length ? filterdProducts?.filter((product) =>
                                                 product.name
                                                     .toLowerCase()
                                                     .includes(searchTerm.toLowerCase()),
@@ -127,7 +143,13 @@ const BottomModal: React.FC<{
                                                         />
                                                     </Stack>
                                                 </label>
-                                            ))}
+                                            )): <Text
+                                            color={'black'}
+                                            size={'lg'}
+                                            fontWeight={'600'}
+                                        >
+                                            Нет доступного для выбора продукта
+                                        </Text>}
                                     </Stack>
                                 </Box>
                             </Box>
