@@ -34,12 +34,14 @@ interface rawMaterials {
     value: number
     label: string
     uom: string
+    category: number
 }
 
 interface ProviderGoods {
     id: number
     providerId: number
     goods: string
+    goodsCategoryId: number
     unitOfMeasure: string
     place: { label: string }[]
     status: string
@@ -59,7 +61,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
 
     useEffect(() => {
         const _providerGoods = providerGoodsData?.map((item) => {
-            return { label: item.goods, value: item.id, uom: item.unitOfMeasure }
+            return { label: item.goods, value: item.id, uom: item.unitOfMeasure, category: item.goodsCategoryId }
         })
 
         setProviderGoods(_providerGoods || [])
@@ -81,7 +83,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
     ]
 
     const sendData = (formData: PurchaseType) => {
-        const response: Promise<any> = createPurchase(formData)
+        const response: Promise<any> = createPurchase({...formData, goodsCategoryId: selectedRawMaterial?.category })
         loading(response)
         response
             .then(() => {

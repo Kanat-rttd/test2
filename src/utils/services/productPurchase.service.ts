@@ -11,7 +11,7 @@ export const createPurchase = async (data: {
     deliverySum: number
     date: Date | string
     providerId: number
-    providerGoodId: number
+    goodsCategoryId: number | undefined
     status?: { value: number; label: string } | string | undefined
 }) => {
     const response = await $host.post('productPurchase', data)
@@ -26,7 +26,7 @@ export const updatePurchase = async (
         deliverySum: number
         date: string
         providerId: number
-        providerGoodId: number
+        goodsCategoryId: number | undefined
         status?: { value: number; label: string } | string | undefined
     },
 ) => {
