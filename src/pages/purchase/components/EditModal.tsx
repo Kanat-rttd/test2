@@ -60,7 +60,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
 
     const [providerGoods, setProviderGoods] = useState<rawMaterials[]>([])
     const [selectedRawMaterial, setSelectedRawMaterial] = useState(
-        selectedData?.providerGood.unitOfMeasure,
+        selectedData?.goodsCategory.unitOfMeasure,
     )
 
     useEffect(() => {
@@ -72,7 +72,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
     }, [providerGoodsData])
 
     useEffect(() => {
-        setSelectedRawMaterial(selectedData?.providerGood.unitOfMeasure)
+        setSelectedRawMaterial(selectedData?.goodsCategory.unitOfMeasure)
     }, [selectedData])
 
     const {
