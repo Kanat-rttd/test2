@@ -4,6 +4,7 @@ export const createProviderGoods = async (data: {
     goods: string
     providerId: number 
     goodsCategoryId: number
+    unitOfMeasure: string | undefined
     bakery: {
         label: string
     }[]
@@ -19,6 +20,7 @@ export const updateProviderGoods = async (
         goods: string
         providerId: number
         goodsCategoryId: number
+        unitOfMeasure: string | undefined
         bakery: {
             label: string
         }[]

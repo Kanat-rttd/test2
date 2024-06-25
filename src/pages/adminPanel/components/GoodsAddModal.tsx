@@ -14,7 +14,7 @@ import {
 import { Controller, useForm } from 'react-hook-form'
 import Select from 'react-select'
 import { useApi } from '@/utils/services/axios'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { createProviderGoods, updateProviderGoods } from '@/utils/services/providerGoods.service'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { ProviderInputs } from '@/utils/types/providerGoog.types'
@@ -25,10 +25,7 @@ interface ProviderGoods {
     id: number
     providerId: number
     goodsCategoryId: number
-    goodsCategory: {
-        id: number
-        unitOfMeasure: string
-    }
+    unitOfMeasure: string
     goods: string
     place: { label: string }[]
     status: string
@@ -60,6 +57,7 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
     const { data: providersData } = useApi<ProviderType[]>('providers?status=Активный')
     const { data: goodsCategories } = useApi<GoodsCategoryType[]>('goodsCategories')
     const { data: placesData } = useApi<Place[]>('place')
+    const [selectedCategory, setSelectedCateory] = useState<GoodsCategoryType | null>(null)
 
     const {
         register,
@@ -69,10 +67,7 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
         setValue,
         reset,
     } = useForm<ProviderInputs>()
-
-    console.log(goodsCategories);
     
-
     useEffect(() => {
         if (selectedData) {
             Object.entries(selectedData).forEach(([key, value]) => {
@@ -86,8 +81,8 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
 
     const sendData = (formData: ProviderInputs) => {
         const responsePromise: Promise<any> = selectedData
-            ? updateProviderGoods(selectedData.id, formData)
-            : createProviderGoods(formData)
+            ? updateProviderGoods(selectedData.id, {...formData, unitOfMeasure: selectedCategory?.unitOfMeasure})
+            : createProviderGoods({...formData, unitOfMeasure: selectedCategory?.unitOfMeasure})
 
         responsePromise
             .then((res) => {
@@ -185,6 +180,7 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                                         selectedOption: GoodsCategoryType | null,
                                                     ) => {
                                                         onChange(selectedOption?.id)
+                                                        setSelectedCateory(selectedOption)
                                                     }}
                                                     placeholder="Выберите категорию товара *"
                                                     isClearable

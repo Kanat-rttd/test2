@@ -5,6 +5,7 @@ export type PurchaseType = {
     date: string
     providerId: number
     providerGoodId: number
+    goodsCategoryId: number
     quantity: number
     price: number
     deliverySum: number
@@ -14,6 +15,11 @@ export type PurchaseType = {
     providerGood: {
         id: number
         name: string
+    }
+    goodsCategory: {
+        id: number
+        name: string
         unitOfMeasure: string
     }
+
 }

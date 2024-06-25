@@ -31,10 +31,7 @@ interface ProviderGoods {
     id: number
     providerId: number
     goodsCategoryId: number
-    goodsCategory: {
-        id: number
-        unitOfMeasure: string
-    }
+    unitOfMeasure: string
     goods: string
     place: { label: string }[]
     status: string
@@ -154,7 +151,7 @@ const AdminGoods = () => {
                                                 }
                                             </Td>
                                             <Td>{providerName?.providerName}</Td>
-                                            <Td>{item.goodsCategory.unitOfMeasure}</Td>
+                                            <Td>{item.unitOfMeasure}</Td>
                                             <Td>{placesString}</Td>
                                             <Td>{item.status}</Td>
                                             <Td sx={{ width: '5%' }}>

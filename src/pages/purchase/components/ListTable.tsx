@@ -88,7 +88,7 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
                                         <Td>{index + 1}</Td>
                                         <Td>{dayjs(purchase.date).format('DD.MM.YYYY')}</Td>
                                         <Td>{purchase.provider.providerName}</Td>
-                                        <Td>{purchase.providerGood.name}</Td>
+                                        <Td>{purchase.goodsCategory.name}</Td>
                                         <Td>{purchase.quantity}</Td>
                                         <Td>{purchase.price}</Td>
                                         <Td>{purchase.totalSum}</Td>
