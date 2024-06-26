@@ -114,8 +114,8 @@ const AdminPanel = () => {
                                 width={'fit-content'}
                                 onChange={handleSelectChange}
                             >
-                                <option value="Активный">Активный</option>
-                                <option value="Неактивный">Неактивный</option>
+                                <option value={1}>Активный</option>
+                                <option value={0}>Неактивный</option>
                             </Select>
                         </Box>
 
@@ -150,7 +150,7 @@ const AdminPanel = () => {
                                                 <Td>{user.surname}</Td>
                                                 <Td>+7{user.contact}</Td>
                                                 <Td>{user.telegrammId}</Td>
-                                                <Td>{user.status}</Td>
+                                                <Td>{user.status ? 'Активный' : 'Неактивный'}</Td>
                                                 <Td sx={{ width: '5%' }}>
                                                     <IconButton
                                                         variant="outline"

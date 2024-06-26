@@ -110,7 +110,7 @@ const AdminPanel = () => {
                                             <Td>{count}</Td>
                                             <Td>{user.name}</Td>
                                             <Td>{user.surname}</Td>
-                                            <Td>{user.status}</Td>
+                                            <Td>{user.status ? 'Активный' : 'Неактивный'}</Td>
                                             <Td>{user.userClass}</Td>
                                             <Td>{user.fixSalary}</Td>
                                             <Td sx={{ width: '5%' }}>

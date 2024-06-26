@@ -46,7 +46,7 @@ type ModalProps = {
     onSuccess: () => void
 }
 
-type GoodsCategoryType ={
+type GoodsCategoryType = {
     id: number
     category: string
     unitOfMeasure: string
@@ -67,13 +67,14 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
         setValue,
         reset,
     } = useForm<ProviderInputs>()
-    
+
     useEffect(() => {
         if (selectedData) {
             Object.entries(selectedData).forEach(([key, value]) => {
                 setValue(key as keyof ProviderInputs, value)
             })
             setValue('bakery', JSON.parse(String(selectedData.place)))
+            setValue('status', selectedData.status ? '1' : '0')
         } else {
             reset()
         }
@@ -81,8 +82,16 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
 
     const sendData = (formData: ProviderInputs) => {
         const responsePromise: Promise<any> = selectedData
-            ? updateProviderGoods(selectedData.id, {...formData, unitOfMeasure: selectedCategory?.unitOfMeasure})
-            : createProviderGoods({...formData, unitOfMeasure: selectedCategory?.unitOfMeasure})
+            ? updateProviderGoods(selectedData.id, {
+                  ...formData,
+                  unitOfMeasure: selectedCategory?.unitOfMeasure,
+                  status: Number(formData.status) ? true : false,
+              })
+            : createProviderGoods({
+                  ...formData,
+                  unitOfMeasure: selectedCategory?.unitOfMeasure,
+                  status: Number(formData.status) ? true : false,
+              })
 
         responsePromise
             .then((res) => {
@@ -190,7 +199,7 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                         }}
                                     />
                                     <FormErrorMessage>{errors.bakery?.message}</FormErrorMessage>
-                                    </FormControl>
+                                </FormControl>
                                 <FormControl isInvalid={!!errors.goods}>
                                     <Input
                                         maxLength={20}

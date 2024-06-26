@@ -8,7 +8,7 @@ export const createProviderGoods = async (data: {
     bakery: {
         label: string
     }[]
-    status: string
+    status: boolean
 }) => {
     const response = await $host.post('providerGoods', data)
     return response
@@ -24,7 +24,7 @@ export const updateProviderGoods = async (
         bakery: {
             label: string
         }[]
-        status: string
+        status: boolean
     },
 ) => {
     const response = await $host.put(`providerGoods/${id}`, data)

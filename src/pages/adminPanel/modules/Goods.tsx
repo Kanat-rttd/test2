@@ -101,8 +101,8 @@ const AdminGoods = () => {
                                 width={'fit-content'}
                                 onChange={(e) => handleSelectChange(e.target.value)}
                             >
-                                <option value="Активный">Активный</option>
-                                <option value="Неактивный">Неактивный</option>
+                                <option value={1}>Активный</option>
+                                <option value={0}>Неактивный</option>
                             </Select>
                         </Box>
 
@@ -153,7 +153,7 @@ const AdminGoods = () => {
                                             <Td>{providerName?.providerName}</Td>
                                             <Td>{item.unitOfMeasure}</Td>
                                             <Td>{placesString}</Td>
-                                            <Td>{item.status}</Td>
+                                            <Td>{item.status ? 'Активный' : 'Неактивный'}</Td>
                                             <Td sx={{ width: '5%' }}>
                                                 <IconButton
                                                     variant="outline"
