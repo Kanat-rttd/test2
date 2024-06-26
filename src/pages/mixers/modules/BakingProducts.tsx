@@ -48,6 +48,8 @@ const BakingPage = () => {
         `baking?${getURLs().toString()}`,
     )
 
+    console.log(bakingsData)
+
     const [selectedBaking, setSelectedBaking] = useState<BakingDataType | undefined>(undefined)
     const [dialog, setDialog] = useState({
         isOpen: false,
