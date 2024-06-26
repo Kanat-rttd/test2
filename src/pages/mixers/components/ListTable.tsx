@@ -119,66 +119,78 @@ export default function ListTable({ shiftAccounting, mutate }: ListTableProps) {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {shiftAccounting?.map((row, index) => {
-                                return (
-                                    <Tr key={row.id}>
-                                        <Td>{index + 1}</Td>
-                                        <Td>{dayjs(row.date).format('DD.MM.YYYY')}</Td>
-                                        <Td>{row.bakingFacilityUnit.facilityUnit}</Td>
-                                        <Td>
-                                            <div
-                                                style={{ display: 'flex', flexDirection: 'column' }}
-                                            >
-                                                {row.shiftAccountingDetails.map((details) => (
-                                                    <span key={details.id}>
-                                                        {details.departPersonal.name}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </Td>
-                                        <Td>
-                                            <div
-                                                style={{ display: 'flex', flexDirection: 'column' }}
-                                            >
-                                                {row.shiftAccountingDetails.map((details) => (
-                                                    <span key={details.id}>
-                                                        {details.shiftTime}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </Td>
-                                        <Td>
-                                            <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
-                                                marginRight={2}
-                                                onClick={() => {
-                                                    setSelectedData(row)
-                                                    setModal({ ...modal, isOpen: true })
-                                                }}
-                                                icon={<EditIcon />}
-                                            />
-                                            <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
-                                                marginRight={3}
-                                                onClick={() => {
-                                                    setSelectedData(row)
-                                                    setDialog({
-                                                        ...dialog,
-                                                        isOpen: true,
-                                                    })
-                                                }}
-                                                icon={<DeleteIcon />}
-                                            />
-                                        </Td>
-                                    </Tr>
-                                )
-                            })}
+                            {shiftAccounting?.length ? (
+                                shiftAccounting?.map((row, index) => {
+                                    return (
+                                        <Tr key={row.id}>
+                                            <Td>{index + 1}</Td>
+                                            <Td>{dayjs(row.date).format('DD.MM.YYYY')}</Td>
+                                            <Td>{row.bakingFacilityUnit.facilityUnit}</Td>
+                                            <Td>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                    }}
+                                                >
+                                                    {row.shiftAccountingDetails.map((details) => (
+                                                        <span key={details.id}>
+                                                            {details.departPersonal.name}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </Td>
+                                            <Td>
+                                                <div
+                                                    style={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                    }}
+                                                >
+                                                    {row.shiftAccountingDetails.map((details) => (
+                                                        <span key={details.id}>
+                                                            {details.shiftTime}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </Td>
+                                            <Td>
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={2}
+                                                    onClick={() => {
+                                                        setSelectedData(row)
+                                                        setModal({ ...modal, isOpen: true })
+                                                    }}
+                                                    icon={<EditIcon />}
+                                                />
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        setSelectedData(row)
+                                                        setDialog({
+                                                            ...dialog,
+                                                            isOpen: true,
+                                                        })
+                                                    }}
+                                                    icon={<DeleteIcon />}
+                                                />
+                                            </Td>
+                                        </Tr>
+                                    )
+                                })
+                            ) : (
+                                <Tr>
+                                    <Td>Нет данных</Td>
+                                </Tr>
+                            )}
                         </Tbody>
                     </Table>
                 </TableContainer>

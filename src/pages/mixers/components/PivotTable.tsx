@@ -82,19 +82,25 @@ const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {shiftAccounting?.map((item, index) => (
-                            <Tr key={index}>
-                                <Td>{index + 1}</Td>
-                                <Td>{dayjs(item.date).format('DD.MM.YYYY')}</Td>
-                                {Array.from(uniqPersonal).map((productName, productIndex) => (
-                                    <Td textAlign={'center'} key={productIndex}>
-                                        {item.shiftAccountingDetails.find(
-                                            (prod) => prod.departPersonal.name === productName,
-                                        )?.shiftTime || 0}
-                                    </Td>
-                                ))}
+                        {shiftAccounting?.length ? (
+                            shiftAccounting?.map((item, index) => (
+                                <Tr key={index}>
+                                    <Td>{index + 1}</Td>
+                                    <Td>{dayjs(item.date).format('DD.MM.YYYY')}</Td>
+                                    {Array.from(uniqPersonal).map((productName, productIndex) => (
+                                        <Td textAlign={'center'} key={productIndex}>
+                                            {item.shiftAccountingDetails.find(
+                                                (prod) => prod.departPersonal.name === productName,
+                                            )?.shiftTime || 0}
+                                        </Td>
+                                    ))}
+                                </Tr>
+                            ))
+                        ) : (
+                            <Tr>
+                                <Td>Нет данных</Td>
                             </Tr>
-                        ))}
+                        )}
                     </Tbody>
                     <Tfoot>
                         <Tr>

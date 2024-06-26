@@ -129,63 +129,69 @@ const AdminGoods = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {providerGoodsData?.map((item, index) => {
-                                    const placesLabels = JSON.parse(String(item.place)).map(
-                                        (place: { label: string }) => place.label,
-                                    )
-                                    const providerName = providerData?.find(
-                                        (provider) => provider.id == item.providerId,
-                                    )
-                                    const placesString = placesLabels.join(', ')
+                                {providerGoodsData?.length ? (
+                                    providerGoodsData?.map((item, index) => {
+                                        const placesLabels = JSON.parse(String(item.place)).map(
+                                            (place: { label: string }) => place.label,
+                                        )
+                                        const providerName = providerData?.find(
+                                            (provider) => provider.id == item.providerId,
+                                        )
+                                        const placesString = placesLabels.join(', ')
 
-                                    return (
-                                        <Tr key={index}>
-                                            <Td>{index + Number(1)}</Td>
-                                            <Td>{item.goods}</Td>
-                                            <Td>
-                                                {
-                                                    goodsCategories?.find(
-                                                        (category) =>
-                                                            category.id == item.goodsCategoryId,
-                                                    )?.category
-                                                }
-                                            </Td>
-                                            <Td>{providerName?.providerName}</Td>
-                                            <Td>{item.unitOfMeasure}</Td>
-                                            <Td>{placesString}</Td>
-                                            <Td>{item.status ? 'Активный' : 'Неактивный'}</Td>
-                                            <Td sx={{ width: '5%' }}>
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        setSelectedData(item)
-                                                        onOpen()
-                                                    }}
-                                                    icon={<EditIcon />}
-                                                />
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        setSelectedData(item)
-                                                        setDialog({
-                                                            ...dialog,
-                                                            isOpen: true,
-                                                        })
-                                                    }}
-                                                    icon={<DeleteIcon />}
-                                                />
-                                            </Td>
-                                        </Tr>
-                                    )
-                                })}
+                                        return (
+                                            <Tr key={index}>
+                                                <Td>{index + Number(1)}</Td>
+                                                <Td>{item.goods}</Td>
+                                                <Td>
+                                                    {
+                                                        goodsCategories?.find(
+                                                            (category) =>
+                                                                category.id == item.goodsCategoryId,
+                                                        )?.category
+                                                    }
+                                                </Td>
+                                                <Td>{providerName?.providerName}</Td>
+                                                <Td>{item.unitOfMeasure}</Td>
+                                                <Td>{placesString}</Td>
+                                                <Td>{item.status ? 'Активный' : 'Неактивный'}</Td>
+                                                <Td sx={{ width: '5%' }}>
+                                                    <IconButton
+                                                        variant="outline"
+                                                        size={'sm'}
+                                                        colorScheme="teal"
+                                                        aria-label="Send email"
+                                                        marginRight={3}
+                                                        onClick={() => {
+                                                            setSelectedData(item)
+                                                            onOpen()
+                                                        }}
+                                                        icon={<EditIcon />}
+                                                    />
+                                                    <IconButton
+                                                        variant="outline"
+                                                        size={'sm'}
+                                                        colorScheme="teal"
+                                                        aria-label="Send email"
+                                                        marginRight={3}
+                                                        onClick={() => {
+                                                            setSelectedData(item)
+                                                            setDialog({
+                                                                ...dialog,
+                                                                isOpen: true,
+                                                            })
+                                                        }}
+                                                        icon={<DeleteIcon />}
+                                                    />
+                                                </Td>
+                                            </Tr>
+                                        )
+                                    })
+                                ) : (
+                                    <Tr>
+                                        <Td>Нет данных</Td>
+                                    </Tr>
+                                )}
                             </Tbody>
                         </Table>
                     </TableContainer>

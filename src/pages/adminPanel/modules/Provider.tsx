@@ -29,7 +29,11 @@ const AdminProvider = () => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const { data: providersData, isLoading, mutate: mutateProviderData } = useApi<ProviderType[]>('providers', {
+    const {
+        data: providersData,
+        isLoading,
+        mutate: mutateProviderData,
+    } = useApi<ProviderType[]>('providers', {
         status: selectedStatus,
     })
 
@@ -43,12 +47,14 @@ const AdminProvider = () => {
     const handlerDeleteProvider = (selectedData: ProviderType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteProvider(selectedData.id)
-            responsePromise.then((res) => {
-                mutateProviderData()
-                success(res.data.message)
-            }).catch((err) =>{
-                error(err.response.data.error)
-            })
+            responsePromise
+                .then((res) => {
+                    mutateProviderData()
+                    success(res.data.message)
+                })
+                .catch((err) => {
+                    error(err.response.data.error)
+                })
         } else {
             console.error('No user data available to delete.')
         }
@@ -99,44 +105,50 @@ const AdminProvider = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {providersData?.map((item, index) => {
-                                    return (
-                                        <Tr key={index}>
-                                            <Td>{index + Number(1)}</Td>
-                                            <Td>{item.providerName}</Td>
-                                            <Td>{item.status ? 'Активный' : 'Неактивный'}</Td>
-                                            <Td sx={{ width: '5%' }}>
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        setSelectedData(item)
-                                                        onOpen()
-                                                    }}
-                                                    icon={<EditIcon />}
-                                                />
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        setSelectedData(item)
-                                                        setDialog({
-                                                            ...dialog,
-                                                            isOpen: true,
-                                                        })
-                                                    }}
-                                                    icon={<DeleteIcon />}
-                                                />
-                                            </Td>
-                                        </Tr>
-                                    )
-                                })}
+                                {providersData?.length ? (
+                                    providersData?.map((item, index) => {
+                                        return (
+                                            <Tr key={index}>
+                                                <Td>{index + Number(1)}</Td>
+                                                <Td>{item.providerName}</Td>
+                                                <Td>{item.status ? 'Активный' : 'Неактивный'}</Td>
+                                                <Td sx={{ width: '5%' }}>
+                                                    <IconButton
+                                                        variant="outline"
+                                                        size={'sm'}
+                                                        colorScheme="teal"
+                                                        aria-label="Send email"
+                                                        marginRight={3}
+                                                        onClick={() => {
+                                                            setSelectedData(item)
+                                                            onOpen()
+                                                        }}
+                                                        icon={<EditIcon />}
+                                                    />
+                                                    <IconButton
+                                                        variant="outline"
+                                                        size={'sm'}
+                                                        colorScheme="teal"
+                                                        aria-label="Send email"
+                                                        marginRight={3}
+                                                        onClick={() => {
+                                                            setSelectedData(item)
+                                                            setDialog({
+                                                                ...dialog,
+                                                                isOpen: true,
+                                                            })
+                                                        }}
+                                                        icon={<DeleteIcon />}
+                                                    />
+                                                </Td>
+                                            </Tr>
+                                        )
+                                    })
+                                ) : (
+                                    <Tr>
+                                        <Td>Нет данных</Td>
+                                    </Tr>
+                                )}
                             </Tbody>
                         </Table>
                     </TableContainer>

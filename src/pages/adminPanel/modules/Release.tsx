@@ -65,15 +65,16 @@ const AdminPanel = () => {
     const deleteUser = (selectedData: ReleaserType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteClient(selectedData.id)
-            responsePromise.then((res) => {
-                mutateClientsData()
-                success(res.data.message)
-            }).catch(() => {
-                error('Произошла ошибка')
-            })
+            responsePromise
+                .then((res) => {
+                    mutateClientsData()
+                    success(res.data.message)
+                })
+                .catch(() => {
+                    error('Произошла ошибка')
+                })
         } else {
             console.error('No releaser data available to delete.')
-
         }
         setSelectedData(undefined)
     }
@@ -141,48 +142,56 @@ const AdminPanel = () => {
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {clientsData?.map((user, index) => {
-                                        const ordinalNumber: number = index + 1
-                                        return (
-                                            <Tr key={index}>
-                                                <Td>{ordinalNumber}</Td>
-                                                <Td>{user.name}</Td>
-                                                <Td>{user.surname}</Td>
-                                                <Td>+7{user.contact}</Td>
-                                                <Td>{user.telegrammId}</Td>
-                                                <Td>{user.status ? 'Активный' : 'Неактивный'}</Td>
-                                                <Td sx={{ width: '5%' }}>
-                                                    <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
-                                                        marginRight={3}
-                                                        onClick={() => {
-                                                            setSelectedData(user)
-                                                            onOpen()
-                                                        }}
-                                                        icon={<EditIcon />}
-                                                    />
-                                                    <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
-                                                        marginRight={3}
-                                                        onClick={() => {
-                                                            setSelectedData(user)
-                                                            setDialog({
-                                                                ...dialog,
-                                                                isOpen: true,
-                                                            })
-                                                        }}
-                                                        icon={<DeleteIcon />}
-                                                    />
-                                                </Td>
-                                            </Tr>
-                                        )
-                                    })}
+                                    {clientsData?.length ? (
+                                        clientsData?.map((user, index) => {
+                                            const ordinalNumber: number = index + 1
+                                            return (
+                                                <Tr key={index}>
+                                                    <Td>{ordinalNumber}</Td>
+                                                    <Td>{user.name}</Td>
+                                                    <Td>{user.surname}</Td>
+                                                    <Td>+7{user.contact}</Td>
+                                                    <Td>{user.telegrammId}</Td>
+                                                    <Td>
+                                                        {user.status ? 'Активный' : 'Неактивный'}
+                                                    </Td>
+                                                    <Td sx={{ width: '5%' }}>
+                                                        <IconButton
+                                                            variant="outline"
+                                                            size={'sm'}
+                                                            colorScheme="teal"
+                                                            aria-label="Send email"
+                                                            marginRight={3}
+                                                            onClick={() => {
+                                                                setSelectedData(user)
+                                                                onOpen()
+                                                            }}
+                                                            icon={<EditIcon />}
+                                                        />
+                                                        <IconButton
+                                                            variant="outline"
+                                                            size={'sm'}
+                                                            colorScheme="teal"
+                                                            aria-label="Send email"
+                                                            marginRight={3}
+                                                            onClick={() => {
+                                                                setSelectedData(user)
+                                                                setDialog({
+                                                                    ...dialog,
+                                                                    isOpen: true,
+                                                                })
+                                                            }}
+                                                            icon={<DeleteIcon />}
+                                                        />
+                                                    </Td>
+                                                </Tr>
+                                            )
+                                        })
+                                    ) : (
+                                        <Tr>
+                                            <Td>Нет данных</Td>
+                                        </Tr>
+                                    )}
                                 </Tbody>
                             </Table>
                         </TableContainer>

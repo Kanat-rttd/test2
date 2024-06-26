@@ -27,7 +27,11 @@ const AdminPanel = () => {
     const [filters, setFilters] = useState({ name: '', clientId: '', status: '' })
     const { data: magazinesDataForSelect } = useApi<MagazineType[]>('magazines')
 
-    const { data: magazinesData, isLoading, mutate: mutateMagazinesData } = useApi<MagazineType[]>('magazines', filters)
+    const {
+        data: magazinesData,
+        isLoading,
+        mutate: mutateMagazinesData,
+    } = useApi<MagazineType[]>('magazines', filters)
     const { data: clientsData } = useApi<ClientType[]>('client')
 
     const { onOpen, isOpen, onClose } = useDisclosure()
@@ -45,7 +49,7 @@ const AdminPanel = () => {
     const deleteMagazine = (selectedData: MagazineType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteMagazines(selectedData.id)
-            
+
             responsePromise.then((res) => {
                 mutateMagazinesData()
                 success(res.data.message)
@@ -129,45 +133,51 @@ const AdminPanel = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {magazinesData?.map((item, index) => {
-                                    return (
-                                        <Tr key={index}>
-                                            <Td>{item.id}</Td>
-                                            <Td>{item.name}</Td>
-                                            <Td>{item.client.name}</Td>
-                                            <Td>{item.status ? 'Активный' : 'Неактивный'}</Td>
-                                            <Td>
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        setSelectedData(item)
-                                                        onOpen()
-                                                    }}
-                                                    icon={<EditIcon />}
-                                                />
-                                                <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
-                                                    marginRight={3}
-                                                    onClick={() => {
-                                                        setSelectedData(item)
-                                                        setDialog({
-                                                            ...dialog,
-                                                            isOpen: true,
-                                                        })
-                                                    }}
-                                                    icon={<DeleteIcon />}
-                                                />
-                                            </Td>
-                                        </Tr>
-                                    )
-                                })}
+                                {magazinesData?.length ? (
+                                    magazinesData?.map((item, index) => {
+                                        return (
+                                            <Tr key={index}>
+                                                <Td>{item.id}</Td>
+                                                <Td>{item.name}</Td>
+                                                <Td>{item.client.name}</Td>
+                                                <Td>{item.status ? 'Активный' : 'Неактивный'}</Td>
+                                                <Td>
+                                                    <IconButton
+                                                        variant="outline"
+                                                        size={'sm'}
+                                                        colorScheme="teal"
+                                                        aria-label="Send email"
+                                                        marginRight={3}
+                                                        onClick={() => {
+                                                            setSelectedData(item)
+                                                            onOpen()
+                                                        }}
+                                                        icon={<EditIcon />}
+                                                    />
+                                                    <IconButton
+                                                        variant="outline"
+                                                        size={'sm'}
+                                                        colorScheme="teal"
+                                                        aria-label="Send email"
+                                                        marginRight={3}
+                                                        onClick={() => {
+                                                            setSelectedData(item)
+                                                            setDialog({
+                                                                ...dialog,
+                                                                isOpen: true,
+                                                            })
+                                                        }}
+                                                        icon={<DeleteIcon />}
+                                                    />
+                                                </Td>
+                                            </Tr>
+                                        )
+                                    })
+                                ) : (
+                                    <Tr>
+                                        <Td>Нет данных</Td>
+                                    </Tr>
+                                )}
                             </Tbody>
                         </Table>
                     </TableContainer>
