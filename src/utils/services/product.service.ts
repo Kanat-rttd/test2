@@ -15,7 +15,7 @@ export const createProduct = async (data: {
     bakingFacilityUnitId?: string
     price: number
     costPrice: number
-    status: string
+    status: boolean
 }) => {
     const response = await $host.post('product', data)
     return response
@@ -37,7 +37,7 @@ export const updateProduct = async (
         bakingFacilityUnitId?: string
         price: number
         costPrice: number
-        status: string
+        status: boolean
     },
 ) => {
     const response = await $host.put(`product/${id}`, data)

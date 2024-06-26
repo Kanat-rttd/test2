@@ -41,6 +41,7 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
             Object.entries(selectedData).forEach(([key, value]) => {
                 setValue(key as keyof ProviderForm, value as string)
             })
+            setValue('status', selectedData.status ? '1' : '0')
         } else {
             reset()
         }
@@ -48,8 +49,8 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
 
     const sendData = (formData: ProviderForm) => {
         const responsePromise: Promise<any> = selectedData
-            ? updateProvider(selectedData.id, formData)
-            : createProvider(formData)
+            ? updateProvider(selectedData.id, {...formData, status: Number(formData.status) ? true : false})
+            : createProvider({...formData, status: Number(formData.status) ? true : false})
 
         responsePromise
             .then((res) => {

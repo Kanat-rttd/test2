@@ -41,11 +41,6 @@ const AdminPanel = () => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const productStatus = [
-        { id: 0, label: 'Активный' },
-        { id: 1, label: 'Неактивный' },
-    ]
-
     useEffect(() => {
         setData(productsData || [])
     }, [productsData])
@@ -126,13 +121,8 @@ const AdminPanel = () => {
                                 name="status"
                                 onChange={handleSelectChange}
                             >
-                                {productStatus.map((item, index) => {
-                                    return (
-                                        <option key={index} value={item.label}>
-                                            {item.label}
-                                        </option>
-                                    )
-                                })}
+                                <option value={1}>Активный</option>
+                                <option value={0}>Неактивный</option>
                             </Select>
                         </Box>
 
@@ -157,50 +147,60 @@ const AdminPanel = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {data
-                                    ?.sort((a, b) => a.id - b.id)
-                                    .map((product, index) => {
-                                        const ordinalNumber: number = index + 1
-                                        return (
-                                            <Tr key={index}>
-                                                <Td>{ordinalNumber}</Td>
-                                                <Td>{product.name}</Td>
-                                                <Td>{product.bakingFacilityUnit?.facilityUnit}</Td>
-                                                <Td>{product.status}</Td>
-                                                <Td>{product.price}</Td>
-                                                <Td>{product.costPrice}</Td>
-                                                <Td>
-                                                    <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
-                                                        marginRight={3}
-                                                        onClick={() => {
-                                                            setSelectedData(product)
-                                                            onOpen()
-                                                        }}
-                                                        icon={<EditIcon />}
-                                                    />
-                                                    <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
-                                                        marginRight={3}
-                                                        onClick={() => {
-                                                            setSelectedData(product)
-                                                            setDialog({
-                                                                ...dialog,
-                                                                isOpen: true,
-                                                            })
-                                                        }}
-                                                        icon={<DeleteIcon />}
-                                                    />
-                                                </Td>
-                                            </Tr>
-                                        )
-                                    })}
+                                {data?.length ? (
+                                    data
+                                        ?.sort((a, b) => a.id - b.id)
+                                        .map((product, index) => {
+                                            const ordinalNumber: number = index + 1
+                                            return (
+                                                <Tr key={index}>
+                                                    <Td>{ordinalNumber}</Td>
+                                                    <Td>{product.name}</Td>
+                                                    <Td>
+                                                        {product.bakingFacilityUnit?.facilityUnit}
+                                                    </Td>
+                                                    <Td>
+                                                        {product.status ? 'Активный' : 'Неактивный'}
+                                                    </Td>
+                                                    <Td>{product.price}</Td>
+                                                    <Td>{product.costPrice}</Td>
+                                                    <Td>
+                                                        <IconButton
+                                                            variant="outline"
+                                                            size={'sm'}
+                                                            colorScheme="teal"
+                                                            aria-label="Send email"
+                                                            marginRight={3}
+                                                            onClick={() => {
+                                                                setSelectedData(product)
+                                                                onOpen()
+                                                            }}
+                                                            icon={<EditIcon />}
+                                                        />
+                                                        <IconButton
+                                                            variant="outline"
+                                                            size={'sm'}
+                                                            colorScheme="teal"
+                                                            aria-label="Send email"
+                                                            marginRight={3}
+                                                            onClick={() => {
+                                                                setSelectedData(product)
+                                                                setDialog({
+                                                                    ...dialog,
+                                                                    isOpen: true,
+                                                                })
+                                                            }}
+                                                            icon={<DeleteIcon />}
+                                                        />
+                                                    </Td>
+                                                </Tr>
+                                            )
+                                        })
+                                ) : (
+                                    <Tr>
+                                        <Td>Нет данных</Td>
+                                    </Tr>
+                                )}
                             </Tbody>
                         </Table>
                     </TableContainer>

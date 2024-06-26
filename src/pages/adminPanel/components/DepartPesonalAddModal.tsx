@@ -45,6 +45,7 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
             Object.entries(data).forEach(([key, value]) => {
                 setValue(key as keyof DepartPersonalType, value)
             })
+            setValue('status', data.status ? '1' : '0')
         } else {
             reset()
         }
@@ -53,8 +54,8 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
     const sendData = (formData: DepartPersonalType) => {
         try {
             const responsePromise: Promise<any> = data
-                ? updateDepartPersonal(data.id, formData)
-                : createDepartPersonal(formData)
+                ? updateDepartPersonal(data.id, {...formData, status: Number(formData.status) ? true : false})
+                : createDepartPersonal({...formData, status: Number(formData.status) ? true : false})
             responsePromise.then((res) => {
                 success(res.message)
                 reset()

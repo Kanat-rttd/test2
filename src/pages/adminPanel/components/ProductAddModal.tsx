@@ -42,6 +42,7 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
             Object.entries(data).forEach(([key, value]) => {
                 setValue(key as keyof ProductForSend, value)
             })
+            setValue('status', data.status ? '1' : '0')
         } else {
             reset()
         }
@@ -49,11 +50,11 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
 
     const sendData = (formData: ProductForSend) => {
         if (data) {
-            updateProduct(data.id, formData).then(() => {
+            updateProduct(data.id, {...formData, status: Number(formData.status) ? true : false}).then(() => {
                 onAddProduct()
             })
         } else {
-            createProduct(formData).then(() => {
+            createProduct({...formData, status: Number(formData.status) ? true : false}).then(() => {
                 onAddProduct()
             })
         }
@@ -140,15 +141,6 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
                                 <FormErrorMessage>{errors.costPrice?.message}</FormErrorMessage>
                             </FormControl>
                             <FormControl isInvalid={!!errors.status}>
-                                {/* <Select
-                                    {...register('status', {
-                                        required: 'Поле является обязательным',
-                                    })}
-                                    name="status"
-                                >
-                                    <option value={'0'}>Активный</option>
-                                    <option value={'1'}>Неактивный</option>
-                                </Select> */}
                                 <StatusSelect
                                     {...register('status', {
                                         required: 'Поле является обязательным',

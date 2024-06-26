@@ -45,8 +45,8 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
 
     const sendData = (formData: ReleaserType) => {
         const responsePromise: Promise<any> = data
-            ? updateClient(data.id, formData)
-            : createClient(formData)
+            ? updateClient(data.id, {...formData, status: Number(formData.status) ? true : false})
+            : createClient({...formData, status: Number(formData.status) ? true : false})
         responsePromise
             .then((res) => {
                 reset()
@@ -65,6 +65,7 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
             Object.entries(data).forEach(([key, value]) => {
                 setValue(key as keyof ReleaserType, value)
             })
+            setValue('status', data.status ? '1' : '0')
         } else {
             reset()
         }
@@ -193,9 +194,6 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                     </FormControl>
                 </ModalBody>
                 <ModalFooter display={'flex'} alignSelf={'center'} gap={5}>
-                    {/* <Button onClick={data ? updClient : addClient}>
-                        {data ? 'Редактировать' : 'Добавить'} реализатора
-                    </Button> */}
                     <Button colorScheme="purple" onClick={handleSubmitForm(sendData)}>
                         {data ? 'Редактировать' : 'Добавить'}
                     </Button>

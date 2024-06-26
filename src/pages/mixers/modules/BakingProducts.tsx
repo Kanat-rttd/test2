@@ -31,12 +31,19 @@ const styles = {
     color: '#000',
 }
 
+type GoodsCategoryType = {
+    id: number
+    category: string
+    unitOfMeasure: string
+}
+
 const BakingPage = () => {
     const { getURLs, getParam, setParam } = useURLParameters()
     const { loading } = useNotify()
     const { onOpen, onClose, isOpen } = useDisclosure()
 
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
+    const { data: goodsCategoriesData } = useApi<GoodsCategoryType[]>('goodsCategories')
     const { data: bakingsData, mutate: mutateBakingData } = useApi<BakingType>(
         `baking?${getURLs().toString()}`,
     )
@@ -111,19 +118,28 @@ const BakingPage = () => {
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant="simple">
                         <Thead>
-                            <Tr>
-                                <Th>Вид хлеба</Th>
-                                <Th sx={styles}>Мука</Th>
-                                <Th sx={styles}>Соль</Th>
-                                <Th sx={styles}>Дрожжи</Th>
-                                <Th sx={styles}>Солод</Th>
-                                <Th sx={styles}>Масло</Th>
-                                <Th sx={styles}>t°</Th>
-                                <Th sx={styles}>Время и дата</Th>
-                                <Th sx={styles}>Выход</Th>
-                                <Th sx={styles}>Брак</Th>
-                                <Th>Действия</Th>
-                            </Tr>
+                            {bakingsData?.bakingData.map((bakingRow, index) => {
+                                return (
+                                    <Tr key={index}>
+                                        <Th>Вид хлеба</Th>
+                                        {bakingRow.bakingDetails.map((item) => (
+                                            <Td textAlign={'center'}>
+                                                {
+                                                    goodsCategoriesData?.find(
+                                                        (category) =>
+                                                            category.id === item.goodsCategoryId,
+                                                    )?.category
+                                                }
+                                            </Td>
+                                        ))}
+                                        <Th sx={styles}>t°</Th>
+                                        <Th sx={styles}>Время и дата</Th>
+                                        <Th sx={styles}>Выход</Th>
+                                        <Th sx={styles}>Брак</Th>
+                                        <Th>Действия</Th>
+                                    </Tr>
+                                )
+                            })}
                         </Thead>
                         <Tbody>
                             {bakingsData?.bakingData.length ? (
@@ -131,11 +147,9 @@ const BakingPage = () => {
                                     return (
                                         <Tr key={index} textAlign={'center'}>
                                             <Td>{bakingRow.product?.name}</Td>
-                                            {/* <Td textAlign={'center'}>{bakingRow.flour}</Td>
-                                        <Td textAlign={'center'}>{bakingRow.salt}</Td>
-                                        <Td textAlign={'center'}>{bakingRow.yeast}</Td>
-                                        <Td textAlign={'center'}>{bakingRow.malt}</Td>
-                                        <Td textAlign={'center'}>{bakingRow.butter}</Td> */}
+                                            {bakingRow.bakingDetails.map((item) => (
+                                                <Td textAlign={'center'}>{item.quantity}</Td>
+                                            ))}
                                             <Td textAlign={'center'}>{bakingRow.temperature}</Td>
                                             <Td textAlign={'center'}>
                                                 {dayjs(bakingRow.dateTime).format(

@@ -77,8 +77,8 @@ const AdminPanel = () => {
                                 width={'fit-content'}
                                 onChange={(e) => applyFilters(e.target.value)}
                             >
-                                <option value="Активный">Активный</option>
-                                <option value="Неактивный">Неактивный</option>
+                                <option value={1}>Активный</option>
+                                <option value={0}>Неактивный</option>
                             </Select>
                         </Box>
 
@@ -112,7 +112,7 @@ const AdminPanel = () => {
                                             <Td>{user.name}</Td>
                                             <Td>{user.surname}</Td>
                                             <Td>{user.phone}</Td>
-                                            <Td>{user.status}</Td>
+                                            <Td>{user.status ? 'Активный' : 'Неактивный'}</Td>
                                             <Td>{user.userClass}</Td>
                                             <Td>{user.fixSalary}</Td>
                                             <Td sx={{ width: '5%' }}>

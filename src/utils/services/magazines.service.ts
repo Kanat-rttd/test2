@@ -5,7 +5,7 @@ export const getAllMagazines = async () => {
     return data
 }
 
-export const createMagazine = async (data: { name: string; clientId: number; status: string }) => {
+export const createMagazine = async (data: { name: string; clientId: number; status: boolean }) => {
     const requestData = {
         data: data,
     }
@@ -15,7 +15,7 @@ export const createMagazine = async (data: { name: string; clientId: number; sta
 
 export const updateMagazine = async (
     id: number,
-    data: { name: string; clientId: number; status: string },
+    data: { name: string; clientId: number; status: boolean },
 ) => {
     const response = await $host.put(`magazines/${id}`, data)
     return response

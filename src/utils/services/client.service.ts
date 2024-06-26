@@ -28,7 +28,7 @@ export const createClient = async (data: {
     surname: string
     contact: string
     telegrammId: string
-    status: string
+    status: boolean
     password: string
 }) => {
     const response = await $host.post('client', data)
@@ -42,7 +42,7 @@ export const updateClient = async (
         surname: string
         contact: string
         telegrammId: string
-        status: string
+        status: boolean
         password: string
     },
 ) => {
@@ -53,7 +53,7 @@ export const updateClient = async (
 export const findByFilters = async (data: {
     name: string
     telegrammId: string
-    status: string
+    status: boolean
 }) => {
     const response = await $host.post('client/find', data)
     return response

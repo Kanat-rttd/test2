@@ -49,6 +49,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                 setValue(key as keyof User, value)
             })
             setValue('permission', JSON.parse(String(data.permission)))
+            setValue('status', data.status ? '1' : '0')
         } else {
             reset()
         }
@@ -56,8 +57,8 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
 
     const sendData = (formData: User) => {
         const responsePromise: Promise<any> = data
-            ? updateUser(data.id, formData)
-            : createUser(formData)
+            ? updateUser(data.id, {...formData, status: Number(formData.status) ? true : false})
+            : createUser({...formData, status: Number(formData.status) ? true : false})
 
         responsePromise
             .then((res) => {
@@ -67,9 +68,6 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                 success(res.data.message)
             })
             .catch((err) => {
-                // setError(err.response.data.field, {
-                //     message: err.response.data.message || 'Ошибка',
-                // })
                 error(err.response.data.error)
             })
     }

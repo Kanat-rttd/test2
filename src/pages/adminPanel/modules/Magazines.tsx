@@ -105,8 +105,8 @@ const AdminPanel = () => {
                                 name="status"
                                 onChange={handleSelectChange}
                             >
-                                <option value="Активный">Активный</option>
-                                <option value="Приостановленный">Приостановленный</option>
+                                <option value={1}>Активный</option>
+                                <option value={0}>Неактивный</option>
                             </Select>
                         </Box>
 
@@ -135,7 +135,7 @@ const AdminPanel = () => {
                                             <Td>{item.id}</Td>
                                             <Td>{item.name}</Td>
                                             <Td>{item.client.name}</Td>
-                                            <Td>{item.status}</Td>
+                                            <Td>{item.status ? 'Активный' : 'Неактивный'}</Td>
                                             <Td>
                                                 <IconButton
                                                     variant="outline"

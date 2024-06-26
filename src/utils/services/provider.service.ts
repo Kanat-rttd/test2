@@ -1,6 +1,6 @@
 import $host from './axios'
 
-export const createProvider = async (data: { providerName: string; status: string }) => {
+export const createProvider = async (data: { providerName: string; status: boolean }) => {
     const response = await $host.post('providers', data)
     return response
 }
@@ -9,7 +9,7 @@ export const updateProvider = async (
     id: number,
     data: {
         providerName: string
-        status: string
+        status: boolean
     },
 ) => {
     const response = await $host.put(`providers/${id}`, data)

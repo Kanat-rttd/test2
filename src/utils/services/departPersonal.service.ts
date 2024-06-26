@@ -10,7 +10,7 @@ export const getAllDepartPersonal = async (selectedStatus: string | undefined) =
 export const createDepartPersonal = async (data: {
     name: string
     surname: string
-    status: string
+    status: boolean
     userClass: string
     fixSalary: string
 }) => {
@@ -23,7 +23,7 @@ export const updateDepartPersonal = async (
     data: {
         name: string
         surname: string
-        status: string
+        status: boolean
         userClass: string
         fixSalary: string
     },
