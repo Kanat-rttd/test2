@@ -41,6 +41,8 @@ const BakingPage = () => {
         `baking?${getURLs().toString()}`,
     )
 
+    console.log(bakingsData)
+
     const [selectedBaking, setSelectedBaking] = useState<BakingDataType | undefined>(undefined)
     const [dialog, setDialog] = useState({
         isOpen: false,
@@ -124,53 +126,61 @@ const BakingPage = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {bakingsData?.bakingData.length ? bakingsData?.bakingData.map((bakingRow, index) => {
-                                return (
-                                    <Tr key={index} textAlign={'center'}>
-                                        <Td>{bakingRow.product?.name}</Td>
-                                        {/* <Td textAlign={'center'}>{bakingRow.flour}</Td>
+                            {bakingsData?.bakingData.length ? (
+                                bakingsData?.bakingData.map((bakingRow, index) => {
+                                    return (
+                                        <Tr key={index} textAlign={'center'}>
+                                            <Td>{bakingRow.product?.name}</Td>
+                                            {/* <Td textAlign={'center'}>{bakingRow.flour}</Td>
                                         <Td textAlign={'center'}>{bakingRow.salt}</Td>
                                         <Td textAlign={'center'}>{bakingRow.yeast}</Td>
                                         <Td textAlign={'center'}>{bakingRow.malt}</Td>
                                         <Td textAlign={'center'}>{bakingRow.butter}</Td> */}
-                                        <Td textAlign={'center'}>{bakingRow.temperature}</Td>
-                                        <Td textAlign={'center'}>
-                                            {dayjs(bakingRow.dateTime).format('HH:mm DD.MM.YYYY')}
-                                        </Td>
-                                        <Td textAlign={'center'}>{bakingRow.output}</Td>
-                                        <Td textAlign={'center'}>{bakingRow.defective}</Td>
-                                        <Td>
-                                            <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
-                                                marginRight={3}
-                                                onClick={() => {
-                                                    setSelectedBaking(bakingRow)
-                                                    onOpen()
-                                                }}
-                                                icon={<EditIcon />}
-                                            />
-                                            <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
-                                                marginRight={3}
-                                                onClick={() => {
-                                                    setSelectedBaking(bakingRow)
-                                                    setDialog({
-                                                        ...dialog,
-                                                        isOpen: true,
-                                                    })
-                                                }}
-                                                icon={<DeleteIcon />}
-                                            />
-                                        </Td>
-                                    </Tr>
-                                )
-                            }) : <Tr><Td>Нет данных</Td></Tr>}
+                                            <Td textAlign={'center'}>{bakingRow.temperature}</Td>
+                                            <Td textAlign={'center'}>
+                                                {dayjs(bakingRow.dateTime).format(
+                                                    'HH:mm DD.MM.YYYY',
+                                                )}
+                                            </Td>
+                                            <Td textAlign={'center'}>{bakingRow.output}</Td>
+                                            <Td textAlign={'center'}>{bakingRow.defective}</Td>
+                                            <Td>
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        setSelectedBaking(bakingRow)
+                                                        onOpen()
+                                                    }}
+                                                    icon={<EditIcon />}
+                                                />
+                                                <IconButton
+                                                    variant="outline"
+                                                    size={'sm'}
+                                                    colorScheme="teal"
+                                                    aria-label="Send email"
+                                                    marginRight={3}
+                                                    onClick={() => {
+                                                        setSelectedBaking(bakingRow)
+                                                        setDialog({
+                                                            ...dialog,
+                                                            isOpen: true,
+                                                        })
+                                                    }}
+                                                    icon={<DeleteIcon />}
+                                                />
+                                            </Td>
+                                        </Tr>
+                                    )
+                                })
+                            ) : (
+                                <Tr>
+                                    <Td>Нет данных</Td>
+                                </Tr>
+                            )}
                         </Tbody>
                         <Tfoot>
                             <Tr>
