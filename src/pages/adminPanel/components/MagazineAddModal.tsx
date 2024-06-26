@@ -10,8 +10,7 @@ import {
     Input,
     FormControl,
     FormErrorMessage,
-    Box,
-    Select as ChakraSelect,
+    Box
 } from '@chakra-ui/react'
 import Select from 'react-select'
 
@@ -21,6 +20,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { useApi } from '@/utils/services/axios'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { ClientType } from '@/utils/types/client.type'
+import StatusSelect from '@/components/shared/StatusSelect'
 
 interface Magazines {
     id: number
@@ -46,18 +46,6 @@ interface MagazinesModalInput {
     clientId: number
 }
 
-const status = [
-    {
-        name: 'Активный',
-    },
-    {
-        name: 'Неактивный',
-    },
-    {
-        name: 'Приостановленный',
-    },
-]
-
 const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalProps) => {
     const { data: clientsData } = useApi<ClientType[]>('client')
     const { success, error } = useNotify()
@@ -76,6 +64,7 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
             Object.entries(data).forEach(([key, value]) => {
                 setValue(key as keyof MagazinesModalInput, value)
             })
+            setValue('status', data.status ? '1' : '0')
         } else {
             reset()
         }
@@ -83,8 +72,8 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
 
     const sendData = (formData: MagazinesModalInput) => {
         const responsePromise: Promise<any> = data
-            ? updateMagazine(data.id, formData)
-            : createMagazine(formData)
+            ? updateMagazine(data.id, {...formData, status: Number(formData.status) ? true : false})
+            : createMagazine({...formData, status: Number(formData.status) ? true : false})
 
         responsePromise
             .then((res) => {
@@ -94,8 +83,8 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                 success(res.data.message)
             })
             .catch((err) => {
-                console.log(err);
-                
+                console.log(err)
+
                 error(err.response.data.message)
             })
     }
@@ -164,19 +153,11 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                                 </FormControl>
 
                                 <FormControl isInvalid={!!errors.status}>
-                                    <ChakraSelect
+                                    <StatusSelect
                                         {...register('status', {
                                             required: 'Поле является обязательным',
                                         })}
-                                    >
-                                        {status.map((item) => {
-                                            return (
-                                                <option key={item.name} value={item.name}>
-                                                    {item.name}
-                                                </option>
-                                            )
-                                        })}
-                                    </ChakraSelect>
+                                    />
                                     <FormErrorMessage>{errors.status?.message}</FormErrorMessage>
                                 </FormControl>
                                 <Box

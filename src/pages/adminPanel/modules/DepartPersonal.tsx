@@ -77,8 +77,8 @@ const AdminPanel = () => {
                                 width={'fit-content'}
                                 onChange={(e) => applyFilters(e.target.value)}
                             >
-                                <option value="Активный">Активный</option>
-                                <option value="Неактивный">Неактивный</option>
+                                <option value={1}>Активный</option>
+                                <option value={0}>Неактивный</option>
                             </Select>
                         </Box>
 
