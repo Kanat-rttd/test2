@@ -51,7 +51,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
         reset,
     } = useForm<BakingDataType>()
 
-    const { data: products } = useApi<{ id: string; name: string }[]>('product?status=Активный')
+    const { data: products } = useApi<{ id: string; name: string }[]>('product?status=1')
     const { data: goodsCategoriesData } = useApi<GoodsCategoryType[]>('goodsCategories')
     const [bakingGoods, setBakingProducts] = useState<
         {

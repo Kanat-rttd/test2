@@ -14,7 +14,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { createDebtTransfer } from '@/utils/services/debtTransfer.service'
 import { useApi } from '@/utils/services/axios'
 import classes from '../index.module.css'
-import { ContragentType } from '@/utils/types/contragent.types'
+import { ContragentCategoryType, ContragentType } from '@/utils/types/contragent.types'
 import { MagazineType } from '@/utils/types/magazine.type'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
@@ -61,9 +61,9 @@ interface InvoiceData {
                 }
             }
         }[]
-        client: {
+        contragent: {
             id: number
-            name: string
+            contragentName: string
         }
     }[]
 }
@@ -73,12 +73,17 @@ const DebtTransferForm = () => {
     const { getParam, setParam } = useURLParameters()
     const [selectedProvider, setSelectedProvider] = useState<ContragentType | null>(null)
 
-    const { data: magazinesData } = useApi<MagazineType[]>('magazines?status=Активный')
+    const { data: magazinesData } = useApi<MagazineType[]>('magazines?status=1')
+    const { data: contragentsTypesData } = useApi<ContragentCategoryType[]>('contragentType')
     const { data: contragentsMagazinesData } = useApi<ContragentType[]>(
-        'contragent?status=Активный&type=магазин',
+        `contragent?status=1&type=${
+            contragentsTypesData?.find((item) => item.type === 'магазин')?.id
+        }`,
     )
     const { data: clientsData } = useApi<ContragentType[]>(
-        'contragent?status=Активный&type=реализатор',
+        `contragent?status=1&type=${
+            contragentsTypesData?.find((item) => item.type === 'реализатор')?.id
+        }`,
     )
     const { data: dispatchesData } = useApi<InvoiceData[]>(
         `release/invoice?${getParam('contragentId')}`,
@@ -122,7 +127,7 @@ const DebtTransferForm = () => {
             return
         }
 
-        if (selectedProvider?.type == 'реализатор' && contragentsMagazinesData != undefined) {
+        if (selectedProvider?.contragentType.type == 'реализатор' && contragentsMagazinesData != undefined) {
             const magazinesIds = magazinesData
                 .filter((magazine) => magazine.clientId == selectedProvider.mainId)
                 .map((magazine) => magazine.id)
@@ -131,7 +136,7 @@ const DebtTransferForm = () => {
             )
             setParam('contragentId', selectedProvider.id.toString())
             return contragents
-        } else if (selectedProvider?.type == 'магазин' && clientsData != undefined) {
+        } else if (selectedProvider?.contragentType.type == 'магазин' && clientsData != undefined) {
             const clientIds = magazinesData
                 .filter((magazine) => magazine.id == selectedProvider.mainId)
                 .map((magazine) => magazine.clientId)

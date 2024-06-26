@@ -43,8 +43,8 @@ type FormData = {
 
 const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddModalProps) => {
     const { loading } = useNotify()
-    const { data: clients } = useApi<ClientType[]>('client?status=Активный')
-    const { data: productsData } = useApi<Product[]>('product?status=Активный')
+    const { data: clients } = useApi<ClientType[]>('client?status=1')
+    const { data: productsData } = useApi<Product[]>('product?status=1')
 
     // const [selectedProductIds, setSelectedProductIds] = useState<number[]>([])
 

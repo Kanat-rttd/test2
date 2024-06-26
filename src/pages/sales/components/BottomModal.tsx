@@ -29,7 +29,7 @@ const BottomModal: React.FC<{
     selectedProducts: Product[]
 }> = ({ isOpen, onClose, handleAddProduct, selectedProducts }) => {
     const [searchTerm, setSearchTerm] = useState('')
-    const { data: products } = useApi<Product[]>('product?status=Активный')
+    const { data: products } = useApi<Product[]>('product?status=1')
     const [filterdProducts, setFilteredProducts] = useState<Product[] | undefined>([])
     const [selectedProductsIds, setSelectedProductsIds] = useState<number[]>([])
 

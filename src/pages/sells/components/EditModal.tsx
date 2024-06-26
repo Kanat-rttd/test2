@@ -22,6 +22,7 @@ import { useApi } from '@/utils/services/axios'
 import { Product } from '@/utils/types/product.types'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import InputNumber from '@/components/shared/NumberInput'
+import { ContragentType } from '@/utils/types/contragent.types'
 
 interface DispatchType {
     id: number
@@ -48,15 +49,6 @@ interface DispatchType {
     }
 }
 
-interface Contragents {
-    id: number
-    contragentName: string
-    mainId: number
-    type: string
-    status: string
-    isDeleted: boolean
-}
-
 interface EditModalProps {
     isOpen: boolean
     onClose: () => void
@@ -73,7 +65,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
     const { loading } = useNotify()
     // const { data: clients } = useApi<ClientType[]>('client')
 
-    const { data: contragents } = useApi<Contragents[]>('contragent')
+    const { data: contragents } = useApi<ContragentType[]>('contragent')
     console.log(contragents)
 
     const { data: products } = useApi<Product[]>('product')

@@ -54,7 +54,7 @@ type GoodsCategoryType = {
 
 const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps) => {
     const { success, error } = useNotify()
-    const { data: providersData } = useApi<ProviderType[]>('providers?status=Активный')
+    const { data: providersData } = useApi<ProviderType[]>('providers?status=1')
     const { data: goodsCategories } = useApi<GoodsCategoryType[]>('goodsCategories')
     const { data: placesData } = useApi<Place[]>('place')
     const [selectedCategory, setSelectedCateory] = useState<GoodsCategoryType | null>(null)

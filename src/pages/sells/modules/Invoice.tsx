@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import DateRange from '@/components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { OverPriceType } from '@/utils/types/overPrice.types'
-import { ContragentType } from '@/utils/types/contragent.types'
+import { ContragentCategoryType, ContragentType } from '@/utils/types/contragent.types'
 
 interface InvoiceData {
     createdAt: Date
@@ -61,11 +61,16 @@ const InvoicePage = () => {
     const { setParam, getURLs } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const { data: clientsData } = useApi<ContragentType[]>('contragent?type=реализатор&status=Активный')
+    const { data: contragentsTypesData } = useApi<ContragentCategoryType[]>('contragentType')
+    const { data: clientsData } = useApi<ContragentType[]>(
+        `contragent?status=1&type=${
+            contragentsTypesData?.find((item) => item.type === 'реализатор')?.id
+        }`,
+    )
     const { data: dispatchesData } = useApi<InvoiceData[]>(
         `release/invoice?${getURLs().toString()}`,
     )
-    
+
     const currentMonth = dayjs().month() + 1
     const currentYear = dayjs().year()
 
@@ -115,7 +120,10 @@ const InvoicePage = () => {
                     >
                         {dispatchesData?.length ? (
                             dispatchesData?.map((row, index) => {
-                                const overPrice = overPriceData?.find(price => price.contragentId == row.contragentId)?.price || 0
+                                const overPrice =
+                                    overPriceData?.find(
+                                        (price) => price.contragentId == row.contragentId,
+                                    )?.price || 0
                                 return (
                                     <Button
                                         key={index}
@@ -145,9 +153,18 @@ const InvoicePage = () => {
                                                 {dayjs(row.createdAt).format('DD.MM.YYYY')}
                                             </Text>
                                         </Box>
-                                        <Box display={'flex'} gap={20} w={'25%'} justifyContent={'space-between'}>
-                                            <Text minWidth={'40%'} textAlign={'start'}>Сверху: {overPrice} ₸</Text>
-                                            <Text minW={'60%'} textAlign={'start'}>Сумма: {row.totalSum} ₸</Text>
+                                        <Box
+                                            display={'flex'}
+                                            gap={20}
+                                            w={'25%'}
+                                            justifyContent={'space-between'}
+                                        >
+                                            <Text minWidth={'40%'} textAlign={'start'}>
+                                                Сверху: {overPrice} ₸
+                                            </Text>
+                                            <Text minW={'60%'} textAlign={'start'}>
+                                                Сумма: {row.totalSum} ₸
+                                            </Text>
                                         </Box>
                                         <Text w={'12%'} textAlign={'start'}>
                                             Итого: {Number(overPrice) + row.totalSum} ₸

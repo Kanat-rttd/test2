@@ -63,9 +63,9 @@ interface InvoiceData {
                 }
             }
         }[]
-        client: {
+        contragent: {
             id: number
-            name: string
+            contragentName: string
         }
     }[]
 }
@@ -73,7 +73,7 @@ interface InvoiceData {
 const formatOptionLabel = (option: ContragentType) => (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span>{option.contragentName}</span>
-        <span style={{ marginLeft: '50px', color: '#bfbdbd' }}> {option.type}</span>
+        <span style={{ marginLeft: '50px', color: '#bfbdbd' }}> {option.contragentType.type}</span>
     </div>
 )
 
@@ -86,7 +86,7 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
 
     const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
     // const { data: categoriesData } = useApi<Category[]>(`financeCategories?${getURLs().toString()}`)
-    const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=Активный')
+    const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=1')
 
     const {
         register,
@@ -199,7 +199,7 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                             <Select
                                 options={contragetnsData}
                                 getOptionLabel={(option: ContragentType) =>
-                                    `${option.contragentName} - ${option.type}`
+                                    `${option.contragentName} - ${option.contragentType.type}`
                                 }
                                 getOptionValue={(option: ContragentType) => `${option.id}`}
                                 value={contragetnsData?.filter((option) => option.id == value)}

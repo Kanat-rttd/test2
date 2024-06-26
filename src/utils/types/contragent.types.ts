@@ -2,7 +2,13 @@ export type ContragentType = {
     id: number
     contragentName: string
     mainId: number
-    type: string
+    contragentTypeId: number
+    contragentType: ContragentCategoryType
     status: string
     isDeleted: boolean
+}
+
+export type ContragentCategoryType = {
+    id: number
+    type: string
 }

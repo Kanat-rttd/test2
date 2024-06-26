@@ -21,7 +21,7 @@ import { createOverprice, updateOverprice } from '@/utils/services/overprice.ser
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { OverPriceInputs, OverPriceType } from '@/utils/types/overPrice.types'
 import { monthData } from '@/utils/constants/month.consts'
-import { ContragentType } from '@/utils/types/contragent.types'
+import { ContragentCategoryType, ContragentType } from '@/utils/types/contragent.types'
 import InputNumber from '@/components/shared/NumberInput'
 
 const defaultValues = {
@@ -30,6 +30,7 @@ const defaultValues = {
     year: '',
     price: '',
 }
+
 
 interface months {
     id: number
@@ -45,10 +46,13 @@ interface OverPriceAddModalProps {
 
 const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddModalProps) => {
     const { success, error } = useNotify()
+    const { data: contragentsTypesData } = useApi<ContragentCategoryType[]>('contragentType')
 
     const { data: clientData } = useApi<ContragentType[]>(
-        'contragent?type=реализатор&status=Активный',
+        `contragent?type=${contragentsTypesData?.find((item) => item.type === 'реализатор')?.id}&status=1`,
     )
+
+    console.log(clientData)
 
     const {
         register,

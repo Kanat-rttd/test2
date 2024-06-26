@@ -21,7 +21,7 @@ import { updateDispatchQuantity } from '@/utils/services/dispatch.service'
 import { DispatchType } from '@/utils/types/dispatch.types'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { useApi } from '@/utils/services/axios'
-import { ContragentType } from '@/utils/types/contragent.types'
+import { ContragentCategoryType, ContragentType } from '@/utils/types/contragent.types'
 
 interface EditModalInputs {
     [key: string]: string
@@ -36,7 +36,10 @@ interface EditModalProps {
 
 const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess }) => {
     const { loading } = useNotify()
-    const {data: clientsData} = useApi<ContragentType[]>('contragent?type=реализатор&status=Активный')
+    const { data: contragentsTypesData } = useApi<ContragentCategoryType[]>('contragentType')
+    const { data: clientsData } = useApi<ContragentType[]>(
+        `contragent?type=${contragentsTypesData?.find((item) => item.type === 'реализатор')?.id}&status=1`,
+    )
     const {
         register,
         handleSubmit: handleSubmitForm,

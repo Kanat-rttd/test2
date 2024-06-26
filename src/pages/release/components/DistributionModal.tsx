@@ -23,7 +23,7 @@ import { DispatchType } from '@/utils/types/dispatch.types'
 import { CloseIcon } from '@chakra-ui/icons'
 import { Product } from '@/utils/types/product.types'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
-import { ContragentType } from '@/utils/types/contragent.types'
+import { ContragentCategoryType, ContragentType } from '@/utils/types/contragent.types'
 import InputNumber from '@/components/shared/NumberInput'
 
 interface DistributionModalProps {
@@ -51,10 +51,11 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 }) => {
     const { getURLs } = useURLParameters()
     const { loading } = useNotify()
+    const { data: contragentsTypesData } = useApi<ContragentCategoryType[]>('contragentType')
     const { data: clientsData } = useApi<ContragentType[]>(
-        'contragent?type=реализатор&status=Активный',
+        `contragent?type=${contragentsTypesData?.find((item) => item.type === 'реализатор')?.id}&status=1`,
     )
-    const { data: products } = useApi<Product[]>('product?status=Активный')
+    const { data: products } = useApi<Product[]>('product?status=1')
 
     const {
         register,

@@ -33,7 +33,7 @@ interface Account {
 const formatOptionLabel = (option: ContragentType) => (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span>{option.contragentName}</span>
-        <span style={{ marginLeft: '50px', color: '#bfbdbd' }}> {option.type}</span>
+        <span style={{ marginLeft: '50px', color: '#bfbdbd' }}> {option.contragentType.type}</span>
     </div>
 )
 
@@ -44,7 +44,7 @@ type ArrivalProps = {
 const Consumption = ({ categoriesData }: ArrivalProps) => {
     const { loading } = useNotify()
 
-    const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=Активный')
+    const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=1')
     // const { data: categoriesData } = useApi<Category[]>(`financeCategories`)
 
     const {
@@ -160,7 +160,7 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
                             <Select
                                 options={contragetnsData}
                                 getOptionLabel={(option: ContragentType) =>
-                                    `${option.contragentName} - ${option.type}`
+                                    `${option.contragentName} - ${option.contragentType.type}`
                                 }
                                 getOptionValue={(option: ContragentType) => `${option.id}`}
                                 value={contragetnsData?.filter((option) => option.id == value)}
