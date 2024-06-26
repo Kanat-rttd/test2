@@ -30,6 +30,8 @@ const InventoryTable = () => {
         `reports/inventoryzation?${getURLs().toString()}`,
     )
 
+    console.log(inventoryzationData)
+
     const [showInput, setShowInput] = useState<EditInput>()
 
     return (
