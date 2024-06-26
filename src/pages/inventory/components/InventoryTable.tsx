@@ -1,4 +1,3 @@
-
 import { Table, Tbody, Tr, Th, Td, Input } from '@chakra-ui/react'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useApi } from '@/utils/services/axios'
@@ -12,13 +11,13 @@ type EditInput = {
 
 interface Inventoryzation {
     table: {
-        id: number
-        goods: string
+        id: 1
+        category: string
         unitOfMeasure: string
-        accountingQuantity: string
+        accQuantity: number
         factQuantity: number
-        adjustments: number
-        discrepancy: number
+        adjusment: number
+        difference: number
     }[]
     totalRegister: number
     totalFact: number
@@ -30,6 +29,8 @@ const InventoryTable = () => {
     const { data: inventoryzationData } = useApi<Inventoryzation>(
         `reports/inventoryzation?${getURLs().toString()}`,
     )
+
+    console.log(inventoryzationData)
 
     const [showInput, setShowInput] = useState<EditInput>()
 
@@ -53,9 +54,9 @@ const InventoryTable = () => {
                                 return (
                                     <Tr key={item.id}>
                                         <Td>{index + 1}</Td>
-                                        <Td>{item.goods}</Td>
+                                        <Td>{item.category}</Td>
                                         <Td>{item.unitOfMeasure}</Td>
-                                        <Td>{item.accountingQuantity}</Td>
+                                        <Td>{item.accQuantity}</Td>
                                         <Td
                                             onClick={() =>
                                                 setShowInput({
@@ -73,7 +74,7 @@ const InventoryTable = () => {
                                                 item.factQuantity
                                             )}
                                         </Td>
-                                        <Td>{item.discrepancy}</Td>
+                                        <Td>{item.difference}</Td>
                                     </Tr>
                                 )
                             })
