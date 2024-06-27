@@ -41,8 +41,8 @@ export const createInvoiceArrival = async (
     data: {
         account: string
         amount: number | null
-        financeCategoryId: string
-        contragentId: number
+        financeCategoryId: number | undefined
+        contragentId: number | undefined
         comment: string
         date: Date
     },
