@@ -43,17 +43,16 @@ const MenuAccordion = () => {
 
     const parsedClass = JSON.parse(String(userInfo?.class))
 
-    // const filteredMenuItems = menuItems.filter((item) => {
-    //     return (
-    //         parsedClass[0].label &&
-    //         item.allowedClasses &&
-    //         item.allowedClasses.includes(parsedClass[0].label)
-    //     )
-    // })
-
     const filteredMenuItems = menuItems.filter((item: { allowedClasses: string[] }) => {
         return parsedClass.some((cls: { label: string }) => item.allowedClasses.includes(cls.label))
     })
+
+    const filteredSubMenuItems = subMenuItems.filter((item: { allowedClasses: string[] }) => {
+        return parsedClass.some((cls: { label: string }) => item.allowedClasses.includes(cls.label))
+    })
+
+    console.log(parsedClass)
+    console.log(filteredSubMenuItems)
 
     const handleNavigate = (route: string) => {
         setIsDrawerOpen(false)
@@ -98,7 +97,7 @@ const MenuAccordion = () => {
                                                         <AccordionIcon />
                                                     </AccordionButton>
                                                 </h2>
-                                                {subMenuItems.map(
+                                                {filteredSubMenuItems.map(
                                                     ({ route, label, path }, index) =>
                                                         path === MenuItem.route && (
                                                             <AccordionPanel
@@ -107,7 +106,9 @@ const MenuAccordion = () => {
                                                                 }
                                                                 ml={'20px'}
                                                                 key={index}
-                                                                className={classes.accordionItemlink}
+                                                                className={
+                                                                    classes.accordionItemlink
+                                                                }
                                                             >
                                                                 <Link
                                                                     key={route}
