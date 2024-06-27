@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Box,
     Table,
@@ -31,24 +31,15 @@ const styles = {
     color: '#000',
 }
 
-type GoodsCategoryType = {
-    id: number
-    category: string
-    unitOfMeasure: string
-}
-
 const BakingPage = () => {
     const { getURLs, getParam, setParam } = useURLParameters()
     const { loading } = useNotify()
     const { onOpen, onClose, isOpen } = useDisclosure()
 
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
-    const { data: goodsCategoriesData } = useApi<GoodsCategoryType[]>('goodsCategories')
     const { data: bakingsData, mutate: mutateBakingData } = useApi<BakingType>(
         `baking?${getURLs().toString()}`,
     )
-
-    console.log(bakingsData)
 
     const [selectedBaking, setSelectedBaking] = useState<BakingDataType | undefined>(undefined)
     const [dialog, setDialog] = useState({
@@ -71,6 +62,11 @@ const BakingPage = () => {
             console.error('No user data available to delete.')
         }
     }
+
+    useEffect(() => {
+        if (!bakingsData) return
+        // setBakingsDetails()
+    }, [bakingsData])
 
     return (
         <>
@@ -118,28 +114,19 @@ const BakingPage = () => {
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant="simple">
                         <Thead>
-                            {bakingsData?.bakingData.map((bakingRow, index) => {
-                                return (
-                                    <Tr key={index}>
-                                        <Th>Вид хлеба</Th>
-                                        {bakingRow.bakingDetails.map((item) => (
-                                            <Td textAlign={'center'}>
-                                                {
-                                                    goodsCategoriesData?.find(
-                                                        (category) =>
-                                                            category.id === item.goodsCategoryId,
-                                                    )?.category
-                                                }
-                                            </Td>
-                                        ))}
-                                        <Th sx={styles}>t°</Th>
-                                        <Th sx={styles}>Время и дата</Th>
-                                        <Th sx={styles}>Выход</Th>
-                                        <Th sx={styles}>Брак</Th>
-                                        <Th>Действия</Th>
-                                    </Tr>
-                                )
-                            })}
+                            <Tr>
+                                <Th>Вид хлеба</Th>
+                                <Th sx={styles}>Время и дата</Th>
+                                <Td textAlign={'center'}>Мука</Td>
+                                <Td textAlign={'center'}>Соль</Td>
+                                <Td textAlign={'center'}>Дрожжи</Td>
+                                <Td textAlign={'center'}>Солод</Td>
+                                <Td textAlign={'center'}>Масло</Td>
+                                <Th sx={styles}>t°</Th>
+                                <Th sx={styles}>Выход</Th>
+                                <Th sx={styles}>Брак</Th>
+                                <Th>Действия</Th>
+                            </Tr>
                         </Thead>
                         <Tbody>
                             {bakingsData?.bakingData.length ? (
@@ -147,15 +134,20 @@ const BakingPage = () => {
                                     return (
                                         <Tr key={index} textAlign={'center'}>
                                             <Td>{bakingRow.product?.name}</Td>
-                                            {bakingRow.bakingDetails.map((item) => (
-                                                <Td textAlign={'center'}>{item.quantity}</Td>
-                                            ))}
-                                            <Td textAlign={'center'}>{bakingRow.temperature}</Td>
                                             <Td textAlign={'center'}>
                                                 {dayjs(bakingRow.dateTime).format(
                                                     'HH:mm DD.MM.YYYY',
                                                 )}
                                             </Td>
+                                            <Td textAlign={'center'}>{bakingRow.flour.quantity}</Td>
+                                            <Td textAlign={'center'}>{bakingRow.salt.quantity}</Td>
+                                            <Td textAlign={'center'}>{bakingRow.yeast.quantity}</Td>
+                                            <Td textAlign={'center'}>{bakingRow.malt.quantity}</Td>
+                                            <Td textAlign={'center'}>
+                                                {bakingRow.butter.quantity}
+                                            </Td>
+
+                                            <Td textAlign={'center'}>{bakingRow.temperature}</Td>
                                             <Td textAlign={'center'}>{bakingRow.output}</Td>
                                             <Td textAlign={'center'}>{bakingRow.defective}</Td>
                                             <Td>
@@ -201,12 +193,12 @@ const BakingPage = () => {
                                 <Th fontSize={16} fontWeight={'bold'} color={'#000'}>
                                     Итого
                                 </Th>
+                                <Th sx={styles}></Th>
                                 <Th sx={styles}>{bakingsData?.totals?.totalFlour || 0}</Th>
                                 <Th sx={styles}>{bakingsData?.totals?.totalSalt || 0}</Th>
                                 <Th sx={styles}>{bakingsData?.totals?.totalYeast || 0}</Th>
                                 <Th sx={styles}>{bakingsData?.totals?.totalMalt || 0}</Th>
                                 <Th sx={styles}>{bakingsData?.totals?.totalButter || 0}</Th>
-                                <Th sx={styles}></Th>
                                 <Th sx={styles}></Th>
                                 <Th sx={styles}>{bakingsData?.totals?.totalOutput || 0}</Th>
                                 <Th sx={styles}>{bakingsData?.totals?.totalDefective || 0}</Th>
