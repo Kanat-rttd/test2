@@ -61,8 +61,14 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
 
     useEffect(() => {
         const _providerGoods = providerGoodsData?.map((item) => {
-            return { label: item.goods, value: item.id, uom: item.unitOfMeasure, category: item.goodsCategoryId }
+            return {
+                label: item.goods,
+                value: item.id,
+                uom: item.unitOfMeasure,
+                category: item.goodsCategoryId,
+            }
         })
+        console.log(_providerGoods)
 
         setProviderGoods(_providerGoods || [])
     }, [providerGoodsData])
@@ -83,7 +89,10 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
     ]
 
     const sendData = (formData: PurchaseType) => {
-        const response: Promise<any> = createPurchase({...formData, goodsCategoryId: selectedRawMaterial?.category })
+        const response: Promise<any> = createPurchase({
+            ...formData,
+            goodsCategoryId: selectedRawMaterial?.category,
+        })
         loading(response)
         response
             .then(() => {
@@ -167,13 +176,27 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
 
                         <FormControl isInvalid={!!errors.quantity}>
                             <InputGroup>
-                                <InputNumber
+                                <Input
                                     {...register('quantity', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    placeholder="Количество *"
+                                    placeholder="Количество"
+                                    type="number"
+                                    autoComplete="off"
+                                    min="0"
+                                    onKeyDown={(e) => {
+                                        if (e.key === '-') {
+                                            e.preventDefault()
+                                        }
+                                        if (e.key === 'e') {
+                                            e.preventDefault()
+                                        }
+                                        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                                            e.preventDefault()
+                                        }
+                                    }}
                                 />
-                                <InputRightAddon>{selectedRawMaterial?.uom}</InputRightAddon>
+                                <InputRightAddon w={'15%'} display={"flex"} justifyContent={"center"}>{selectedRawMaterial?.uom}</InputRightAddon>
                             </InputGroup>
                             <FormErrorMessage>{errors.quantity?.message}</FormErrorMessage>
                         </FormControl>

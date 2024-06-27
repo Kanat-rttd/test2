@@ -164,7 +164,6 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                                                                         category.id ===
                                                                         selectedOption?.id,
                                                                 )?.unitOfMeasure || ''
-                                                                
                                                             setSelectedUnitsOfMeasure(
                                                                 (prevUnitsOfMeasure) => {
                                                                     const newUnitsOfMeasure = [
@@ -189,6 +188,23 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                                                     required: 'Поле является обязательным',
                                                 })}
                                                 placeholder="Количество"
+                                                type="number"
+                                                autoComplete="off"
+                                                min="0"
+                                                onKeyDown={(e) => {
+                                                    if (e.key === '-') {
+                                                        e.preventDefault()
+                                                    }
+                                                    if (e.key === 'e') {
+                                                        e.preventDefault()
+                                                    }
+                                                    if (
+                                                        e.key === 'ArrowUp' ||
+                                                        e.key === 'ArrowDown'
+                                                    ) {
+                                                        e.preventDefault()
+                                                    }
+                                                }}
                                             />
                                             <InputRightAddon
                                                 w={'25%'}
