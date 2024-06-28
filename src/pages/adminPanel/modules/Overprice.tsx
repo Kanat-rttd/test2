@@ -47,7 +47,7 @@ const AdminPanel = () => {
     }, [])
 
     const getYearsArray = (startYear: number) => {
-        const currentYear = new Date().getFullYear()
+        const currentYear = new Date().getFullYear() + 1    
         const years = []
 
         for (let year = startYear; year <= currentYear; year++) {
