@@ -53,7 +53,9 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     const { loading } = useNotify()
     const { data: contragentsTypesData } = useApi<ContragentCategoryType[]>('contragentType')
     const { data: clientsData } = useApi<ContragentType[]>(
-        `contragent?type=${contragentsTypesData?.find((item) => item.type === 'реализатор')?.id}&status=1`,
+        `contragent?type=${
+            contragentsTypesData?.find((item) => item.type === 'реализатор')?.id
+        }&status=1`,
     )
     const { data: products } = useApi<Product[]>('product?status=1')
 
@@ -140,22 +142,34 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                         style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                     >
                         <FormControl id="type" isRequired isInvalid={!!errors.contragentId}>
-                            <Select
-                                {...register('contragentId', {
-                                    required: 'Поле является обязательным',
-                                })}
-                                required
-                                placeholder="Выберите получателя"
-                                width={'100%'}
-                            >
-                                {clientsData?.map((client, index) => {
+                            <Controller
+                                name="contragentId"
+                                control={control}
+                                rules={{ required: 'Поле является обязательным' }}
+                                render={({ field }) => {
+                                    const { onChange, value } = field
+                                    const selectedContragentId = value !== null ? String(value) : ''
                                     return (
-                                        <option key={index} value={Number(client.id)}>
-                                            {client.contragentName}
-                                        </option>
+                                        <Select
+                                            required
+                                            placeholder="Выберите получателя"
+                                            width={'100%'}
+                                            value={selectedContragentId}
+                                            onChange={(selectedOption) => {
+                                                onChange(selectedOption)
+                                            }}
+                                        >
+                                            {clientsData?.map((client, index) => {
+                                                return (
+                                                    <option key={index} value={Number(client.id)}>
+                                                        {client.contragentName}
+                                                    </option>
+                                                )
+                                            })}
+                                        </Select>
                                     )
-                                })}
-                            </Select>
+                                }}
+                            />
                             <FormErrorMessage>{errors.contragentId?.message}</FormErrorMessage>
                         </FormControl>
                         <FormControl isRequired gap="1rem" display="flex" flexDirection="column">
