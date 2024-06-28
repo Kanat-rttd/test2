@@ -30,21 +30,28 @@ const DateRange = () => {
         targetDate = dayjs().add(1, 'day')
     }
 
+    const initialStartDate = dayjs(getParam('startDate')).isValid()
+        ? dayjs(getParam('startDate')).toDate()
+        : targetDate.toDate()
+
+    const initialEndDate = dayjs(getParam('endDate')).isValid()
+        ? dayjs(getParam('endDate')).toDate()
+        : targetDate.toDate()
+
     const [selectionRange, setSelectionRange] = useState({
-        startDate: dayjs(getParam('startDate')).isValid()
-            ? dayjs(getParam('startDate')).toDate()
-            : targetDate.toDate(),
-        endDate: dayjs(getParam('endDate')).isValid()
-            ? dayjs(getParam('endDate')).toDate()
-            : targetDate.toDate(),
+        startDate: initialStartDate,
+        endDate: initialEndDate,
     })
 
     useEffect(() => {
-        setParamObject({
-            startDate: dayjs(selectionRange.startDate).format('YYYY-MM-DD'),
-            endDate: dayjs(selectionRange.endDate).format('YYYY-MM-DD'),
-        })
-    }, [selectionRange])
+        if (dayjs(selectionRange.startDate).format('YYYY-MM-DD') !== getParam('startDate') ||
+            dayjs(selectionRange.endDate).format('YYYY-MM-DD') !== getParam('endDate')) {
+            setParamObject({
+                startDate: dayjs(selectionRange.startDate).format('YYYY-MM-DD'),
+                endDate: dayjs(selectionRange.endDate).format('YYYY-MM-DD'),
+            })
+        }
+    }, [selectionRange, setParamObject, getParam])
 
     const handleConfirmDate = () => {
         onClose()

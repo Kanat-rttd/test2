@@ -62,7 +62,7 @@ export type headerButton = {
 }
 
 export type buttonsData = {
-    puth: string
+    path: string
     label: string
     isCurrentPage: boolean
 }
@@ -72,12 +72,12 @@ export const headerButtons: headerButton[] = [
         currentPage: ADMIN_USERS_ROUTE,
         buttonsData: [
             {
-                puth: ADMIN_USERS_ROUTE,
+                path: ADMIN_USERS_ROUTE,
                 label: 'Адмперсонал',
                 isCurrentPage: true,
             },
             {
-                puth: ADMIN_DEPART_PERSONAL_ROUTE,
+                path: ADMIN_DEPART_PERSONAL_ROUTE,
                 label: 'Цехперсонал',
                 isCurrentPage: false,
             },
@@ -87,12 +87,12 @@ export const headerButtons: headerButton[] = [
         currentPage: ADMIN_DEPART_PERSONAL_ROUTE,
         buttonsData: [
             {
-                puth: ADMIN_USERS_ROUTE,
+                path: ADMIN_USERS_ROUTE,
                 label: 'Адмперсонал',
                 isCurrentPage: false,
             },
             {
-                puth: ADMIN_DEPART_PERSONAL_ROUTE,
+                path: ADMIN_DEPART_PERSONAL_ROUTE,
                 label: 'Цехперсонал',
                 isCurrentPage: true,
             },
@@ -102,12 +102,12 @@ export const headerButtons: headerButton[] = [
         currentPage: ADMIN_RELEASE_ROUTE,
         buttonsData: [
             {
-                puth: ADMIN_RELEASE_ROUTE,
+                path: ADMIN_RELEASE_ROUTE,
                 label: 'Реализаторы',
                 isCurrentPage: true,
             },
             {
-                puth: ADMIN_UNIQUEPRICE_ROUTE,
+                path: ADMIN_UNIQUEPRICE_ROUTE,
                 label: 'Уникальные цены',
                 isCurrentPage: false,
             },
@@ -117,12 +117,12 @@ export const headerButtons: headerButton[] = [
         currentPage: ADMIN_UNIQUEPRICE_ROUTE,
         buttonsData: [
             {
-                puth: ADMIN_RELEASE_ROUTE,
+                path: ADMIN_RELEASE_ROUTE,
                 label: 'Реализаторы',
                 isCurrentPage: false,
             },
             {
-                puth: ADMIN_UNIQUEPRICE_ROUTE,
+                path: ADMIN_UNIQUEPRICE_ROUTE,
                 label: 'Уникальные цены',
                 isCurrentPage: true,
             },
@@ -132,7 +132,7 @@ export const headerButtons: headerButton[] = [
         currentPage: ADMIN_PRODUCTS_ROUTE,
         buttonsData: [
             {
-                puth: ADMIN_PRODUCTS_ROUTE,
+                path: ADMIN_PRODUCTS_ROUTE,
                 label: 'Продукты',
                 isCurrentPage: true,
             },
@@ -142,12 +142,12 @@ export const headerButtons: headerButton[] = [
         currentPage: ADMIN_PROVIDER_ROUTE,
         buttonsData: [
             {
-                puth: ADMIN_PROVIDER_ROUTE,
+                path: ADMIN_PROVIDER_ROUTE,
                 label: 'Поставщики',
                 isCurrentPage: true,
             },
             {
-                puth: ADMIN_GOODS_ROUTE,
+                path: ADMIN_GOODS_ROUTE,
                 label: 'Товары',
                 isCurrentPage: false,
             },
@@ -157,12 +157,12 @@ export const headerButtons: headerButton[] = [
         currentPage: ADMIN_GOODS_ROUTE,
         buttonsData: [
             {
-                puth: ADMIN_PROVIDER_ROUTE,
+                path: ADMIN_PROVIDER_ROUTE,
                 label: 'Поставщики',
                 isCurrentPage: false,
             },
             {
-                puth: ADMIN_GOODS_ROUTE,
+                path: ADMIN_GOODS_ROUTE,
                 label: 'Товары',
                 isCurrentPage: true,
             },
@@ -172,7 +172,7 @@ export const headerButtons: headerButton[] = [
         currentPage: ADMIN_OVERPRICE_ROUTE,
         buttonsData: [
             {
-                puth: ADMIN_OVERPRICE_ROUTE,
+                path: ADMIN_OVERPRICE_ROUTE,
                 label: 'Сверху',
                 isCurrentPage: true,
             },
@@ -182,7 +182,7 @@ export const headerButtons: headerButton[] = [
         currentPage: ADMIN_MAGAZINES_ROUTE,
         buttonsData: [
             {
-                puth: ADMIN_MAGAZINES_ROUTE,
+                path: ADMIN_MAGAZINES_ROUTE,
                 label: 'Магазины',
                 isCurrentPage: true,
             },
@@ -192,17 +192,17 @@ export const headerButtons: headerButton[] = [
         currentPage: REQUEST_PROCESSING_ROUTE,
         buttonsData: [
             {
-                puth: REQUEST_PROCESSING_ROUTE,
+                path: REQUEST_PROCESSING_ROUTE,
                 label: 'Обработка',
                 isCurrentPage: true,
             },
             {
-                puth: REQUEST_PROCESSED_ROUTE,
+                path: REQUEST_PROCESSED_ROUTE,
                 label: 'Обработанные заявки',
                 isCurrentPage: false,
             },
             {
-                puth: MIXERS_BAKINGPRODUCTS_ROUTE,
+                path: MIXERS_BAKINGPRODUCTS_ROUTE,
                 label: 'Выпечка',
                 isCurrentPage: false,
             },
@@ -212,17 +212,17 @@ export const headerButtons: headerButton[] = [
         currentPage: REQUEST_PROCESSED_ROUTE,
         buttonsData: [
             {
-                puth: REQUEST_PROCESSING_ROUTE,
+                path: REQUEST_PROCESSING_ROUTE,
                 label: 'Обработка',
                 isCurrentPage: false,
             },
             {
-                puth: REQUEST_PROCESSED_ROUTE,
+                path: REQUEST_PROCESSED_ROUTE,
                 label: 'Обработанные заявки',
                 isCurrentPage: true,
             },
             {
-                puth: MIXERS_BAKINGPRODUCTS_ROUTE,
+                path: MIXERS_BAKINGPRODUCTS_ROUTE,
                 label: 'Выпечка',
                 isCurrentPage: false,
             },
@@ -232,17 +232,17 @@ export const headerButtons: headerButton[] = [
         currentPage: MIXERS_BAKINGPRODUCTS_ROUTE,
         buttonsData: [
             {
-                puth: REQUEST_PROCESSING_ROUTE,
+                path: REQUEST_PROCESSING_ROUTE,
                 label: 'Обработка',
                 isCurrentPage: false,
             },
             {
-                puth: REQUEST_PROCESSED_ROUTE,
+                path: REQUEST_PROCESSED_ROUTE,
                 label: 'Обработанные заявки',
                 isCurrentPage: false,
             },
             {
-                puth: MIXERS_BAKINGPRODUCTS_ROUTE,
+                path: MIXERS_BAKINGPRODUCTS_ROUTE,
                 label: 'Выпечка',
                 isCurrentPage: true,
             },
@@ -252,12 +252,12 @@ export const headerButtons: headerButton[] = [
         currentPage: RELEASE_DISTRIBUTION_ROUTE,
         buttonsData: [
             {
-                puth: RELEASE_DISTRIBUTION_ROUTE,
+                path: RELEASE_DISTRIBUTION_ROUTE,
                 label: 'Выдача',
                 isCurrentPage: true,
             },
             {
-                puth: RELEASE_REFUND_ROUTE,
+                path: RELEASE_REFUND_ROUTE,
                 label: 'Возврат',
                 isCurrentPage: false,
             },
@@ -267,12 +267,12 @@ export const headerButtons: headerButton[] = [
         currentPage: RELEASE_REFUND_ROUTE,
         buttonsData: [
             {
-                puth: RELEASE_DISTRIBUTION_ROUTE,
+                path: RELEASE_DISTRIBUTION_ROUTE,
                 label: 'Выдача',
                 isCurrentPage: false,
             },
             {
-                puth: RELEASE_REFUND_ROUTE,
+                path: RELEASE_REFUND_ROUTE,
                 label: 'Возврат',
                 isCurrentPage: true,
             },
@@ -282,12 +282,12 @@ export const headerButtons: headerButton[] = [
         currentPage: MIXERS_REMAIN_RAW_MATERIALS_ROUTE,
         buttonsData: [
             {
-                puth: MIXERS_REMAIN_RAW_MATERIALS_ROUTE,
+                path: MIXERS_REMAIN_RAW_MATERIALS_ROUTE,
                 label: 'Остаток сырья',
                 isCurrentPage: true,
             },
             {
-                puth: MIXERS_REMAIN_PRODUCTS_ROUTE,
+                path: MIXERS_REMAIN_PRODUCTS_ROUTE,
                 label: 'Остаток продукции',
                 isCurrentPage: false,
             },
@@ -297,12 +297,12 @@ export const headerButtons: headerButton[] = [
         currentPage: MIXERS_REMAIN_PRODUCTS_ROUTE,
         buttonsData: [
             {
-                puth: MIXERS_REMAIN_RAW_MATERIALS_ROUTE,
+                path: MIXERS_REMAIN_RAW_MATERIALS_ROUTE,
                 label: 'Остаток сырья',
                 isCurrentPage: false,
             },
             {
-                puth: MIXERS_REMAIN_PRODUCTS_ROUTE,
+                path: MIXERS_REMAIN_PRODUCTS_ROUTE,
                 label: 'Остаток продукции',
                 isCurrentPage: true,
             },
@@ -312,7 +312,7 @@ export const headerButtons: headerButton[] = [
         currentPage: MIXERS_SHIFT_ACCOUNTING_ROUTE,
         buttonsData: [
             {
-                puth: MIXERS_SHIFT_ACCOUNTING_ROUTE,
+                path: MIXERS_SHIFT_ACCOUNTING_ROUTE,
                 label: 'Учёт смен',
                 isCurrentPage: true,
             },
@@ -322,22 +322,22 @@ export const headerButtons: headerButton[] = [
         currentPage: SELLS_JOURNAL_ROUTE,
         buttonsData: [
             {
-                puth: SELLS_JOURNAL_ROUTE,
+                path: SELLS_JOURNAL_ROUTE,
                 label: 'Журнал Продаж',
                 isCurrentPage: true,
             },
             {
-                puth: SELLS_INVOICE_ROUTE,
+                path: SELLS_INVOICE_ROUTE,
                 label: 'Накладные',
                 isCurrentPage: false,
             },
             {
-                puth: SELLS_DEBT_ACCOUNTING_ROUTE,
+                path: SELLS_DEBT_ACCOUNTING_ROUTE,
                 label: 'Учёт долгов',
                 isCurrentPage: false,
             },
             {
-                puth: SELLS_DEBT_TRANSFER_ROUTE,
+                path: SELLS_DEBT_TRANSFER_ROUTE,
                 label: 'Перевод долга',
                 isCurrentPage: false,
             },
@@ -347,22 +347,22 @@ export const headerButtons: headerButton[] = [
         currentPage: SELLS_INVOICE_ROUTE,
         buttonsData: [
             {
-                puth: SELLS_JOURNAL_ROUTE,
+                path: SELLS_JOURNAL_ROUTE,
                 label: 'Журнал Продаж',
                 isCurrentPage: false,
             },
             {
-                puth: SELLS_INVOICE_ROUTE,
+                path: SELLS_INVOICE_ROUTE,
                 label: 'Накладные',
                 isCurrentPage: true,
             },
             {
-                puth: SELLS_DEBT_ACCOUNTING_ROUTE,
+                path: SELLS_DEBT_ACCOUNTING_ROUTE,
                 label: 'Учёт долгов',
                 isCurrentPage: false,
             },
             {
-                puth: SELLS_DEBT_TRANSFER_ROUTE,
+                path: SELLS_DEBT_TRANSFER_ROUTE,
                 label: 'Перевод долга',
                 isCurrentPage: false,
             },
@@ -372,22 +372,22 @@ export const headerButtons: headerButton[] = [
         currentPage: SELLS_DEBT_ACCOUNTING_ROUTE,
         buttonsData: [
             {
-                puth: SELLS_JOURNAL_ROUTE,
+                path: SELLS_JOURNAL_ROUTE,
                 label: 'Журнал Продаж',
                 isCurrentPage: false,
             },
             {
-                puth: SELLS_INVOICE_ROUTE,
+                path: SELLS_INVOICE_ROUTE,
                 label: 'Накладные',
                 isCurrentPage: false,
             },
             {
-                puth: SELLS_DEBT_ACCOUNTING_ROUTE,
+                path: SELLS_DEBT_ACCOUNTING_ROUTE,
                 label: 'Учёт долгов',
                 isCurrentPage: true,
             },
             {
-                puth: SELLS_DEBT_TRANSFER_ROUTE,
+                path: SELLS_DEBT_TRANSFER_ROUTE,
                 label: 'Перевод долга',
                 isCurrentPage: false,
             },
@@ -397,22 +397,22 @@ export const headerButtons: headerButton[] = [
         currentPage: SELLS_DEBT_TRANSFER_ROUTE,
         buttonsData: [
             {
-                puth: SELLS_JOURNAL_ROUTE,
+                path: SELLS_JOURNAL_ROUTE,
                 label: 'Журнал Продаж',
                 isCurrentPage: false,
             },
             {
-                puth: SELLS_INVOICE_ROUTE,
+                path: SELLS_INVOICE_ROUTE,
                 label: 'Накладные',
                 isCurrentPage: false,
             },
             {
-                puth: SELLS_DEBT_ACCOUNTING_ROUTE,
+                path: SELLS_DEBT_ACCOUNTING_ROUTE,
                 label: 'Учёт долгов',
                 isCurrentPage: false,
             },
             {
-                puth: SELLS_DEBT_TRANSFER_ROUTE,
+                path: SELLS_DEBT_TRANSFER_ROUTE,
                 label: 'Перевод долга',
                 isCurrentPage: true,
             },
@@ -422,12 +422,12 @@ export const headerButtons: headerButton[] = [
         currentPage: PURCHASE_PRODUCTS_ROUTE,
         buttonsData: [
             {
-                puth: PURCHASE_PRODUCTS_ROUTE,
+                path: PURCHASE_PRODUCTS_ROUTE,
                 label: 'Закуп',
                 isCurrentPage: true,
             },
             {
-                puth: PURCHASE_DEBT_ROUTE,
+                path: PURCHASE_DEBT_ROUTE,
                 label: 'Долги по закупу',
                 isCurrentPage: false,
             },
@@ -437,12 +437,12 @@ export const headerButtons: headerButton[] = [
         currentPage: PURCHASE_DEBT_ROUTE,
         buttonsData: [
             {
-                puth: PURCHASE_PRODUCTS_ROUTE,
+                path: PURCHASE_PRODUCTS_ROUTE,
                 label: 'Закуп',
                 isCurrentPage: false,
             },
             {
-                puth: PURCHASE_DEBT_ROUTE,
+                path: PURCHASE_DEBT_ROUTE,
                 label: 'Долги по закупу',
                 isCurrentPage: true,
             },
@@ -452,22 +452,22 @@ export const headerButtons: headerButton[] = [
         currentPage: BREAD_REPORT_ROUTE,
         buttonsData: [
             {
-                puth: BREAD_REPORT_ROUTE,
+                path: BREAD_REPORT_ROUTE,
                 label: 'Отчет по продукции',
                 isCurrentPage: true,
             },
             // {
-            //     puth: RELEASE_REPORT_ROUTE,
+            //     path: RELEASE_REPORT_ROUTE,
             //     label: 'Отчет по реализации',
             //     isCurrentPage: false,
             // },
             {
-                puth: VISIT_REPORT_ROUTE,
+                path: VISIT_REPORT_ROUTE,
                 label: 'Отчет по посещению',
                 isCurrentPage: false,
             },
             {
-                puth: RECONCILIATION_REPORT_ROUTE,
+                path: RECONCILIATION_REPORT_ROUTE,
                 label: 'Акт сверки',
                 isCurrentPage: false,
             },
@@ -477,22 +477,22 @@ export const headerButtons: headerButton[] = [
     //     currentPage: RELEASE_REPORT_ROUTE,
     //     buttonsData: [
     //         {
-    //             puth: BREAD_REPORT_ROUTE,
+    //             path: BREAD_REPORT_ROUTE,
     //             label: 'Отчет по продукции',
     //             isCurrentPage: false,
     //         },
     //         {
-    //             puth: RELEASE_REPORT_ROUTE,
+    //             path: RELEASE_REPORT_ROUTE,
     //             label: 'Отчет по реализации',
     //             isCurrentPage: true,
     //         },
     //         {
-    //             puth: VISIT_REPORT_ROUTE,
+    //             path: VISIT_REPORT_ROUTE,
     //             label: 'Отчет по посещению',
     //             isCurrentPage: false,
     //         },
     //         {
-    //             puth: RECONCILIATION_REPORT_ROUTE,
+    //             path: RECONCILIATION_REPORT_ROUTE,
     //             label: 'Акт сверки',
     //             isCurrentPage: false,
     //         },
@@ -502,22 +502,22 @@ export const headerButtons: headerButton[] = [
         currentPage: VISIT_REPORT_ROUTE,
         buttonsData: [
             {
-                puth: BREAD_REPORT_ROUTE,
+                path: BREAD_REPORT_ROUTE,
                 label: 'Отчет по продукции',
                 isCurrentPage: false,
             },
             // {
-            //     puth: RELEASE_REPORT_ROUTE,
+            //     path: RELEASE_REPORT_ROUTE,
             //     label: 'Отчет по реализации',
             //     isCurrentPage: false,
             // },
             {
-                puth: VISIT_REPORT_ROUTE,
+                path: VISIT_REPORT_ROUTE,
                 label: 'Отчет по посещению',
                 isCurrentPage: true,
             },
             {
-                puth: RECONCILIATION_REPORT_ROUTE,
+                path: RECONCILIATION_REPORT_ROUTE,
                 label: 'Акт сверки',
                 isCurrentPage: false,
             },
@@ -527,22 +527,22 @@ export const headerButtons: headerButton[] = [
         currentPage: RECONCILIATION_REPORT_ROUTE,
         buttonsData: [
             {
-                puth: BREAD_REPORT_ROUTE,
+                path: BREAD_REPORT_ROUTE,
                 label: 'Отчет по продукции',
                 isCurrentPage: false,
             },
             // {
-            //     puth: RELEASE_REPORT_ROUTE,
+            //     path: RELEASE_REPORT_ROUTE,
             //     label: 'Отчет по реализации',
             //     isCurrentPage: false,
             // },
             {
-                puth: VISIT_REPORT_ROUTE,
+                path: VISIT_REPORT_ROUTE,
                 label: 'Отчет по посещению',
                 isCurrentPage: false,
             },
             {
-                puth: RECONCILIATION_REPORT_ROUTE,
+                path: RECONCILIATION_REPORT_ROUTE,
                 label: 'Акт сверки',
                 isCurrentPage: true,
             },
@@ -552,17 +552,17 @@ export const headerButtons: headerButton[] = [
         currentPage: INVENTORY_FACT_ROUTE,
         buttonsData: [
             {
-                puth: INVENTORY_FACT_ROUTE,
+                path: INVENTORY_FACT_ROUTE,
                 label: 'Ввод факт',
                 isCurrentPage: true,
             },
             {
-                puth: INVENTORY_DETAILS_ROUTE,
+                path: INVENTORY_DETAILS_ROUTE,
                 label: 'Инвентаризация',
                 isCurrentPage: false,
             },
             {
-                puth: INVENTORY_HISTORY_ROUTE,
+                path: INVENTORY_HISTORY_ROUTE,
                 label: 'История корректировок',
                 isCurrentPage: false,
             },
@@ -572,17 +572,17 @@ export const headerButtons: headerButton[] = [
         currentPage: INVENTORY_DETAILS_ROUTE,
         buttonsData: [
             {
-                puth: INVENTORY_FACT_ROUTE,
+                path: INVENTORY_FACT_ROUTE,
                 label: 'Ввод факт',
                 isCurrentPage: false,
             },
             {
-                puth: INVENTORY_DETAILS_ROUTE,
+                path: INVENTORY_DETAILS_ROUTE,
                 label: 'Инвентаризация',
                 isCurrentPage: true,
             },
             {
-                puth: INVENTORY_HISTORY_ROUTE,
+                path: INVENTORY_HISTORY_ROUTE,
                 label: 'История корректировок',
                 isCurrentPage: false,
             },
@@ -592,17 +592,17 @@ export const headerButtons: headerButton[] = [
         currentPage: INVENTORY_HISTORY_ROUTE,
         buttonsData: [
             {
-                puth: INVENTORY_FACT_ROUTE,
+                path: INVENTORY_FACT_ROUTE,
                 label: 'Ввод факт',
                 isCurrentPage: false,
             },
             {
-                puth: INVENTORY_DETAILS_ROUTE,
+                path: INVENTORY_DETAILS_ROUTE,
                 label: 'Инвентаризация',
                 isCurrentPage: false,
             },
             {
-                puth: INVENTORY_HISTORY_ROUTE,
+                path: INVENTORY_HISTORY_ROUTE,
                 label: 'История корректировок',
                 isCurrentPage: true,
             },
@@ -612,17 +612,17 @@ export const headerButtons: headerButton[] = [
         currentPage: FINANCE_INPUT_ROUTE,
         buttonsData: [
             {
-                puth: FINANCE_INPUT_ROUTE,
+                path: FINANCE_INPUT_ROUTE,
                 label: 'Ввод',
                 isCurrentPage: true,
             },
             {
-                puth: FINANCE_HISTORY_ROUTE,
+                path: FINANCE_HISTORY_ROUTE,
                 label: 'История финансов',
                 isCurrentPage: false,
             },
             {
-                puth: FINANCE_REPORT_ROUTE,
+                path: FINANCE_REPORT_ROUTE,
                 label: 'Фин. отчет',
                 isCurrentPage: false,
             },
@@ -632,17 +632,17 @@ export const headerButtons: headerButton[] = [
         currentPage: FINANCE_HISTORY_ROUTE,
         buttonsData: [
             {
-                puth: FINANCE_INPUT_ROUTE,
+                path: FINANCE_INPUT_ROUTE,
                 label: 'Ввод',
                 isCurrentPage: false,
             },
             {
-                puth: FINANCE_HISTORY_ROUTE,
+                path: FINANCE_HISTORY_ROUTE,
                 label: 'История финансов',
                 isCurrentPage: true,
             },
             {
-                puth: FINANCE_REPORT_ROUTE,
+                path: FINANCE_REPORT_ROUTE,
                 label: 'Фин. отчет',
                 isCurrentPage: false,
             },
@@ -652,17 +652,17 @@ export const headerButtons: headerButton[] = [
         currentPage: FINANCE_REPORT_ROUTE,
         buttonsData: [
             {
-                puth: FINANCE_INPUT_ROUTE,
+                path: FINANCE_INPUT_ROUTE,
                 label: 'Ввод',
                 isCurrentPage: false,
             },
             {
-                puth: FINANCE_HISTORY_ROUTE,
+                path: FINANCE_HISTORY_ROUTE,
                 label: 'История финансов',
                 isCurrentPage: false,
             },
             {
-                puth: FINANCE_REPORT_ROUTE,
+                path: FINANCE_REPORT_ROUTE,
                 label: 'Фин. отчет',
                 isCurrentPage: true,
             },
