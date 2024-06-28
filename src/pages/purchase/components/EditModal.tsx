@@ -22,16 +22,13 @@ import { useApi } from '@/utils/services/axios'
 import dayjs from 'dayjs'
 import { PurchaseType } from '@/utils/types/purchase.types'
 import InputNumber from '@/components/shared/NumberInput'
+import { ProviderType } from '@/utils/types/provider.types'
 
 interface rawMaterials {
     value: number
     label: string
     uom: string
-}
-
-interface Providers {
-    value: number
-    label: string
+    category: number
 }
 
 type EditModalProps = {
@@ -45,6 +42,7 @@ interface ProviderGoods {
     id: number
     providerId: number
     goods: string
+    goodsCategoryId: number
     unitOfMeasure: string
     place: { label: string }[]
     status: string
@@ -53,26 +51,36 @@ interface ProviderGoods {
         name: string
     }
 }
-
 const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps) => {
-    const { data: providersData } = useApi<Providers[]>('providers')
+    const { data: providersData } = useApi<ProviderType[]>('providers')
     const { data: providerGoodsData } = useApi<ProviderGoods[]>('providerGoods')
 
     const [providerGoods, setProviderGoods] = useState<rawMaterials[]>([])
-    const [selectedRawMaterial, setSelectedRawMaterial] = useState(
-        selectedData?.goodsCategory.unitOfMeasure,
+    const [selectedRawMaterial, setSelectedRawMaterial] = useState<rawMaterials | undefined>(
+        undefined,
     )
 
     useEffect(() => {
         const _providerGoods = providerGoodsData?.map((item) => {
-            return { label: item.goods, value: item.id, uom: item.unitOfMeasure }
+            return {
+                label: item.goods,
+                value: item.id,
+                uom: item.unitOfMeasure,
+                category: item.goodsCategoryId,
+            }
         })
-
         setProviderGoods(_providerGoods || [])
     }, [providerGoodsData])
 
     useEffect(() => {
-        setSelectedRawMaterial(selectedData?.goodsCategory.unitOfMeasure)
+        const _rowMaterial = {
+            label: selectedData?.providerGood.goods || '',
+            value: selectedData?.providerGood.id || 0,
+            uom: selectedData?.goodsCategory.unitOfMeasure || '',
+            category: selectedData?.goodsCategoryId || 0,
+        }
+
+        setSelectedRawMaterial(_rowMaterial || [])
     }, [selectedData])
 
     const {
@@ -89,6 +97,10 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
             Object.entries(selectedData).forEach(([key, value]) => {
                 setValue(key as keyof PurchaseType, value)
             })
+            setValue('providerId', selectedData.providerId)
+            setValue('providerGoodId', selectedData.providerGood.id)
+            console.log(selectedData.providerGoodId)
+
             setValue('date', dayjs(selectedData.date).format('YYYY-MM-DD'))
         } else {
             reset()
@@ -102,7 +114,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
 
     const updateData = (formData: PurchaseType) => {
         const purchaseId = selectedData?.id?.toString() ?? ''
-        updatePurchase(purchaseId, formData)
+        updatePurchase(purchaseId, { ...formData, goodsCategoryId: selectedRawMaterial?.category })
             .then(() => {
                 onSuccess()
                 handleClose()
@@ -135,15 +147,17 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                     return (
                                         <Select
                                             options={providersData}
-                                            defaultValue={
-                                                value
-                                                    ? providersData?.filter(
-                                                          (option) => option.value == value,
-                                                      )
-                                                    : null
+                                            getOptionLabel={(option: ProviderType) =>
+                                                option.providerName
                                             }
-                                            onChange={(selectedOption) => {
-                                                onChange(selectedOption?.value)
+                                            getOptionValue={(option: ProviderType) =>
+                                                `${option.id}`
+                                            }
+                                            value={providersData?.filter(
+                                                (option) => String(option.id) == String(value),
+                                            )}
+                                            onChange={(selectedOption: ProviderType | null) => {
+                                                onChange(selectedOption?.id)
                                             }}
                                             placeholder="Поставщик *"
                                             isClearable
@@ -165,13 +179,13 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                     return (
                                         <Select
                                             options={providerGoods}
-                                            defaultValue={providerGoods?.filter(
-                                                (option) => option.value == Number(value),
+                                            value={providerGoods?.filter(
+                                                (option) => String(option.value) == String(value),
                                             )}
                                             onChange={(selectedOption: rawMaterials | null) => {
                                                 if (selectedOption) {
                                                     onChange(selectedOption.value)
-                                                    setSelectedRawMaterial(selectedOption.uom)
+                                                    setSelectedRawMaterial(selectedOption)
                                                 }
                                             }}
                                             placeholder="Товар *"
@@ -186,13 +200,27 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
 
                         <FormControl isInvalid={!!errors.quantity}>
                             <InputGroup>
-                                <InputNumber
+                            <Input
                                     {...register('quantity', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    placeholder="Количество *"
+                                    placeholder="Количество"
+                                    type="number"
+                                    autoComplete="off"
+                                    min="0"
+                                    onKeyDown={(e) => {
+                                        if (e.key === '-') {
+                                            e.preventDefault()
+                                        }
+                                        if (e.key === 'e') {
+                                            e.preventDefault()
+                                        }
+                                        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                                            e.preventDefault()
+                                        }
+                                    }}
                                 />
-                                <InputRightAddon>{selectedRawMaterial}</InputRightAddon>
+                                <InputRightAddon>{selectedRawMaterial?.uom}</InputRightAddon>
                             </InputGroup>
                             <FormErrorMessage>{errors.quantity?.message}</FormErrorMessage>
                         </FormControl>

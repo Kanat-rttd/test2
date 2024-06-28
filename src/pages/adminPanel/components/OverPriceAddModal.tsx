@@ -52,8 +52,6 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
         `contragent?type=${contragentsTypesData?.find((item) => item.type === 'реализатор')?.id}&status=1`,
     )
 
-    console.log(clientData)
-
     const {
         register,
         handleSubmit: handleSubmitForm,

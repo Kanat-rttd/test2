@@ -92,18 +92,20 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
         const response: Promise<any> = createPurchase({
             ...formData,
             goodsCategoryId: selectedRawMaterial?.category,
-        })
-        loading(response)
+        });
+        loading(response);
         response
             .then(() => {
-                onSuccess()
-                reset()
-                onClose()
+                onSuccess();
+                reset();
+                onClose();
             })
             .catch((error) => {
-                console.error('Error creating sale:', error)
-            })
-    }
+                console.error('Error creating sale:', error);
+            });
+    };
+    
+    
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
