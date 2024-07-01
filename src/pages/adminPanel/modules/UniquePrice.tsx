@@ -36,7 +36,7 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 
 const AdminPanel = () => {
     const { success, error } = useNotify()
-    const { data: individualPrices } = useApi<individualPriceType[]>('inPrice')
+    const { data: individualPrices, mutate } = useApi<individualPriceType[]>('inPrice')
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<UniquePriceType | undefined>(undefined)
     const [selectedRelease, setSelectedRelease] = useState<string>('')
@@ -318,6 +318,7 @@ const AdminPanel = () => {
                                 getIndividualPrices()
                                 setSelectedData(undefined)
                                 success(res.data.message)
+                                mutate()
                             },
                         ).catch((err) => {
                             error(err.response.data.error)
