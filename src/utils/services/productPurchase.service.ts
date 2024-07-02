@@ -11,6 +11,7 @@ export const createPurchase = async (data: {
     deliverySum: number
     date: Date | string
     providerId: number
+    providerGoodId: number | undefined
     goodsCategoryId: number | undefined
     status?: { value: number; label: string } | string | undefined
 }) => {
@@ -26,6 +27,7 @@ export const updatePurchase = async (
         deliverySum: number
         date: string
         providerId: number
+        providerGoodId: number | undefined;
         goodsCategoryId: number | undefined
         status?: { value: number; label: string } | string | undefined
     },

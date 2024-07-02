@@ -1,25 +1,25 @@
-import { ProviderType } from "./provider.types"
-
 export type PurchaseType = {
-    id: number
-    date: string
-    providerId: number
-    providerGoodId: number
-    goodsCategoryId: number
-    quantity: number
-    price: number
-    deliverySum: number
-    totalSum: number
-    status: string
-    provider: ProviderType
-    providerGood: {
-        id: number
-        name: string
-    }
+    id: number;
+    date: string;
+    deliverySum: number;
+    goodsCategoryId: number;
     goodsCategory: {
-        id: number
-        name: string
-        unitOfMeasure: string
-    }
-
-}
+        id: number;
+        name: string;
+        unitOfMeasure: string;
+    };
+    price: number;
+    providerId: number;
+    provider: {
+        id: number;
+        providerName: string;
+    };
+    providerGoodId: number;
+    quantity: number;
+    status: string;
+    totalSum: number;
+    providerGood: {
+        id: number;
+        goods: string;
+    };
+};

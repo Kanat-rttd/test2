@@ -36,10 +36,10 @@ const Header: React.FC<StyledContainerProps> = ({ buttons }) => {
                         {buttons?.map((button) => {
                             return (
                                 <Button
-                                    key={button.puth}
+                                    key={button.path}
                                     height={'100%'}
                                     p={'0 25px'}
-                                    onClick={() => navigate(button.puth)}
+                                    onClick={() => navigate(button.path)}
                                     style={
                                         button.isCurrentPage
                                             ? { backgroundColor: 'rgba(217, 217, 217, 1)' }

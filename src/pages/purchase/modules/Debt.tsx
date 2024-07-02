@@ -4,8 +4,8 @@ import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 interface Provider {
-    value: number
-    label: string
+    id: number
+    providerName: string
 }
 
 interface DebtPurchase {
@@ -16,7 +16,7 @@ interface DebtPurchase {
             providerId: number
             provider: {
                 id: number
-                name: string
+                providerName: string
             }
         },
     ]
@@ -28,7 +28,7 @@ const Debt = () => {
     const { data: purchasesData } = useApi<DebtPurchase>(
         `productPurchase/debt?${getURLs().toString()}`,
     )
-    const { data: providersData } = useApi<Provider[]>('providers')
+    const { data: providersData } = useApi<Provider[]>('providers?status=1')
 
     return (
         <>
@@ -43,8 +43,8 @@ const Debt = () => {
                     onChange={(event) => setParam('providerId', event.target.value)}
                 >
                     {providersData?.map((provider, index) => (
-                        <option key={`${index}`} value={provider.value}>
-                            {provider.label}
+                        <option key={index} value={provider.id}>
+                            {provider.providerName}
                         </option>
                     ))}
                 </Select>
@@ -65,7 +65,7 @@ const Debt = () => {
                                     return (
                                         <Tr key={item.providerId}>
                                             <Td>{index + 1}</Td>
-                                            <Td>{item.provider.name}</Td>
+                                            <Td>{item.provider.providerName}</Td>
                                             <Td>{item.totalDebt}</Td>
                                         </Tr>
                                     )

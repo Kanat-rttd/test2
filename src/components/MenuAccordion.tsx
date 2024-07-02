@@ -51,9 +51,6 @@ const MenuAccordion = () => {
         return parsedClass.some((cls: { label: string }) => item.allowedClasses.includes(cls.label))
     })
 
-    console.log(parsedClass)
-    console.log(filteredSubMenuItems)
-
     const handleNavigate = (route: string) => {
         setIsDrawerOpen(false)
         navigate(route)

@@ -10,6 +10,7 @@ interface Category {
     id: number
     name: string
     type: string
+    contragentTypeId: number
 }
 
 const Input = () => {

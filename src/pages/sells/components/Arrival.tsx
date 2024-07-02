@@ -147,7 +147,7 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
                                         getOptionLabel={(option: Category) => option.name}
                                         getOptionValue={(option: Category) => `${option.id}`}
                                         value={categoriesData?.filter(
-                                            (option) => String(option.id) == value,
+                                            (option) => option.id == value,
                                         )}
                                         // onChange={(val: Category) => onChange(val?.id)}
                                         onChange={(selectedOption: Category | null) => {

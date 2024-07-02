@@ -20,12 +20,15 @@ import { deleteDepartPersonal } from '@/utils/services/departPersonal.service'
 import { TableContainer, Thead } from '@/components/ui'
 import DepartPersonalModal from '../components/DepartPesonalAddModal'
 import { DepartPersonalType } from '@/utils/types/departPersonal.types'
+import { FacilityUnit } from '@/utils/types/product.types'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 const AdminPanel = () => {
+    const { getURLs, getParam, setParam } = useURLParameters()
     const { success, error } = useNotify()
     const { onOpen, onClose, isOpen } = useDisclosure()
     const [selectedData, setSelectedData] = useState<DepartPersonalType | undefined>(undefined)
-    const [selectedStatus, setSelectedStatus] = useState<string>('')
+    const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
@@ -35,9 +38,7 @@ const AdminPanel = () => {
         data: departPersonalData,
         isLoading,
         mutate: mutateDepartPersonal,
-    } = useApi<DepartPersonalType[]>('departPersonal', {
-        status: selectedStatus,
-    })
+    } = useApi<DepartPersonalType[]>(`departPersonal?${getURLs().toString()}`)
 
     const handleClose = () => {
         onClose()
@@ -46,10 +47,6 @@ const AdminPanel = () => {
 
     const handledSuccess = () => {
         mutateDepartPersonal()
-    }
-
-    const applyFilters = (status: string) => {
-        setSelectedStatus(status)
     }
 
     const deleteUser = (selectedData: DepartPersonalType | undefined) => {
@@ -71,14 +68,31 @@ const AdminPanel = () => {
             <UniversalComponent>
                 <Box display="flex" flexDirection="column" p={5}>
                     <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
-                        <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                        <Box display={'flex'} gap={'15px'} width={'100%'}>
                             <Select
-                                placeholder="Статус"
-                                width={'fit-content'}
-                                onChange={(e) => applyFilters(e.target.value)}
+                                width={'20%'}
+                                size={'sm'}
+                                borderRadius={5}
+                                value={getParam('status')}
+                                onChange={(e) => setParam('status', e.target.value)}
                             >
                                 <option value={1}>Активный</option>
                                 <option value={0}>Неактивный</option>
+                            </Select>
+                            <Select
+                                placeholder="Цех"
+                                width={'20%'}
+                                size={'sm'}
+                                borderRadius={5}
+                                justifyContent={'space-between'}
+                                defaultValue={getParam('facilityUnit')}
+                                onChange={(e) => setParam('facilityUnit', e.target.value)}
+                            >
+                                {facilityUnits?.map((item, index) => (
+                                    <option key={index} value={item.id}>
+                                        {item.facilityUnit}
+                                    </option>
+                                ))}
                             </Select>
                         </Box>
 

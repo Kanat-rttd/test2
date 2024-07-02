@@ -1,6 +1,6 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { IconButton, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
+import { IconButton, Table, Tbody, Td, Th, Tr, useDisclosure } from '@chakra-ui/react'
 import { useState } from 'react'
 import dayjs from 'dayjs'
 import { useApi } from '@/utils/services/axios'
@@ -23,6 +23,7 @@ type Dispatch = {
 
 export default function ListTable({ status }: ListTableProps) {
     const { loading } = useNotify()
+    const { isOpen, onOpen, onClose } = useDisclosure()
     const { getURLs } = useURLParameters()
 
     const [selectedData, setSelectedData] = useState<DispatchType>()
@@ -119,6 +120,7 @@ export default function ListTable({ status }: ListTableProps) {
                                                     marginRight={3}
                                                     onClick={() => {
                                                         setSelectedData(row)
+                                                        onOpen()
                                                     }}
                                                     icon={<EditIcon />}
                                                 />
@@ -154,10 +156,10 @@ export default function ListTable({ status }: ListTableProps) {
                     </Tbody>
                 </Table>
             </TableContainer>
-            {selectedData && (
+            {isOpen && (
                 <DistributionModal
-                    isOpen={!!selectedData}
-                    onClose={() => setSelectedData(undefined)}
+                    isOpen={isOpen}
+                    onClose={onClose}
                     data={selectedData}
                     onSuccess={onSuccess}
                     status={status}

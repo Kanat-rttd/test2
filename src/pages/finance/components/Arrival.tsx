@@ -7,6 +7,7 @@ import { useApi } from '@/utils/services/axios'
 import { useNotify } from '@/utils/providers/ToastProvider'
 import { ContragentType } from '@/utils/types/contragent.types'
 import InputNumber from '@/components/shared/NumberInput'
+import { useEffect, useState } from 'react'
 
 const account = [
     {
@@ -23,6 +24,7 @@ interface Category {
     id: number
     name: string
     type: string
+    contragentTypeId: number
 }
 
 interface Account {
@@ -85,16 +87,20 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
     const { loading } = useNotify()
 
     const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
-    // const { data: categoriesData } = useApi<Category[]>(`financeCategories?${getURLs().toString()}`)
     const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=1')
+    const [filteredFinanceCategories, setFilteredFinanceCategories] = useState<Category[]>([])
+    const [filteredContragents, setFilteredContragents] = useState<ContragentType[] >([])
+    const [filteredDispatches, setFilteredDispatches] = useState<InvoiceData[] | undefined>([])
 
     const {
         register,
         handleSubmit: handleSubmitForm,
         control,
         setValue,
+        getValues,
         formState: { errors },
         reset,
+        watch,
     } = useForm<ArrivalInputs>()
 
     const sendData = (formData: ArrivalInputs) => {
@@ -110,6 +116,34 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                 console.error('Error creating sale:', error)
             })
     }
+
+    useEffect(() => {
+        const values = getValues();
+        
+        if (!contragetnsData || !categoriesData) return;
+
+        if (values.financeCategoryId !== null) {
+          const contragentType = categoriesData.find((item) => item.id === Number(values.financeCategoryId))?.contragentTypeId;
+          const filteredContragents = contragetnsData.filter((item) => item.contragentTypeId === contragentType);
+          setFilteredContragents(filteredContragents);
+        }
+    
+        if (values.contragentId !== null) {
+          const selectedContragent = contragetnsData.find((item) => item.id === Number(values.contragentId));
+          const filteredFinanceCategories = categoriesData.filter((item) => item.contragentTypeId === selectedContragent?.contragentTypeId);
+          setFilteredFinanceCategories(filteredFinanceCategories);
+
+          if(selectedContragent?.contragentType.type === 'реализатор'){
+            setFilteredDispatches(dispatchesData?.filter((item) => item.contragentId === selectedContragent.id))
+          }
+        }
+      }, [watch('financeCategoryId'), watch('contragentId')]);
+    
+      useEffect(() => {
+        if (contragetnsData) {
+          setFilteredContragents(contragetnsData);
+        }
+      }, [contragetnsData]);
 
     return (
         <>
@@ -168,11 +202,11 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                         const { onChange, value } = field
                         return (
                             <Select
-                                options={categoriesData}
+                                options={filteredFinanceCategories.length ? filteredFinanceCategories : categoriesData}
                                 getOptionLabel={(option: Category) => option.name}
                                 getOptionValue={(option: Category) => `${option.id}`}
                                 value={categoriesData?.filter(
-                                    (option) => String(option.id) == value,
+                                    (option) => option.id == value,
                                 )}
                                 // onChange={(val: Category) => onChange(val?.id)}
                                 onChange={(selectedOption: Category | null) => {
@@ -197,7 +231,7 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                         const { onChange, value } = field
                         return (
                             <Select
-                                options={contragetnsData}
+                                options={filteredContragents.length ? filteredContragents : contragetnsData}
                                 getOptionLabel={(option: ContragentType) =>
                                     `${option.contragentName} - ${option.contragentType.type}`
                                 }
@@ -225,7 +259,7 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                         const { onChange, value } = field
                         return (
                             <Select
-                                options={dispatchesData}
+                                options={filteredDispatches}
                                 getOptionLabel={(option: InvoiceData) =>
                                     String(option.invoiceNumber)
                                 }
@@ -233,7 +267,6 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                                 value={dispatchesData?.filter(
                                     (option) => String(option.invoiceNumber) == String(value),
                                 )}
-                                // onChange={(val: Account) => onChange(val?.name)}
                                 onChange={(selectedOption: InvoiceData | null) => {
                                     onChange(selectedOption?.invoiceNumber)
                                 }}

@@ -72,8 +72,6 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
         setBakingProducts(_bakingGoods)
     }, [goodsCategoriesData])
 
-    console.log(bakingGoods)
-
     useEffect(() => {
         if (data) {
             Object.entries(data).forEach(([key, value]) => {
@@ -86,7 +84,6 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
     }, [data, isOpen, reset])
 
     const sendData = (formData: BakingDataType) => {
-        console.log({ ...formData, bakingDetails: bakingGoods })
         const responsePromise: Promise<any> = data
             ? updateBaking(data.id, { ...formData, bakingDetails: bakingGoods })
             : createBaking({ ...formData, bakingDetails: bakingGoods })

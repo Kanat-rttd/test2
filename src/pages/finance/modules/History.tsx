@@ -166,7 +166,8 @@ const History = () => {
                                         )}
                                     </Th>
                                     <Th w={'20%'}>Счёт</Th>
-                                    <Th w={'30%'}>Категория</Th>
+                                    <Th w={'25%'}>Категория</Th>
+                                    <Th w={'25%'}>Комментарий</Th>
                                     <Th w={'25%'}>Сумма</Th>
                                 </Tr>
                             </Thead>
@@ -177,6 +178,7 @@ const History = () => {
                                             <Td>{dayjs(transaction.date).format('DD.MM.YYYY')}</Td>
                                             <Td>{transaction.account}</Td>
                                             <Td>{transaction.financeCategory.name}</Td>
+                                            <Td>{transaction.comment}</Td>
                                             <Td>{transaction.amount}</Td>
                                         </Tr>
                                     ))

@@ -10,10 +10,17 @@ export type BakingDataType = {
         name: string
         id: string
     }
+    flour: BakingDetailType
+    salt: BakingDetailType
+    yeast: BakingDetailType
+    malt: BakingDetailType
+    butter: BakingDetailType
 }
 
 export type BakingDetailType = {
+    bakingId: number
     goodsCategoryId: number
+    id: number
     quantity: number | undefined
 }
 
@@ -31,4 +38,3 @@ export type BakingTotalsType = {
     totalYeast: number
     totalDefective: number
 }
-

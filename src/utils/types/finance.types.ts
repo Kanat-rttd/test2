@@ -3,8 +3,8 @@ export type ArrivalInputs = {
     amount: number | null
     date: Date
     account: string
-    financeCategoryId: string
-    contragentId: number
+    financeCategoryId: number  | undefined
+    contragentId: number | undefined
     comment: string
     invoiceNumber: number
 }

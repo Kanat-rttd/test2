@@ -7,6 +7,7 @@ import { useNotify } from '@/utils/providers/ToastProvider'
 import { ContragentType } from '@/utils/types/contragent.types'
 import { useApi } from '@/utils/services/axios'
 import InputNumber from '@/components/shared/NumberInput'
+import { useEffect, useState } from 'react'
 
 const account = [
     {
@@ -23,6 +24,7 @@ interface Category {
     id: number
     name: string
     type: string
+    contragentTypeId: number
 }
 
 interface Account {
@@ -45,15 +47,18 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
     const { loading } = useNotify()
 
     const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=1')
-    // const { data: categoriesData } = useApi<Category[]>(`financeCategories`)
+    const [filteredFinanceCategories, setFilteredFinanceCategories] = useState<Category[]>([])
+    const [filteredContragents, setFilteredContragents] = useState<ContragentType[]>([])
 
     const {
         register,
         handleSubmit: handleSubmitForm,
         control,
         setValue,
+        getValues,
         formState: { errors },
         reset,
+        watch,
     } = useForm<ArrivalInputs>()
 
     const sendData = (formData: ArrivalInputs) => {
@@ -69,6 +74,38 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
                 console.error('Error creating sale:', error)
             })
     }
+
+    useEffect(() => {
+        const values = getValues()
+
+        if (!contragetnsData || !categoriesData) return
+
+        if (values.financeCategoryId !== null) {
+            const contragentType = categoriesData.find(
+                (item) => item.id === Number(values.financeCategoryId),
+            )?.contragentTypeId
+            const filteredContragents = contragetnsData.filter(
+                (item) => item.contragentTypeId === contragentType,
+            )
+            setFilteredContragents(filteredContragents)
+        }
+
+        if (values.contragentId !== null) {
+            const contragentType = contragetnsData.find(
+                (item) => item.id === Number(values.contragentId),
+            )?.contragentTypeId
+            const filteredFinanceCategories = categoriesData.filter(
+                (item) => item.contragentTypeId === contragentType,
+            )
+            setFilteredFinanceCategories(filteredFinanceCategories)
+        }
+    }, [watch('financeCategoryId'), watch('contragentId')])
+
+    useEffect(() => {
+        if (contragetnsData) {
+            setFilteredContragents(contragetnsData)
+        }
+    }, [contragetnsData])
 
     return (
         <>
@@ -128,16 +165,16 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
                         const { onChange, value } = field
                         return (
                             <Select
-                                options={categoriesData}
+                                options={
+                                    filteredFinanceCategories.length
+                                        ? filteredFinanceCategories
+                                        : categoriesData
+                                }
                                 getOptionLabel={(option: Category) => option.name}
                                 getOptionValue={(option: Category) => `${option.id}`}
-                                value={categoriesData?.filter(
-                                    (option) => String(option.id) == value,
-                                )}
+                                value={categoriesData?.filter((option) => option.id == value)}
                                 onChange={(selectedOption: Category | null) => {
-                                    if (selectedOption) {
-                                        onChange(selectedOption.id)
-                                    }
+                                    onChange(selectedOption?.id)
                                 }}
                                 placeholder="Категория *"
                                 isClearable
@@ -158,7 +195,11 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
                         const { onChange, value } = field
                         return (
                             <Select
-                                options={contragetnsData}
+                                options={
+                                    filteredContragents.length
+                                        ? filteredContragents
+                                        : contragetnsData
+                                }
                                 getOptionLabel={(option: ContragentType) =>
                                     `${option.contragentName} - ${option.contragentType.type}`
                                 }
