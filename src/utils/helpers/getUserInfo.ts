@@ -2,6 +2,7 @@ import { jwtDecode } from 'jwt-decode'
 
 interface DecodedToken {
     userId: string
+    clientId: string
     email: string
     phone: number
     class: string

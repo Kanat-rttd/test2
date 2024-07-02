@@ -39,6 +39,8 @@ const RequestForm = () => {
 
     const userInfo = getUserInfo()
 
+    console.log(userInfo)
+
     const handleAddProduct = (product: Product): void => {
         setSelectedProducts([...selectedProducts, { ...product, quantity: null }])
         onClose()
@@ -57,7 +59,7 @@ const RequestForm = () => {
         setSelectedProducts(updatedProducts)
     }
 
-    const clientId = Number(userInfo?.userId) || null
+    const clientId = Number(userInfo?.clientId) || null
 
     const handleSubmit = (): void => {
         const requestData = {
@@ -236,7 +238,12 @@ const RequestForm = () => {
                     </Box>
                 </>
             )}
-            <BottomModal isOpen={isOpen} onClose={onClose} handleAddProduct={handleAddProduct} selectedProducts={selectedProducts} />
+            <BottomModal
+                isOpen={isOpen}
+                onClose={onClose}
+                handleAddProduct={handleAddProduct}
+                selectedProducts={selectedProducts}
+            />
         </div>
     )
 }

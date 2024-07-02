@@ -16,8 +16,10 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import { loginUser } from '../utils/services/user.service'
 
 import { MAIN_ROUTE } from '../utils/constants/routes.consts'
+import { SALES_REQUEST_FORM_ROUTE } from '../utils/constants/routes.consts'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import getUserInfo from '@/utils/helpers/getUserInfo'
 
 const Login = () => {
     const navigate = useNavigate()
@@ -49,7 +51,12 @@ const Login = () => {
         loginUser(data)
             .then((res) => {
                 window.localStorage.setItem('authToken', res.data.token)
-                navigate(MAIN_ROUTE)
+                let userInfo = getUserInfo()
+                if (JSON.parse(String(userInfo?.class))[0].label == 'Реализатор') {
+                    navigate(SALES_REQUEST_FORM_ROUTE)
+                } else {
+                    navigate(MAIN_ROUTE)
+                }
             })
             .catch((error) => {
                 toast({
@@ -86,7 +93,6 @@ const Login = () => {
                             placeholder="(777)-777-77-77"
                             value={phoneNumber}
                             onChange={handleInputChange}
-                            
                         />
                     </InputGroup>
                 </Box>
