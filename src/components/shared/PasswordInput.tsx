@@ -21,7 +21,7 @@ const PasswordInput = forwardRef(
                     placeholder={placeholder}
                     ref={ref}
                     type={showPassword ? 'text' : 'password'}
-                    autoComplete="off"
+                    autoComplete="new-password"
                     {...props}
                 />
                 <InputRightElement>

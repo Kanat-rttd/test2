@@ -57,8 +57,8 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
 
     const sendData = (formData: User) => {
         const responsePromise: Promise<any> = data
-            ? updateUser(data.id, {...formData, status: Number(formData.status) ? true : false})
-            : createUser({...formData, status: Number(formData.status) ? true : false})
+            ? updateUser(data.id, { ...formData, status: Number(formData.status) ? true : false })
+            : createUser({ ...formData, status: Number(formData.status) ? true : false })
 
         responsePromise
             .then((res) => {
@@ -97,6 +97,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                     <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
                         <form
                             onSubmit={handleSubmitForm(sendData)}
+                            autoComplete="new-password"
                             style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                         >
                             <FormControl isInvalid={!!errors.name}>
@@ -104,7 +105,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                     {...register('name', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    autoComplete="off"
+                                    autoComplete="new-password"
                                     placeholder="Имя *"
                                     type="text"
                                 />
@@ -116,7 +117,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                     {...register('surname', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    autoComplete="off"
+                                    autoComplete="new-password"
                                     placeholder="Фамилия *"
                                     type="text"
                                 />
@@ -129,7 +130,9 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                         required: 'Поле является обязательным',
                                     })}
                                     placeholder="Должность *"
-                                    autoComplete="off"
+                                    autoComplete="new-password"
+                                    id="userClassInput"
+                                    name="userClassInput"
                                     type="text"
                                 />
                                 <FormErrorMessage>{errors.userClass?.message}</FormErrorMessage>
