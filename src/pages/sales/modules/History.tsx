@@ -1,17 +1,18 @@
-import { Box, Heading } from '@chakra-ui/react'
+import { Box, Heading, Text, IconButton } from '@chakra-ui/react'
 import MobileNavbar from '@/components/MobileNavbar'
 import { getAllSales } from '@/utils/services/sales.service'
 import { useState, useEffect } from 'react'
-// import { ChevronRightIcon } from '@chakra-ui/icons'
-// import dayjs from 'dayjs'
-// import ru from 'dayjs/locale/ru'
-// import { useNavigate } from 'react-router-dom'
-// import { SALES_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
+import { ChevronRightIcon } from '@chakra-ui/icons'
+import dayjs from 'dayjs'
+import ru from 'dayjs/locale/ru'
+import { useNavigate } from 'react-router-dom'
+import { SALES_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
 
 interface SalesOrder {
     id: number
     userId: number
-    totalPrice: number
+    client: Client
+    totalQuantity: number
     createdAt: string
     orderDetails: OrderDetails[]
 }
@@ -21,32 +22,38 @@ interface OrderDetails {
     product: ProductDetails[]
 }
 
+interface Client {
+    id: number
+    name: string
+}
+
 interface ProductDetails {
     name: string
     price: number
 }
 
 const History = () => {
-    // const navigator = useNavigate()
+    const navigator = useNavigate()
     const [getSalesData, setSalesData] = useState<SalesOrder[]>([])
 
     console.log(getSalesData)
 
     useEffect(() => {
         getAllSales().then((res) => {
-            setSalesData(res.data)
+            setSalesData(res)
+            console.log(res)
         })
     }, [])
 
     return (
-        <div style={{overflowY: 'scroll', height: '100dvh'}}>
+        <div style={{ overflowY: 'scroll', height: '100dvh' }}>
             <MobileNavbar></MobileNavbar>
             <Box display="flex" flexDirection={'column'} height="100vh" textAlign={'center'}>
                 <Box borderBottom={'1px solid black'} p={5}>
                     <Heading size={'md'}>История</Heading>
                 </Box>
                 <Box>
-                    {/* {getSalesData.map((order, index) => (
+                    {getSalesData.map((order, index) => (
                         <Box
                             key={index}
                             p={5}
@@ -70,7 +77,7 @@ const History = () => {
                                 onClick={() => navigator(`${SALES_HISTORY_ROUTE}/${order.id}`)}
                             />
                         </Box>
-                    ))} */}
+                    ))}
                 </Box>
             </Box>
         </div>

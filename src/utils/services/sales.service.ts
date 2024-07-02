@@ -26,6 +26,22 @@ export const updateSale = async (
     return response
 }
 
+export const saveOrderChanges = async (
+    id: number,
+    data: {
+        orderDetailsId: number
+        productId: number
+        orderedQuantity: number
+        product: {
+            name: string
+            price: number
+        }
+    }[],
+) => {
+    const response = await $host.put(`sales/order/${id}`, data)
+    return response
+}
+
 export const deleteSale = async (id: number) => {
     const response = await $host.delete(`sales/${id}`)
     return response

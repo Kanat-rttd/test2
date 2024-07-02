@@ -55,7 +55,7 @@ const RequestForm = () => {
     const handleQuantityChange = (index: number, event: ChangeEvent<HTMLInputElement>): void => {
         const updatedProducts = [...selectedProducts]
         updatedProducts[index].quantity =
-            event.target.value !== '' ? parseInt(event.target.value) : null
+            event.target.value === '' ? 0 : parseInt(event.target.value)
         setSelectedProducts(updatedProducts)
     }
 

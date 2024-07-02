@@ -8,6 +8,9 @@ import { getSaleById } from '@/utils/services/sales.service'
 import { ChevronLeftIcon } from '@chakra-ui/icons'
 import { useNavigate } from 'react-router-dom'
 import { SALES_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
+import { saveOrderChanges } from '@/utils/services/sales.service'
+import SuccessPage from '../components/SuccessPage'
+import ErrorPage from '../components/ErrorPage'
 
 interface Order {
     id: number
@@ -26,6 +29,7 @@ interface OrderDetail {
     productId: number
     orderedQuantity: number
     product: Product
+    orderDetailsId: number
 }
 
 const OrderHistory = () => {
@@ -33,6 +37,8 @@ const OrderHistory = () => {
     const navigator = useNavigate()
 
     const [orderData, setOrderData] = useState<Order | null>(null)
+    const [isSuccess, setIsSuccess] = useState(false)
+    const [isError, setIsError] = useState(false)
     const [selectedProducts, setSelectedProducts] = useState<OrderDetail[]>([])
     const [removedOrderData, setRemovedOrderData] = useState<Order | null>(null)
 
@@ -82,141 +88,164 @@ const OrderHistory = () => {
 
     const handleQuantityChange = (index: number, event: ChangeEvent<HTMLInputElement>): void => {
         const updatedProducts = [...selectedProducts]
-        updatedProducts[index].orderedQuantity = parseInt(event.target.value)
+        const value = event.target.value === '' ? 0 : parseInt(event.target.value)
+        updatedProducts[index].orderedQuantity = value
         setSelectedProducts(updatedProducts)
     }
 
     const handleSaveChanges = () => {
-        console.log(removedOrderData)
-        // saveOrderChanges(orderData.id, selectedProducts)
-        //     .then(() => {
-        //         toast({
-        //             title: 'Изменения сохранены',
-        //             status: 'success',
-        //         });
-        //     })
-        //     .catch((error) => {
-        //         console.error('Error saving changes:', error);
-        //         toast({
-        //             title: 'Ошибка сохранения изменений',
-        //             status: 'error',
-        //         });
-        //     });
+        if (orderData) {
+            console.log(removedOrderData)
+            console.log(orderData.id, selectedProducts)
+            saveOrderChanges(orderData.id, selectedProducts)
+                .then((res) => {
+                    if (res.status === 200) {
+                        setIsSuccess(true)
+                    } else {
+                        setIsError(true)
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error saving changes:', error)
+                    // toast({
+                    //     title: 'Ошибка сохранения изменений',
+                    //     status: 'error',
+                    // });
+                })
+        }
     }
 
     return (
         <div style={{ overflowY: 'auto', height: '100dvh' }}>
-            <MobileNavbar></MobileNavbar>
-            <Box
-                display="flex"
-                flexDirection="column"
-                height="100vh"
-                backgroundColor={'white'}
-                gap={5}
-            >
-                <Box
-                    borderBottom={'2px solid #E2E2E2'}
-                    width={'100%'}
-                    display={'flex'}
-                    flexDirection={'column'}
-                    textAlign={'center'}
-                    alignItems={'center'}
-                    p={5}
-                    gap={4}
-                >
-                    <Box display={'flex'} flexDirection={'row'} alignItems="flex-start">
-                        <IconButton
-                            position={'absolute'}
-                            variant="filled"
-                            w={8}
-                            h={8}
-                            colorScheme="black"
-                            aria-label="Edit product"
-                            icon={<ChevronLeftIcon />}
-                            onClick={() => navigator(SALES_HISTORY_ROUTE)}
-                            mt={1}
-                        />
-                        <Box width={'100%'}>
-                            <Heading size={'lg'} textAlign={'center'} alignSelf="flex-start" mt={1}>
-                                Заказ №{orderData?.id}
-                            </Heading>
-                        </Box>
-                    </Box>
-                    <Input
-                        variant="filled"
-                        placeholder="Filled"
-                        width={'50%'}
-                        borderRadius={'15'}
-                        name="date"
-                        defaultValue={dayjs(orderData?.createdAt).format('DD.MM.YYYY')}
-                        textAlign={'center'}
-                    />
-                </Box>
-
-                <Box>
-                    <VStack spacing={2}>
-                        {orderData?.orderDetails.map((product, index) => (
-                            <Box
-                                key={index}
-                                p={5}
-                                display={'flex'}
-                                flexDirection={'row'}
-                                alignItems={'center'}
-                            >
-                                <Box width={'60%'}>
-                                    {' '}
-                                    <Text fontWeight={'bold'}>{product.product.name}</Text>{' '}
-                                </Box>
-                                <Box display={'flex'} flexDirection={'row'} width={'40%'}>
-                                    <Input
-                                        variant="filled"
-                                        borderRadius={15}
-                                        name="quantity"
-                                        backgroundColor={'gray.100'}
-                                        value={product.orderedQuantity}
-                                        onChange={(e) => handleQuantityChange(index, e)}
-                                    />
-                                    <IconButton
-                                        bg={'transparent'}
-                                        color={'gray'}
-                                        size={'md'}
-                                        aria-label="remove item"
-                                        marginRight={3}
-                                        icon={<CloseIcon />}
-                                        onClick={() => handleRemoveProduct(product.productId)}
-                                    />
+            {isSuccess ? (
+                <SuccessPage />
+            ) : isError ? (
+                <ErrorPage />
+            ) : (
+                <>
+                    <MobileNavbar></MobileNavbar>
+                    <Box
+                        display="flex"
+                        flexDirection="column"
+                        height="100vh"
+                        backgroundColor={'white'}
+                        gap={5}
+                    >
+                        <Box
+                            borderBottom={'2px solid #E2E2E2'}
+                            width={'100%'}
+                            display={'flex'}
+                            flexDirection={'column'}
+                            textAlign={'center'}
+                            alignItems={'center'}
+                            p={5}
+                            gap={4}
+                        >
+                            <Box display={'flex'} flexDirection={'row'} alignItems="flex-start">
+                                <IconButton
+                                    position={'absolute'}
+                                    variant="filled"
+                                    w={8}
+                                    h={8}
+                                    colorScheme="black"
+                                    aria-label="Edit product"
+                                    icon={<ChevronLeftIcon />}
+                                    onClick={() => navigator(SALES_HISTORY_ROUTE)}
+                                    mt={1}
+                                />
+                                <Box width={'100%'}>
+                                    <Heading
+                                        size={'lg'}
+                                        textAlign={'center'}
+                                        alignSelf="flex-start"
+                                        mt={1}
+                                    >
+                                        Заказ №{orderData?.id}
+                                    </Heading>
                                 </Box>
                             </Box>
-                        ))}
-                    </VStack>
-                </Box>
+                            <Input
+                                variant="filled"
+                                placeholder="Filled"
+                                width={'50%'}
+                                borderRadius={'15'}
+                                name="date"
+                                defaultValue={dayjs(orderData?.createdAt).format('DD.MM.YYYY')}
+                                textAlign={'center'}
+                            />
+                        </Box>
 
-                <Box m={5} borderBottom={'1px solid #7C7C7C'}>
-                    <Text mb="8px" color={'#7C7C7C'} textAlign={'left'}>
-                        Комментарий
-                    </Text>
-                    {/* <Input
+                        <Box>
+                            <VStack spacing={2}>
+                                {orderData?.orderDetails.map((product, index) => (
+                                    <Box
+                                        key={index}
+                                        p={5}
+                                        display={'flex'}
+                                        flexDirection={'row'}
+                                        alignItems={'center'}
+                                    >
+                                        <Box width={'60%'}>
+                                            {' '}
+                                            <Text fontWeight={'bold'}>
+                                                {product.product.name}
+                                            </Text>{' '}
+                                        </Box>
+                                        <Box display={'flex'} flexDirection={'row'} width={'40%'}>
+                                            <Input
+                                                variant="filled"
+                                                borderRadius={15}
+                                                name="quantity"
+                                                backgroundColor={'gray.100'}
+                                                value={product.orderedQuantity}
+                                                onChange={(e) => handleQuantityChange(index, e)}
+                                            />
+                                            <IconButton
+                                                bg={'transparent'}
+                                                color={'gray'}
+                                                size={'md'}
+                                                aria-label="remove item"
+                                                marginRight={3}
+                                                icon={<CloseIcon />}
+                                                onClick={() =>
+                                                    handleRemoveProduct(product.productId)
+                                                }
+                                            />
+                                        </Box>
+                                    </Box>
+                                ))}
+                            </VStack>
+                        </Box>
+
+                        <Box m={5} borderBottom={'1px solid #7C7C7C'}>
+                            <Text mb="8px" color={'#7C7C7C'} textAlign={'left'}>
+                                Комментарий
+                            </Text>
+                            {/* <Input
                         border={'none'}
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                     /> */}
-                </Box>
+                        </Box>
 
-                <Box textAlign={'center'} p={5}>
-                    <Input
-                        variant="filled"
-                        size={'lg'}
-                        color={'white'}
-                        backgroundColor={'#F7B23B'}
-                        placeholder="Filled"
-                        width={'100%'}
-                        borderRadius={'15'}
-                        textAlign={'center'}
-                        defaultValue={'Заказать'}
-                        onClick={handleSaveChanges}
-                    />
-                </Box>
-            </Box>
+                        <Box textAlign={'center'} p={5}>
+                            <Input
+                                variant="filled"
+                                size={'lg'}
+                                color={'white'}
+                                backgroundColor={'#F7B23B'}
+                                placeholder="Filled"
+                                width={'100%'}
+                                borderRadius={'15'}
+                                textAlign={'center'}
+                                value={'Редактировать'}
+                                type="submit"
+                                onClick={handleSaveChanges}
+                            />
+                        </Box>
+                    </Box>
+                </>
+            )}
         </div>
     )
 }
