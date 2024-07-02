@@ -1,6 +1,7 @@
 import { Table, Tr, Th, Tbody, Td, Box, Select } from '@chakra-ui/react'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
+import { useApi } from '@/utils/services/axios'
 
 const data = [
     {
@@ -22,6 +23,10 @@ const data = [
 ]
 
 const RemainRawMaterials = () => {
+    const { data: remainRawMaterials } = useApi(`reports/remainRawMaterials`)
+
+    console.log(remainRawMaterials)
+
     return (
         <>
             <UniversalComponent>
