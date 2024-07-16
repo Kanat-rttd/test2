@@ -2,6 +2,8 @@ import { Table, Tr, Th, Tbody, Td, Box, Select } from '@chakra-ui/react'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useApi } from '@/utils/services/axios'
+import DateRange from '@/components/DateRange'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
 const data = [
     {
@@ -23,7 +25,10 @@ const data = [
 ]
 
 const RemainRawMaterials = () => {
-    const { data: remainRawMaterials } = useApi(`reports/remainRawMaterials`)
+    const { getURLs } = useURLParameters()
+    const { data: remainRawMaterials } = useApi(
+        `reports/remainRawMaterials?${getURLs().toString()}`,
+    )
 
     console.log(remainRawMaterials)
 
@@ -33,7 +38,14 @@ const RemainRawMaterials = () => {
                 <Box display="flex" flexDirection="column" p={5} mt={1}>
                     <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
                         <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                            <Select placeholder="Название" width={'fit-content'} name="status">
+                            <DateRange />
+                            <Select
+                                size={'sm'}
+                                borderRadius={5}
+                                placeholder="Название"
+                                width={'fit-content'}
+                                name="status"
+                            >
                                 <option value="1">Активен</option>
                                 <option value="0">Приостановлен</option>
                             </Select>
@@ -52,7 +64,7 @@ const RemainRawMaterials = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {data.map((product, index) => {
+                                {data.length ? data.map((product, index) => {
                                     return (
                                         <Tr key={index}>
                                             <Td>{product.id}</Td>
@@ -63,7 +75,11 @@ const RemainRawMaterials = () => {
                                             <Td>{product.remainOnTheEnd}</Td>
                                         </Tr>
                                     )
-                                })}
+                                }) : (
+                                    <Tr>
+                                        <Td>Нет данных</Td>
+                                    </Tr>
+                                )}
                             </Tbody>
                             <Tfoot>
                                 <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>
