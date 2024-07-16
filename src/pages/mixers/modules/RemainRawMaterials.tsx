@@ -5,28 +5,20 @@ import { useApi } from '@/utils/services/axios'
 import DateRange from '@/components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
-const data = [
-    {
-        id: 1,
-        name: 'Мука',
-        remainOnTheBeginning: 100,
-        expense: 500,
-        arrival: 500,
-        remainOnTheEnd: 100,
-    },
-    {
-        id: 2,
-        name: 'Картошка',
-        remainOnTheBeginning: 100,
-        expense: 500,
-        arrival: 500,
-        remainOnTheEnd: 100,
-    },
-]
+interface RemainRawMaterials {
+    id: number // ID
+    category: string // Category
+    unitOfMeasure: string // Unit of Measure
+    openingStock: number // ОстатокНаНачало
+    consumption: number // Расход
+    incoming: string // Приход
+    adjustmentPeriod: number // КорректировкаЗаПериод
+    closingStock: number // ОстатокНаКонец
+}
 
 const RemainRawMaterials = () => {
     const { getURLs } = useURLParameters()
-    const { data: remainRawMaterials } = useApi(
+    const { data: remainRawMaterials } = useApi<RemainRawMaterials[]>(
         `reports/remainRawMaterials?${getURLs().toString()}`,
     )
 
@@ -64,18 +56,20 @@ const RemainRawMaterials = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {data.length ? data.map((product, index) => {
-                                    return (
-                                        <Tr key={index}>
-                                            <Td>{product.id}</Td>
-                                            <Td>{product.name}</Td>
-                                            <Td>{product.remainOnTheBeginning}</Td>
-                                            <Td>{product.expense}</Td>
-                                            <Td>{product.arrival}</Td>
-                                            <Td>{product.remainOnTheEnd}</Td>
-                                        </Tr>
-                                    )
-                                }) : (
+                                {remainRawMaterials?.length ? (
+                                    remainRawMaterials?.map((product, index) => {
+                                        return (
+                                            <Tr key={index}>
+                                                <Td>{product.id}</Td>
+                                                <Td>{product.category}</Td>
+                                                <Td>{product.openingStock}</Td>
+                                                <Td>{product.consumption}</Td>
+                                                <Td>{product.incoming}</Td>
+                                                <Td>{product.closingStock}</Td>
+                                            </Tr>
+                                        )
+                                    })
+                                ) : (
                                     <Tr>
                                         <Td>Нет данных</Td>
                                     </Tr>

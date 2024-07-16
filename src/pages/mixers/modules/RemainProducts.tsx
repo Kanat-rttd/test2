@@ -5,34 +5,27 @@ import DateRange from '@/components/DateRange'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useApi } from '@/utils/services/axios'
 
-const data = [
-    {
-        id: 1,
-        name: 'Мука',
-        remainOnTheBeginning: 100,
-        baking: 100,
-        sells: 100,
-        defective: 500,
-        remainOnTheEnd: 100,
-    },
-    {
-        id: 1,
-        name: 'Картошка',
-        remainOnTheBeginning: 100,
-        baking: 100,
-        sells: 100,
-        defective: 500,
-        remainOnTheEnd: 100,
-    },
-]
+interface RemainProducts {
+    id: number // ID
+    name: string // Name
+    production: number // Выпечка
+    distribution: string // Выдача
+    returns: string // Возврат
+    openingStock: number // ОстатокНаНачало
+    productionPeriod: number // ВыпечкаПериод
+    distributionPeriod: string // ВыдачаПериод
+    defect: number // Брак
+    returnsPeriod: string // ВозвратПериод
+    closingStock: number // ОстатокНаКонец
+}
 
 const RemainProducts = () => {
     const { getURLs } = useURLParameters()
-    const { data: remainRawMaterials } = useApi(
-        `reports/remainRawMaterials?${getURLs().toString()}`,
+    const { data: remainProducts } = useApi<RemainProducts[]>(
+        `reports/remainProducts?${getURLs().toString()}`,
     )
 
-    console.log(remainRawMaterials)
+    console.log(remainProducts)
 
     return (
         <UniversalComponent>
@@ -62,21 +55,23 @@ const RemainProducts = () => {
                                 <Th>Выпечка</Th>
                                 <Th>Продажи</Th>
                                 <Th>Брак</Th>
+                                <Th>Возврат</Th>
                                 <Th>Остаток на конец</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {data.length ? (
-                                data.map((product, index) => {
+                            {remainProducts?.length ? (
+                                remainProducts?.map((product, index) => {
                                     return (
                                         <Tr key={index + 1}>
                                             <Td>{index + 1}</Td>
                                             <Td>{product.name}</Td>
-                                            <Td>{product.remainOnTheBeginning}</Td>
-                                            <Td>{product.baking}</Td>
-                                            <Td>{product.sells}</Td>
-                                            <Td>{product.defective}</Td>
-                                            <Td>{product.remainOnTheEnd}</Td>
+                                            <Td>{product.openingStock}</Td>
+                                            <Td>{product.productionPeriod}</Td>
+                                            <Td>{product.distributionPeriod}</Td>
+                                            <Td>{product.defect}</Td>
+                                            <Td>{product.returnsPeriod}</Td>
+                                            <Td>{product.closingStock}</Td>
                                         </Tr>
                                     )
                                 })
