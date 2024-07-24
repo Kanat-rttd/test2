@@ -49,8 +49,13 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
 
     const sendData = (formData: ProviderForm) => {
         const responsePromise: Promise<any> = selectedData
-            ? updateProvider(selectedData.id, {...formData, status: Number(formData.status) ? true : false})
-            : createProvider({...formData, status: Number(formData.status) ? true : false})
+            ? updateProvider(selectedData.id, {
+                  ...formData,
+                  status: Number(formData.status) ? true : false,
+              })
+            : createProvider({ ...formData, status: Number(formData.status) ? true : false })
+
+        console.log('123')
 
         responsePromise
             .then((res) => {

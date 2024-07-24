@@ -12,12 +12,11 @@ interface DebtPurchase {
     totalDebt: string
     data: [
         {
+            id: number
+            providerName: string
             totalDebt: string
-            providerId: number
-            provider: {
-                id: number
-                providerName: string
-            }
+            debt: string
+            status: string
         },
     ]
 }
@@ -26,7 +25,7 @@ const Debt = () => {
     const { getParam, setParam, getURLs } = useURLParameters()
 
     const { data: purchasesData } = useApi<DebtPurchase>(
-        `productPurchase/debt?${getURLs().toString()}`,
+        `reports/purchaseDebts?${getURLs().toString()}`,
     )
     const { data: providersData } = useApi<Provider[]>('providers?status=1')
 
@@ -63,10 +62,10 @@ const Debt = () => {
                             {purchasesData?.data.length ? (
                                 purchasesData.data.map((item, index) => {
                                     return (
-                                        <Tr key={item.providerId}>
+                                        <Tr key={index}>
                                             <Td>{index + 1}</Td>
-                                            <Td>{item.provider.providerName}</Td>
-                                            <Td>{item.totalDebt}</Td>
+                                            <Td>{item.providerName}</Td>
+                                            <Td>{item.debt}</Td>
                                         </Tr>
                                     )
                                 })
