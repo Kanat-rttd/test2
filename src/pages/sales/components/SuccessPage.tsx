@@ -1,5 +1,5 @@
 import { Box, Heading, Text, Input, Image } from '@chakra-ui/react'
-import { MAIN_ROUTE, SALES_REQUEST_FORM_ROUTE } from '@/utils/constants/routes.consts'
+import { SALES_HISTORY_ROUTE, SALES_REQUEST_FORM_ROUTE } from '@/utils/constants/routes.consts'
 import { useNavigate } from 'react-router-dom'
 
 const SuccessPage = () => {
@@ -9,8 +9,8 @@ const SuccessPage = () => {
         navigator(SALES_REQUEST_FORM_ROUTE)
     }
 
-    const redirectToMain = () => {
-        navigator(MAIN_ROUTE)
+    const redirectToHistory = () => {
+        navigator(SALES_HISTORY_ROUTE)
     }
 
     return (
@@ -26,7 +26,7 @@ const SuccessPage = () => {
         >
             <Image
                 src="/src/assets/Success.png"
-                alt="Dan Abramov"
+                alt="SuccessImg"
                 mb={5}
                 style={{ marginTop: '-20px', marginBottom: '25px' }}
             />
@@ -60,8 +60,8 @@ const SuccessPage = () => {
                     width={'100%'}
                     borderRadius={15}
                     textAlign={'center'}
-                    defaultValue={'На главную'}
-                    onClick={redirectToMain}
+                    defaultValue={'История заказов'}
+                    onClick={redirectToHistory}
                 />
             </Box>
         </Box>
