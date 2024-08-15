@@ -71,6 +71,8 @@ const InvoicePage = () => {
         `release/invoice?${getURLs().toString()}`,
     )
 
+    console.log(dispatchesData)
+
     const currentMonth = dayjs().month() + 1
     const currentYear = dayjs().year()
 

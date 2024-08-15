@@ -131,8 +131,8 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                     })}
                                     placeholder="Должность *"
                                     autoComplete="new-password"
-                                    id="userClassInput"
-                                    name="userClassInput"
+                                    // id="userClassInput"
+                                    // name="userClassInput"
                                     type="text"
                                 />
                                 <FormErrorMessage>{errors.userClass?.message}</FormErrorMessage>

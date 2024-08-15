@@ -78,9 +78,13 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
     useEffect(() => {
         const values = getValues()
 
+        console.log(values)
+
         if (!contragetnsData || !categoriesData) return
 
         if (values.financeCategoryId !== null) {
+            console.log('1', values.financeCategoryId)
+            console.log(categoriesData)
             const contragentType = categoriesData.find(
                 (item) => item.id === Number(values.financeCategoryId),
             )?.contragentTypeId

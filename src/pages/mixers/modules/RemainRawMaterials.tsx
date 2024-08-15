@@ -5,20 +5,33 @@ import { useApi } from '@/utils/services/axios'
 import DateRange from '@/components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 
-interface RemainRawMaterials {
-    id: number // ID
-    category: string // Category
-    unitOfMeasure: string // Unit of Measure
-    openingStock: number // ОстатокНаНачало
-    consumption: number // Расход
-    incoming: string // Приход
-    adjustmentPeriod: number // КорректировкаЗаПериод
-    closingStock: number // ОстатокНаКонец
+type RemainRawMaterials = {
+    id: number
+    category: string
+    unitOfMeasure: string
+    openingStock: number
+    consumption: number
+    incoming: string
+    adjustmentPeriod: number
+    closingStock: number
+}[]
+
+type Totals = {
+    openingStock: number
+    consumption: number
+    incoming: number
+    adjustmentPeriod: number
+    closingStock: number
+}
+
+type Remain = {
+    data: RemainRawMaterials
+    totals: Totals
 }
 
 const RemainRawMaterials = () => {
     const { getURLs } = useURLParameters()
-    const { data: remainRawMaterials } = useApi<RemainRawMaterials[]>(
+    const { data: remainRawMaterials } = useApi<Remain>(
         `reports/remainRawMaterials?${getURLs().toString()}`,
     )
 
@@ -56,8 +69,8 @@ const RemainRawMaterials = () => {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {remainRawMaterials?.length ? (
-                                    remainRawMaterials?.map((product, index) => {
+                                {remainRawMaterials?.data?.length ? (
+                                    remainRawMaterials.data?.map((product, index) => {
                                         return (
                                             <Tr key={index}>
                                                 <Td>{product.id}</Td>
@@ -79,10 +92,10 @@ const RemainRawMaterials = () => {
                                 <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>
                                     <Td>Итого</Td>
                                     <Td></Td>
-                                    <Td>100</Td>
-                                    <Td>100</Td>
-                                    <Td>100</Td>
-                                    <Td>100</Td>
+                                    <Td>{remainRawMaterials?.totals?.openingStock}</Td>
+                                    <Td>{remainRawMaterials?.totals?.consumption}</Td>
+                                    <Td>{remainRawMaterials?.totals?.incoming}</Td>
+                                    <Td>{remainRawMaterials?.totals?.closingStock}</Td>
                                 </Tr>
                             </Tfoot>
                         </Table>

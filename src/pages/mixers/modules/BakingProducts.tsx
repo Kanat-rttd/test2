@@ -117,11 +117,21 @@ const BakingPage = () => {
                             <Tr>
                                 <Th>Вид хлеба</Th>
                                 <Th sx={styles}>Время и дата</Th>
-                                <Td sx={styles} textAlign={'center'}>Мука</Td>
-                                <Td sx={styles} textAlign={'center'}>Соль</Td>
-                                <Td sx={styles} textAlign={'center'}>Дрожжи</Td>
-                                <Td sx={styles} textAlign={'center'}>Солод</Td>
-                                <Td sx={styles} textAlign={'center'}>Масло</Td>
+                                <Td sx={styles} textAlign={'center'}>
+                                    Мука
+                                </Td>
+                                <Td sx={styles} textAlign={'center'}>
+                                    Соль
+                                </Td>
+                                <Td sx={styles} textAlign={'center'}>
+                                    Дрожжи
+                                </Td>
+                                <Td sx={styles} textAlign={'center'}>
+                                    Солод
+                                </Td>
+                                <Td sx={styles} textAlign={'center'}>
+                                    Масло
+                                </Td>
                                 <Th sx={styles}>t°</Th>
                                 <Th sx={styles}>Выход</Th>
                                 <Th sx={styles}>Брак</Th>

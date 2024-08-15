@@ -5,7 +5,7 @@ import DateRange from '@/components/DateRange'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useApi } from '@/utils/services/axios'
 
-interface RemainProducts {
+type RemainProducts = {
     id: number // ID
     name: string // Name
     production: number // Выпечка
@@ -17,11 +17,28 @@ interface RemainProducts {
     defect: number // Брак
     returnsPeriod: string // ВозвратПериод
     closingStock: number // ОстатокНаКонец
+}[]
+
+type Totals = {
+    production: number
+    distribution: number
+    returns: number
+    openingStock: number
+    productionPeriod: number
+    distributionPeriod: number
+    defect: number
+    returnsPeriod: number
+    closingStock: number
+}
+
+type RemProducts = {
+    data: RemainProducts
+    totals: Totals
 }
 
 const RemainProducts = () => {
     const { getURLs } = useURLParameters()
-    const { data: remainProducts } = useApi<RemainProducts[]>(
+    const { data: remainProducts } = useApi<RemProducts>(
         `reports/remainProducts?${getURLs().toString()}`,
     )
 
@@ -60,8 +77,8 @@ const RemainProducts = () => {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {remainProducts?.length ? (
-                                remainProducts?.map((product, index) => {
+                            {remainProducts?.data?.length ? (
+                                remainProducts.data?.map((product, index) => {
                                     return (
                                         <Tr key={index + 1}>
                                             <Td>{index + 1}</Td>
@@ -85,10 +102,12 @@ const RemainProducts = () => {
                             <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>
                                 <Td>Итого</Td>
                                 <Td></Td>
-                                <Td>100</Td>
-                                <Td>100</Td>
-                                <Td>100</Td>
-                                <Td>100</Td>
+                                <Td>{remainProducts?.totals?.openingStock}</Td>
+                                <Td>{remainProducts?.totals?.productionPeriod}</Td>
+                                <Td>{remainProducts?.totals?.distributionPeriod}</Td>
+                                <Td>{remainProducts?.totals?.defect}</Td>
+                                <Td>{remainProducts?.totals?.returnsPeriod}</Td>
+                                <Td>{remainProducts?.totals?.closingStock}</Td>
                             </Tr>
                         </Tfoot>
                     </Table>
