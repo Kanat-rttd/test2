@@ -31,7 +31,6 @@ const defaultValues = {
     price: '',
 }
 
-
 interface months {
     id: number
     name: string
@@ -49,7 +48,9 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
     const { data: contragentsTypesData } = useApi<ContragentCategoryType[]>('contragentType')
 
     const { data: clientData } = useApi<ContragentType[]>(
-        `contragent?type=${contragentsTypesData?.find((item) => item.type === 'реализатор')?.id}&status=1`,
+        `contragent?type=${
+            contragentsTypesData?.find((item) => item.type === 'реализатор')?.id
+        }&status=1`,
     )
 
     const {
@@ -59,7 +60,12 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
         setValue,
         formState: { errors },
         reset,
-    } = useForm<OverPriceInputs>()
+    } = useForm<OverPriceInputs>({
+        defaultValues: {
+            month: String(new Date().getMonth() + 1),
+            year: new Date().getFullYear().toString(),
+        },
+    })
 
     const sendData = (formData: OverPriceInputs) => {
         if (data) {

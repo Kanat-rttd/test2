@@ -160,6 +160,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                                     autoComplete="off"
                                                     placeholder="Количество"
                                                     min="0"
+                                                    step="0.01"
                                                     onKeyDown={(e) => {
                                                         if (e.key === '-') {
                                                             e.preventDefault()
@@ -175,7 +176,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                                         }
                                                     }}
                                                     onChange={(e) => {
-                                                        const newValue = Number(e.target.value)
+                                                        const newValue = parseFloat(e.target.value) // Преобразует значение в дробное число
                                                         const updatedBakingGoods = bakingGoods.map(
                                                             (item, idx) => {
                                                                 if (idx === index) {

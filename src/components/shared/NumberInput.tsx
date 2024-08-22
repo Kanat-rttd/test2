@@ -19,6 +19,7 @@ const InputNumber = forwardRef(
                     autoComplete="off"
                     placeholder={placeholder}
                     min="0"
+                    step="0.01"
                     onKeyDown={(e) => {
                         if (e.key === '-') {
                             e.preventDefault()
@@ -26,10 +27,7 @@ const InputNumber = forwardRef(
                         if (e.key === 'e') {
                             e.preventDefault()
                         }
-                        if (
-                            e.key === 'ArrowUp' ||
-                            e.key === 'ArrowDown'
-                        ) {
+                        if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                             e.preventDefault()
                         }
                     }}
