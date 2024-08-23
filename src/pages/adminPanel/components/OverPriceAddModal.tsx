@@ -100,7 +100,11 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
     }, [data])
 
     const handleClose = () => {
-        reset(defaultValues)
+        reset({
+            ...defaultValues,
+            month: String(new Date().getMonth() + 1),
+            year: new Date().getFullYear().toString(),
+        })
         onClose()
     }
 
