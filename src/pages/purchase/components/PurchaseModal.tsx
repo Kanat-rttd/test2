@@ -31,6 +31,7 @@ type PurchaseModalProps = {
 }
 
 interface rawMaterials {
+    providerId: number
     value: number
     label: string
     uom: string
@@ -59,9 +60,12 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
 
     const [providerGoods, setProviderGoods] = useState<rawMaterials[]>([])
 
+    console.log('providerGoods', providerGoods)
+
     useEffect(() => {
         const _providerGoods = providerGoodsData?.map((item) => {
             return {
+                providerId: item.providerId,
                 label: item.goods,
                 value: item.id,
                 uom: item.unitOfMeasure,
@@ -74,6 +78,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
     }, [providerGoodsData])
 
     const [selectedRawMaterial, setSelectedRawMaterial] = useState<rawMaterials | null>(null)
+    const [filteredProviderGoods, setFilteredProviderGoods] = useState<rawMaterials[]>([])
 
     const {
         register,
@@ -81,6 +86,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
         control,
         formState: { errors },
         reset,
+        setValue,
     } = useForm<PurchaseType>()
 
     const status = [
@@ -92,20 +98,34 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
         const response: Promise<any> = createPurchase({
             ...formData,
             goodsCategoryId: selectedRawMaterial?.category,
-        });
-        loading(response);
+        })
+        loading(response)
         response
             .then(() => {
-                onSuccess();
-                reset();
-                onClose();
+                onSuccess()
+                reset()
+                onClose()
             })
             .catch((error) => {
-                console.error('Error creating sale:', error);
-            });
-    };
-    
-    
+                console.error('Error creating sale:', error)
+            })
+    }
+
+    const handleProviderChange = (selectedOption: ProviderType | null) => {
+        const selectedProviderId = selectedOption?.id
+
+        if (selectedProviderId) {
+            const filteredGoods = providerGoods.filter(
+                (good) => good.providerId === selectedProviderId,
+            )
+            setFilteredProviderGoods(filteredGoods)
+        } else {
+            setFilteredProviderGoods([])
+        }
+
+        setValue('providerId', selectedOption?.id ?? 0)
+        setSelectedRawMaterial(null)
+    }
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -121,7 +141,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
-                                    const { onChange, value } = field
+                                    const { value } = field
                                     return (
                                         <Select
                                             options={providersData}
@@ -134,9 +154,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                             value={providersData?.filter(
                                                 (option) => String(option.id) == String(value),
                                             )}
-                                            onChange={(selectedOption: ProviderType | null) => {
-                                                onChange(selectedOption?.id)
-                                            }}
+                                            onChange={handleProviderChange}
                                             placeholder="Поставщик *"
                                             isClearable
                                             isSearchable
@@ -156,8 +174,8 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                     const { onChange, value } = field
                                     return (
                                         <Select
-                                            options={providerGoods}
-                                            defaultValue={providerGoods?.filter(
+                                            options={filteredProviderGoods}
+                                            defaultValue={filteredProviderGoods?.filter(
                                                 (option) => option.value == value,
                                             )}
                                             onChange={(selectedOption: rawMaterials | null) => {
@@ -198,7 +216,13 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                         }
                                     }}
                                 />
-                                <InputRightAddon w={'15%'} display={"flex"} justifyContent={"center"}>{selectedRawMaterial?.uom}</InputRightAddon>
+                                <InputRightAddon
+                                    w={'15%'}
+                                    display={'flex'}
+                                    justifyContent={'center'}
+                                >
+                                    {selectedRawMaterial?.uom}
+                                </InputRightAddon>
                             </InputGroup>
                             <FormErrorMessage>{errors.quantity?.message}</FormErrorMessage>
                         </FormControl>
