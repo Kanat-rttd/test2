@@ -15,13 +15,13 @@ import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { useApi } from '@/utils/services/axios'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import Dialog from '@/components/Dialog'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteDepartPersonal } from '@/utils/services/departPersonal.service'
 import { TableContainer, Thead } from '@/components/ui'
 import DepartPersonalModal from '../components/DepartPesonalAddModal'
 import { DepartPersonalType } from '@/utils/types/departPersonal.types'
 import { FacilityUnit } from '@/utils/types/product.types'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 const AdminPanel = () => {
     const { getURLs, getParam, setParam } = useURLParameters()
@@ -66,12 +66,12 @@ const AdminPanel = () => {
     return (
         <>
             <UniversalComponent>
-                <Box display="flex" flexDirection="column" p={5}>
-                    <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
-                        <Box display={'flex'} gap={'15px'} width={'100%'}>
+                <Box display='flex' flexDirection='column' p={5}>
+                    <Box marginBottom={6} display='flex' justifyContent='space-between'>
+                        <Box display='flex' gap='15px' width='100%'>
                             <Select
-                                width={'20%'}
-                                size={'sm'}
+                                width='20%'
+                                size='sm'
                                 borderRadius={5}
                                 value={getParam('status')}
                                 onChange={(e) => setParam('status', e.target.value)}
@@ -80,11 +80,11 @@ const AdminPanel = () => {
                                 <option value={0}>Неактивный</option>
                             </Select>
                             <Select
-                                placeholder="Цех"
-                                width={'20%'}
-                                size={'sm'}
+                                placeholder='Цех'
+                                width='20%'
+                                size='sm'
                                 borderRadius={5}
-                                justifyContent={'space-between'}
+                                justifyContent='space-between'
                                 defaultValue={getParam('facilityUnit')}
                                 onChange={(e) => setParam('facilityUnit', e.target.value)}
                             >
@@ -96,7 +96,7 @@ const AdminPanel = () => {
                             </Select>
                         </Box>
 
-                        <Button colorScheme="purple" onClick={onOpen}>
+                        <Button colorScheme='purple' onClick={onOpen}>
                             Добавить
                         </Button>
                     </Box>
@@ -104,7 +104,7 @@ const AdminPanel = () => {
                         isLoading={isLoading}
                         style={{ width: '100%', height: '100%', overflowY: 'auto' }}
                     >
-                        <Table variant="simple">
+                        <Table variant='simple'>
                             <Thead>
                                 <Tr>
                                     <Th>№</Th>
@@ -130,10 +130,10 @@ const AdminPanel = () => {
                                                 <Td>{user.fixSalary}</Td>
                                                 <Td sx={{ width: '5%' }}>
                                                     <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
+                                                        variant='outline'
+                                                        size='sm'
+                                                        colorScheme='teal'
+                                                        aria-label='Send email'
                                                         marginRight={3}
                                                         onClick={() => {
                                                             setSelectedData(user)
@@ -142,10 +142,10 @@ const AdminPanel = () => {
                                                         icon={<EditIcon />}
                                                     />
                                                     <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
+                                                        variant='outline'
+                                                        size='sm'
+                                                        colorScheme='teal'
+                                                        aria-label='Send email'
                                                         marginRight={3}
                                                         onClick={() => {
                                                             setSelectedData(user)
@@ -180,14 +180,14 @@ const AdminPanel = () => {
                             dialog.onClose()
                             setSelectedData(undefined)
                         }}
-                        header="Удалить"
-                        body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                        header='Удалить'
+                        body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                         actionBtn={() => {
                             dialog.onClose()
                             deleteUser(selectedData)
                             setSelectedData(undefined)
                         }}
-                        actionText="Удалить"
+                        actionText='Удалить'
                     />
                 </Box>
             </UniversalComponent>

@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Thead } from '@/components/ui'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 import { deleteDispatch } from '@/utils/services/dispatch.service'
 import { DispatchType } from '@/utils/types/dispatch.types'
 import DistributionModal from './DistributionModal'
@@ -113,10 +113,10 @@ export default function ListTable({ status }: ListTableProps) {
                                             </Td>
                                             <Td>
                                                 <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
+                                                    variant='outline'
+                                                    size='sm'
+                                                    colorScheme='teal'
+                                                    aria-label='Send email'
                                                     marginRight={3}
                                                     onClick={() => {
                                                         setSelectedData(row)
@@ -125,10 +125,10 @@ export default function ListTable({ status }: ListTableProps) {
                                                     icon={<EditIcon />}
                                                 />
                                                 <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
+                                                    variant='outline'
+                                                    size='sm'
+                                                    colorScheme='teal'
+                                                    aria-label='Send email'
                                                     marginRight={3}
                                                     onClick={() => {
                                                         setSelectedData(row)
@@ -168,13 +168,13 @@ export default function ListTable({ status }: ListTableProps) {
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}
-                header="Удалить"
-                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                header='Удалить'
+                body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                 actionBtn={() => {
                     dialog.onClose()
                     handlerDelete(selectedData)
                 }}
-                actionText="Удалить"
+                actionText='Удалить'
             />
         </>
     )

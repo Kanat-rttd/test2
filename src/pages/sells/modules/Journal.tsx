@@ -41,20 +41,20 @@ const JournalPage = () => {
     return (
         <>
             <Box
-                display="flex"
-                flexDirection="column"
-                maxHeight={'calc(95% - 2.5rem)'}
-                height="100vh"
+                display='flex'
+                flexDirection='column'
+                maxHeight='calc(95% - 2.5rem)'
+                height='100vh'
                 p={5}
                 mt={2}
             >
-                <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
-                    <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                <Box marginBottom={6} display='flex' justifyContent='space-between'>
+                    <Box display='flex' gap='15px' width='fit-content'>
                         <DateRange />
                         <Select
-                            placeholder="Цех"
-                            width={'90%'}
-                            size={'sm'}
+                            placeholder='Цех'
+                            width='90%'
+                            size='sm'
                             borderRadius={5}
                             value={getParam('facilityUnit')}
                             onChange={(e) => setParam('facilityUnit', e.target.value)}
@@ -66,9 +66,9 @@ const JournalPage = () => {
                             ))}
                         </Select>
                         <Select
-                            placeholder="Реализатор"
-                            width={'90%'}
-                            size={'sm'}
+                            placeholder='Реализатор'
+                            width='90%'
+                            size='sm'
                             borderRadius={5}
                             onChange={(e) => setParam('client', e.target.value)}
                         >
@@ -79,9 +79,9 @@ const JournalPage = () => {
                             ))}
                         </Select>
                         <Select
-                            placeholder="Продукт"
-                            width={'90%'}
-                            size={'sm'}
+                            placeholder='Продукт'
+                            width='90%'
+                            size='sm'
                             borderRadius={5}
                             onChange={(e) => setParam('product', e.target.value)}
                         >
@@ -93,7 +93,7 @@ const JournalPage = () => {
                         </Select>
                     </Box>
                 </Box>
-                <Box position={'relative'}>
+                <Box position='relative'>
                     <ListTable />
                 </Box>
             </Box>

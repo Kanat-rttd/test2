@@ -9,8 +9,8 @@ import Dialog from '@/components/Dialog'
 import { deleteFactInput } from '@/utils/services/factInput.service'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { FactInputTableData, FactInputType } from '@/utils/types/factInput.types'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 const FactTable = () => {
     const { loading } = useNotify()
@@ -31,10 +31,7 @@ const FactTable = () => {
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const [selectedData, setSelectedData] = useState<
-        | FactInputTableData
-        | undefined
-    >(undefined)
+    const [selectedData, setSelectedData] = useState<FactInputTableData | undefined>(undefined)
 
     const deleteFactHandler = () => {
         if (selectedData) {
@@ -55,9 +52,9 @@ const FactTable = () => {
     return (
         <>
             <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                <Table variant="simple" width={'100%'}>
+                <Table variant='simple' width='100%'>
                     <Thead>
-                        <Tr position={'sticky'} top={0} backgroundColor={'white'}>
+                        <Tr position='sticky' top={0} backgroundColor='white'>
                             <Th>№</Th>
                             <Th>Товары</Th>
                             <Th>Место</Th>
@@ -68,7 +65,7 @@ const FactTable = () => {
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {factInputData?.data?.length  ? (
+                        {factInputData?.data?.length ? (
                             factInputData?.data.map((item, index) => (
                                 <Tr key={item.id}>
                                     <Td>{index + 1}</Td>
@@ -79,10 +76,10 @@ const FactTable = () => {
                                     <Td>{dayjs(item.updatedAt).format('DD.MM.YYYY HH:mm')}</Td>
                                     <Td>
                                         <IconButton
-                                            variant="outline"
-                                            size={'sm'}
-                                            colorScheme="teal"
-                                            aria-label="Send email"
+                                            variant='outline'
+                                            size='sm'
+                                            colorScheme='teal'
+                                            aria-label='Send email'
                                             marginRight={3}
                                             onClick={() => {
                                                 handleSelected(item)
@@ -90,10 +87,10 @@ const FactTable = () => {
                                             icon={<EditIcon />}
                                         />
                                         <IconButton
-                                            variant="outline"
-                                            size={'sm'}
-                                            colorScheme="teal"
-                                            aria-label="Send email"
+                                            variant='outline'
+                                            size='sm'
+                                            colorScheme='teal'
+                                            aria-label='Send email'
                                             marginRight={3}
                                             onClick={() => {
                                                 setSelectedData(item)
@@ -115,13 +112,13 @@ const FactTable = () => {
                     </Tbody>
                     <Tfoot>
                         <Tr>
-                            <Th fontSize={15} color={'#000'}>
+                            <Th fontSize={15} color='#000'>
                                 ИТОГО
                             </Th>
                             <Th></Th>
                             <Th></Th>
                             <Th></Th>
-                            <Th fontSize={15} color={'#000'}>
+                            <Th fontSize={15} color='#000'>
                                 {factInputData?.totalFact}
                             </Th>
                             <Th></Th>
@@ -140,13 +137,13 @@ const FactTable = () => {
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}
-                header="Удалить"
-                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                header='Удалить'
+                body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                 actionBtn={() => {
                     deleteFactHandler()
                     dialog.onClose()
                 }}
-                actionText="Удалить"
+                actionText='Удалить'
             />
         </>
     )

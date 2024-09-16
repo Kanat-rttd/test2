@@ -136,10 +136,10 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                 <ModalHeader>Изменить</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Box display={'flex'} flexDirection={'column'} gap={3}>
+                    <Box display='flex' flexDirection='column' gap={3}>
                         <FormControl isInvalid={!!errors.providerId}>
                             <Controller
-                                name="providerId"
+                                name='providerId'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -159,7 +159,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                             onChange={(selectedOption: ProviderType | null) => {
                                                 onChange(selectedOption?.id)
                                             }}
-                                            placeholder="Поставщик *"
+                                            placeholder='Поставщик *'
                                             isClearable
                                             isSearchable
                                         />
@@ -171,7 +171,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
 
                         <FormControl isInvalid={!!errors.providerGoodId}>
                             <Controller
-                                name="providerGoodId"
+                                name='providerGoodId'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -188,7 +188,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                                     setSelectedRawMaterial(selectedOption)
                                                 }
                                             }}
-                                            placeholder="Товар *"
+                                            placeholder='Товар *'
                                             isClearable
                                             isSearchable
                                         />
@@ -200,14 +200,14 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
 
                         <FormControl isInvalid={!!errors.quantity}>
                             <InputGroup>
-                            <Input
+                                <Input
                                     {...register('quantity', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    placeholder="Количество"
-                                    type="number"
-                                    autoComplete="off"
-                                    min="0"
+                                    placeholder='Количество'
+                                    type='number'
+                                    autoComplete='off'
+                                    min='0'
                                     onKeyDown={(e) => {
                                         if (e.key === '-') {
                                             e.preventDefault()
@@ -228,7 +228,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                         <FormControl isInvalid={!!errors.price}>
                             <InputNumber
                                 {...register('price', { required: 'Поле является обязательным' })}
-                                placeholder="Цена *"
+                                placeholder='Цена *'
                             />
                             <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
                         </FormControl>
@@ -238,7 +238,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                 {...register('deliverySum', {
                                     required: 'Поле является обязательным',
                                 })}
-                                placeholder="Сумма доставки *"
+                                placeholder='Сумма доставки *'
                             />
                             <FormErrorMessage>{errors.deliverySum?.message}</FormErrorMessage>
                         </FormControl>
@@ -248,16 +248,16 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                 {...register('date', {
                                     required: 'Поле является обязательным',
                                 })}
-                                autoComplete="off"
-                                placeholder="Дата *"
-                                type="date"
+                                autoComplete='off'
+                                placeholder='Дата *'
+                                type='date'
                             />
                             <FormErrorMessage>{errors.date?.message}</FormErrorMessage>
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.status}>
                             <Controller
-                                name="status"
+                                name='status'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -273,7 +273,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                                     : null
                                             }
                                             onChange={(val: any) => onChange(val)}
-                                            placeholder="Статус *"
+                                            placeholder='Статус *'
                                             isClearable
                                             isSearchable
                                         />
@@ -286,10 +286,10 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme="red" mr={3} onClick={handleClose}>
+                    <Button colorScheme='red' mr={3} onClick={handleClose}>
                         Отмена
                     </Button>
-                    <Button colorScheme="purple" onClick={handleSubmitForm(updateData)}>
+                    <Button colorScheme='purple' onClick={handleSubmitForm(updateData)}>
                         Изменить
                     </Button>
                 </ModalFooter>

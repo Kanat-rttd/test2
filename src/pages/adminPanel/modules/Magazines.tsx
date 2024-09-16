@@ -15,12 +15,12 @@ import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Dialog from '@/components/Dialog'
 import { useApi } from '@/utils/services/axios'
 import MagazineAddModal from '../components/MagazineAddModal'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteMagazines } from '@/utils/services/magazines.service'
 import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { MagazineType } from '@/utils/types/magazine.type'
 import { ClientType } from '@/utils/types/client.type'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 const AdminPanel = () => {
     const { success, error } = useNotify()
@@ -76,13 +76,13 @@ const AdminPanel = () => {
     return (
         <>
             <UniversalComponent>
-                <Box display="flex" flexDirection="column" p={5}>
-                    <Box mb={5} mt={1} display={'flex'} justifyContent={'space-between'}>
-                        <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                <Box display='flex' flexDirection='column' p={5}>
+                    <Box mb={5} mt={1} display='flex' justifyContent='space-between'>
+                        <Box display='flex' gap='15px' width='fit-content'>
                             <Select
-                                placeholder="Магазины"
-                                width={'fit-content'}
-                                name="name"
+                                placeholder='Магазины'
+                                width='fit-content'
+                                name='name'
                                 onChange={handleSelectChange}
                             >
                                 {magazinesDataForSelect?.map((product, index) => (
@@ -92,9 +92,9 @@ const AdminPanel = () => {
                                 ))}
                             </Select>
                             <Select
-                                placeholder="Реализатор"
-                                width={'fit-content'}
-                                name="clientId"
+                                placeholder='Реализатор'
+                                width='fit-content'
+                                name='clientId'
                                 onChange={handleSelectChange}
                             >
                                 {clientsData?.map((unit, index) => (
@@ -104,9 +104,9 @@ const AdminPanel = () => {
                                 ))}
                             </Select>
                             <Select
-                                placeholder="Статус"
-                                width={'fit-content'}
-                                name="status"
+                                placeholder='Статус'
+                                width='fit-content'
+                                name='status'
                                 onChange={handleSelectChange}
                             >
                                 <option value={1}>Активный</option>
@@ -114,7 +114,7 @@ const AdminPanel = () => {
                             </Select>
                         </Box>
 
-                        <Button colorScheme="purple" onClick={onOpen}>
+                        <Button colorScheme='purple' onClick={onOpen}>
                             Добавить
                         </Button>
                     </Box>
@@ -122,7 +122,7 @@ const AdminPanel = () => {
                         isLoading={isLoading}
                         style={{ width: '100%', height: '100%', overflowY: 'auto' }}
                     >
-                        <Table variant="simple">
+                        <Table variant='simple'>
                             <Thead>
                                 <Tr>
                                     <Th>№</Th>
@@ -143,10 +143,10 @@ const AdminPanel = () => {
                                                 <Td>{item.status ? 'Активный' : 'Неактивный'}</Td>
                                                 <Td>
                                                     <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
+                                                        variant='outline'
+                                                        size='sm'
+                                                        colorScheme='teal'
+                                                        aria-label='Send email'
                                                         marginRight={3}
                                                         onClick={() => {
                                                             setSelectedData(item)
@@ -155,10 +155,10 @@ const AdminPanel = () => {
                                                         icon={<EditIcon />}
                                                     />
                                                     <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
+                                                        variant='outline'
+                                                        size='sm'
+                                                        colorScheme='teal'
+                                                        aria-label='Send email'
                                                         marginRight={3}
                                                         onClick={() => {
                                                             setSelectedData(item)
@@ -193,14 +193,14 @@ const AdminPanel = () => {
                             dialog.onClose()
                             setSelectedData(undefined)
                         }}
-                        header="Удалить"
-                        body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                        header='Удалить'
+                        body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                         actionBtn={() => {
                             dialog.onClose()
                             deleteMagazine(selectedData)
                             setSelectedData(undefined)
                         }}
-                        actionText="Удалить"
+                        actionText='Удалить'
                     />
                 </Box>
             </UniversalComponent>

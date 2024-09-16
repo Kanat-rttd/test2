@@ -32,7 +32,7 @@ import { TableContainer } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { individualPriceType } from '@/utils/types/individualPrice.types'
 import { UniquePriceType } from '@/utils/types/uniquePrice.types'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 const AdminPanel = () => {
     const { success, error } = useNotify()
@@ -87,12 +87,12 @@ const AdminPanel = () => {
     return (
         <>
             <UniversalComponent>
-                <Box display="flex" flexDirection="column" p={5}>
+                <Box display='flex' flexDirection='column' p={5}>
                     <Box>
                         <Box
-                            display={'flex'}
-                            width={'100%'}
-                            justifyContent={'space-between'}
+                            display='flex'
+                            width='100%'
+                            justifyContent='space-between'
                             paddingLeft={4}
                             paddingRight={10}
                             marginBottom={5}
@@ -115,11 +115,11 @@ const AdminPanel = () => {
                                 return (
                                     <AccordionItem key={index}>
                                         <h2>
-                                            <AccordionButton background={'#F5F5F5'}>
+                                            <AccordionButton background='#F5F5F5'>
                                                 <Box
-                                                    as="span"
-                                                    flex="1"
-                                                    textAlign="left"
+                                                    as='span'
+                                                    flex='1'
+                                                    textAlign='left'
                                                     fontWeight={600}
                                                 >
                                                     {item.clientName}
@@ -127,7 +127,11 @@ const AdminPanel = () => {
                                                 {recentUpdatesDates?.map((dateData, index) => {
                                                     if (dateData.name == item.clientName) {
                                                         return (
-                                                            <Text mr={'10px'} fontWeight={'600'} key={index}>
+                                                            <Text
+                                                                mr='10px'
+                                                                fontWeight='600'
+                                                                key={index}
+                                                            >
                                                                 {dateData.recentUpdates
                                                                     ? dayjs(
                                                                           dateData.recentUpdates,
@@ -149,20 +153,20 @@ const AdminPanel = () => {
                                                     overflowY: 'auto',
                                                 }}
                                             >
-                                                <Table variant="simple">
+                                                <Table variant='simple'>
                                                     <Thead>
-                                                        <Tr textAlign={'center'}>
-                                                            <Th w={'20%'}>Продукты</Th>
-                                                            <Th w={'20%'} isNumeric>
+                                                        <Tr textAlign='center'>
+                                                            <Th w='20%'>Продукты</Th>
+                                                            <Th w='20%' isNumeric>
                                                                 Цена
                                                             </Th>
                                                             <Th></Th>
-                                                            <Th w={'20%'} isNumeric>
+                                                            <Th w='20%' isNumeric>
                                                                 Время изменения
                                                             </Th>
                                                             <Th></Th>
 
-                                                            <Th w={'10%'} textAlign={'center'}>
+                                                            <Th w='10%' textAlign='center'>
                                                                 Действия
                                                             </Th>
                                                         </Tr>
@@ -172,14 +176,14 @@ const AdminPanel = () => {
                                                             item.detail.map((value, index) => {
                                                                 return (
                                                                     <Tr key={index}>
-                                                                        <Td w={'20%'}>
+                                                                        <Td w='20%'>
                                                                             {value.name}
                                                                         </Td>
-                                                                        <Td w={'20%'} isNumeric>
+                                                                        <Td w='20%' isNumeric>
                                                                             {value.price}
                                                                         </Td>
                                                                         <Td></Td>
-                                                                        <Td w={'20%'} isNumeric>
+                                                                        <Td w='20%' isNumeric>
                                                                             {dayjs(
                                                                                 value.date,
                                                                             ).format(
@@ -189,16 +193,14 @@ const AdminPanel = () => {
                                                                         <Td></Td>
 
                                                                         <Td
-                                                                            display={'flex'}
-                                                                            justifyContent={
-                                                                                'center'
-                                                                            }
+                                                                            display='flex'
+                                                                            justifyContent='center'
                                                                         >
                                                                             <IconButton
-                                                                                variant="outline"
-                                                                                size={'sm'}
-                                                                                colorScheme="teal"
-                                                                                aria-label="Send email"
+                                                                                variant='outline'
+                                                                                size='sm'
+                                                                                colorScheme='teal'
+                                                                                aria-label='Send email'
                                                                                 marginRight={3}
                                                                                 onClick={() => {
                                                                                     setSelectedData(
@@ -224,10 +226,10 @@ const AdminPanel = () => {
                                                                                 icon={<EditIcon />}
                                                                             />
                                                                             <IconButton
-                                                                                variant="outline"
-                                                                                size={'sm'}
-                                                                                colorScheme="teal"
-                                                                                aria-label="Send email"
+                                                                                variant='outline'
+                                                                                size='sm'
+                                                                                colorScheme='teal'
+                                                                                aria-label='Send email'
                                                                                 marginRight={3}
                                                                                 onClick={() => {
                                                                                     setSelectedData(
@@ -270,11 +272,11 @@ const AdminPanel = () => {
                                                             <Th></Th>
                                                             <Th></Th>
                                                             <Th
-                                                                display={'flex'}
-                                                                justifyContent={'center'}
+                                                                display='flex'
+                                                                justifyContent='center'
                                                             >
                                                                 <Button
-                                                                    colorScheme="purple"
+                                                                    colorScheme='purple'
                                                                     onClick={() => {
                                                                         setSelectedRelease(
                                                                             item.clientName,
@@ -310,22 +312,22 @@ const AdminPanel = () => {
                         dialog.onClose()
                         setSelectedData(undefined)
                     }}
-                    header="Удалить"
-                    body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                    header='Удалить'
+                    body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                     actionBtn={() => {
-                        deleteIndividualPrice(selectedData?.detail[0].individualPriceId ?? '').then(
-                            (res) => {
+                        deleteIndividualPrice(selectedData?.detail[0].individualPriceId ?? '')
+                            .then((res) => {
                                 getIndividualPrices()
                                 setSelectedData(undefined)
                                 success(res.data.message)
                                 mutate()
-                            },
-                        ).catch((err) => {
-                            error(err.response.data.error)
-                        })
+                            })
+                            .catch((err) => {
+                                error(err.response.data.error)
+                            })
                         dialog.onClose()
                     }}
-                    actionText="Удалить"
+                    actionText='Удалить'
                 />
             </UniversalComponent>
         </>

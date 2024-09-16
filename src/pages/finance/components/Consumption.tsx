@@ -3,11 +3,11 @@ import { Box, Button, FormControl, FormErrorMessage, Input, Textarea } from '@ch
 import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
 import { createConsumption } from '@/utils/services/finance.service'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { ContragentType } from '@/utils/types/contragent.types'
 import { useApi } from '@/utils/services/axios'
 import InputNumber from '@/components/shared/NumberInput'
 import { useEffect, useState } from 'react'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 const account = [
     {
@@ -117,24 +117,24 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
                 <InputNumber
                     maxLength={20}
                     {...register('amount', { required: 'Поле является обязательным' })}
-                    placeholder="Сумма *"
+                    placeholder='Сумма *'
                 />
                 <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl variant={'floating'} isInvalid={!!errors.date}>
+            <FormControl variant='floating' isInvalid={!!errors.date}>
                 <Input
                     {...register('date', { required: 'Поле является обязательным' })}
-                    autoComplete="off"
+                    autoComplete='off'
                     defaultValue={new Date().toISOString().split('T')[0]}
-                    placeholder="Дата"
-                    type="date"
+                    placeholder='Дата'
+                    type='date'
                 />
             </FormControl>
 
             <FormControl isInvalid={!!errors.account}>
                 <Controller
-                    name="account"
+                    name='account'
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
@@ -150,7 +150,7 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
                                         onChange(selectedOption.name)
                                     }
                                 }}
-                                placeholder="Выберите счет *"
+                                placeholder='Выберите счет *'
                                 isClearable
                                 isSearchable
                             />
@@ -162,7 +162,7 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
 
             <FormControl isInvalid={!!errors.financeCategoryId}>
                 <Controller
-                    name="financeCategoryId"
+                    name='financeCategoryId'
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
@@ -180,7 +180,7 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
                                 onChange={(selectedOption: Category | null) => {
                                     onChange(selectedOption?.id)
                                 }}
-                                placeholder="Категория *"
+                                placeholder='Категория *'
                                 isClearable
                                 isSearchable
                             />
@@ -192,7 +192,7 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
 
             <FormControl isInvalid={!!errors.contragentId}>
                 <Controller
-                    name="contragentId"
+                    name='contragentId'
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
@@ -212,7 +212,7 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
                                 onChange={(selectedOption: ContragentType | null) => {
                                     onChange(selectedOption?.id)
                                 }}
-                                placeholder="Контрагент *"
+                                placeholder='Контрагент *'
                                 formatOptionLabel={formatOptionLabel}
                                 isClearable
                                 isSearchable
@@ -225,11 +225,11 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
 
             <FormControl>
                 <Textarea
-                    placeholder="Комментарий"
+                    placeholder='Комментарий'
                     maxLength={50}
-                    size="sm"
+                    size='sm'
                     {...register('comment')}
-                    resize="none"
+                    resize='none'
                 />
             </FormControl>
 

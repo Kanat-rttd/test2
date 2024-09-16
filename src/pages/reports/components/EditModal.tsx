@@ -24,10 +24,10 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose }) => {
                 <ModalBody>{/* <Lorem count={2} /> */}</ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={onClose}>
+                    <Button colorScheme='blue' mr={3} onClick={onClose}>
                         Закрыть
                     </Button>
-                    <Button colorScheme="purple">Подтвердить</Button>
+                    <Button colorScheme='purple'>Подтвердить</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

@@ -12,7 +12,7 @@ const verticalTh: React.CSSProperties = {
 
 const RevertTh: React.FC<RevertThProps> = ({ text }) => {
     return (
-        <Th p={0} textAlign={'center'}>
+        <Th p={0} textAlign='center'>
             <span style={verticalTh}>{text}</span>
         </Th>
     )

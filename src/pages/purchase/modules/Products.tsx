@@ -32,17 +32,17 @@ const Products = () => {
 
     return (
         <>
-            <Box width={'100%'} p={5} pt={7}>
-                <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} mb={5}>
-                    <Box display={'flex'} gap={'15px'} mb={'5px'}>
+            <Box width='100%' p={5} pt={7}>
+                <Box display='flex' alignItems='center' justifyContent='space-between' mb={5}>
+                    <Box display='flex' gap='15px' mb='5px'>
                         <DateRange />
                         <Select
-                            size={'sm'}
+                            size='sm'
                             borderRadius={5}
-                            placeholder="Поставщик"
+                            placeholder='Поставщик'
                             value={getParam('providerId')}
                             onChange={(event) => setParam('providerId', event.target.value)}
-                            width={'fit-content'}
+                            width='fit-content'
                         >
                             {providersData?.map((provider, index) => (
                                 <option key={`${index}`} value={provider.id}>
@@ -51,12 +51,12 @@ const Products = () => {
                             ))}
                         </Select>
                         <Select
-                            size={'sm'}
+                            size='sm'
                             borderRadius={5}
-                            placeholder="Товар"
+                            placeholder='Товар'
                             value={getParam('rawMaterialId')}
                             onChange={(event) => setParam('rawMaterialId', event.target.value)}
-                            width={'fit-content'}
+                            width='fit-content'
                         >
                             {providerGoodsData?.map((units) => (
                                 <option key={units.id} value={units.id}>
@@ -65,18 +65,18 @@ const Products = () => {
                             ))}
                         </Select>
                         <Select
-                            placeholder="Статус"
-                            width={'fit-content'}
+                            placeholder='Статус'
+                            width='fit-content'
                             value={getParam('paymentStatus')}
-                            size={'sm'}
+                            size='sm'
                             borderRadius={5}
                             onChange={(e) => setParam('paymentStatus', e.target.value)}
                         >
-                            <option value="Оплачено">Оплачено</option>
-                            <option value="Не оплачено">Не оплачено</option>
+                            <option value='Оплачено'>Оплачено</option>
+                            <option value='Не оплачено'>Не оплачено</option>
                         </Select>
                     </Box>
-                    <Button colorScheme="purple" onClick={onOpen}>
+                    <Button colorScheme='purple' onClick={onOpen}>
                         Добавить закупки
                     </Button>
                 </Box>

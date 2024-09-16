@@ -46,24 +46,24 @@ const RemainProducts = () => {
 
     return (
         <UniversalComponent>
-            <Box display="flex" flexDirection="column" p={5} mt={1}>
-                <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
-                    <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+            <Box display='flex' flexDirection='column' p={5} mt={1}>
+                <Box marginBottom={5} display='flex' justifyContent='space-between'>
+                    <Box display='flex' gap='15px' width='fit-content'>
                         <DateRange />
                         <Select
-                            size={'sm'}
+                            size='sm'
                             borderRadius={5}
-                            placeholder="Название"
-                            width={'fit-content'}
-                            name="status"
+                            placeholder='Название'
+                            width='fit-content'
+                            name='status'
                         >
-                            <option value="1">Активен</option>
-                            <option value="0">Приостановлен</option>
+                            <option value='1'>Активен</option>
+                            <option value='0'>Приостановлен</option>
                         </Select>
                     </Box>
                 </Box>
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                    <Table variant="simple">
+                    <Table variant='simple'>
                         <Thead>
                             <Tr>
                                 <Th>№</Th>
@@ -99,7 +99,7 @@ const RemainProducts = () => {
                             )}
                         </Tbody>
                         <Tfoot>
-                            <Tr color={'#000'} fontSize={15} fontWeight={'bold'}>
+                            <Tr color='#000' fontSize={15} fontWeight='bold'>
                                 <Td>Итого</Td>
                                 <Td></Td>
                                 <Td>{remainProducts?.totals?.openingStock}</Td>

@@ -18,10 +18,10 @@ import {
 } from '@chakra-ui/react'
 import PasswordInput from '@/components/shared/PasswordInput'
 import PhoneInput from '@/components/shared/PhoneInput'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import StatusSelect from '@/components/shared/StatusSelect'
 import { ReleaserType } from '@/utils/types/releaser.types'
 import InputNumber from '@/components/shared/NumberInput'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 interface ReleaseAddModalProps {
     data: ReleaserType | undefined
@@ -45,8 +45,8 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
 
     const sendData = (formData: ReleaserType) => {
         const responsePromise: Promise<any> = data
-            ? updateClient(data.id, {...formData, status: Number(formData.status) ? true : false})
-            : createClient({...formData, status: Number(formData.status) ? true : false})
+            ? updateClient(data.id, { ...formData, status: Number(formData.status) ? true : false })
+            : createClient({ ...formData, status: Number(formData.status) ? true : false })
         responsePromise
             .then((res) => {
                 reset()
@@ -78,20 +78,20 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
 
     return (
         <Modal isCentered isOpen={isOpen} onClose={handleClose}>
-            <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+            <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(90deg)' />
             <ModalContent>
                 <ModalHeader>{data ? 'Редактировать' : 'Добавить'} реализатора</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
+                <ModalBody display='flex' flexDirection='column' gap={3}>
                     <FormControl isInvalid={!!errors.name}>
                         <InputGroup>
                             <Input
                                 {...register('name', {
                                     required: 'Поле является обязательным',
                                 })}
-                                autoComplete="off"
-                                placeholder="Имя *"
-                                type="text"
+                                autoComplete='off'
+                                placeholder='Имя *'
+                                type='text'
                             />
                         </InputGroup>
                         <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
@@ -103,9 +103,9 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                                 {...register('surname', {
                                     required: 'Поле является обязательным',
                                 })}
-                                autoComplete="off"
-                                placeholder="Фамилия *"
-                                type="text"
+                                autoComplete='off'
+                                placeholder='Фамилия *'
+                                type='text'
                             />
                         </InputGroup>
                         <FormErrorMessage>{errors.surname?.message}</FormErrorMessage>
@@ -113,7 +113,7 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
 
                     <FormControl isInvalid={!!errors.contact}>
                         <Controller
-                            name="contact"
+                            name='contact'
                             control={control}
                             rules={{
                                 required: 'Поле является обязательным',
@@ -157,7 +157,7 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                                             'Некорректный Телеграм ID. Используйте только цифры',
                                     },
                                 })}
-                                placeholder="Телеграм ID *"
+                                placeholder='Телеграм ID *'
                             />
                         </InputGroup>
                         <FormErrorMessage>{errors.telegrammId?.message}</FormErrorMessage>
@@ -177,7 +177,7 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                             {...register('password', {
                                 required: data ? false : 'Поле является обязательным',
                             })}
-                            placeholder="Пароль *"
+                            placeholder='Пароль *'
                         />
                         <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
                     </FormControl>
@@ -188,13 +188,13 @@ const ReleaseAddModal: React.FC<ReleaseAddModalProps> = ({ data, isOpen, onClose
                                 validate: (value) =>
                                     value === getValues('password') || 'Пароли должны совпадать',
                             })}
-                            placeholder="Подтвердите пароль *"
+                            placeholder='Подтвердите пароль *'
                         />
                         <FormErrorMessage>{errors.checkPassword?.message}</FormErrorMessage>
                     </FormControl>
                 </ModalBody>
-                <ModalFooter display={'flex'} alignSelf={'center'} gap={5}>
-                    <Button colorScheme="purple" onClick={handleSubmitForm(sendData)}>
+                <ModalFooter display='flex' alignSelf='center' gap={5}>
+                    <Button colorScheme='purple' onClick={handleSubmitForm(sendData)}>
                         {data ? 'Редактировать' : 'Добавить'}
                     </Button>
                     <Button onClick={handleClose}>Закрыть</Button>

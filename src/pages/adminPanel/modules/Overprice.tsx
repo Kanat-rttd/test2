@@ -34,7 +34,7 @@ const AdminPanel = () => {
     } = useApi<OverPriceType[]>(`overPrice?${getURLs().toString()}`)
 
     const { data: clientData } = useApi<ClientsFilter[]>('overPrice/clientFilter')
-    
+
     const [years, setYears] = useState<number[]>([])
     const startYear = 2022
 
@@ -47,7 +47,7 @@ const AdminPanel = () => {
     }, [])
 
     const getYearsArray = (startYear: number) => {
-        const currentYear = new Date().getFullYear() + 1    
+        const currentYear = new Date().getFullYear() + 1
         const years = []
 
         for (let year = startYear; year <= currentYear; year++) {
@@ -103,15 +103,15 @@ const AdminPanel = () => {
     return (
         <>
             <UniversalComponent>
-                <Box display="flex" flexDirection="column" p={5}>
-                    <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
-                        <Box width={'100%'} display={'flex'} gap={'15px'} mt={2}>
+                <Box display='flex' flexDirection='column' p={5}>
+                    <Box marginBottom={6} display='flex' justifyContent='space-between'>
+                        <Box width='100%' display='flex' gap='15px' mt={2}>
                             <Select
-                                size={'sm'}
+                                size='sm'
                                 borderRadius={5}
-                                placeholder="Имя"
-                                width={'20%'}
-                                name="name"
+                                placeholder='Имя'
+                                width='20%'
+                                name='name'
                                 onChange={handleSelectChange}
                             >
                                 {clientData?.map((client, index) => (
@@ -122,8 +122,8 @@ const AdminPanel = () => {
                             </Select>
 
                             <Select
-                                size={'sm'}
-                                w={'20%'}
+                                size='sm'
+                                w='20%'
                                 borderRadius={5}
                                 value={getParam('month')}
                                 onChange={(e) => setParam('month', e.target.value)}
@@ -135,8 +135,8 @@ const AdminPanel = () => {
                                 ))}
                             </Select>
                             <Select
-                                size={'sm'}
-                                w={'20%'}
+                                size='sm'
+                                w='20%'
                                 borderRadius={5}
                                 value={getParam('year')}
                                 onChange={(e) => setParam('year', e.target.value)}
@@ -149,7 +149,7 @@ const AdminPanel = () => {
                             </Select>
                         </Box>
 
-                        <Button colorScheme="purple" onClick={onOpen}>
+                        <Button colorScheme='purple' onClick={onOpen}>
                             Добавить
                         </Button>
                     </Box>
@@ -157,7 +157,7 @@ const AdminPanel = () => {
                         isLoading={isLoading}
                         style={{ width: '100%', height: '100%', overflowY: 'auto' }}
                     >
-                        <Table variant="simple">
+                        <Table variant='simple'>
                             <Thead>
                                 <Tr>
                                     <Th>№</Th>
@@ -180,10 +180,10 @@ const AdminPanel = () => {
                                                 <Td>{overData.year}</Td>
                                                 <Td>
                                                     <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
+                                                        variant='outline'
+                                                        size='sm'
+                                                        colorScheme='teal'
+                                                        aria-label='Send email'
                                                         marginRight={3}
                                                         onClick={() => {
                                                             setSelectedData(overData)
@@ -192,10 +192,10 @@ const AdminPanel = () => {
                                                         icon={<EditIcon />}
                                                     />
                                                     <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
+                                                        variant='outline'
+                                                        size='sm'
+                                                        colorScheme='teal'
+                                                        aria-label='Send email'
                                                         marginRight={3}
                                                         onClick={() => {
                                                             setSelectedData(overData)
@@ -241,13 +241,13 @@ const AdminPanel = () => {
                                 },
                             })
                         }}
-                        header="Удалить"
-                        body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                        header='Удалить'
+                        body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                         actionBtn={() => {
                             dialog.onClose()
                             delOverprice(selectedData)
                         }}
-                        actionText="Удалить"
+                        actionText='Удалить'
                     />
                 </Box>
             </UniversalComponent>

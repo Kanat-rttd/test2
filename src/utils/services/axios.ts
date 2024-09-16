@@ -22,7 +22,7 @@ $host.interceptors.request.use((config) => {
 //     return response.data
 // }
 
-export const fetcher = async (url: string, params?: any) => {
+export const fetcher = async (url: string, params?: unknown) => {
     const response = await $host.get(url, { params })
     return response.data
 }

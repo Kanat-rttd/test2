@@ -5,16 +5,14 @@ export const getAllFactInputs = async () => {
     return data
 }
 
-export const createFactInput = async (
-    data: {
-        place: string
-        details: {
-            goodsCategoryId: number | null
-            quantity: number | null
-            unitOfMeasure: string | null
-        }[]
-    },
-) => {
+export const createFactInput = async (data: {
+    place: string
+    details: {
+        goodsCategoryId: number | null
+        quantity: number | null
+        unitOfMeasure: string | null
+    }[]
+}) => {
     const response = await $host.post('factInput', data)
     return response
 }

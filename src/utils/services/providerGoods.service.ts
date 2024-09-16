@@ -2,7 +2,7 @@ import $host from './axios'
 
 export const createProviderGoods = async (data: {
     goods: string
-    providerId: number 
+    providerId: number
     goodsCategoryId: number
     unitOfMeasure: string | undefined
     bakery: {

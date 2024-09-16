@@ -3,9 +3,9 @@ import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
 import { TransferInputs } from '@/utils/types/finance.types'
 import { createTransfer } from '@/utils/services/finance.service'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { useApi } from '@/utils/services/axios'
 import InputNumber from '@/components/shared/NumberInput'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 interface Account {
     id: number
@@ -39,14 +39,14 @@ const Transfer = () => {
     }
 
     return (
-        <Box display={'flex'} flexDirection={'column'} gap={4}>
+        <Box display='flex' flexDirection='column' gap={4}>
             <FormControl isInvalid={!!errors.amount}>
                 <InputNumber
                     maxLength={20}
                     {...register('amount', {
                         required: 'Поле является обязательным',
                     })}
-                    placeholder="Сумма *"
+                    placeholder='Сумма *'
                 />
                 <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
             </FormControl>
@@ -54,16 +54,16 @@ const Transfer = () => {
             <FormControl>
                 <Input
                     {...register('date', { required: 'Поле является обязательным' })}
-                    autoComplete="off"
+                    autoComplete='off'
                     defaultValue={new Date().toISOString().split('T')[0]}
-                    placeholder="Дата *"
-                    type="date"
+                    placeholder='Дата *'
+                    type='date'
                 />
             </FormControl>
 
             <FormControl isInvalid={!!errors.fromAccount}>
                 <Controller
-                    name="fromAccount"
+                    name='fromAccount'
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
@@ -79,7 +79,7 @@ const Transfer = () => {
                                         onChange(selectedOption.name)
                                     }
                                 }}
-                                placeholder="Со счета*"
+                                placeholder='Со счета*'
                                 isClearable
                                 isSearchable
                             />
@@ -91,7 +91,7 @@ const Transfer = () => {
 
             <FormControl isInvalid={!!errors.toAccount}>
                 <Controller
-                    name="toAccount"
+                    name='toAccount'
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
@@ -107,7 +107,7 @@ const Transfer = () => {
                                         onChange(selectedOption.name)
                                     }
                                 }}
-                                placeholder="На счет*"
+                                placeholder='На счет*'
                                 isClearable
                                 isSearchable
                             />
@@ -118,11 +118,11 @@ const Transfer = () => {
             </FormControl>
 
             <Textarea
-                placeholder="Комментарий"
+                placeholder='Комментарий'
                 maxLength={50}
-                size="sm"
+                size='sm'
                 {...register('comment')}
-                resize="none"
+                resize='none'
             />
 
             <Box style={{ width: '100%', textAlign: 'center' }}>

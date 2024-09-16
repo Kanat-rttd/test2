@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
 import dayjs from 'dayjs'
 import { updateShiftAccounting } from '@/utils/services/shiftAccounting.service'
@@ -78,7 +78,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
             <ModalContent>
                 <ModalHeader>Редактировать</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
+                <ModalBody display='flex' flexDirection='column' gap={3}>
                     <form
                         onSubmit={handleSubmitForm(handleConfirm)}
                         style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
@@ -88,34 +88,34 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
                                 {...register('date', {
                                     required: 'Поле является обязательным',
                                 })}
-                                autoComplete="off"
-                                placeholder="Дата *"
-                                type="date"
+                                autoComplete='off'
+                                placeholder='Дата *'
+                                type='date'
                                 defaultValue={new Date().toISOString().split('T')[0]}
                             />
                             <FormErrorMessage>{errors.date?.message}</FormErrorMessage>
                         </FormControl>
                         <Box
-                            display={'flex'}
-                            flexDirection={'column'}
+                            display='flex'
+                            flexDirection='column'
                             // alignItems={'center'}
                             gap={2}
-                            justifyContent={'space-between'}
+                            justifyContent='space-between'
                             ml={1}
                         >
                             {data &&
                                 data.shiftAccountingDetails.map((details, index) => {
                                     return (
                                         <Box
-                                            display={'flex'}
-                                            flexDirection={'row'}
-                                            alignItems={'center'}
-                                            justifyContent={'space-between'}
+                                            display='flex'
+                                            flexDirection='row'
+                                            alignItems='center'
+                                            justifyContent='space-between'
                                             key={index}
                                         >
                                             <Text>{details.departPersonal.name}</Text>
                                             <FormControl
-                                                width={'70%'}
+                                                width='70%'
                                                 key={index}
                                                 isInvalid={!!errors[`quantity_${index}`]}
                                             >
@@ -124,9 +124,9 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
                                                         {...register(`quantity_${index}`, {
                                                             required: 'Поле является обязательным',
                                                         })}
-                                                        autoComplete="off"
-                                                        placeholder={`Часы *`}
-                                                        type="text"
+                                                        autoComplete='off'
+                                                        placeholder='Часы *'
+                                                        type='text'
                                                         defaultValue={details.shiftTime}
                                                     />
                                                 </InputGroup>
@@ -161,11 +161,11 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
                             }}
                         >
                             <Input
-                                width={'40%'}
-                                type="submit"
-                                bg="purple.500"
-                                color="white"
-                                cursor="pointer"
+                                width='40%'
+                                type='submit'
+                                bg='purple.500'
+                                color='white'
+                                cursor='pointer'
                                 value={data ? 'Редактировать' : 'Добавить'}
                             />
                         </Box>

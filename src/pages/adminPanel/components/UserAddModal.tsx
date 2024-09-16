@@ -17,11 +17,11 @@ import { Controller, useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { createUser, updateUser } from '../../../utils/services/user.service'
 import PhoneInput from '@/components/shared/PhoneInput'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { User } from '@/utils/types/user.types'
 import PasswordInput from '@/components/shared/PasswordInput'
 import StatusSelect from '@/components/shared/StatusSelect'
 import InputNumber from '@/components/shared/NumberInput'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 interface UserAddModalProps {
     data: User | undefined
@@ -90,14 +90,14 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
     return (
         <>
             <Modal isCentered isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+                <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(90deg)' />
                 <ModalContent>
                     <ModalHeader>{data ? 'Редактировать' : 'Добавить'} адмперсонал</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
+                    <ModalBody display='flex' flexDirection='column' gap={3}>
                         <form
                             onSubmit={handleSubmitForm(sendData)}
-                            autoComplete="new-password"
+                            autoComplete='new-password'
                             style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                         >
                             <FormControl isInvalid={!!errors.name}>
@@ -105,9 +105,9 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                     {...register('name', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    autoComplete="new-password"
-                                    placeholder="Имя *"
-                                    type="text"
+                                    autoComplete='new-password'
+                                    placeholder='Имя *'
+                                    type='text'
                                 />
                                 <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
                             </FormControl>
@@ -117,9 +117,9 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                     {...register('surname', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    autoComplete="new-password"
-                                    placeholder="Фамилия *"
-                                    type="text"
+                                    autoComplete='new-password'
+                                    placeholder='Фамилия *'
+                                    type='text'
                                 />
                                 <FormErrorMessage>{errors.surname?.message}</FormErrorMessage>
                             </FormControl>
@@ -129,18 +129,18 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                     {...register('userClass', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    placeholder="Должность *"
-                                    autoComplete="new-password"
+                                    placeholder='Должность *'
+                                    autoComplete='new-password'
                                     // id="userClassInput"
                                     // name="userClassInput"
-                                    type="text"
+                                    type='text'
                                 />
                                 <FormErrorMessage>{errors.userClass?.message}</FormErrorMessage>
                             </FormControl>
 
                             <FormControl isInvalid={!!errors.permission}>
                                 <Controller
-                                    name="permission"
+                                    name='permission'
                                     control={control}
                                     rules={{ required: 'Поле является обязательным' }}
                                     render={({ field }) => {
@@ -157,7 +157,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                                     label: val.label,
                                                 }))}
                                                 onChange={(val) => onChange(val)}
-                                                placeholder="Доступ *"
+                                                placeholder='Доступ *'
                                                 isClearable
                                                 isSearchable
                                             />
@@ -168,7 +168,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                             </FormControl>
                             <FormControl isInvalid={!!errors.phone}>
                                 <Controller
-                                    name="phone"
+                                    name='phone'
                                     control={control}
                                     rules={{
                                         required: 'Поле является обязательным',
@@ -207,7 +207,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                             message: 'Максимальная длина 10 символов',
                                         },
                                     })}
-                                    placeholder="Фикс ЗП. *"
+                                    placeholder='Фикс ЗП. *'
                                 />
                                 <FormErrorMessage>{errors.fixSalary?.message}</FormErrorMessage>
                             </FormControl>
@@ -226,7 +226,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                     {...register('pass', {
                                         required: data ? false : 'Поле является обязательным',
                                     })}
-                                    placeholder="Пароль *"
+                                    placeholder='Пароль *'
                                 />
                                 <FormErrorMessage>{errors.pass?.message}</FormErrorMessage>
                             </FormControl>
@@ -239,7 +239,7 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                             value === getValues('pass') ||
                                             'Пароли должны совпадать',
                                     })}
-                                    placeholder="Подтвердите пароль *"
+                                    placeholder='Подтвердите пароль *'
                                 />
                                 <FormErrorMessage>{errors.checkPass?.message}</FormErrorMessage>
                             </FormControl>
@@ -251,11 +251,11 @@ const UserAddModal = ({ data, isOpen, onClose, onSuccess }: UserAddModalProps) =
                                 }}
                             >
                                 <Input
-                                    width={'40%'}
-                                    type="submit"
-                                    bg="purple.500"
-                                    color="white"
-                                    cursor="pointer"
+                                    width='40%'
+                                    type='submit'
+                                    bg='purple.500'
+                                    color='white'
+                                    cursor='pointer'
                                     value={data ? 'Редактировать' : 'Добавить'}
                                 />
                             </Box>

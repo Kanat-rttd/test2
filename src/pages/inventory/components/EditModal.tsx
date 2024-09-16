@@ -20,8 +20,8 @@ import Select from 'react-select'
 import { useEffect } from 'react'
 import { updateFactInput } from '@/utils/services/factInput.service'
 import { useApi } from '@/utils/services/axios'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { AddFactModalInputs, FactInputTableData } from '@/utils/types/factInput.types'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 const defaultValues = {
     id: 0,
@@ -94,10 +94,10 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                 <ModalHeader>Изменить</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Box display={'flex'} flexDirection={'column'} gap={3}>
+                    <Box display='flex' flexDirection='column' gap={3}>
                         <FormControl isInvalid={!!errors.place}>
                             <Controller
-                                name="place"
+                                name='place'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -115,7 +115,7 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                                                     onChange(selectedOption.label)
                                                 }
                                             }}
-                                            placeholder="Место *"
+                                            placeholder='Место *'
                                             isClearable
                                             isSearchable
                                         />
@@ -126,23 +126,25 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                         </FormControl>
 
                         <Box
-                            display={'flex'}
-                            flexDirection={'row'}
-                            alignItems={'center'}
-                            justifyContent={'space-between'}
+                            display='flex'
+                            flexDirection='row'
+                            alignItems='center'
+                            justifyContent='space-between'
                         >
                             <Text>{selectedData?.goodsCategory.category}</Text>
-                            <FormControl isInvalid={!!errors.quantity} width={'70%'}>
+                            <FormControl isInvalid={!!errors.quantity} width='70%'>
                                 <InputGroup>
                                     <Input
                                         {...register('quantity', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        autoComplete="off"
-                                        placeholder="Количество. *"
-                                        type="string"
+                                        autoComplete='off'
+                                        placeholder='Количество. *'
+                                        type='string'
                                     />
-                                    <InputRightAddon>{selectedData?.goodsCategory.unitOfMeasure}</InputRightAddon>
+                                    <InputRightAddon>
+                                        {selectedData?.goodsCategory.unitOfMeasure}
+                                    </InputRightAddon>
                                 </InputGroup>
                                 <FormErrorMessage>{errors.quantity?.message}</FormErrorMessage>
                             </FormControl>
@@ -151,10 +153,10 @@ const EditModal = ({ isOpen, onClose, selectedData, onSuccess }: EditModalProps)
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme="red" mr={3} onClick={handleClose}>
+                    <Button colorScheme='red' mr={3} onClick={handleClose}>
                         Отмена
                     </Button>
-                    <Button colorScheme="purple" onClick={handleSubmitForm(updateData)}>
+                    <Button colorScheme='purple' onClick={handleSubmitForm(updateData)}>
                         Изменить
                     </Button>
                 </ModalFooter>

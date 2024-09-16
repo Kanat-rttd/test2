@@ -48,7 +48,6 @@ interface Account {
     name: string
 }
 
-
 const History = () => {
     const { getURLs, setParam, getParam } = useURLParameters()
     const [sortOrder, setSortOrder] = useState('asc')
@@ -56,7 +55,7 @@ const History = () => {
 
     const { data: financeData } = useApi<Finance[]>(`finance?${getURLs().toString()}`)
     const { data: categoriesData } = useApi<Category[] | undefined>(`financeCategories`)
-    const {data: accounts} = useApi<Account[]>('financeAccount')
+    const { data: accounts } = useApi<Account[]>('financeAccount')
 
     const [selectedData, setSelectedData] = useState<History | null>(null)
     const [data, setData] = useState<Finance[] | undefined>(undefined)
@@ -99,13 +98,13 @@ const History = () => {
 
     return (
         <>
-            <Box display="flex" flexDirection="column" gap="1rem" padding={IsMobile() ? 0 : 5}>
-                <Box width={'55%'} gap={'15px'} mt={2} mb={1} display={'flex'}>
+            <Box display='flex' flexDirection='column' gap='1rem' padding={IsMobile() ? 0 : 5}>
+                <Box width='55%' gap='15px' mt={2} mb={1} display='flex'>
                     <DateRange />
                     <Select
-                        placeholder="Все счета"
-                        width={'90%'}
-                        size={'sm'}
+                        placeholder='Все счета'
+                        width='90%'
+                        size='sm'
                         borderRadius={5}
                         value={getParam('accountName')}
                         onChange={(e) => setParam('accountName', e.target.value)}
@@ -117,9 +116,9 @@ const History = () => {
                         ))}
                     </Select>
                     <Select
-                        placeholder="Все категории"
-                        width={'90%'}
-                        size={'sm'}
+                        placeholder='Все категории'
+                        width='90%'
+                        size='sm'
                         borderRadius={5}
                         value={getParam('categoryId')}
                         onChange={(e) => setParam('categoryId', e.target.value)}
@@ -134,17 +133,17 @@ const History = () => {
 
                 <UniversalComponent>
                     <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                        <Table variant="simple" width={'100%'}>
+                        <Table variant='simple' width='100%'>
                             <Thead>
                                 <Tr
-                                w={'100%'}
-                                    position={'sticky'}
+                                    w='100%'
+                                    position='sticky'
                                     top={0}
-                                    backgroundColor={'white'}
+                                    backgroundColor='white'
                                     zIndex={9}
                                 >
                                     <Th
-                                    w={'25%'}
+                                        w='25%'
                                         onClick={() =>
                                             sortData(sortOrder === 'asc' ? 'desc' : 'asc')
                                         }
@@ -165,10 +164,10 @@ const History = () => {
                                             <ChevronUpIcon boxSize={6} />
                                         )}
                                     </Th>
-                                    <Th w={'20%'}>Счёт</Th>
-                                    <Th w={'25%'}>Категория</Th>
-                                    <Th w={'25%'}>Комментарий</Th>
-                                    <Th w={'25%'}>Сумма</Th>
+                                    <Th w='20%'>Счёт</Th>
+                                    <Th w='25%'>Категория</Th>
+                                    <Th w='25%'>Комментарий</Th>
+                                    <Th w='25%'>Сумма</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -198,7 +197,7 @@ const History = () => {
                 <Dialog
                     isOpen={isOpen}
                     onClose={onClose}
-                    header="Удалить запись?"
+                    header='Удалить запись?'
                     body={
                         <>
                             <Text>
@@ -217,7 +216,7 @@ const History = () => {
                         </>
                     }
                     actionBtn={() => console.log('Удалить')}
-                    actionText="Удалить"
+                    actionText='Удалить'
                 />
             </Box>
         </>

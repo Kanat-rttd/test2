@@ -19,7 +19,7 @@ import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { updateDispatchQuantity } from '@/utils/services/dispatch.service'
 import { DispatchType } from '@/utils/types/dispatch.types'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 import { useApi } from '@/utils/services/axios'
 import { ContragentCategoryType, ContragentType } from '@/utils/types/contragent.types'
 
@@ -92,14 +92,14 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
             <ModalContent>
                 <ModalHeader>Редактировать</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
+                <ModalBody display='flex' flexDirection='column' gap={3}>
                     <FormControl isInvalid={!!errors.name}>
                         <Select
                             {...register('contragentId', {
                                 required: 'Поле является обязательным',
                             })}
-                            placeholder="Имя *"
-                            width={'100%'}
+                            placeholder='Имя *'
+                            width='100%'
                         >
                             {clientsData?.map((client, index) => {
                                 return (
@@ -116,15 +116,15 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
                         data.goodsDispatchDetails.map((details, index) => {
                             return (
                                 <Box
-                                    display={'flex'}
-                                    flexDirection={'row'}
-                                    alignItems={'center'}
-                                    justifyContent={'space-between'}
+                                    display='flex'
+                                    flexDirection='row'
+                                    alignItems='center'
+                                    justifyContent='space-between'
                                     key={index}
                                 >
                                     <Text>{details.product.name}</Text>
                                     <FormControl
-                                        width={'70%'}
+                                        width='70%'
                                         key={index}
                                         isInvalid={!!errors[`quantity_${index}`]}
                                     >
@@ -133,9 +133,9 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
                                                 {...register(`quantity_${index}`, {
                                                     required: 'Поле является обязательным',
                                                 })}
-                                                autoComplete="off"
+                                                autoComplete='off'
                                                 placeholder={`Количество ${details.product.name} *`}
-                                                type="text"
+                                                type='text'
                                             />
                                         </InputGroup>
                                         <FormErrorMessage>
@@ -148,10 +148,10 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, data, onSuccess 
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme="blue" mr={3} onClick={onClose}>
+                    <Button colorScheme='blue' mr={3} onClick={onClose}>
                         Закрыть
                     </Button>
-                    <Button colorScheme="purple" onClick={handleSubmitForm(sendData)}>
+                    <Button colorScheme='purple' onClick={handleSubmitForm(sendData)}>
                         Подтвердить
                     </Button>
                 </ModalFooter>

@@ -1,4 +1,3 @@
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { useApi } from '@/utils/services/axios'
 import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
 import {
@@ -23,6 +22,7 @@ import { createAdjustment } from '@/utils/services/adjustment.service'
 import { useState } from 'react'
 import { AddIcon, MinusIcon } from '@chakra-ui/icons'
 import InputNumber from '@/components/shared/NumberInput'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 type EditModalProps = {
     isOpen: boolean
@@ -87,10 +87,10 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
                     <ModalHeader>Добавить корректировки</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Box display={'flex'} flexDirection={'column'} gap={3}>
+                        <Box display='flex' flexDirection='column' gap={3}>
                             <FormControl isInvalid={!!errors.item}>
                                 <Controller
-                                    name="item"
+                                    name='item'
                                     control={control}
                                     rules={{ required: 'Поле является обязательным' }}
                                     render={({ field }) => {
@@ -107,7 +107,7 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
                                                     onChange(val)
                                                     setSelectedValue(val)
                                                 }}
-                                                placeholder="Товар *"
+                                                placeholder='Товар *'
                                                 isClearable
                                                 isSearchable
                                             />
@@ -126,7 +126,7 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
                                         {...register('qty', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        placeholder="Количество *"
+                                        placeholder='Количество *'
                                     />
                                     <InputRightAddon>
                                         {selectedValue ? selectedValue.unitOfMeasure : 'кг'}
@@ -137,21 +137,21 @@ const CorrectModal = ({ isOpen, onClose }: EditModalProps) => {
 
                             <FormControl>
                                 <Textarea
-                                    placeholder="Комментарий"
+                                    placeholder='Комментарий'
                                     maxLength={50}
-                                    size="sm"
+                                    size='sm'
                                     {...register('Comment')}
-                                    resize="none"
+                                    resize='none'
                                 />
                             </FormControl>
                         </Box>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme="red" mr={3} onClick={onClose}>
+                        <Button colorScheme='red' mr={3} onClick={onClose}>
                             Отмена
                         </Button>
-                        <Button colorScheme="purple" onClick={handleSubmitForm(sendData)}>
+                        <Button colorScheme='purple' onClick={handleSubmitForm(sendData)}>
                             Отправить
                         </Button>
                     </ModalFooter>

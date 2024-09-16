@@ -18,11 +18,11 @@ import { Controller, useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { useApi } from '@/utils/services/axios'
 import { createOverprice, updateOverprice } from '@/utils/services/overprice.service'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { OverPriceInputs, OverPriceType } from '@/utils/types/overPrice.types'
 import { monthData } from '@/utils/constants/month.consts'
 import { ContragentCategoryType, ContragentType } from '@/utils/types/contragent.types'
 import InputNumber from '@/components/shared/NumberInput'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 const defaultValues = {
     contragentId: 0,
@@ -111,14 +111,14 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
     return (
         <>
             <Modal isCentered isOpen={isOpen} onClose={handleClose}>
-                <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+                <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(90deg)' />
                 <ModalContent>
                     <ModalHeader>{data ? 'Редактировать' : 'Добавить'} Сверху</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
+                    <ModalBody display='flex' flexDirection='column' gap={3}>
                         <FormControl isInvalid={!!errors.contragentId}>
                             <Controller
-                                name="contragentId"
+                                name='contragentId'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -141,7 +141,7 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                                                     onChange(selectedOption.id)
                                                 }
                                             }}
-                                            placeholder="Реализатор *"
+                                            placeholder='Реализатор *'
                                             isClearable
                                             isSearchable
                                         />
@@ -153,7 +153,7 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
 
                         <FormControl isInvalid={!!errors.month}>
                             <Controller
-                                name="month"
+                                name='month'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -171,7 +171,7 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                                                     onChange(selectedOption.id)
                                                 }
                                             }}
-                                            placeholder="Месяц *"
+                                            placeholder='Месяц *'
                                             isClearable
                                             isSearchable
                                         />
@@ -194,7 +194,7 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                                         message: 'Некорректный год.',
                                     },
                                 })}
-                                placeholder="Год *"
+                                placeholder='Год *'
                             />
                             <FormErrorMessage>{errors.year?.message}</FormErrorMessage>
                         </FormControl>
@@ -205,7 +205,7 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                                     {...register('price', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    placeholder="Сверху *"
+                                    placeholder='Сверху *'
                                 />
                                 <InputRightAddon>тг</InputRightAddon>
                             </InputGroup>
@@ -213,10 +213,10 @@ const OverPriceAddModal = ({ data, isOpen, onClose, onSuccess }: OverPriceAddMod
                         </FormControl>
                     </ModalBody>
                     <ModalFooter gap={3}>
-                        <Button onClick={handleClose} colorScheme="red">
+                        <Button onClick={handleClose} colorScheme='red'>
                             Отмена
                         </Button>
-                        <Button colorScheme="purple" onClick={handleSubmitForm(sendData)}>
+                        <Button colorScheme='purple' onClick={handleSubmitForm(sendData)}>
                             {data ? 'Редактировать' : 'Добавить'}
                         </Button>
                     </ModalFooter>

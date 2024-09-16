@@ -7,7 +7,7 @@ import { useApi } from '@/utils/services/axios'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { OrderArrayType } from '@/utils/types/order.types'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 import RequestAddModal from '../components/RequestAddModal'
 
 const ProcessingPage = () => {
@@ -38,21 +38,16 @@ const ProcessingPage = () => {
 
     return (
         <UniversalComponent>
-            <Box width={'100%'} height={'94%'} p={5} mt={1}>
-                <Box
-                    marginBottom={5}
-                    height={'5%'}
-                    display={'flex'}
-                    justifyContent={'space-between'}
-                >
+            <Box width='100%' height='94%' p={5} mt={1}>
+                <Box marginBottom={5} height='5%' display='flex' justifyContent='space-between'>
                     <Box
-                        width={'100%'}
-                        display={'flex'}
-                        justifyContent={'space-between'}
-                        alignItems={'center'}
+                        width='100%'
+                        display='flex'
+                        justifyContent='space-between'
+                        alignItems='center'
                     >
                         <DateRange />
-                        <Button colorScheme="purple" onClick={onOpen}>
+                        <Button colorScheme='purple' onClick={onOpen}>
                             Добавить закупки
                         </Button>
                     </Box>

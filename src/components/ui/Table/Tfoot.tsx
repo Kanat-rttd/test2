@@ -5,7 +5,7 @@ interface StyledTfootProps extends TableFooterProps {
 }
 
 const StyledTfoot: React.FC<StyledTfootProps> = ({ children, ...props }) => {
-    return ( 
+    return (
         <Tfoot className={classes.tfoot} {...props}>
             {children}
         </Tfoot>

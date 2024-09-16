@@ -17,10 +17,10 @@ import { deleteClient, getAllClients } from '@/utils/services/client.service'
 import useSWR, { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'
 import Dialog from '@/components/Dialog'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { Thead, TableContainer } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { ReleaserType } from '@/utils/types/releaser.types'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 const AdminPanel = () => {
     const { success, error } = useNotify()
@@ -82,13 +82,13 @@ const AdminPanel = () => {
     return (
         <>
             <UniversalComponent>
-                <Box display="flex" flexDirection="column" p={5}>
-                    <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
-                        <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                <Box display='flex' flexDirection='column' p={5}>
+                    <Box marginBottom={6} display='flex' justifyContent='space-between'>
+                        <Box display='flex' gap='15px' width='fit-content'>
                             <Select
-                                name="name"
-                                placeholder="Имя"
-                                width={'fit-content'}
+                                name='name'
+                                placeholder='Имя'
+                                width='fit-content'
                                 onChange={handleSelectChange}
                             >
                                 {filtersData?.map((client, index) => (
@@ -98,9 +98,9 @@ const AdminPanel = () => {
                                 ))}
                             </Select>
                             <Select
-                                name="telegrammId"
-                                placeholder="Телеграм ID"
-                                width={'fit-content'}
+                                name='telegrammId'
+                                placeholder='Телеграм ID'
+                                width='fit-content'
                                 onChange={handleSelectChange}
                             >
                                 {filtersData?.map((client, index) => (
@@ -110,9 +110,9 @@ const AdminPanel = () => {
                                 ))}
                             </Select>
                             <Select
-                                name="status"
-                                placeholder="Статус"
-                                width={'fit-content'}
+                                name='status'
+                                placeholder='Статус'
+                                width='fit-content'
                                 onChange={handleSelectChange}
                             >
                                 <option value={1}>Активный</option>
@@ -120,7 +120,7 @@ const AdminPanel = () => {
                             </Select>
                         </Box>
 
-                        <Button colorScheme="purple" onClick={onOpen}>
+                        <Button colorScheme='purple' onClick={onOpen}>
                             Добавить
                         </Button>
                     </Box>
@@ -129,9 +129,9 @@ const AdminPanel = () => {
                             isLoading={isLoading}
                             style={{ width: '100%', height: '100%', overflowY: 'auto' }}
                         >
-                            <Table variant="simple">
+                            <Table variant='simple'>
                                 <Thead>
-                                    <Tr position={'sticky'}>
+                                    <Tr position='sticky'>
                                         <Th>№</Th>
                                         <Th>Имя</Th>
                                         <Th>Фамилия</Th>
@@ -157,10 +157,10 @@ const AdminPanel = () => {
                                                     </Td>
                                                     <Td sx={{ width: '5%' }}>
                                                         <IconButton
-                                                            variant="outline"
-                                                            size={'sm'}
-                                                            colorScheme="teal"
-                                                            aria-label="Send email"
+                                                            variant='outline'
+                                                            size='sm'
+                                                            colorScheme='teal'
+                                                            aria-label='Send email'
                                                             marginRight={3}
                                                             onClick={() => {
                                                                 setSelectedData(user)
@@ -169,10 +169,10 @@ const AdminPanel = () => {
                                                             icon={<EditIcon />}
                                                         />
                                                         <IconButton
-                                                            variant="outline"
-                                                            size={'sm'}
-                                                            colorScheme="teal"
-                                                            aria-label="Send email"
+                                                            variant='outline'
+                                                            size='sm'
+                                                            colorScheme='teal'
+                                                            aria-label='Send email'
                                                             marginRight={3}
                                                             onClick={() => {
                                                                 setSelectedData(user)
@@ -210,13 +210,13 @@ const AdminPanel = () => {
                         dialog.onClose()
                         setSelectedData(undefined)
                     }}
-                    header="Удалить"
-                    body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                    header='Удалить'
+                    body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                     actionBtn={() => {
                         dialog.onClose()
                         deleteUser(selectedData)
                     }}
-                    actionText="Удалить"
+                    actionText='Удалить'
                 />
             </UniversalComponent>
         </>

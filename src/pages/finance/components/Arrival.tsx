@@ -4,10 +4,10 @@ import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
 import { createArrival } from '@/utils/services/finance.service'
 import { useApi } from '@/utils/services/axios'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { ContragentType } from '@/utils/types/contragent.types'
 import InputNumber from '@/components/shared/NumberInput'
 import { useEffect, useState } from 'react'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 const account = [
     {
@@ -89,7 +89,7 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
     const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
     const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=1')
     const [filteredFinanceCategories, setFilteredFinanceCategories] = useState<Category[]>([])
-    const [filteredContragents, setFilteredContragents] = useState<ContragentType[] >([])
+    const [filteredContragents, setFilteredContragents] = useState<ContragentType[]>([])
     const [filteredDispatches, setFilteredDispatches] = useState<InvoiceData[] | undefined>([])
 
     const {
@@ -118,32 +118,42 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
     }
 
     useEffect(() => {
-        const values = getValues();
-        
-        if (!contragetnsData || !categoriesData) return;
+        const values = getValues()
+
+        if (!contragetnsData || !categoriesData) return
 
         if (values.financeCategoryId !== null) {
-          const contragentType = categoriesData.find((item) => item.id === Number(values.financeCategoryId))?.contragentTypeId;
-          const filteredContragents = contragetnsData.filter((item) => item.contragentTypeId === contragentType);
-          setFilteredContragents(filteredContragents);
+            const contragentType = categoriesData.find(
+                (item) => item.id === Number(values.financeCategoryId),
+            )?.contragentTypeId
+            const filteredContragents = contragetnsData.filter(
+                (item) => item.contragentTypeId === contragentType,
+            )
+            setFilteredContragents(filteredContragents)
         }
-    
-        if (values.contragentId !== null) {
-          const selectedContragent = contragetnsData.find((item) => item.id === Number(values.contragentId));
-          const filteredFinanceCategories = categoriesData.filter((item) => item.contragentTypeId === selectedContragent?.contragentTypeId);
-          setFilteredFinanceCategories(filteredFinanceCategories);
 
-          if(selectedContragent?.contragentType.type === 'реализатор'){
-            setFilteredDispatches(dispatchesData?.filter((item) => item.contragentId === selectedContragent.id))
-          }
+        if (values.contragentId !== null) {
+            const selectedContragent = contragetnsData.find(
+                (item) => item.id === Number(values.contragentId),
+            )
+            const filteredFinanceCategories = categoriesData.filter(
+                (item) => item.contragentTypeId === selectedContragent?.contragentTypeId,
+            )
+            setFilteredFinanceCategories(filteredFinanceCategories)
+
+            if (selectedContragent?.contragentType.type === 'реализатор') {
+                setFilteredDispatches(
+                    dispatchesData?.filter((item) => item.contragentId === selectedContragent.id),
+                )
+            }
         }
-      }, [watch('financeCategoryId'), watch('contragentId')]);
-    
-      useEffect(() => {
+    }, [watch('financeCategoryId'), watch('contragentId')])
+
+    useEffect(() => {
         if (contragetnsData) {
-          setFilteredContragents(contragetnsData);
+            setFilteredContragents(contragetnsData)
         }
-      }, [contragetnsData]);
+    }, [contragetnsData])
 
     return (
         <>
@@ -151,24 +161,24 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                 <InputNumber
                     maxLength={20}
                     {...register('amount', { required: 'Поле является обязательным' })}
-                    placeholder="Сумма *"
+                    placeholder='Сумма *'
                 />
                 <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl variant={'floating'} isInvalid={!!errors.date}>
+            <FormControl variant='floating' isInvalid={!!errors.date}>
                 <Input
                     {...register('date', { required: 'Поле является обязательным' })}
-                    autoComplete="off"
+                    autoComplete='off'
                     defaultValue={new Date().toISOString().split('T')[0]}
-                    placeholder="Дата"
-                    type="date"
+                    placeholder='Дата'
+                    type='date'
                 />
             </FormControl>
 
             <FormControl isInvalid={!!errors.account}>
                 <Controller
-                    name="account"
+                    name='account'
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
@@ -183,7 +193,7 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                                 onChange={(selectedOption: Account | null) => {
                                     onChange(selectedOption?.name)
                                 }}
-                                placeholder="Выберите счет *"
+                                placeholder='Выберите счет *'
                                 isClearable
                                 isSearchable
                             />
@@ -195,24 +205,26 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
 
             <FormControl isInvalid={!!errors.financeCategoryId}>
                 <Controller
-                    name="financeCategoryId"
+                    name='financeCategoryId'
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
                         const { onChange, value } = field
                         return (
                             <Select
-                                options={filteredFinanceCategories.length ? filteredFinanceCategories : categoriesData}
+                                options={
+                                    filteredFinanceCategories.length
+                                        ? filteredFinanceCategories
+                                        : categoriesData
+                                }
                                 getOptionLabel={(option: Category) => option.name}
                                 getOptionValue={(option: Category) => `${option.id}`}
-                                value={categoriesData?.filter(
-                                    (option) => option.id == value,
-                                )}
+                                value={categoriesData?.filter((option) => option.id == value)}
                                 // onChange={(val: Category) => onChange(val?.id)}
                                 onChange={(selectedOption: Category | null) => {
                                     onChange(selectedOption?.id)
                                 }}
-                                placeholder="Категория *"
+                                placeholder='Категория *'
                                 isClearable
                                 isSearchable
                             />
@@ -224,14 +236,18 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
 
             <FormControl isInvalid={!!errors.contragentId}>
                 <Controller
-                    name="contragentId"
+                    name='contragentId'
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
                         const { onChange, value } = field
                         return (
                             <Select
-                                options={filteredContragents.length ? filteredContragents : contragetnsData}
+                                options={
+                                    filteredContragents.length
+                                        ? filteredContragents
+                                        : contragetnsData
+                                }
                                 getOptionLabel={(option: ContragentType) =>
                                     `${option.contragentName} - ${option.contragentType.type}`
                                 }
@@ -240,7 +256,7 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                                 onChange={(selectedOption: ContragentType | null) => {
                                     onChange(selectedOption?.id)
                                 }}
-                                placeholder="Контрагент *"
+                                placeholder='Контрагент *'
                                 formatOptionLabel={formatOptionLabel}
                                 isClearable
                                 isSearchable
@@ -253,7 +269,7 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
 
             <FormControl isInvalid={!!errors.invoiceNumber}>
                 <Controller
-                    name="invoiceNumber"
+                    name='invoiceNumber'
                     control={control}
                     render={({ field }) => {
                         const { onChange, value } = field
@@ -270,7 +286,7 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                                 onChange={(selectedOption: InvoiceData | null) => {
                                     onChange(selectedOption?.invoiceNumber)
                                 }}
-                                placeholder="Номер накладной"
+                                placeholder='Номер накладной'
                                 isClearable
                                 isSearchable
                             />
@@ -282,11 +298,11 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
 
             <FormControl>
                 <Textarea
-                    placeholder="Комментарий"
+                    placeholder='Комментарий'
                     maxLength={50}
-                    size="sm"
+                    size='sm'
                     {...register('comment')}
-                    resize="none"
+                    resize='none'
                 />
             </FormControl>
 

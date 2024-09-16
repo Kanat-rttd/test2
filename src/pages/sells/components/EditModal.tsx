@@ -20,7 +20,7 @@ import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { useApi } from '@/utils/services/axios'
 // import { ClientType } from '@/utils/types/client.type'
 import { Product } from '@/utils/types/product.types'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 import InputNumber from '@/components/shared/NumberInput'
 import { ContragentType } from '@/utils/types/contragent.types'
 
@@ -124,7 +124,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader textAlign={'center'}>Изменить</ModalHeader>
+                <ModalHeader textAlign='center'>Изменить</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <form
@@ -136,8 +136,8 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                                 {...register('contragentId', {
                                     required: 'Поле является обязательным',
                                 })}
-                                variant="filled"
-                                placeholder="Имя клиента"
+                                variant='filled'
+                                placeholder='Имя клиента'
                             >
                                 {contragents?.map((client) => (
                                     <option key={client.contragentName} value={client.id}>
@@ -157,31 +157,31 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                                                   .split('T')[0]
                                             : ''
                                     }
-                                    autoComplete="off"
-                                    placeholder="Дата *"
-                                    type="date"
+                                    autoComplete='off'
+                                    placeholder='Дата *'
+                                    type='date'
                                     marginBottom={3}
                                     readOnly
-                                    bg={'RGB(223, 223, 223)'}
+                                    bg='RGB(223, 223, 223)'
                                 />
                             </InputGroup>
                         </FormControl>
 
-                        <Box display="flex" gap={5} marginBottom={1}>
-                            <Text width="50%">Название товара</Text>
-                            <Text width="25%">Количество</Text>
-                            <Text width="25%">Цена</Text>
+                        <Box display='flex' gap={5} marginBottom={1}>
+                            <Text width='50%'>Название товара</Text>
+                            <Text width='25%'>Количество</Text>
+                            <Text width='25%'>Цена</Text>
                         </Box>
                         {fields.map((_, index) => {
                             return (
-                                <Box display="flex" gap="1rem" alignItems="center" key={index}>
+                                <Box display='flex' gap='1rem' alignItems='center' key={index}>
                                     <Select
-                                        width="50%"
+                                        width='50%'
                                         {...register(`products.${index}.productId`, {
                                             required: 'Поле является обязательным',
                                         })}
-                                        variant="filled"
-                                        placeholder="Вид хлеба"
+                                        variant='filled'
+                                        placeholder='Вид хлеба'
                                         disabled
                                     >
                                         {products?.map((product) => (
@@ -191,19 +191,19 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                                         ))}
                                     </Select>
                                     <Input
-                                        width="25%"
+                                        width='25%'
                                         {...register(`products.${index}.quantity`, {
                                             required: 'Поле является обязательным',
                                         })}
-                                        placeholder="Количество"
+                                        placeholder='Количество'
                                         disabled
-                                        backgroundColor="#edf2f7"
+                                        backgroundColor='#edf2f7'
                                     />
                                     <InputNumber
                                         {...register(`products.${index}.price`, {
                                             required: 'Поле является обязательным',
                                         })}
-                                        placeholder="Количество"
+                                        placeholder='Количество'
                                     />
                                 </Box>
                             )
@@ -216,12 +216,12 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
                             }}
                         >
                             <Input
-                                width={'40%'}
-                                type="submit"
-                                bg="purple.500"
-                                color="white"
-                                cursor="pointer"
-                                value={'Редактировать'}
+                                width='40%'
+                                type='submit'
+                                bg='purple.500'
+                                color='white'
+                                cursor='pointer'
+                                value='Редактировать'
                             />
                         </Box>
                     </form>

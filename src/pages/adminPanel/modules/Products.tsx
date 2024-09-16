@@ -88,13 +88,13 @@ const AdminPanel = () => {
     return (
         <>
             <UniversalComponent>
-                <Box display="flex" flexDirection="column" p={5}>
-                    <Box mb={6} display={'flex'} justifyContent={'space-between'}>
-                        <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                <Box display='flex' flexDirection='column' p={5}>
+                    <Box mb={6} display='flex' justifyContent='space-between'>
+                        <Box display='flex' gap='15px' width='fit-content'>
                             <Select
-                                placeholder="Наименование"
-                                width={'fit-content'}
-                                name="name"
+                                placeholder='Наименование'
+                                width='fit-content'
+                                name='name'
                                 onChange={handleSelectChange}
                             >
                                 {dataForSelect?.map((product, index) => (
@@ -104,9 +104,9 @@ const AdminPanel = () => {
                                 ))}
                             </Select>
                             <Select
-                                placeholder="Цех"
-                                width={'fit-content'}
-                                name="bakingFacilityUnitId"
+                                placeholder='Цех'
+                                width='fit-content'
+                                name='bakingFacilityUnitId'
                                 onChange={handleSelectChange}
                             >
                                 {facilityUnitsData?.map((unit, index) => (
@@ -116,9 +116,9 @@ const AdminPanel = () => {
                                 ))}
                             </Select>
                             <Select
-                                placeholder="Статус"
-                                width={'fit-content'}
-                                name="status"
+                                placeholder='Статус'
+                                width='fit-content'
+                                name='status'
                                 onChange={handleSelectChange}
                             >
                                 <option value={1}>Активный</option>
@@ -126,7 +126,7 @@ const AdminPanel = () => {
                             </Select>
                         </Box>
 
-                        <Button colorScheme="purple" onClick={onOpen}>
+                        <Button colorScheme='purple' onClick={onOpen}>
                             Добавить
                         </Button>
                     </Box>
@@ -134,9 +134,9 @@ const AdminPanel = () => {
                         isLoading={isLoading}
                         style={{ width: '100%', height: '100%', overflowY: 'auto' }}
                     >
-                        <Table variant="simple">
+                        <Table variant='simple'>
                             <Thead>
-                                <Tr position={'sticky'}>
+                                <Tr position='sticky'>
                                     <Th>№</Th>
                                     <Th>Наименование</Th>
                                     <Th>Цех</Th>
@@ -166,10 +166,10 @@ const AdminPanel = () => {
                                                     <Td>{product.costPrice}</Td>
                                                     <Td>
                                                         <IconButton
-                                                            variant="outline"
-                                                            size={'sm'}
-                                                            colorScheme="teal"
-                                                            aria-label="Send email"
+                                                            variant='outline'
+                                                            size='sm'
+                                                            colorScheme='teal'
+                                                            aria-label='Send email'
                                                             marginRight={3}
                                                             onClick={() => {
                                                                 setSelectedData(product)
@@ -178,10 +178,10 @@ const AdminPanel = () => {
                                                             icon={<EditIcon />}
                                                         />
                                                         <IconButton
-                                                            variant="outline"
-                                                            size={'sm'}
-                                                            colorScheme="teal"
-                                                            aria-label="Send email"
+                                                            variant='outline'
+                                                            size='sm'
+                                                            colorScheme='teal'
+                                                            aria-label='Send email'
                                                             marginRight={3}
                                                             onClick={() => {
                                                                 setSelectedData(product)
@@ -213,13 +213,13 @@ const AdminPanel = () => {
                     <Dialog
                         isOpen={dialog.isOpen}
                         onClose={dialog.onClose}
-                        header="Удалить"
-                        body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                        header='Удалить'
+                        body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                         actionBtn={() => {
                             dialog.onClose()
                             delProduct(selectedData)
                         }}
-                        actionText="Удалить"
+                        actionText='Удалить'
                     />
                 </Box>
             </UniversalComponent>

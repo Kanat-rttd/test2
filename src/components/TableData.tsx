@@ -21,32 +21,34 @@ const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
 
     return (
         <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-            <Table variant="simple">
+            <Table variant='simple'>
                 <Thead>
                     <Tr>
                         <Th>№</Th>
                         <Th>Реализаторы</Th>
                         {Array.from(uniqProducts).map((name, index) => (
-                            <Th minWidth={'150px'} textAlign={'center'} key={index}>
+                            <Th minWidth='150px' textAlign='center' key={index}>
                                 {name}
                             </Th>
                         ))}
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {data?.length ? data?.map((item, index) => (
-                        <Tr key={index}>
-                            <Td>{index + 1}</Td>
-                            <Td>{item.client.name}</Td>
-                            {Array.from(uniqProducts).map((productName, productIndex) => (
-                                <Td textAlign={'center'} key={productIndex}>
-                                    {item.orderDetails.find(
-                                        (prod) => prod.product.name === productName,
-                                    )?.orderedQuantity || ''}
-                                </Td>
-                            ))}
-                        </Tr>
-                    )): (
+                    {data?.length ? (
+                        data?.map((item, index) => (
+                            <Tr key={index}>
+                                <Td>{index + 1}</Td>
+                                <Td>{item.client.name}</Td>
+                                {Array.from(uniqProducts).map((productName, productIndex) => (
+                                    <Td textAlign='center' key={productIndex}>
+                                        {item.orderDetails.find(
+                                            (prod) => prod.product.name === productName,
+                                        )?.orderedQuantity || ''}
+                                    </Td>
+                                ))}
+                            </Tr>
+                        ))
+                    ) : (
                         <Tr>
                             <Th>Нет данных</Th>
                         </Tr>
@@ -54,20 +56,20 @@ const TableData = ({ data }: { data: OrderArrayType[] | undefined }) => {
                 </Tbody>
                 <Tfoot>
                     <Tr>
-                        <Th fontSize={16} fontWeight={'bold'} color={'#000'}>
+                        <Th fontSize={16} fontWeight='bold' color='#000'>
                             Итого
                         </Th>
                         <Th></Th>
 
                         {Array.from(uniqProducts).map((productName, productIndex) => (
                             <Th
-                                marginLeft={'50px'}
-                                minWidth={'150px'}
+                                marginLeft='50px'
+                                minWidth='150px'
                                 key={productIndex}
                                 fontSize={16}
-                                fontWeight={'bold'}
-                                textAlign={'center'}
-                                color={'#000'}
+                                fontWeight='bold'
+                                textAlign='center'
+                                color='#000'
                             >
                                 {getColumnTotal(productName)}
                             </Th>

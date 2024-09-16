@@ -22,7 +22,7 @@ import { createSale, updateSale } from '@/utils/services/sales.service'
 import { ClientType } from '@/utils/types/client.type'
 import { Product } from '@/utils/types/product.types'
 import { useApi } from '@/utils/services/axios'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 import { useEffect } from 'react'
 import { CloseIcon } from '@chakra-ui/icons'
 import InputNumber from '@/components/shared/NumberInput'
@@ -114,7 +114,7 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
 
     return (
         <Modal isCentered isOpen={isOpen} onClose={handleModalClose}>
-            <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+            <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(90deg)' />
             <ModalContent>
                 <ModalHeader>{selectedData ? 'Редактировать' : 'Добавить'} заказ</ModalHeader>
                 <ModalCloseButton />
@@ -124,13 +124,13 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
                             onSubmit={handleSubmitForm(addRequest)}
                             style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                         >
-                            <FormControl id="type" isRequired isInvalid={!!errors.clientId}>
+                            <FormControl id='type' isRequired isInvalid={!!errors.clientId}>
                                 <Select
                                     {...register('clientId', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    variant="filled"
-                                    placeholder="Имя клиента"
+                                    variant='filled'
+                                    placeholder='Имя клиента'
                                 >
                                     {clients?.map((client) => (
                                         <option key={client.name} value={client.id}>
@@ -146,25 +146,25 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
                                     {...register('date', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    autoComplete="off"
-                                    placeholder="Смена *"
-                                    type="date"
+                                    autoComplete='off'
+                                    placeholder='Смена *'
+                                    type='date'
                                     defaultValue={new Date().toISOString().split('T')[0]}
                                 />
                                 <FormErrorMessage>{errors.date?.message}</FormErrorMessage>
                             </FormControl>
                             <FormControl
                                 isRequired
-                                gap="1rem"
-                                display="flex"
-                                flexDirection="column"
+                                gap='1rem'
+                                display='flex'
+                                flexDirection='column'
                             >
                                 {fields.map((_, index) => {
                                     return (
                                         <Box
-                                            display="flex"
-                                            gap="1rem"
-                                            alignItems="center"
+                                            display='flex'
+                                            gap='1rem'
+                                            alignItems='center'
                                             key={index}
                                         >
                                             <Controller
@@ -182,8 +182,8 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
                                                             onChange={(selectedOption) => {
                                                                 onChange(selectedOption)
                                                             }}
-                                                            variant="filled"
-                                                            placeholder="Выберите продукт"
+                                                            variant='filled'
+                                                            placeholder='Выберите продукт'
                                                         >
                                                             {productsData
                                                                 ?.filter((item) => {
@@ -212,11 +212,11 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
                                                 {...register(`products.${index}.orderedQuantity`, {
                                                     required: 'Поле является обязательным',
                                                 })}
-                                                placeholder="Количество"
+                                                placeholder='Количество'
                                             />
                                             {fields.length > 1 && (
                                                 <CloseIcon
-                                                    cursor="pointer"
+                                                    cursor='pointer'
                                                     onClick={() => remove(index)}
                                                 />
                                             )}
@@ -239,18 +239,18 @@ const RequestAddModal = ({ isOpen, onClose, selectedData, mutate }: ClientAddMod
                                 }}
                             >
                                 <Input
-                                    width={'40%'}
-                                    type="submit"
-                                    bg="purple.500"
-                                    color="white"
-                                    cursor="pointer"
+                                    width='40%'
+                                    type='submit'
+                                    bg='purple.500'
+                                    color='white'
+                                    cursor='pointer'
                                     value={selectedData ? 'Редактировать' : 'Добавить'}
                                 />
                             </Box>
                         </form>
                     </Stack>
                 </ModalBody>
-                <ModalFooter display={'flex'} alignSelf={'center'} gap={5}></ModalFooter>
+                <ModalFooter display='flex' alignSelf='center' gap={5}></ModalFooter>
             </ModalContent>
         </Modal>
     )

@@ -97,7 +97,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
             products: selectedBreads.map(({ id, quantity }) => ({
                 productId: Number(id),
                 quantity: Number(quantity),
-                productPrice: undefined
+                productPrice: undefined,
             })),
             dispatch: status,
         }
@@ -119,10 +119,10 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
             <ModalContent>
                 <ModalHeader>{status == '0' ? 'Выдача' : 'Возврат'} продукции</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody display={'flex'} gap={'10px'} flexDirection={'column'}>
+                <ModalBody display='flex' gap='10px' flexDirection='column'>
                     <Select
-                        placeholder="Выберите получателя"
-                        width={'100%'}
+                        placeholder='Выберите получателя'
+                        width='100%'
                         onChange={handleRecipientChange}
                         value={recipient}
                     >
@@ -136,13 +136,13 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                     </Select>
 
                     <Box
-                        display={'grid'}
-                        gridTemplateColumns={'repeat(3, 1fr)'}
-                        gap={'10px'}
-                        border={'1px solid #E2E8F0'}
-                        padding={'5px'}
-                        borderRadius={'8px'}
-                        marginTop={'5px'}
+                        display='grid'
+                        gridTemplateColumns='repeat(3, 1fr)'
+                        gap='10px'
+                        border='1px solid #E2E8F0'
+                        padding='5px'
+                        borderRadius='8px'
+                        marginTop='5px'
                     >
                         {breadNames.map((bread) => {
                             return (
@@ -159,14 +159,14 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                         })}
                     </Box>
 
-                    <Box display={'flex'} flexDirection={'column'} gap={'10px'}>
+                    <Box display='flex' flexDirection='column' gap='10px'>
                         {selectedBreads.map(({ name, quantity }) => {
                             return (
-                                <Box display={'flex'} gap={'10px'} key={name}>
+                                <Box display='flex' gap='10px' key={name}>
                                     <Text>{name}</Text>
                                     <Input
-                                        type="number"
-                                        placeholder="Кол-во"
+                                        type='number'
+                                        placeholder='Кол-во'
                                         value={quantity}
                                         onChange={(e) => handleQuantityChange(e, name)}
                                     />
@@ -177,10 +177,10 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button mr={3} onClick={onClose} colorScheme={'red'}>
+                    <Button mr={3} onClick={onClose} colorScheme='red'>
                         Отмена
                     </Button>
-                    <Button colorScheme={'purple'} onClick={handleConfirm}>
+                    <Button colorScheme='purple' onClick={handleConfirm}>
                         Подтвердить
                     </Button>
                 </ModalFooter>

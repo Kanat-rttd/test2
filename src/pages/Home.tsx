@@ -8,11 +8,11 @@ const Home = () => {
         <>
             {IsMobile() ? <MobileNavbar /> : <TopNavBar />}
             <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                height="100vh"
+                display='flex'
+                flexDirection='column'
+                alignItems='center'
+                justifyContent='center'
+                height='100vh'
             >
                 Main Page
             </Box>

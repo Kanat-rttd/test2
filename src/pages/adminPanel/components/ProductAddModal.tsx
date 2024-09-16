@@ -50,13 +50,18 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
 
     const sendData = (formData: ProductForSend) => {
         if (data) {
-            updateProduct(data.id, {...formData, status: Number(formData.status) ? true : false}).then(() => {
+            updateProduct(data.id, {
+                ...formData,
+                status: Number(formData.status) ? true : false,
+            }).then(() => {
                 onAddProduct()
             })
         } else {
-            createProduct({...formData, status: Number(formData.status) ? true : false}).then(() => {
-                onAddProduct()
-            })
+            createProduct({ ...formData, status: Number(formData.status) ? true : false }).then(
+                () => {
+                    onAddProduct()
+                },
+            )
         }
         handleClose()
         reset()
@@ -78,7 +83,7 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
     return (
         <>
             <Modal isCentered isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+                <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(90deg)' />
                 <ModalContent>
                     <ModalHeader>{data ? 'Редактировать' : 'Добавить'} продукт</ModalHeader>
                     <ModalCloseButton />
@@ -92,13 +97,13 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
                                     {...register('name', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    placeholder="Наименование"
+                                    placeholder='Наименование'
                                 />
                                 <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
                             </FormControl>
                             <FormControl isInvalid={!!errors.bakingFacilityUnitId}>
                                 <Select
-                                    placeholder="Выберите цех"
+                                    placeholder='Выберите цех'
                                     defaultValue={data?.bakingFacilityUnit.id}
                                     {...register('bakingFacilityUnitId', {
                                         required: 'Поле является обязательным',
@@ -119,7 +124,7 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
                                     {...register('price', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    placeholder="Цена"
+                                    placeholder='Цена'
                                 />
                                 <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
                             </FormControl>
@@ -128,10 +133,10 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
                                     {...register('costPrice', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    type="number"
-                                    name="costPrice"
-                                    placeholder="Себестоимость"
-                                    min="0"
+                                    type='number'
+                                    name='costPrice'
+                                    placeholder='Себестоимость'
+                                    min='0'
                                     onKeyDown={(e) => {
                                         if (e.key === '-') {
                                             e.preventDefault()
@@ -156,11 +161,11 @@ const ProductAddModal = ({ data, isOpen, onClose, onAddProduct }: ProductAddModa
                                 }}
                             >
                                 <Input
-                                    width={'40%'}
-                                    type="submit"
-                                    bg="purple.500"
-                                    color="white"
-                                    cursor="pointer"
+                                    width='40%'
+                                    type='submit'
+                                    bg='purple.500'
+                                    color='white'
+                                    cursor='pointer'
                                     value={data ? 'Редактировать' : 'Добавить'}
                                 />
                             </Box>

@@ -23,9 +23,9 @@ const Layout = ({ children }: LayoutProps) => {
     })
 
     return (
-        <Box display="flex" flexDirection="column" overflow="hidden" minH="100dvh">
+        <Box display='flex' flexDirection='column' overflow='hidden' minH='100dvh'>
             {buttons?.buttonsData && <Header buttons={buttons?.buttonsData} />}
-            <Box minH="90dvh">{children}</Box>
+            <Box minH='90dvh'>{children}</Box>
         </Box>
     )
 }

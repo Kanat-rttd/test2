@@ -11,15 +11,15 @@ type NumberInputProps = {
 const InputNumber = forwardRef(
     ({ placeholder, ...props }: NumberInputProps, ref: ForwardedRef<HTMLInputElement>) => {
         return (
-            <InputGroup size="md">
+            <InputGroup size='md'>
                 <Input
                     {...props}
                     ref={ref}
-                    type="number"
-                    autoComplete="off"
+                    type='number'
+                    autoComplete='off'
                     placeholder={placeholder}
-                    min="0"
-                    step="0.01"
+                    min='0'
+                    step='0.01'
                     onKeyDown={(e) => {
                         if (e.key === '-') {
                             e.preventDefault()

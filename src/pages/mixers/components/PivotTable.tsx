@@ -34,17 +34,17 @@ const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
     }
 
     return (
-        <Box width={'100%'}>
-            <Box display={'flex'} justifyContent={'space-between'} mt={-3} mb={2}>
-                <Box display={'flex'} gap={'15px'} mb={'5px'}>
+        <Box width='100%'>
+            <Box display='flex' justifyContent='space-between' mt={-3} mb={2}>
+                <Box display='flex' gap='15px' mb='5px'>
                     <DateRange />
                     <Select
-                        size={'sm'}
+                        size='sm'
                         borderRadius={4}
-                        placeholder="Сотрудники"
+                        placeholder='Сотрудники'
                         value={getParam('personal')}
                         onChange={(event) => setParam('personal', event.target.value)}
-                        width={'fit-content'}
+                        width='fit-content'
                     >
                         {departPersonalData?.map((item, index) => (
                             <option key={index} value={item.id}>
@@ -53,10 +53,10 @@ const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
                         ))}
                     </Select>
                     <Select
-                        size={'sm'}
+                        size='sm'
                         borderRadius={5}
-                        placeholder="Цех"
-                        width={'fit-content'}
+                        placeholder='Цех'
+                        width='fit-content'
                         defaultValue={getParam('facilityUnit')}
                         onChange={(e) => setParam('facilityUnit', e.target.value)}
                     >
@@ -69,13 +69,13 @@ const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
                 </Box>
             </Box>
             <TableContainer style={{ width: '100%', overflowY: 'auto' }}>
-                <Table variant="simple">
+                <Table variant='simple'>
                     <Thead>
                         <Tr>
-                            <Th w={'5%'}>№</Th>
-                            <Th w={'20%'}>дата</Th>
+                            <Th w='5%'>№</Th>
+                            <Th w='20%'>дата</Th>
                             {Array.from(uniqPersonal).map((name, index) => (
-                                <Th textAlign={'center'} key={index}>
+                                <Th textAlign='center' key={index}>
                                     {name}
                                 </Th>
                             ))}
@@ -88,7 +88,7 @@ const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
                                     <Td>{index + 1}</Td>
                                     <Td>{dayjs(item.date).format('DD.MM.YYYY')}</Td>
                                     {Array.from(uniqPersonal).map((productName, productIndex) => (
-                                        <Td textAlign={'center'} key={productIndex}>
+                                        <Td textAlign='center' key={productIndex}>
                                             {item.shiftAccountingDetails.find(
                                                 (prod) => prod.departPersonal.name === productName,
                                             )?.shiftTime || 0}
@@ -104,16 +104,16 @@ const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
                     </Tbody>
                     <Tfoot>
                         <Tr>
-                            <Th color={'#000'} fontSize={15} fontWeight={'bold'}>
+                            <Th color='#000' fontSize={15} fontWeight='bold'>
                                 Итого
                             </Th>
                             <Th></Th>
                             {Array.from(uniqPersonal).map((productName, productIndex) => (
                                 <Th
                                     fontSize={15}
-                                    color={'#000'}
+                                    color='#000'
                                     key={productIndex}
-                                    textAlign={'center'}
+                                    textAlign='center'
                                 >
                                     {getColumnTotal(productName)}
                                 </Th>

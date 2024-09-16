@@ -41,7 +41,7 @@ const AdminPanel = () => {
         magazines: <Magazines />,
         overprice: <Overprice />,
         departPersonal: <DepartPersonal />,
-        goods: <Goods />
+        goods: <Goods />,
     }
 
     useEffect(() => {

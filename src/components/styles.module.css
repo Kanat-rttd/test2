@@ -7,7 +7,6 @@
     position: relative;
 }
 
-
 .drawerBody {
     width: 100%;
     display: flex;
@@ -16,10 +15,10 @@
     flex-direction: column;
 }
 
-.accordionItemlink{
+.accordionItemlink {
     height: 45px;
 }
-.accordionItemlink:hover{
+.accordionItemlink:hover {
     background-color: rgba(0, 0, 0, 0.055);
     cursor: pointer;
 }

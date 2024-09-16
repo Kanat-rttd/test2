@@ -17,19 +17,19 @@ const Inventory = () => {
     return (
         <>
             <Box
-                display="flex"
-                flexDirection="column"
-                maxHeight={'calc(95% - 2.5rem)'}
-                height="100vh"
+                display='flex'
+                flexDirection='column'
+                maxHeight='calc(95% - 2.5rem)'
+                height='100vh'
                 p={5}
                 mt={2}
             >
-                <Box marginBottom={4} display={'flex'} justifyContent={'space-between'}>
-                    <Box width={'100%'} display={'flex'} gap={'15px'}>
+                <Box marginBottom={4} display='flex' justifyContent='space-between'>
+                    <Box width='100%' display='flex' gap='15px'>
                         <Select
-                            placeholder="Товар"
-                            w={'20%'}
-                            size={'sm'}
+                            placeholder='Товар'
+                            w='20%'
+                            size='sm'
                             borderRadius={5}
                             defaultValue={getParam('productId')}
                             onChange={(e) => {
@@ -44,11 +44,11 @@ const Inventory = () => {
                         </Select>
                     </Box>
 
-                    <Button colorScheme="purple" onClick={onOpen}>
+                    <Button colorScheme='purple' onClick={onOpen}>
                         Корректировка
                     </Button>
                 </Box>
-                <Box position={'relative'}>
+                <Box position='relative'>
                     <InventoryTable />
                 </Box>
             </Box>

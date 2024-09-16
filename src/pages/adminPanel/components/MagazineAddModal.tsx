@@ -10,7 +10,7 @@ import {
     Input,
     FormControl,
     FormErrorMessage,
-    Box
+    Box,
 } from '@chakra-ui/react'
 import Select from 'react-select'
 
@@ -18,9 +18,9 @@ import { useEffect } from 'react'
 import { createMagazine, updateMagazine } from '@/utils/services/magazines.service'
 import { useForm, Controller } from 'react-hook-form'
 import { useApi } from '@/utils/services/axios'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { ClientType } from '@/utils/types/client.type'
 import StatusSelect from '@/components/shared/StatusSelect'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 interface Magazines {
     id: number
@@ -72,8 +72,11 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
 
     const sendData = (formData: MagazinesModalInput) => {
         const responsePromise: Promise<any> = data
-            ? updateMagazine(data.id, {...formData, status: Number(formData.status) ? true : false})
-            : createMagazine({...formData, status: Number(formData.status) ? true : false})
+            ? updateMagazine(data.id, {
+                  ...formData,
+                  status: Number(formData.status) ? true : false,
+              })
+            : createMagazine({ ...formData, status: Number(formData.status) ? true : false })
 
         responsePromise
             .then((res) => {
@@ -92,7 +95,7 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
     return (
         <>
             <Modal isCentered isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+                <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(90deg)' />
                 <ModalContent>
                     <ModalHeader>{data ? 'Редактировать' : 'Добавить'} продукт</ModalHeader>
                     <ModalCloseButton />
@@ -108,16 +111,16 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                                         {...register('name', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        autoComplete="off"
-                                        placeholder="Магазин *"
-                                        type="string"
+                                        autoComplete='off'
+                                        placeholder='Магазин *'
+                                        type='string'
                                     />
                                     <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
                                 </FormControl>
 
                                 <FormControl isInvalid={!!errors.clientId}>
                                     <Controller
-                                        name="clientId"
+                                        name='clientId'
                                         control={control}
                                         rules={{ required: 'Поле является обязательным' }}
                                         render={({ field }) => {
@@ -142,7 +145,7 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                                                             onChange(selectedOption.id)
                                                         }
                                                     }}
-                                                    placeholder="Реализатор *"
+                                                    placeholder='Реализатор *'
                                                     isClearable
                                                     isSearchable
                                                 />
@@ -168,11 +171,11 @@ const MagazineAddModal = ({ data, isOpen, onClose, onSuccess }: ProductAddModalP
                                     }}
                                 >
                                     <Input
-                                        width={'40%'}
-                                        type="submit"
-                                        bg="purple.500"
-                                        color="white"
-                                        cursor="pointer"
+                                        width='40%'
+                                        type='submit'
+                                        bg='purple.500'
+                                        color='white'
+                                        cursor='pointer'
                                         value={data ? 'Редактировать' : 'Добавить'}
                                     />
                                 </Box>

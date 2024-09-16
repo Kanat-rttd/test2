@@ -9,7 +9,7 @@ interface Place {
     label: string
 }
 
-type GoodsCategoryType ={
+type GoodsCategoryType = {
     id: number
     category: string
     unitOfMeasure: string
@@ -34,19 +34,19 @@ const Fact = () => {
     return (
         <>
             <Box
-                display="flex"
-                flexDirection="column"
-                maxHeight={'calc(95% - 2.5rem)'}
-                height="100vh"
+                display='flex'
+                flexDirection='column'
+                maxHeight='calc(95% - 2.5rem)'
+                height='100vh'
                 p={5}
                 mt={2}
             >
-                <Box marginBottom={4} display={'flex'} justifyContent={'space-between'}>
-                    <Box width={'100%'} display={'flex'} gap={'15px'}>
+                <Box marginBottom={4} display='flex' justifyContent='space-between'>
+                    <Box width='100%' display='flex' gap='15px'>
                         <Select
-                            placeholder="Все товары"
-                            w={'20%'}
-                            size={'sm'}
+                            placeholder='Все товары'
+                            w='20%'
+                            size='sm'
                             borderRadius={5}
                             value={getParam('productId')}
                             onChange={(e) => {
@@ -61,10 +61,10 @@ const Fact = () => {
                         </Select>
 
                         <Select
-                            placeholder="Место"
-                            width={'fit-content'}
-                            w={'20%'}
-                            size={'sm'}
+                            placeholder='Место'
+                            width='fit-content'
+                            w='20%'
+                            size='sm'
                             borderRadius={5}
                             value={getParam('place')}
                             onChange={(e) => {
@@ -79,15 +79,17 @@ const Fact = () => {
                         </Select>
                     </Box>
 
-                    <Button colorScheme="purple" onClick={onOpen}>
+                    <Button colorScheme='purple' onClick={onOpen}>
                         Добавить факт
                     </Button>
                 </Box>
-                <Box position={'relative'}>
+                <Box position='relative'>
                     <FactTable />
                 </Box>
             </Box>
-            {isOpen && <FactModal isOpen={isOpen} onClose={handleClose} onSuccess={successHandler} />}
+            {isOpen && (
+                <FactModal isOpen={isOpen} onClose={handleClose} onSuccess={successHandler} />
+            )}
         </>
     )
 }

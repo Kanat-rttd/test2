@@ -7,7 +7,7 @@ export type DepartPersonalType = {
     fixSalary: string
     bakingFacilityUnitId: number
     bakingFacilityUnit: {
-        id: number,
+        id: number
         facilityUnit: string
-    },
+    }
 }

@@ -20,9 +20,9 @@ import classes from '../index.module.css'
 import Select from 'react-select'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { createFactInput } from '@/utils/services/factInput.service'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { CloseIcon } from '@chakra-ui/icons'
 import { useState } from 'react'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 type AddFactModalInputs = {
     place: string
@@ -88,10 +88,10 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                 <ModalHeader>Ввод фактического количества</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Box display={'flex'} flexDirection={'column'} gap={2}>
+                    <Box display='flex' flexDirection='column' gap={2}>
                         <FormControl isInvalid={!!errors.place}>
                             <Controller
-                                name="place"
+                                name='place'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -107,7 +107,7 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                                             onChange={(selectedOption: Place | null) => {
                                                 onChange(selectedOption?.label)
                                             }}
-                                            placeholder="Место *"
+                                            placeholder='Место *'
                                             isClearable
                                             isSearchable
                                         />
@@ -116,16 +116,10 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                             />
                             <FormErrorMessage>{errors.place?.message}</FormErrorMessage>
                         </FormControl>
-                        <FormControl
-                            mt={3}
-                            w={'100%'}
-                            display={'flex'}
-                            flexDirection={'column'}
-                            gap={3}
-                        >
+                        <FormControl mt={3} w='100%' display='flex' flexDirection='column' gap={3}>
                             {fields.map((_, index) => {
                                 return (
-                                    <Box display="flex" gap={2} alignItems="center" key={index}>
+                                    <Box display='flex' gap={2} alignItems='center' key={index}>
                                         <Controller
                                             name={`details.${index}.goodsCategoryId`}
                                             control={control}
@@ -175,7 +169,7 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                                                                 },
                                                             )
                                                         }}
-                                                        placeholder="Категория"
+                                                        placeholder='Категория'
                                                         isSearchable
                                                         className={classes.select}
                                                     />
@@ -187,10 +181,10 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                                                 {...register(`details.${index}.quantity`, {
                                                     required: 'Поле является обязательным',
                                                 })}
-                                                placeholder="Количество"
-                                                type="number"
-                                                autoComplete="off"
-                                                min="0"
+                                                placeholder='Количество'
+                                                type='number'
+                                                autoComplete='off'
+                                                min='0'
                                                 onKeyDown={(e) => {
                                                     if (e.key === '-') {
                                                         e.preventDefault()
@@ -207,9 +201,9 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                                                 }}
                                             />
                                             <InputRightAddon
-                                                w={'25%'}
-                                                display={'flex'}
-                                                justifyContent={'center'}
+                                                w='25%'
+                                                display='flex'
+                                                justifyContent='center'
                                             >
                                                 {selectedUnitsOfMeasure[index] || ''}
                                             </InputRightAddon>
@@ -217,7 +211,7 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                                         {fields.length > 1 && (
                                             <CloseIcon
                                                 ml={2}
-                                                cursor="pointer"
+                                                cursor='pointer'
                                                 onClick={() => remove(index)}
                                             />
                                         )}
@@ -274,10 +268,10 @@ const FactModal = ({ isOpen, onClose, onSuccess }: FactModalProps) => {
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme="red" mr={3} onClick={onClose}>
+                    <Button colorScheme='red' mr={3} onClick={onClose}>
                         Закрыть
                     </Button>
-                    <Button colorScheme="purple" onClick={handleSubmitForm(sendData)}>
+                    <Button colorScheme='purple' onClick={handleSubmitForm(sendData)}>
                         Добавить
                     </Button>
                 </ModalFooter>

@@ -17,21 +17,21 @@ type AdjustmentType = {
 
 const AdjustmentsHictory = () => {
     const { data: adjustmentData } = useApi<AdjustmentType[]>('adjustment')
-  
+
     return (
         <>
             <UniversalComponent>
-                <Box display="flex" flexDirection="column" p={5} mt={1}>
-                    <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
-                        <Box display={'flex'} gap={'15px'} width={'fit-content'}>
-                            <Select placeholder="Название" width={'fit-content'} name="status">
-                                <option value="1">Активен</option>
-                                <option value="0">Приостановлен</option>
+                <Box display='flex' flexDirection='column' p={5} mt={1}>
+                    <Box marginBottom={5} display='flex' justifyContent='space-between'>
+                        <Box display='flex' gap='15px' width='fit-content'>
+                            <Select placeholder='Название' width='fit-content' name='status'>
+                                <option value='1'>Активен</option>
+                                <option value='0'>Приостановлен</option>
                             </Select>
                         </Box>
                     </Box>
                     <TableContainer style={{ width: '100%', overflowY: 'auto' }}>
-                        <Table variant="simple">
+                        <Table variant='simple'>
                             <Thead>
                                 <Tr>
                                     <Th>№</Th>
@@ -45,7 +45,7 @@ const AdjustmentsHictory = () => {
                                     adjustmentData?.map((item, index) => {
                                         return (
                                             <Tr key={index}>
-                                                <Td>{index +1}</Td>
+                                                <Td>{index + 1}</Td>
                                                 <Td>
                                                     {dayjs(item.createdAt).format('DD.MM.YYYY')}
                                                 </Td>

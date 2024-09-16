@@ -103,18 +103,18 @@ const BreadView = () => {
 
     return (
         <Box>
-            <Box width={'100%'} height={'100%'} p={5} mt={1}>
-                <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
-                    <Box display={'flex'} gap={'15px'} width={'100%'}>
+            <Box width='100%' height='100%' p={5} mt={1}>
+                <Box marginBottom={6} display='flex' justifyContent='space-between'>
+                    <Box display='flex' gap='15px' width='100%'>
                         <DateRange />
                         <Select
-                            size={'sm'}
+                            size='sm'
                             borderRadius={5}
-                            width={'fit-content'}
+                            width='fit-content'
                             value={getParam('contragentName')}
                             onChange={(e) => setParam('contragentName', e.target.value)}
                         >
-                            <option value="">Все клиенты</option>
+                            <option value=''>Все клиенты</option>
                             {clientsData?.map((client) => (
                                 <option key={client.id} value={client.name}>
                                     {client.name}
@@ -125,7 +125,7 @@ const BreadView = () => {
                 </Box>
                 <Box>
                     <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                        <Table variant="simple">
+                        <Table variant='simple'>
                             <Thead>
                                 <Tr>
                                     <Th>№</Th>
@@ -158,7 +158,7 @@ const BreadView = () => {
                             </Tbody>
                             <Tfoot>
                                 <Tr>
-                                    <Th fontSize={15} color={'#000'}>
+                                    <Th fontSize={15} color='#000'>
                                         ИТОГО
                                     </Th>
                                     <Th></Th>
@@ -167,7 +167,7 @@ const BreadView = () => {
                                             (item) => item.name === productName,
                                         )?.totalQuantity
                                         return (
-                                            <Th key={index} fontSize={15} color={'#000'}>
+                                            <Th key={index} fontSize={15} color='#000'>
                                                 {total}
                                             </Th>
                                         )

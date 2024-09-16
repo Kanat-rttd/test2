@@ -24,12 +24,12 @@ import {
     updateIndividualPrice,
 } from '@/utils/services/individualPrices.service'
 import { useApi } from '@/utils/services/axios'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { useForm } from 'react-hook-form'
 import { ClientType } from '@/utils/types/client.type'
 import { UniquePriceDetail, UniquePriceType } from '@/utils/types/uniquePrice.types'
 import { individualPriceType } from '@/utils/types/individualPrice.types'
 import InputNumber from '@/components/shared/NumberInput'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 interface Product {
     id: string
@@ -181,13 +181,13 @@ const UniquePriceAddModal = ({
     return (
         <>
             <Modal isCentered isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+                <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(90deg)' />
                 <ModalContent>
                     <ModalHeader>{data ? 'Изменить цены' : 'Добавить цену продукта'}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Stack spacing={4}>
-                            <Box display={'flex'} flexDirection={'column'} gap={'15px'}>
+                            <Box display='flex' flexDirection='column' gap='15px'>
                                 <form
                                     onSubmit={handleSubmitForm(handleAddOrUpdate)}
                                     style={{
@@ -196,7 +196,7 @@ const UniquePriceAddModal = ({
                                         gap: '15px',
                                     }}
                                 >
-                                    <Box display={'flex'} gap={'10px'}>
+                                    <Box display='flex' gap='10px'>
                                         <Text>Реализатор:</Text>
                                         <Text fontWeight={600}>{selectedRelease}</Text>
                                     </Box>
@@ -205,8 +205,8 @@ const UniquePriceAddModal = ({
                                             {...register('name', {
                                                 required: 'Поле является обязательным',
                                             })}
-                                            variant="filled"
-                                            placeholder="Продукт"
+                                            variant='filled'
+                                            placeholder='Продукт'
                                             isDisabled={!!data}
                                         >
                                             {(data ? products : filteredProducts).map((product) => (
@@ -223,7 +223,7 @@ const UniquePriceAddModal = ({
                                                 {...register('price', {
                                                     required: 'Поле является обязательным',
                                                 })}
-                                                placeholder="Цена"
+                                                placeholder='Цена'
                                             />
                                             <InputRightAddon>₸</InputRightAddon>
                                         </InputGroup>
@@ -238,11 +238,11 @@ const UniquePriceAddModal = ({
                                         }}
                                     >
                                         <Input
-                                            width={'40%'}
-                                            type="submit"
-                                            bg="purple.500"
-                                            color="white"
-                                            cursor="pointer"
+                                            width='40%'
+                                            type='submit'
+                                            bg='purple.500'
+                                            color='white'
+                                            cursor='pointer'
                                             value={data ? 'Редактировать' : 'Добавить'}
                                         />
                                     </Box>

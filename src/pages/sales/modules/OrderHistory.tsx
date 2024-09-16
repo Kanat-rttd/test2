@@ -125,39 +125,39 @@ const OrderHistory = () => {
                 <>
                     <MobileNavbar></MobileNavbar>
                     <Box
-                        display="flex"
-                        flexDirection="column"
-                        height="100vh"
-                        backgroundColor={'white'}
+                        display='flex'
+                        flexDirection='column'
+                        height='100vh'
+                        backgroundColor='white'
                         gap={5}
                     >
                         <Box
-                            borderBottom={'2px solid #E2E2E2'}
-                            width={'100%'}
-                            display={'flex'}
-                            flexDirection={'column'}
-                            textAlign={'center'}
-                            alignItems={'center'}
+                            borderBottom='2px solid #E2E2E2'
+                            width='100%'
+                            display='flex'
+                            flexDirection='column'
+                            textAlign='center'
+                            alignItems='center'
                             p={5}
                             gap={4}
                         >
-                            <Box display={'flex'} flexDirection={'row'} alignItems="flex-start">
+                            <Box display='flex' flexDirection='row' alignItems='flex-start'>
                                 <IconButton
-                                    position={'absolute'}
-                                    variant="filled"
+                                    position='absolute'
+                                    variant='filled'
                                     w={8}
                                     h={8}
-                                    colorScheme="black"
-                                    aria-label="Edit product"
+                                    colorScheme='black'
+                                    aria-label='Edit product'
                                     icon={<ChevronLeftIcon />}
                                     onClick={() => navigator(SALES_HISTORY_ROUTE)}
                                     mt={1}
                                 />
-                                <Box width={'100%'}>
+                                <Box width='100%'>
                                     <Heading
-                                        size={'lg'}
-                                        textAlign={'center'}
-                                        alignSelf="flex-start"
+                                        size='lg'
+                                        textAlign='center'
+                                        alignSelf='flex-start'
                                         mt={1}
                                     >
                                         Заказ №{orderData?.id}
@@ -165,13 +165,13 @@ const OrderHistory = () => {
                                 </Box>
                             </Box>
                             <Input
-                                variant="filled"
-                                placeholder="Filled"
-                                width={'50%'}
-                                borderRadius={'15'}
-                                name="date"
+                                variant='filled'
+                                placeholder='Filled'
+                                width='50%'
+                                borderRadius='15'
+                                name='date'
                                 defaultValue={dayjs(orderData?.createdAt).format('DD.MM.YYYY')}
-                                textAlign={'center'}
+                                textAlign='center'
                             />
                         </Box>
 
@@ -181,30 +181,30 @@ const OrderHistory = () => {
                                     <Box
                                         key={index}
                                         p={5}
-                                        display={'flex'}
-                                        flexDirection={'row'}
-                                        alignItems={'center'}
+                                        display='flex'
+                                        flexDirection='row'
+                                        alignItems='center'
                                     >
-                                        <Box width={'60%'}>
+                                        <Box width='60%'>
                                             {' '}
-                                            <Text fontWeight={'bold'}>
+                                            <Text fontWeight='bold'>
                                                 {product.product.name}
                                             </Text>{' '}
                                         </Box>
-                                        <Box display={'flex'} flexDirection={'row'} width={'40%'}>
+                                        <Box display='flex' flexDirection='row' width='40%'>
                                             <Input
-                                                variant="filled"
+                                                variant='filled'
                                                 borderRadius={15}
-                                                name="quantity"
-                                                backgroundColor={'gray.100'}
+                                                name='quantity'
+                                                backgroundColor='gray.100'
                                                 value={product.orderedQuantity}
                                                 onChange={(e) => handleQuantityChange(index, e)}
                                             />
                                             <IconButton
-                                                bg={'transparent'}
-                                                color={'gray'}
-                                                size={'md'}
-                                                aria-label="remove item"
+                                                bg='transparent'
+                                                color='gray'
+                                                size='md'
+                                                aria-label='remove item'
                                                 marginRight={3}
                                                 icon={<CloseIcon />}
                                                 onClick={() =>
@@ -217,8 +217,8 @@ const OrderHistory = () => {
                             </VStack>
                         </Box>
 
-                        <Box m={5} borderBottom={'1px solid #7C7C7C'}>
-                            <Text mb="8px" color={'#7C7C7C'} textAlign={'left'}>
+                        <Box m={5} borderBottom='1px solid #7C7C7C'>
+                            <Text mb='8px' color='#7C7C7C' textAlign='left'>
                                 Комментарий
                             </Text>
                             {/* <Input
@@ -228,18 +228,18 @@ const OrderHistory = () => {
                     /> */}
                         </Box>
 
-                        <Box textAlign={'center'} p={5}>
+                        <Box textAlign='center' p={5}>
                             <Input
-                                variant="filled"
-                                size={'lg'}
-                                color={'white'}
-                                backgroundColor={'#F7B23B'}
-                                placeholder="Filled"
-                                width={'100%'}
-                                borderRadius={'15'}
-                                textAlign={'center'}
-                                value={'Редактировать'}
-                                type="submit"
+                                variant='filled'
+                                size='lg'
+                                color='white'
+                                backgroundColor='#F7B23B'
+                                placeholder='Filled'
+                                width='100%'
+                                borderRadius='15'
+                                textAlign='center'
+                                value='Редактировать'
+                                type='submit'
                                 onClick={handleSaveChanges}
                             />
                         </Box>

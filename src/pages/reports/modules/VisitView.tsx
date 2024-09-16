@@ -19,7 +19,7 @@ interface DepartPersonal {
 type FilteredData = {
     date: Date
     personals: {
-        personalName: string 
+        personalName: string
         totalQuantity: number
     }[]
 }
@@ -71,20 +71,22 @@ const VisitView = () => {
             return entry
         }
 
-        visitViewData?.forEach(item => {
-            const dateEntry = findOrCreateDateEntry(item.date);
-            item.shiftAccountingDetails.forEach(detail => {
-                const { name } = detail.departPersonal;
-                let personalEntry = dateEntry.personals.find(person => person.personalName === name);
+        visitViewData?.forEach((item) => {
+            const dateEntry = findOrCreateDateEntry(item.date)
+            item.shiftAccountingDetails.forEach((detail) => {
+                const { name } = detail.departPersonal
+                let personalEntry = dateEntry.personals.find(
+                    (person) => person.personalName === name,
+                )
                 if (!personalEntry) {
-                    personalEntry = { personalName: name, totalQuantity: 0 };
-                    dateEntry.personals.push(personalEntry);
+                    personalEntry = { personalName: name, totalQuantity: 0 }
+                    dateEntry.personals.push(personalEntry)
                 }
-                personalEntry.totalQuantity += detail.shiftTime;
-            });
-        });
-        
-        result.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+                personalEntry.totalQuantity += detail.shiftTime
+            })
+        })
+
+        result.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
         return result
     }
@@ -104,18 +106,18 @@ const VisitView = () => {
 
     return (
         <Box>
-            <Box width={'100%'} height={'100%'} p={5} mt={1}>
-                <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
-                    <Box display={'flex'} gap={'15px'} width={'100%'}>
+            <Box width='100%' height='100%' p={5} mt={1}>
+                <Box marginBottom={6} display='flex' justifyContent='space-between'>
+                    <Box display='flex' gap='15px' width='100%'>
                         <DateRange />
                         <Select
-                            size={'sm'}
+                            size='sm'
                             borderRadius={5}
-                            width={'fit-content'}
+                            width='fit-content'
                             value={getParam('personal')}
                             onChange={(e) => setParam('personal', e.target.value)}
                         >
-                            <option value="">Все клиенты</option>
+                            <option value=''>Все клиенты</option>
                             {departPersonalData?.map((personal) => (
                                 <option key={personal.id} value={personal.id}>
                                     {personal.name}
@@ -126,32 +128,33 @@ const VisitView = () => {
                 </Box>
                 <Box>
                     <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                        <Table variant="simple">
+                        <Table variant='simple'>
                             <Thead>
                                 <Tr>
                                     <Th>№</Th>
                                     <Th>Дата</Th>
                                     {personalNames.map((personalName, index) => (
-                                        <Th key={index} textAlign={'center'}>{personalName}</Th>
+                                        <Th key={index} textAlign='center'>
+                                            {personalName}
+                                        </Th>
                                     ))}
                                 </Tr>
                             </Thead>
                             <Tbody>
                                 {filteredData?.length ? (
                                     filteredData?.map((entry, index) => (
-                                            <Tr key={index}>
-                                                <Td>{index + 1}</Td>
-                                                <Td>{dayjs(entry.date).format('DD.MM.YYYY')}</Td>
-                                                {personalNames.map((name, indx) => (
-                                                    <Td key={indx} textAlign={'center'}>
-                                                        {entry.personals.find(
-                                                            (person) =>
-                                                                person.personalName === name,
-                                                        )?.totalQuantity || 0}
-                                                    </Td>
-                                                ))}
-                                            </Tr>
-                                        ))
+                                        <Tr key={index}>
+                                            <Td>{index + 1}</Td>
+                                            <Td>{dayjs(entry.date).format('DD.MM.YYYY')}</Td>
+                                            {personalNames.map((name, indx) => (
+                                                <Td key={indx} textAlign='center'>
+                                                    {entry.personals.find(
+                                                        (person) => person.personalName === name,
+                                                    )?.totalQuantity || 0}
+                                                </Td>
+                                            ))}
+                                        </Tr>
+                                    ))
                                 ) : (
                                     <Tr>
                                         <Td>Нет данных</Td>
@@ -159,23 +162,23 @@ const VisitView = () => {
                                 )}
                             </Tbody>
                             <Tfoot>
-                        <Tr>
-                            <Th color={'#000'} fontSize={15} fontWeight={'bold'}>
-                                Итого
-                            </Th>
-                            <Th></Th>
-                            {personalNames.map((personalName, productIndex) => (
-                                <Th
-                                    fontSize={15}
-                                    color={'#000'}
-                                    key={productIndex}
-                                    textAlign={'center'}
-                                >
-                                    {getColumnTotal(personalName)}
-                                </Th>
-                            ))}
-                        </Tr>
-                    </Tfoot>
+                                <Tr>
+                                    <Th color='#000' fontSize={15} fontWeight='bold'>
+                                        Итого
+                                    </Th>
+                                    <Th></Th>
+                                    {personalNames.map((personalName, productIndex) => (
+                                        <Th
+                                            fontSize={15}
+                                            color='#000'
+                                            key={productIndex}
+                                            textAlign='center'
+                                        >
+                                            {getColumnTotal(personalName)}
+                                        </Th>
+                                    ))}
+                                </Tr>
+                            </Tfoot>
                         </Table>
                     </TableContainer>
                 </Box>

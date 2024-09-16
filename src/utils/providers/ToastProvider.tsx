@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext } from 'react'
+import { ReactNode, createContext } from 'react'
 import { useToast } from '@chakra-ui/react'
 
 type ToastContextType = {
@@ -6,7 +6,8 @@ type ToastContextType = {
     error: (message: string) => void
     loading: (promise: Promise<{ message: string }>) => void
 }
-const ToastContext = createContext<ToastContextType | null>(null)
+
+export const ToastContext = createContext<ToastContextType | null>(null)
 
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
     const toast = useToast()
@@ -68,12 +69,4 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
             {children}
         </ToastContext.Provider>
     )
-}
-
-export const useNotify = () => {
-    const context = useContext(ToastContext)
-    if (!context) {
-        throw new Error('useNotify must be used within a ToastProvider')
-    }
-    return context
 }

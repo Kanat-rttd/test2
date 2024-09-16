@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import Dialog from '@/components/Dialog'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 import { deletePurchase } from '@/utils/services/productPurchase.service'
 import { PurchaseType } from '@/utils/types/purchase.types'
 
@@ -65,7 +65,7 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
     return (
         <>
             <TableContainer style={{ width: '100%', overflowY: 'auto' }}>
-                <Table variant="simple">
+                <Table variant='simple'>
                     <Thead>
                         <Tr>
                             <Th>№</Th>
@@ -96,10 +96,10 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
                                         <Td>{purchase.status}</Td>
                                         <Td>
                                             <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
+                                                variant='outline'
+                                                size='sm'
+                                                colorScheme='teal'
+                                                aria-label='Send email'
                                                 marginRight={3}
                                                 onClick={() => {
                                                     handleSelected(purchase)
@@ -107,10 +107,10 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
                                                 icon={<EditIcon />}
                                             />
                                             <IconButton
-                                                variant="outline"
-                                                size={'sm'}
-                                                colorScheme="teal"
-                                                aria-label="Send email"
+                                                variant='outline'
+                                                size='sm'
+                                                colorScheme='teal'
+                                                aria-label='Send email'
                                                 onClick={() => {
                                                     setSelectedData(purchase)
                                                     setDialog({
@@ -132,20 +132,20 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
                     </Tbody>
                     <Tfoot>
                         <Tr>
-                            <Th color={'#000'} fontSize={15} fontWeight={'bold'}>
+                            <Th color='#000' fontSize={15} fontWeight='bold'>
                                 ИТОГО
                             </Th>
                             <Th> </Th>
                             <Th> </Th>
                             <Th> </Th>
                             <Th> </Th>
-                            <Th color={'#000'} fontSize={15} fontWeight={'bold'}>
+                            <Th color='#000' fontSize={15} fontWeight='bold'>
                                 {purchasesData?.totalQuantity}
                             </Th>
-                            <Th color={'#000'} fontSize={15} fontWeight={'bold'}>
+                            <Th color='#000' fontSize={15} fontWeight='bold'>
                                 {purchasesData?.totalSum}
                             </Th>
-                            <Th color={'#000'} fontSize={15} fontWeight={'bold'}>
+                            <Th color='#000' fontSize={15} fontWeight='bold'>
                                 {purchasesData?.totalDeliverySum}
                             </Th>
                             <Th> </Th>
@@ -163,13 +163,13 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}
-                header="Удалить"
-                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                header='Удалить'
+                body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                 actionBtn={() => {
                     dialog.onClose()
                     handlerDelete(selectedData)
                 }}
-                actionText="Удалить"
+                actionText='Удалить'
             />
         </>
     )

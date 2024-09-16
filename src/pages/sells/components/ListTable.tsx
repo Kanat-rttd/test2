@@ -6,7 +6,7 @@ import EditModal from './EditModal'
 // import { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'
 import { deleteDispatch } from '@/utils/services/dispatch.service'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import dayjs from 'dayjs'
@@ -49,7 +49,9 @@ const ListTable: React.FC = () => {
 
     const [selectedRow, setSelectedRow] = useState<DispatchType | null>(null)
 
-    const { data: dispatchData, mutate: mutateDispatchData } = useApi<DispatchData>(`release?${getURLs().toString()}&status=0`)
+    const { data: dispatchData, mutate: mutateDispatchData } = useApi<DispatchData>(
+        `release?${getURLs().toString()}&status=0`,
+    )
 
     const [modal, setModal] = useState({
         isOpen: false,
@@ -86,11 +88,11 @@ const ListTable: React.FC = () => {
     return (
         <>
             <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                <Table variant="simple" width={'100%'}>
+                <Table variant='simple' width='100%'>
                     <Thead>
-                        <Tr position={'sticky'} top={0} backgroundColor={'white'} zIndex={9}>
-                            <Th textAlign={'center'}>№</Th>
-                            <Th textAlign={'center'}>Дата</Th>
+                        <Tr position='sticky' top={0} backgroundColor='white' zIndex={9}>
+                            <Th textAlign='center'>№</Th>
+                            <Th textAlign='center'>Дата</Th>
                             <Th>Реализатор</Th>
                             <Th>Продукт</Th>
                             <Th>Количество </Th>
@@ -105,9 +107,9 @@ const ListTable: React.FC = () => {
                                 ?.filter((row: DispatchType) => row.dispatch == status)
                                 ?.map((row, index) => {
                                     return (
-                                        <Tr textAlign={'center'} key={row.id}>
-                                            <Td textAlign={'center'}>{index + 1}</Td>
-                                            <Td textAlign={'center'}>
+                                        <Tr textAlign='center' key={row.id}>
+                                            <Td textAlign='center'>{index + 1}</Td>
+                                            <Td textAlign='center'>
                                                 {dayjs(row.createdAt).format('HH:mm DD.MM.YYYY')}
                                             </Td>
                                             <Td>{row.contragent.contragentName}</Td>
@@ -174,10 +176,10 @@ const ListTable: React.FC = () => {
                                             </Td>
                                             <Td>
                                                 <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
+                                                    variant='outline'
+                                                    size='sm'
+                                                    colorScheme='teal'
+                                                    aria-label='Send email'
                                                     marginRight={3}
                                                     onClick={() => {
                                                         handleEditClick(row)
@@ -185,10 +187,10 @@ const ListTable: React.FC = () => {
                                                     icon={<EditIcon />}
                                                 />
                                                 <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
+                                                    variant='outline'
+                                                    size='sm'
+                                                    colorScheme='teal'
+                                                    aria-label='Send email'
                                                     marginRight={3}
                                                     onClick={() => {
                                                         setSelectedRow(row)
@@ -208,17 +210,17 @@ const ListTable: React.FC = () => {
                     </Tbody>
                     <Tfoot>
                         <Tr>
-                            <Th fontSize={15} color={'#000'}>
+                            <Th fontSize={15} color='#000'>
                                 ИТОГО
                             </Th>
                             <Th></Th>
                             <Th></Th>
                             <Th></Th>
-                            <Th fontSize={15} color={'#000'}>
+                            <Th fontSize={15} color='#000'>
                                 {dispatchData?.totalQuantity}
                             </Th>
                             <Th></Th>
-                            <Th fontSize={15} color={'#000'}>
+                            <Th fontSize={15} color='#000'>
                                 {dispatchData?.totalPrice}
                             </Th>
                             <Th></Th>
@@ -235,12 +237,12 @@ const ListTable: React.FC = () => {
             <Dialog
                 isOpen={isOpen}
                 onClose={onClose}
-                header="Удалить"
-                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                header='Удалить'
+                body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                 actionBtn={() => {
                     handlerDeleteUser()
                 }}
-                actionText="Удалить"
+                actionText='Удалить'
             />
         </>
     )

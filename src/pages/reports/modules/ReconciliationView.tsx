@@ -113,18 +113,18 @@ const ReconciliationView = () => {
 
     return (
         <Box>
-            <Box width={'100%'} height={'100%'} p={5} mt={1}>
-                <Box marginBottom={6} display={'flex'} justifyContent={'space-between'}>
-                    <Box display={'flex'} gap={'15px'} width={'100%'}>
+            <Box width='100%' height='100%' p={5} mt={1}>
+                <Box marginBottom={6} display='flex' justifyContent='space-between'>
+                    <Box display='flex' gap='15px' width='100%'>
                         <DateRange />
                         <Select
-                            size={'sm'}
+                            size='sm'
                             borderRadius={5}
-                            width={'fit-content'}
+                            width='fit-content'
                             value={getParam('clientName')}
                             onChange={(e) => setParam('clientName', e.target.value)}
                         >
-                            <option value="">Все клиенты</option>
+                            <option value=''>Все клиенты</option>
                             {clientsData?.map((client) => (
                                 <option key={client.id} value={client.name}>
                                     {client.name}
@@ -135,7 +135,7 @@ const ReconciliationView = () => {
                 </Box>
                 <Box>
                     <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                        <Table variant="simple">
+                        <Table variant='simple'>
                             <Thead>
                                 <Tr>
                                     <Th>№</Th>
@@ -170,26 +170,26 @@ const ReconciliationView = () => {
                             </Tbody>
                             <Tfoot>
                                 <Tr>
-                                    <Th fontSize={15} color={'#000'}>
+                                    <Th fontSize={15} color='#000'>
                                         ИТОГО
                                     </Th>
                                     <Th></Th>
-                                    <Th fontSize={15} color={'#000'}>
+                                    <Th fontSize={15} color='#000'>
                                         {reconciliationViewData?.totalSales}
                                     </Th>
-                                    <Th fontSize={15} color={'#000'}>
+                                    <Th fontSize={15} color='#000'>
                                         {reconciliationViewData?.totalExpenses}
                                     </Th>
-                                    <Th fontSize={15} color={'#000'}>
+                                    <Th fontSize={15} color='#000'>
                                         {reconciliationViewData?.totalCredit}
                                     </Th>
-                                    <Th fontSize={15} color={'#000'}>
+                                    <Th fontSize={15} color='#000'>
                                         {reconciliationViewData?.totalPayments}
                                     </Th>
-                                    <Th fontSize={15} color={'#000'}>
+                                    <Th fontSize={15} color='#000'>
                                         {reconciliationViewData?.totalOverhead}
                                     </Th>
-                                    <Th fontSize={15} color={'#000'}>
+                                    <Th fontSize={15} color='#000'>
                                         {reconciliationViewData?.totalDebt}
                                     </Th>
                                 </Tr>

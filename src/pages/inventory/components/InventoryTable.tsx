@@ -37,9 +37,9 @@ const InventoryTable = () => {
     return (
         <>
             <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                <Table variant="simple" width={'100%'}>
+                <Table variant='simple' width='100%'>
                     <Thead>
-                        <Tr position={'sticky'} top={0} backgroundColor={'white'} zIndex={9}>
+                        <Tr position='sticky' top={0} backgroundColor='white' zIndex={9}>
                             <Th>№</Th>
                             <Th>Товары</Th>
                             <Th>Единица измерения</Th>
@@ -86,18 +86,18 @@ const InventoryTable = () => {
                     </Tbody>
                     <Tfoot>
                         <Tr>
-                            <Th fontSize={15} color={'#000'}>
+                            <Th fontSize={15} color='#000'>
                                 ИТОГО
                             </Th>
                             <Th> </Th>
                             <Th> </Th>
-                            <Th fontSize={15} color={'#000'}>
+                            <Th fontSize={15} color='#000'>
                                 {inventoryzationData?.totalRegister}
                             </Th>
-                            <Th fontSize={15} color={'#000'}>
+                            <Th fontSize={15} color='#000'>
                                 {inventoryzationData?.totalFact}
                             </Th>
-                            <Th fontSize={15} color={'#000'}>
+                            <Th fontSize={15} color='#000'>
                                 {inventoryzationData?.divergence}
                             </Th>
                         </Tr>
@@ -128,7 +128,7 @@ const EditInput = ({ setShowInput, showInput }: EditInputProps) => {
                 setShowInput({ rowId: null, value: showInput.value })
                 //fetch
             }}
-            type="number"
+            type='number'
             autoFocus
         />
     )

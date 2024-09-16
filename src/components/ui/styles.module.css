@@ -1,6 +1,6 @@
 .tableContainer {
     height: 100%;
-    width: 100%;    
+    width: 100%;
     overflow-x: auto;
     overflow-y: auto;
     background-color: white;
@@ -9,14 +9,13 @@
 
 .tableWrapper {
     height: 100%;
-    width: 100%; 
+    width: 100%;
     /* min-height: 77lvh;   */
-    max-height: 77lvh; 
+    max-height: 77lvh;
     overflow-x: auto;
     overflow-y: auto;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border-radius: 5px;
-    
 }
 
 .tfoot {

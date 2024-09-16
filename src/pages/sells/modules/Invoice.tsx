@@ -90,16 +90,16 @@ const InvoicePage = () => {
     return (
         <>
             <Box>
-                <Box width={'100%'} height={'100%'} p={5} mt={2}>
-                    <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
-                        <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                <Box width='100%' height='100%' p={5} mt={2}>
+                    <Box marginBottom={5} display='flex' justifyContent='space-between'>
+                        <Box display='flex' gap='15px' width='fit-content'>
                             <DateRange />
                             <Select
-                                placeholder="Реализатор"
-                                width={'fit-content'}
-                                size={'sm'}
+                                placeholder='Реализатор'
+                                width='fit-content'
+                                size='sm'
                                 borderRadius={5}
-                                name="clientId"
+                                name='clientId'
                                 onChange={handleSelectChange}
                             >
                                 {clientsData?.map((client, index) => (
@@ -129,11 +129,11 @@ const InvoicePage = () => {
                                 return (
                                     <Button
                                         key={index}
-                                        w={'100%'}
+                                        w='100%'
                                         p={8}
-                                        display={'flex'}
-                                        justifyContent={'space-between'}
-                                        border={'1px solid black'}
+                                        display='flex'
+                                        justifyContent='space-between'
+                                        border='1px solid black'
                                         borderRadius={0}
                                         onClick={() => {
                                             onOpen()
@@ -141,34 +141,29 @@ const InvoicePage = () => {
                                         }}
                                         marginBottom={1}
                                     >
-                                        <Box
-                                            display={'flex'}
-                                            gap={10}
-                                            textAlign={'start'}
-                                            w={'35%'}
-                                        >
-                                            <Text w={'30%'} color={'gray'} fontWeight={''}>
+                                        <Box display='flex' gap={10} textAlign='start' w='35%'>
+                                            <Text w='30%' color='gray' fontWeight=''>
                                                 № {row.invoiceNumber}
                                             </Text>
-                                            <Text w={'44%'}>{row.contragentName}</Text>
-                                            <Text w={'25%'}>
+                                            <Text w='44%'>{row.contragentName}</Text>
+                                            <Text w='25%'>
                                                 {dayjs(row.createdAt).format('DD.MM.YYYY')}
                                             </Text>
                                         </Box>
                                         <Box
-                                            display={'flex'}
+                                            display='flex'
                                             gap={20}
-                                            w={'25%'}
-                                            justifyContent={'space-between'}
+                                            w='25%'
+                                            justifyContent='space-between'
                                         >
-                                            <Text minWidth={'40%'} textAlign={'start'}>
+                                            <Text minWidth='40%' textAlign='start'>
                                                 Сверху: {overPrice} ₸
                                             </Text>
-                                            <Text minW={'60%'} textAlign={'start'}>
+                                            <Text minW='60%' textAlign='start'>
                                                 Сумма: {row.totalSum} ₸
                                             </Text>
                                         </Box>
-                                        <Text w={'12%'} textAlign={'start'}>
+                                        <Text w='12%' textAlign='start'>
                                             Итого: {Number(overPrice) + row.totalSum} ₸
                                         </Text>
                                     </Button>

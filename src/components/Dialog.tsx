@@ -33,7 +33,7 @@ const Dialog: React.FC<DialogProps> = ({
         <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
             <AlertDialogOverlay>
                 <AlertDialogContent>
-                    <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                    <AlertDialogHeader fontSize='lg' fontWeight='bold'>
                         {header}
                     </AlertDialogHeader>
 
@@ -45,7 +45,7 @@ const Dialog: React.FC<DialogProps> = ({
                         <Button ref={cancelRef} onClick={onClose}>
                             Отмена
                         </Button>
-                        <Button colorScheme="red" ml={3} onClick={actionBtn}>
+                        <Button colorScheme='red' ml={3} onClick={actionBtn}>
                             {actionText}
                         </Button>
                     </AlertDialogFooter>

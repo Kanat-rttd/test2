@@ -19,7 +19,7 @@ import { createPurchase } from '@/utils/services/productPurchase.service'
 import { useEffect, useState } from 'react'
 import Select from 'react-select'
 import { useApi } from '@/utils/services/axios'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 import { ProviderType } from '@/utils/types/provider.types'
 import { PurchaseType } from '@/utils/types/purchase.types'
 import InputNumber from '@/components/shared/NumberInput'
@@ -134,10 +134,10 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                 <ModalHeader>Добавить закупки</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <Box display={'flex'} flexDirection={'column'} gap={3}>
+                    <Box display='flex' flexDirection='column' gap={3}>
                         <FormControl isInvalid={!!errors.providerId}>
                             <Controller
-                                name="providerId"
+                                name='providerId'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -155,7 +155,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                                 (option) => String(option.id) == String(value),
                                             )}
                                             onChange={handleProviderChange}
-                                            placeholder="Поставщик *"
+                                            placeholder='Поставщик *'
                                             isClearable
                                             isSearchable
                                         />
@@ -167,7 +167,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
 
                         <FormControl isInvalid={!!errors.providerGoodId}>
                             <Controller
-                                name="providerGoodId"
+                                name='providerGoodId'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -184,7 +184,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                                     setSelectedRawMaterial(selectedOption)
                                                 }
                                             }}
-                                            placeholder="Товар *"
+                                            placeholder='Товар *'
                                             isClearable
                                             isSearchable
                                         />
@@ -200,10 +200,10 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                     {...register('quantity', {
                                         required: 'Поле является обязательным',
                                     })}
-                                    placeholder="Количество"
-                                    type="number"
-                                    autoComplete="off"
-                                    min="0"
+                                    placeholder='Количество'
+                                    type='number'
+                                    autoComplete='off'
+                                    min='0'
                                     onKeyDown={(e) => {
                                         if (e.key === '-') {
                                             e.preventDefault()
@@ -216,11 +216,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                         }
                                     }}
                                 />
-                                <InputRightAddon
-                                    w={'15%'}
-                                    display={'flex'}
-                                    justifyContent={'center'}
-                                >
+                                <InputRightAddon w='15%' display='flex' justifyContent='center'>
                                     {selectedRawMaterial?.uom}
                                 </InputRightAddon>
                             </InputGroup>
@@ -230,7 +226,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                         <FormControl isInvalid={!!errors.price}>
                             <InputNumber
                                 {...register('price', { required: 'Поле является обязательным' })}
-                                placeholder="Цена *"
+                                placeholder='Цена *'
                             />
                             <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
                         </FormControl>
@@ -240,7 +236,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                 {...register('deliverySum', {
                                     required: 'Поле является обязательным',
                                 })}
-                                placeholder="Сумма доставки *"
+                                placeholder='Сумма доставки *'
                             />
                             <FormErrorMessage>{errors.deliverySum?.message}</FormErrorMessage>
                         </FormControl>
@@ -250,9 +246,9 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                 {...register('date', {
                                     required: 'Поле является обязательным',
                                 })}
-                                autoComplete="off"
-                                placeholder="Дата *"
-                                type="date"
+                                autoComplete='off'
+                                placeholder='Дата *'
+                                type='date'
                                 defaultValue={new Date().toISOString().split('T')[0]}
                             />
                             <FormErrorMessage>{errors.date?.message}</FormErrorMessage>
@@ -260,7 +256,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
 
                         <FormControl isInvalid={!!errors.status}>
                             <Controller
-                                name="status"
+                                name='status'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -274,7 +270,7 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                                             onChange={(val: any) => {
                                                 return onChange(val)
                                             }}
-                                            placeholder="Статус *"
+                                            placeholder='Статус *'
                                             isClearable
                                             isSearchable
                                         />
@@ -287,10 +283,10 @@ const PurchaseModal = ({ isOpen, onClose, onSuccess }: PurchaseModalProps) => {
                 </ModalBody>
 
                 <ModalFooter>
-                    <Button colorScheme="red" mr={3} onClick={onClose}>
+                    <Button colorScheme='red' mr={3} onClick={onClose}>
                         Отмена
                     </Button>
-                    <Button colorScheme="purple" onClick={handleSubmitForm(sendData)}>
+                    <Button colorScheme='purple' onClick={handleSubmitForm(sendData)}>
                         Добавить
                     </Button>
                 </ModalFooter>

@@ -16,21 +16,21 @@ const PasswordInput = forwardRef(
         const handlePasswordVisibility = () => setShowPassword(!showPassword)
 
         return (
-            <InputGroup size="md">
+            <InputGroup size='md'>
                 <Input
                     placeholder={placeholder}
                     ref={ref}
                     type={showPassword ? 'text' : 'password'}
-                    autoComplete="new-password"
+                    autoComplete='new-password'
                     {...props}
                 />
                 <InputRightElement>
                     <IconButton
                         icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
                         onClick={handlePasswordVisibility}
-                        variant="ghost"
-                        size="sm"
-                        aria-label={''}
+                        variant='ghost'
+                        size='sm'
+                        aria-label=''
                     />
                 </InputRightElement>
             </InputGroup>

@@ -16,10 +16,10 @@ import Select from 'react-select'
 import { useApi } from '@/utils/services/axios'
 import { useEffect, useState } from 'react'
 import { createProviderGoods, updateProviderGoods } from '@/utils/services/providerGoods.service'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { ProviderInputs } from '@/utils/types/providerGoog.types'
 import StatusSelect from '@/components/shared/StatusSelect'
 import { ProviderType } from '@/utils/types/provider.types'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 interface ProviderGoods {
     id: number
@@ -124,14 +124,14 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                     <ModalHeader>{selectedData ? 'Редактировать' : 'Добавить'}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Box display={'flex'} flexDirection={'column'} gap={3}>
+                        <Box display='flex' flexDirection='column' gap={3}>
                             <form
                                 onSubmit={handleSubmitForm(sendData)}
                                 style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                             >
                                 <FormControl isInvalid={!!errors.providerId}>
                                     <Controller
-                                        name="providerId"
+                                        name='providerId'
                                         control={control}
                                         rules={{ required: 'Поле является обязательным' }}
                                         render={({ field }) => {
@@ -154,7 +154,7 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                                     ) => {
                                                         onChange(selectedOption?.id)
                                                     }}
-                                                    placeholder="Выберите поставщика *"
+                                                    placeholder='Выберите поставщика *'
                                                     isClearable
                                                     isSearchable
                                                 />
@@ -167,7 +167,7 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.goodsCategoryId}>
                                     <Controller
-                                        name="goodsCategoryId"
+                                        name='goodsCategoryId'
                                         control={control}
                                         rules={{ required: 'Поле является обязательным' }}
                                         render={({ field }) => {
@@ -191,7 +191,7 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                                         onChange(selectedOption?.id)
                                                         setSelectedCateory(selectedOption)
                                                     }}
-                                                    placeholder="Выберите категорию товара *"
+                                                    placeholder='Выберите категорию товара *'
                                                     isClearable
                                                     isSearchable
                                                 />
@@ -206,16 +206,16 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                         {...register('goods', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        autoComplete="off"
-                                        placeholder="Товар *"
-                                        type="text"
+                                        autoComplete='off'
+                                        placeholder='Товар *'
+                                        type='text'
                                     />
                                     <FormErrorMessage>{errors.goods?.message}</FormErrorMessage>
                                 </FormControl>
 
                                 <FormControl isInvalid={!!errors.bakery}>
                                     <Controller
-                                        name="bakery"
+                                        name='bakery'
                                         control={control}
                                         rules={{ required: 'Поле является обязательным' }}
                                         render={({ field }) => {
@@ -232,7 +232,7 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                                         label: val.label,
                                                     }))}
                                                     onChange={(val) => onChange(val)}
-                                                    placeholder="Выберите место *"
+                                                    placeholder='Выберите место *'
                                                     isClearable
                                                     isSearchable
                                                 />
@@ -258,11 +258,11 @@ const GoodsAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalProps)
                                     }}
                                 >
                                     <Input
-                                        width={'40%'}
-                                        type="submit"
-                                        bg="purple.500"
-                                        color="white"
-                                        cursor="pointer"
+                                        width='40%'
+                                        type='submit'
+                                        bg='purple.500'
+                                        color='white'
+                                        cursor='pointer'
                                         value={selectedData ? 'Редактировать' : 'Добавить'}
                                     />
                                 </Box>

@@ -16,7 +16,7 @@ import {
 import { useEffect } from 'react'
 
 import { createDispatch, updateDispatchQuantity } from '@/utils/services/dispatch.service'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 import { Controller, SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { mutate, useApi } from '@/utils/services/axios'
 import { DispatchType } from '@/utils/types/dispatch.types'
@@ -136,14 +136,14 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
             <ModalContent>
                 <ModalHeader>{status == '0' ? 'Выдача' : 'Возврат'} продукции</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody display={'flex'} gap={'10px'} flexDirection={'column'}>
+                <ModalBody display='flex' gap='10px' flexDirection='column'>
                     <form
                         onSubmit={handleSubmitForm(handleConfirm)}
                         style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                     >
-                        <FormControl id="type" isRequired isInvalid={!!errors.contragentId}>
+                        <FormControl id='type' isRequired isInvalid={!!errors.contragentId}>
                             <Controller
-                                name="contragentId"
+                                name='contragentId'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -152,8 +152,8 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                     return (
                                         <Select
                                             required
-                                            placeholder="Выберите получателя"
-                                            width={'100%'}
+                                            placeholder='Выберите получателя'
+                                            width='100%'
                                             value={selectedContragentId}
                                             onChange={(selectedOption) => {
                                                 onChange(selectedOption)
@@ -172,10 +172,10 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                             />
                             <FormErrorMessage>{errors.contragentId?.message}</FormErrorMessage>
                         </FormControl>
-                        <FormControl isRequired gap="1rem" display="flex" flexDirection="column">
+                        <FormControl isRequired gap='1rem' display='flex' flexDirection='column'>
                             {fields.map((_, index) => {
                                 return (
-                                    <Box display="flex" gap="1rem" alignItems="center" key={index}>
+                                    <Box display='flex' gap='1rem' alignItems='center' key={index}>
                                         <Controller
                                             name={`products.${index}.productId`}
                                             control={control}
@@ -191,8 +191,8 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                                         onChange={(selectedOption) => {
                                                             onChange(selectedOption)
                                                         }}
-                                                        variant="filled"
-                                                        placeholder="Выберите продукт"
+                                                        variant='filled'
+                                                        placeholder='Выберите продукт'
                                                     >
                                                         {products
                                                             ?.filter((item) => {
@@ -221,11 +221,11 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                             {...register(`products.${index}.quantity`, {
                                                 required: 'Поле является обязательным',
                                             })}
-                                            placeholder="Количество"
+                                            placeholder='Количество'
                                         />
                                         {fields.length > 1 && (
                                             <CloseIcon
-                                                cursor="pointer"
+                                                cursor='pointer'
                                                 onClick={() => remove(index)}
                                             />
                                         )}
@@ -249,12 +249,12 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                             }}
                         >
                             <Input
-                                width={'40%'}
-                                type="submit"
-                                bg="purple.500"
-                                color="white"
-                                cursor="pointer"
-                                value={'Подтвердить'}
+                                width='40%'
+                                type='submit'
+                                bg='purple.500'
+                                color='white'
+                                cursor='pointer'
+                                value='Подтвердить'
                             />
                         </Box>
                     </form>

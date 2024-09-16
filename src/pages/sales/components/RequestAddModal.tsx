@@ -121,16 +121,16 @@ const RequestAddModal = ({ isOpen, onClose }: ClientAddModalProps) => {
 
     return (
         <Modal isCentered isOpen={isOpen} onClose={handleModalClose}>
-            <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+            <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(90deg)' />
             <ModalContent>
-                <ModalHeader>{'Добавить'} заказ</ModalHeader>
+                <ModalHeader>Добавить заказ</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <Stack spacing={4}>
                         <Select
-                            variant="filled"
-                            placeholder="Имя клиента"
-                            name="name"
+                            variant='filled'
+                            placeholder='Имя клиента'
+                            name='name'
                             onChange={handleNameChange}
                             value={formData?.name ?? ''}
                         >
@@ -142,10 +142,10 @@ const RequestAddModal = ({ isOpen, onClose }: ClientAddModalProps) => {
                         </Select>
 
                         {formData.items.map((item, index) => (
-                            <Box key={index} display={'flex'}>
+                            <Box key={index} display='flex'>
                                 <Select
-                                    variant="filled"
-                                    placeholder="Вид хлеба"
+                                    variant='filled'
+                                    placeholder='Вид хлеба'
                                     name={`bakeryType-${index}`}
                                     onChange={handleChange(index, 'bakeryType')}
                                     value={item.bakeryType}
@@ -161,7 +161,7 @@ const RequestAddModal = ({ isOpen, onClose }: ClientAddModalProps) => {
                                     <Input
                                         name={`quantity-${index}`}
                                         onChange={handleChange(index, 'quantity')}
-                                        placeholder="Количество"
+                                        placeholder='Количество'
                                         value={item.quantity}
                                     />
                                 </InputGroup>
@@ -169,8 +169,8 @@ const RequestAddModal = ({ isOpen, onClose }: ClientAddModalProps) => {
                         ))}
                     </Stack>
                 </ModalBody>
-                <ModalFooter display={'flex'} alignSelf={'center'} gap={5}>
-                    <Button onClick={addRequest}>{'Добавить'} заказ</Button>
+                <ModalFooter display='flex' alignSelf='center' gap={5}>
+                    <Button onClick={addRequest}>Добавить заказ</Button>
                     <Button onClick={handleModalClose}>Закрыть</Button>
                 </ModalFooter>
             </ModalContent>

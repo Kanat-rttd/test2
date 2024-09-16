@@ -19,11 +19,11 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import Dialog from './Dialog'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { deleteSale } from '@/utils/services/sales.service'
 import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import dayjs from 'dayjs'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 type accorfionClientType = {
     data: OrderArrayType[]
@@ -43,7 +43,7 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
-    
+
     const handleConfirmClick = (clientName: OrderArrayType) => {
         handleChangeStatus(clientName)
     }
@@ -54,8 +54,8 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
 
     const handleDeleteOrder = (selectedData: OrderArrayType | undefined) => {
         if (selectedData) {
-            const responsePromise: Promise<any> = deleteSale(selectedData.id)
-            loading(responsePromise)
+            const responsePromise: Promise<unknown> = deleteSale(selectedData.id)
+            loading(responsePromise as Promise<{ message: string }>)
             responsePromise.then(() => {
                 mutateSalesData()
             })
@@ -86,41 +86,39 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
                 {data?.map((order) => (
                     <AccordionItem key={order.id}>
                         <h2>
-                            <AccordionButton
-                                backgroundColor={'#e6e6e6'}
-                                display={'flex'}
-                                gap={'10px'}
-                            >
+                            <AccordionButton backgroundColor='#e6e6e6' display='flex' gap='10px'>
                                 <Box
-                                    display={'flex'}
-                                    justifyContent={'space-between'}
-                                    as="span"
-                                    flex="1"
-                                    textAlign="left"
-                                    mr={'60px'}
+                                    display='flex'
+                                    justifyContent='space-between'
+                                    as='span'
+                                    flex='1'
+                                    textAlign='left'
+                                    mr='60px'
                                 >
-                                    <Box display={'flex'} gap={10} width={'60%'}>
-                                        <Heading size={'sm'} minWidth={'20%'}>{order.client.name}</Heading>
-                                        <Heading size={'sm'}>
+                                    <Box display='flex' gap={10} width='60%'>
+                                        <Heading size='sm' minWidth='20%'>
+                                            {order.client.name}
+                                        </Heading>
+                                        <Heading size='sm'>
                                             Смена: {dayjs(order.date).format('DD.MM.YYYY')}
                                         </Heading>
                                     </Box>
 
-                                    <Heading size={'sm'}>Итого: {order.totalQuantity}</Heading>
+                                    <Heading size='sm'>Итого: {order.totalQuantity}</Heading>
                                 </Box>
-                                <Box display={'flex'}>
+                                <Box display='flex'>
                                     <Box
                                         p={1.5}
-                                        backgroundColor={'#fff'}
-                                        border={'1px solid teal'}
+                                        backgroundColor='#fff'
+                                        border='1px solid teal'
                                         borderRadius={4}
-                                        display={'flex'}
-                                        alignItems={'center'}
-                                        justifyContent={'center'}
+                                        display='flex'
+                                        alignItems='center'
+                                        justifyContent='center'
                                         marginRight={2}
                                     >
                                         <EditIcon
-                                            color="teal"
+                                            color='teal'
                                             onClick={(event) => {
                                                 event.stopPropagation()
                                                 setSelectedData(order)
@@ -131,15 +129,15 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
 
                                     <Box
                                         p={1.5}
-                                        backgroundColor={'#fff'}
-                                        border={'1px solid teal'}
+                                        backgroundColor='#fff'
+                                        border='1px solid teal'
                                         borderRadius={4}
-                                        display={'flex'}
-                                        alignItems={'center'}
-                                        justifyContent={'center'}
+                                        display='flex'
+                                        alignItems='center'
+                                        justifyContent='center'
                                     >
                                         <DeleteIcon
-                                            color="teal"
+                                            color='teal'
                                             onClick={(event) => {
                                                 event.stopPropagation()
                                                 setSelectedData(order)
@@ -155,11 +153,11 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
                             </AccordionButton>
                         </h2>
                         <AccordionPanel pb={0}>
-                            <Table variant="unstyled">
+                            <Table variant='unstyled'>
                                 <Tbody>
                                     {order.orderDetails.map((item, index) => (
                                         <Tr key={index}>
-                                            <Td width={'80%'}>{item.product.name}</Td>
+                                            <Td width='80%'>{item.product.name}</Td>
                                             <Td>{item.orderedQuantity}</Td>
                                         </Tr>
                                     ))}
@@ -169,7 +167,7 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
                                         <Td></Td>
                                         <Td>
                                             <Button
-                                                width={'100%'}
+                                                width='100%'
                                                 onClick={() => handleConfirmClick(order)}
                                             >
                                                 Подтвердить
@@ -193,13 +191,13 @@ const AccordionClients = ({ data, handleChangeStatus }: accorfionClientType) => 
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}
-                header="Удалить"
-                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                header='Удалить'
+                body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                 actionBtn={() => {
                     dialog.onClose()
                     handleDeleteOrder(selectedData)
                 }}
-                actionText="Удалить"
+                actionText='Удалить'
             />
         </>
     )

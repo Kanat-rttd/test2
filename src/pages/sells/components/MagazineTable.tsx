@@ -22,7 +22,6 @@ interface MagazineData {
 
 const MagazineTable = () => {
     const [filters, setFilters] = useState({ MagazineName: '' })
-    let count = 0
 
     const { data: magazineDebtData } = useApi<MagazineDebtView>('reports/magazineDebt', filters)
     const { data: magazinesData } = useApi<MagazineData[]>('magazines')
@@ -37,14 +36,14 @@ const MagazineTable = () => {
 
     return (
         <>
-            <Box width={'25%'} marginBottom={4}>
+            <Box width='25%' marginBottom={4}>
                 <Select
-                    name="MagazineName"
-                    placeholder="Магазин"
-                    width={'fit-content'}
+                    name='MagazineName'
+                    placeholder='Магазин'
+                    width='fit-content'
                     onChange={handleSelectChange}
-                    w={'80%'}
-                    size={'sm'}
+                    w='80%'
+                    size='sm'
                     borderRadius={5}
                 >
                     {magazinesData?.map((item, index) => (
@@ -62,7 +61,7 @@ const MagazineTable = () => {
                 }
             >
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                    <Table variant="simple">
+                    <Table variant='simple'>
                         <Thead>
                             <Tr>
                                 <Th>№</Th>
@@ -74,7 +73,6 @@ const MagazineTable = () => {
                             {magazineDebtData?.mainData.length ? (
                                 magazineDebtData?.mainData.map((item, index) => {
                                     if (Number(item.Debit) != 0) {
-                                        count += 1
                                         return (
                                             <Tr key={index}>
                                                 <Td>{index + 1}</Td>
@@ -92,11 +90,11 @@ const MagazineTable = () => {
                         </Tbody>
                         <Tfoot>
                             <Tr>
-                                <Th color={'#000'} fontSize={15}>
+                                <Th color='#000' fontSize={15}>
                                     ИТОГО
                                 </Th>
-                                <Th width={'60%'}> </Th>
-                                <Th color={'#000'} fontSize={15}>
+                                <Th width='60%'> </Th>
+                                <Th color='#000' fontSize={15}>
                                     {magazineDebtData?.total}
                                 </Th>
                             </Tr>

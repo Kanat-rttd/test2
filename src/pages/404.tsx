@@ -10,21 +10,21 @@ const NotFound = () => {
         <>
             <TopNavBar></TopNavBar>
             <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                height="80vh"
+                display='flex'
+                flexDirection='column'
+                alignItems='center'
+                justifyContent='center'
+                height='80vh'
             >
                 <Image
-                    borderRadius="full"
-                    src="https://www.akilligundem.com/wp-content/uploads/2022/03/error-404-page-not-found-hatasi-nasil-cozulur-0-1ELWuxVK.jpeg"
-                    alt="404"
+                    borderRadius='full'
+                    src='https://www.akilligundem.com/wp-content/uploads/2022/03/error-404-page-not-found-hatasi-nasil-cozulur-0-1ELWuxVK.jpeg'
+                    alt='404'
                 />
                 <Link
-                    fontSize="22"
-                    color="blue.500"
-                    cursor="pointer"
+                    fontSize='22'
+                    color='blue.500'
+                    cursor='pointer'
                     onClick={() => navigate(MAIN_ROUTE)}
                 >
                     Вернитесь на главную страницу

@@ -108,75 +108,69 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay overflow={'hidden'} />
-            <ModalContent maxWidth={'40%'} height={'90%'} margin={0} alignSelf={'center'}>
+            <ModalOverlay overflow='hidden' />
+            <ModalContent maxWidth='40%' height='90%' margin={0} alignSelf='center'>
                 <ModalCloseButton />
-                <ModalBody display={'flex'} flexDirection={'row'}>
-                    <Box width={'100%'}>
+                <ModalBody display='flex' flexDirection='row'>
+                    <Box width='100%'>
                         <IconButton
-                            size={'sm'}
-                            aria-label="downloadPdf"
+                            size='sm'
+                            aria-label='downloadPdf'
                             onClick={generatePDF}
                             icon={<DownloadIcon />}
                         />
                         <Box ref={modalContentRef} p={5}>
-                            <Box display={'flex'} justifyContent={'space-between'}>
+                            <Box display='flex' justifyContent='space-between'>
                                 <Text>#{selectedRow?.invoiceNumber}</Text>
                             </Box>
-                            <Box display={'flex'} justifyContent={'space-between'} p={2} pb={2}>
+                            <Box display='flex' justifyContent='space-between' p={2} pb={2}>
                                 <Text>Расходная накладная от</Text>
                                 <Text>{dayjs(selectedRow?.createdAt).format('DD-MM-YYYY')}</Text>
                             </Box>
                             <Divider
-                                size={'lg'}
-                                borderColor={'black'}
-                                borderWidth={'2px'}
-                                orientation="horizontal"
+                                size='lg'
+                                borderColor='black'
+                                borderWidth='2px'
+                                orientation='horizontal'
                             />
-                            <Box
-                                display={'flex'}
-                                justifyContent={'space-between'}
-                                pt={1}
-                                p={2}
-                                pb={3}
-                            >
+                            <Box display='flex' justifyContent='space-between' pt={1} p={2} pb={3}>
                                 <Box
-                                    display={'flex'}
-                                    justifyContent={'space-between'}
-                                    flexDirection={'column'}
+                                    display='flex'
+                                    justifyContent='space-between'
+                                    flexDirection='column'
                                 >
                                     <Text>Получатель</Text>
                                     <Text>Покупатель</Text>
                                 </Box>
                                 <Box
-                                    display={'flex'}
-                                    flexDirection={'column'}
-                                    justifyContent={'space-between'}
+                                    display='flex'
+                                    flexDirection='column'
+                                    justifyContent='space-between'
                                 >
                                     <Text></Text>
                                     <Text>{selectedRow?.contragentName}</Text>
                                 </Box>
                             </Box>
                             <Divider
-                                size={'lg'}
-                                borderColor={'black'}
-                                borderWidth={'2px'}
-                                orientation="horizontal"
+                                size='lg'
+                                borderColor='black'
+                                borderWidth='2px'
+                                orientation='horizontal'
                                 marginBottom={3}
                             />
-                            <Table size={'xs'} variant={'unstyled'} fontSize={'12px'}>
+                            <Table size='xs' variant='unstyled' fontSize='12px'>
                                 <Thead>
                                     <Tr>
-                                        <Th border={'none'} color={'RGB(108, 112, 219)'}>
+                                        <Th border='none' color='RGB(108, 112, 219)'>
                                             Продукция
                                         </Th>
-                                        <Th border={'none'} color={'RGB(108, 112, 219)'}>
+                                        <Th border='none' color='RGB(108, 112, 219)'>
                                             Количество
                                         </Th>
-                                        <Th border={'none'} color={'RGB(108, 112, 219)'}>
+                                        <Th border='none' color='RGB(108, 112, 219)'>
                                             Цена
                                         </Th>
-                                        <Th border={'none'} color={'RGB(108, 112, 219)'}>
+                                        <Th border='none' color='RGB(108, 112, 219)'>
                                             Сумма
                                         </Th>
                                     </Tr>
@@ -185,31 +179,31 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                 <Tbody>
                                     {selectedRow?.totalProducts.map((item, index) => (
                                         <Tr key={index}>
-                                            <Td border={'1px solid black'} padding={'1'}>
+                                            <Td border='1px solid black' padding='1'>
                                                 {item.name}
                                             </Td>
-                                            <Td border={'1px solid black'} padding={'1'}>
+                                            <Td border='1px solid black' padding='1'>
                                                 {item.quantity}
                                             </Td>
-                                            <Td border={'1px solid black'} padding={'1'}>
+                                            <Td border='1px solid black' padding='1'>
                                                 {item.price}
                                             </Td>
-                                            <Td border={'1px solid black'} padding={'1'}>
+                                            <Td border='1px solid black' padding='1'>
                                                 {item.totalPrice}
                                             </Td>
                                         </Tr>
                                     ))}
                                 </Tbody>
                             </Table>
-                            <Box display={'flex'} marginBottom={3} mt={3}>
-                                <Text marginLeft={'auto'}>Получено</Text>
+                            <Box display='flex' marginBottom={3} mt={3}>
+                                <Text marginLeft='auto'>Получено</Text>
                                 <Text>________</Text>
                             </Box>
-                            <Box display={'flex'} flexDirection={'column'}>
-                                <Text marginLeft={'auto'} fontWeight={'bold'}>
+                            <Box display='flex' flexDirection='column'>
+                                <Text marginLeft='auto' fontWeight='bold'>
                                     Сверху: {overPrice} тг
                                 </Text>
-                                <Text marginLeft={'auto'} fontWeight={'bold'}>
+                                <Text marginLeft='auto' fontWeight='bold'>
                                     Всего: {Number(selectedRow?.totalSum) + Number(overPrice)} тг
                                 </Text>
                             </Box>

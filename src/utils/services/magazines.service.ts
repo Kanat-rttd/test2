@@ -25,4 +25,3 @@ export const deleteMagazines = async (id: number) => {
     const response = await $host.delete(`magazines/${id}`)
     return response
 }
-

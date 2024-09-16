@@ -15,12 +15,12 @@ import { useState } from 'react'
 import Dialog from '@/components/Dialog'
 import { useApi } from '@/utils/services/axios'
 import { deleteProviderGoods } from '@/utils/services/providerGoods.service'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { mutate } from 'swr'
 import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import GoodsAddModal from '../components/GoodsAddModal'
 import { ProviderType } from '@/utils/types/provider.types'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 type GoodsCategory = {
     id: number
@@ -92,13 +92,13 @@ const AdminGoods = () => {
     return (
         <>
             <UniversalComponent>
-                <Box width={'100%'} height={'100%'} p={5}>
-                    <Box marginBottom={5} display={'flex'} justifyContent={'space-between'}>
-                        <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                <Box width='100%' height='100%' p={5}>
+                    <Box marginBottom={5} display='flex' justifyContent='space-between'>
+                        <Box display='flex' gap='15px' width='fit-content'>
                             <Select
-                                name="status"
-                                placeholder="Статус"
-                                width={'fit-content'}
+                                name='status'
+                                placeholder='Статус'
+                                width='fit-content'
                                 onChange={(e) => handleSelectChange(e.target.value)}
                             >
                                 <option value={1}>Активный</option>
@@ -106,7 +106,7 @@ const AdminGoods = () => {
                             </Select>
                         </Box>
 
-                        <Button colorScheme="purple" onClick={onOpen}>
+                        <Button colorScheme='purple' onClick={onOpen}>
                             Добавить
                         </Button>
                     </Box>
@@ -115,7 +115,7 @@ const AdminGoods = () => {
                         isLoading={isLoading}
                         style={{ width: '100%', height: '100%', overflowY: 'auto' }}
                     >
-                        <Table variant="simple">
+                        <Table variant='simple'>
                             <Thead>
                                 <Tr>
                                     <Th>№</Th>
@@ -157,10 +157,10 @@ const AdminGoods = () => {
                                                 <Td>{item.status ? 'Активный' : 'Неактивный'}</Td>
                                                 <Td sx={{ width: '5%' }}>
                                                     <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
+                                                        variant='outline'
+                                                        size='sm'
+                                                        colorScheme='teal'
+                                                        aria-label='Send email'
                                                         marginRight={3}
                                                         onClick={() => {
                                                             setSelectedData(item)
@@ -169,10 +169,10 @@ const AdminGoods = () => {
                                                         icon={<EditIcon />}
                                                     />
                                                     <IconButton
-                                                        variant="outline"
-                                                        size={'sm'}
-                                                        colorScheme="teal"
-                                                        aria-label="Send email"
+                                                        variant='outline'
+                                                        size='sm'
+                                                        colorScheme='teal'
+                                                        aria-label='Send email'
                                                         marginRight={3}
                                                         onClick={() => {
                                                             setSelectedData(item)
@@ -202,13 +202,13 @@ const AdminGoods = () => {
                         dialog.onClose()
                         setSelectedData(undefined)
                     }}
-                    header="Удалить"
-                    body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                    header='Удалить'
+                    body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                     actionBtn={() => {
                         dialog.onClose()
                         handlerDeleteProvider(selectedData)
                     }}
-                    actionText="Удалить"
+                    actionText='Удалить'
                 />
                 <GoodsAddModal
                     isOpen={isOpen}

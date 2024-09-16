@@ -27,7 +27,7 @@ export const updatePurchase = async (
         deliverySum: number
         date: string
         providerId: number
-        providerGoodId: number | undefined;
+        providerGoodId: number | undefined
         goodsCategoryId: number | undefined
         status?: { value: number; label: string } | string | undefined
     },

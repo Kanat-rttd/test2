@@ -35,25 +35,25 @@ export default function ShiftAccounting() {
 
     return (
         <Box mt={1}>
-            <Tabs variant="soft-rounded" height={'100%'} mt={'-10px'}>
-                <Box width={'100%'} height={'100%'} p={5}>
-                    <Box display={'flex'} justifyContent={'space-between'}>
-                        <TabList height={'22px'}>
+            <Tabs variant='soft-rounded' height='100%' mt='-10px'>
+                <Box width='100%' height='100%' p={5}>
+                    <Box display='flex' justifyContent='space-between'>
+                        <TabList height='22px'>
                             <Tab onClick={clearParam}>List</Tab>
                             <Tab onClick={clearParam}>Pivot</Tab>
                         </TabList>
-                        <Button colorScheme="purple" onClick={onOpen}>
+                        <Button colorScheme='purple' onClick={onOpen}>
                             Добавить часы
                         </Button>
                     </Box>
-                    <TabPanels height={'100%'}>
-                        <TabPanel height={'100%'} p={'10px 0'}>
+                    <TabPanels height='100%'>
+                        <TabPanel height='100%' p='10px 0'>
                             <ListTable
                                 shiftAccounting={shiftAccounting}
                                 mutate={mutateShiftAccountingData}
                             />
                         </TabPanel>
-                        <TabPanel p={'10px 0'}>
+                        <TabPanel p='10px 0'>
                             <PivotTable shiftAccounting={shiftAccounting} />
                         </TabPanel>
                     </TabPanels>

@@ -6,11 +6,11 @@ const Sales = () => {
         <>
             <TopNavBar></TopNavBar>
             <Box
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                height="80vh"
+                display='flex'
+                flexDirection='column'
+                alignItems='center'
+                justifyContent='center'
+                height='80vh'
             >
                 Sales Page
             </Box>

@@ -51,7 +51,7 @@ export default function ListTable({ status }: any) {
     return (
         <>
             <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                <Table variant="simple">
+                <Table variant='simple'>
                     <Thead>
                         <Tr>
                             <Th>№</Th>
@@ -84,21 +84,17 @@ export default function ListTable({ status }: any) {
                                     </Td>
                                     <Td>{dayjs(row.createdAt).format('HH:MM DD.MM.YYYY')}</Td>
                                     <Td style={{ display: 'flex', gap: '10px' }}>
-                                        {
-                                            <EditIcon
-                                                boxSize={'1.5em'}
-                                                cursor={'pointer'}
-                                                onClick={() => setModal({ ...modal, isOpen: true })}
-                                            />
-                                        }
-                                        {
-                                            <DeleteIcon
-                                                boxSize={'1.5em'}
-                                                color={'red'}
-                                                cursor={'pointer'}
-                                                onClick={onOpen}
-                                            />
-                                        }
+                                        <EditIcon
+                                            boxSize='1.5em'
+                                            cursor='pointer'
+                                            onClick={() => setModal({ ...modal, isOpen: true })}
+                                        />
+                                        <DeleteIcon
+                                            boxSize='1.5em'
+                                            color='red'
+                                            cursor='pointer'
+                                            onClick={onOpen}
+                                        />
                                     </Td>
                                 </Tr>
                             )
@@ -110,10 +106,10 @@ export default function ListTable({ status }: any) {
             <Dialog
                 isOpen={isOpen}
                 onClose={onClose}
-                header="Удалить"
-                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                header='Удалить'
+                body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                 actionBtn={onClose}
-                actionText="Удалить"
+                actionText='Удалить'
             />
         </>
     )

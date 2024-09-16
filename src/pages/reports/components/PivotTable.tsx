@@ -57,7 +57,7 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
     return (
         <>
             <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                <Table variant="simple">
+                <Table variant='simple'>
                     <Thead>
                         <Tr>
                             <Th>№</Th>
@@ -78,13 +78,9 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
                                     )?.quantity
                                     return <Td key={index}>{quantity}</Td>
                                 })}
-                                <Td display={'flex'} gap={'10px'}>
-                                    <EditIcon boxSize={'1.5em'} cursor={'pointer'} />
-                                    <DeleteIcon
-                                        boxSize={'1.5em'}
-                                        color={'red'}
-                                        cursor={'pointer'}
-                                    />
+                                <Td display='flex' gap='10px'>
+                                    <EditIcon boxSize='1.5em' cursor='pointer' />
+                                    <DeleteIcon boxSize='1.5em' color='red' cursor='pointer' />
                                 </Td>
                             </Tr>
                         ))}

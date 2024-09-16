@@ -51,7 +51,7 @@ const Login = () => {
         loginUser(data)
             .then((res) => {
                 window.localStorage.setItem('authToken', res.data.token)
-                let userInfo = getUserInfo()
+                const userInfo = getUserInfo()
                 if (JSON.parse(String(userInfo?.class))[0].label == 'Реализатор') {
                     navigate(SALES_REQUEST_FORM_ROUTE)
                 } else {
@@ -71,26 +71,26 @@ const Login = () => {
 
     return (
         <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-            height="100vh"
-            width={'100%'}
-            p={'3em'}
+            display='flex'
+            flexDirection='column'
+            alignItems='center'
+            justifyContent='center'
+            height='100vh'
+            width='100%'
+            p='3em'
         >
-            <Box width={'100%'} marginBottom={5}>
-                <Heading textAlign={'left'}>Вход</Heading>
-                <Text color={'#7C7C7C'}>Введите телефон и пароль</Text>
+            <Box width='100%' marginBottom={5}>
+                <Heading textAlign='left'>Вход</Heading>
+                <Text color='#7C7C7C'>Введите телефон и пароль</Text>
             </Box>
-            <Stack width={'100%'} spacing={4}>
+            <Stack width='100%' spacing={4}>
                 <Box>
-                    <Text mb="8px">Телефон: </Text>
-                    <InputGroup size={'lg'}>
+                    <Text mb='8px'>Телефон: </Text>
+                    <InputGroup size='lg'>
                         <InputLeftAddon>+7</InputLeftAddon>
                         <Input
-                            type="tel"
-                            placeholder="(777)-777-77-77"
+                            type='tel'
+                            placeholder='(777)-777-77-77'
                             value={phoneNumber}
                             onChange={handleInputChange}
                         />
@@ -98,20 +98,20 @@ const Login = () => {
                 </Box>
 
                 <Box marginBottom={15}>
-                    <Text mb="8px">Пароль: </Text>
-                    <InputGroup size="lg">
+                    <Text mb='8px'>Пароль: </Text>
+                    <InputGroup size='lg'>
                         <Input
-                            pr="4.5rem"
+                            pr='4.5rem'
                             type={show ? 'text' : 'password'}
-                            placeholder="Введите пароль"
+                            placeholder='Введите пароль'
                             value={password}
                             onChange={handlePasswordChange}
                         />
-                        <InputRightElement width="4.5rem">
+                        <InputRightElement width='4.5rem'>
                             <Button
-                                h="1.75rem"
-                                size="lg"
-                                backgroundColor={'transparent'}
+                                h='1.75rem'
+                                size='lg'
+                                backgroundColor='transparent'
                                 onClick={handleClick}
                             >
                                 {show ? <ViewOffIcon /> : <ViewIcon />}
@@ -121,11 +121,11 @@ const Login = () => {
                 </Box>
 
                 <Button
-                    size={'lg'}
+                    size='lg'
                     borderRadius={15}
                     onClick={handleConfirmClick}
-                    backgroundColor={'#F7B23B'}
-                    color={'white'}
+                    backgroundColor='#F7B23B'
+                    color='white'
                 >
                     Войти
                 </Button>

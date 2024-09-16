@@ -42,21 +42,15 @@ const ProviderTable = () => {
 
     return (
         <>
-            <Box width={'25%'} marginBottom={4}>
-                <Select placeholder="Реализатор" size={'sm'} borderRadius={5} width={'80%'}>
+            <Box width='25%' marginBottom={4}>
+                <Select placeholder='Реализатор' size='sm' borderRadius={5} width='80%'>
                     <option>Реализатор</option>
                 </Select>
             </Box>
 
-            <Box
-                style={
-                    filteredData && filteredData.length >= 7
-                        ? { height: '100dvh' }
-                        : {}
-                }
-            >
+            <Box style={filteredData && filteredData.length >= 7 ? { height: '100dvh' } : {}}>
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                    <Table variant="simple">
+                    <Table variant='simple'>
                         <Thead>
                             <Tr>
                                 <Th>№</Th>
@@ -83,11 +77,11 @@ const ProviderTable = () => {
                         </Tbody>
                         <Tfoot>
                             <Tr>
-                                <Th color={'#000'} fontSize={15}>
+                                <Th color='#000' fontSize={15}>
                                     ИТОГО
                                 </Th>
-                                <Th width={'60%'}></Th>
-                                <Th color={'#000'} fontSize={15}>
+                                <Th width='60%'></Th>
+                                <Th color='#000' fontSize={15}>
                                     {calculationsData?.Total}
                                 </Th>
                             </Tr>

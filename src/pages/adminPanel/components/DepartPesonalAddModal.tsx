@@ -15,12 +15,12 @@ import {
 import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { createDepartPersonal, updateDepartPersonal } from '@/utils/services/departPersonal.service'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import StatusSelect from '@/components/shared/StatusSelect'
 import { DepartPersonalType } from '@/utils/types/departPersonal.types'
 import { FacilityUnit } from '@/utils/types/product.types'
 import { useApi } from '@/utils/services/axios'
 import InputNumber from '@/components/shared/NumberInput'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 interface DepartPesonalAddModalProps {
     data: DepartPersonalType | undefined
@@ -54,8 +54,14 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
     const sendData = (formData: DepartPersonalType) => {
         try {
             const responsePromise: Promise<any> = data
-                ? updateDepartPersonal(data.id, {...formData, status: Number(formData.status) ? true : false})
-                : createDepartPersonal({...formData, status: Number(formData.status) ? true : false})
+                ? updateDepartPersonal(data.id, {
+                      ...formData,
+                      status: Number(formData.status) ? true : false,
+                  })
+                : createDepartPersonal({
+                      ...formData,
+                      status: Number(formData.status) ? true : false,
+                  })
             responsePromise.then((res) => {
                 success(res.message)
                 reset()
@@ -76,11 +82,11 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
     return (
         <>
             <Modal isCentered isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+                <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(90deg)' />
                 <ModalContent>
                     <ModalHeader>{data ? 'Редактировать' : 'Добавить'} цехперсонал</ModalHeader>
                     <ModalCloseButton />
-                    <ModalBody display={'flex'} flexDirection={'column'} gap={3}>
+                    <ModalBody display='flex' flexDirection='column' gap={3}>
                         <form
                             onSubmit={handleSubmitForm(sendData)}
                             style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
@@ -91,9 +97,9 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
                                         {...register('name', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        autoComplete="off"
-                                        placeholder="Имя *"
-                                        type="text"
+                                        autoComplete='off'
+                                        placeholder='Имя *'
+                                        type='text'
                                     />
                                 </InputGroup>
                                 <FormErrorMessage>{errors.name?.message}</FormErrorMessage>
@@ -105,16 +111,16 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
                                         {...register('surname', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        autoComplete="off"
-                                        placeholder="Фамилия *"
-                                        type="text"
+                                        autoComplete='off'
+                                        placeholder='Фамилия *'
+                                        type='text'
                                     />
                                 </InputGroup>
                                 <FormErrorMessage>{errors.surname?.message}</FormErrorMessage>
                             </FormControl>
                             <FormControl isInvalid={!!errors.bakingFacilityUnitId}>
                                 <Select
-                                    placeholder="Выберите цех"
+                                    placeholder='Выберите цех'
                                     defaultValue={data?.bakingFacilityUnit.id}
                                     {...register('bakingFacilityUnitId', {
                                         required: 'Поле является обязательным',
@@ -137,9 +143,9 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
                                         {...register('userClass', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        autoComplete="off"
-                                        placeholder="Должность *"
-                                        type="text"
+                                        autoComplete='off'
+                                        placeholder='Должность *'
+                                        type='text'
                                     />
                                 </InputGroup>
                                 <FormErrorMessage>{errors.userClass?.message}</FormErrorMessage>
@@ -163,7 +169,7 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
                                             message: 'Максимальная длина 10 символов',
                                         },
                                     })}
-                                    placeholder="Фикс ЗП. *"
+                                    placeholder='Фикс ЗП. *'
                                 />
                                 <FormErrorMessage>{errors.fixSalary?.message}</FormErrorMessage>
                             </FormControl>
@@ -175,11 +181,11 @@ const DepartPersonalModal = ({ data, isOpen, onClose, onSuccess }: DepartPesonal
                                 }}
                             >
                                 <Input
-                                    width={'40%'}
-                                    type="submit"
-                                    bg="purple.500"
-                                    color="white"
-                                    cursor="pointer"
+                                    width='40%'
+                                    type='submit'
+                                    bg='purple.500'
+                                    color='white'
+                                    cursor='pointer'
                                     value={data ? 'Редактировать' : 'Добавить'}
                                 />
                             </Box>

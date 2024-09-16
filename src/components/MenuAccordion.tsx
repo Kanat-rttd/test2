@@ -58,25 +58,25 @@ const MenuAccordion = () => {
 
     return (
         <>
-            <Button ref={btnRef} colorScheme="white" onClick={toggleDrawer}>
-                <Icon viewBox="0 0 24 24" fill="none" boxSize={6} color="black">
-                    <path d="M4 6H20M4 12H20M4 18H20" stroke="#000000" strokeWidth="2"></path>
+            <Button ref={btnRef} colorScheme='white' onClick={toggleDrawer}>
+                <Icon viewBox='0 0 24 24' fill='none' boxSize={6} color='black'>
+                    <path d='M4 6H20M4 12H20M4 18H20' stroke='#000000' strokeWidth='2'></path>
                 </Icon>
             </Button>
             {isDrawerOpen && (
                 <div>
                     <Drawer
                         isOpen={isDrawerOpen}
-                        placement="left"
+                        placement='left'
                         onClose={() => setIsDrawerOpen(false)}
                         finalFocusRef={btnRef}
                     >
-                        <DrawerOverlay width={'100%'} />
-                        <DrawerContent width={'100%'}>
+                        <DrawerOverlay width='100%' />
+                        <DrawerContent width='100%'>
                             <DrawerCloseButton />
                             <DrawerHeader>Меню</DrawerHeader>
 
-                            <DrawerBody display="flex" p={2} gap="0.5rem" flexDirection="column">
+                            <DrawerBody display='flex' p={2} gap='0.5rem' flexDirection='column'>
                                 <Accordion allowMultiple>
                                     {filteredMenuItems.map((MenuItem, index) => (
                                         <Fragment key={index}>
@@ -84,9 +84,9 @@ const MenuAccordion = () => {
                                                 <h2>
                                                     <AccordionButton>
                                                         <Box
-                                                            as="span"
-                                                            flex="1"
-                                                            textAlign="left"
+                                                            as='span'
+                                                            flex='1'
+                                                            textAlign='left'
                                                             fontWeight={700}
                                                         >
                                                             {MenuItem.label}
@@ -101,7 +101,7 @@ const MenuAccordion = () => {
                                                                 onClick={() =>
                                                                     handleNavigate(route)
                                                                 }
-                                                                ml={'20px'}
+                                                                ml='20px'
                                                                 key={index}
                                                                 className={
                                                                     classes.accordionItemlink
@@ -109,8 +109,8 @@ const MenuAccordion = () => {
                                                             >
                                                                 <Link
                                                                     key={route}
-                                                                    variant="ghost"
-                                                                    width={'60%'}
+                                                                    variant='ghost'
+                                                                    width='60%'
                                                                 >
                                                                     {label}
                                                                 </Link>

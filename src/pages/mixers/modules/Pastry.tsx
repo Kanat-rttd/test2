@@ -19,21 +19,16 @@ const MixersPage = () => {
 
     return (
         <UniversalComponent>
-            <Box width={'100%'} height={'94%'} p={5} mt={1}>
-                <Box
-                    marginBottom={'34px'}
-                    height={'5%'}
-                    display={'flex'}
-                    justifyContent={'space-between'}
-                >
-                    <Box display={'flex'} gap={'15px'} width={'100%'}>
+            <Box width='100%' height='94%' p={5} mt={1}>
+                <Box marginBottom='34px' height='5%' display='flex' justifyContent='space-between'>
+                    <Box display='flex' gap='15px' width='100%'>
                         <DateRange />
                         <Select
-                            width={'15%'}
-                            size={'sm'}
+                            width='15%'
+                            size='sm'
                             borderRadius={5}
-                            placeholder="Цех"
-                            name="bakingFacilityUnitId"
+                            placeholder='Цех'
+                            name='bakingFacilityUnitId'
                             defaultValue={getParam('facilityUnitId')}
                             onChange={(e) => setParam('facilityUnitId', e.target.value)}
                         >
@@ -47,7 +42,7 @@ const MixersPage = () => {
                         </Select>
                     </Box>
                 </Box>
-                <Box height={'calc(95% - 2.5rem)'}>
+                <Box height='calc(95% - 2.5rem)'>
                     {salesData && <TableData data={salesData?.filter((sale) => sale.done === 1)} />}
                 </Box>
             </Box>

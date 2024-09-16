@@ -21,7 +21,6 @@ export interface FacilityUnit {
     facilityUnit: string
 }
 
-
 const Refund = () => {
     const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
     const handleSuccess = () => {
@@ -33,45 +32,45 @@ const Refund = () => {
     return (
         <Box>
             <UniversalComponent>
-                <Box width={'100%'} height={'100%'} p={5}>
+                <Box width='100%' height='100%' p={5}>
                     <Box
-                        marginBottom={'35px'}
-                        height={'5%'}
-                        display={'flex'}
-                        justifyContent={'space-between'}
+                        marginBottom='35px'
+                        height='5%'
+                        display='flex'
+                        justifyContent='space-between'
                     >
-                        <Box display={'flex'} gap={'15px'} width={'fit-content'}>
+                        <Box display='flex' gap='15px' width='fit-content'>
                             <DateRange />
                             <Select
-                                placeholder="Цех"
-                                width={'fit-content'}
-                                size={'sm'}
+                                placeholder='Цех'
+                                width='fit-content'
+                                size='sm'
                                 borderRadius={5}
                             >
                                 {facilityUnitsData?.map((unit, index) => (
-                            <option key={index} value={unit.id}>
-                                {unit.facilityUnit}
-                            </option>
-                        ))}
+                                    <option key={index} value={unit.id}>
+                                        {unit.facilityUnit}
+                                    </option>
+                                ))}
                             </Select>
                         </Box>
 
-                        <Button colorScheme="purple" height={'32px'} onClick={onOpen} p={'0 15px'}>
+                        <Button colorScheme='purple' height='32px' onClick={onOpen} p='0 15px'>
                             Возврат продукции
                         </Button>
                     </Box>
                     <Box>
-                        <Tabs variant="soft-rounded" mt={'-10px'}>
-                            <TabList height={'22px'}>
+                        <Tabs variant='soft-rounded' mt='-10px'>
+                            <TabList height='22px'>
                                 <Tab>List</Tab>
                                 <Tab>Pivot</Tab>
                             </TabList>
                             <TabPanels>
-                                <TabPanel p={'10px 0'}>
-                                    <ListTable status="1" />
+                                <TabPanel p='10px 0'>
+                                    <ListTable status='1' />
                                 </TabPanel>
-                                <TabPanel p={'10px 0'}>
-                                    <PivotTable status="1" />
+                                <TabPanel p='10px 0'>
+                                    <PivotTable status='1' />
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>
@@ -83,7 +82,7 @@ const Refund = () => {
                 onClose={onClose}
                 onSuccess={handleSuccess}
                 data={undefined}
-                status="1"
+                status='1'
             />
         </Box>
     )

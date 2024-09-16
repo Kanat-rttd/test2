@@ -83,29 +83,29 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
 
     return (
         <>
-            <Box height={'100%'} display={'flex'} flexDirection={'column'}>
-                <Box display={'flex'} flexDirection={'column'} gap={'15px'} flex={1}>
+            <Box height='100%' display='flex' flexDirection='column'>
+                <Box display='flex' flexDirection='column' gap='15px' flex={1}>
                     <FormControl isInvalid={!!errors.amount}>
                         <InputNumber
                             maxLength={20}
                             {...register('amount', { required: 'Поле является обязательным' })}
-                            placeholder="Сумма *"
+                            placeholder='Сумма *'
                         />
                         <FormErrorMessage>{errors.amount?.message}</FormErrorMessage>
                     </FormControl>
 
-                    <FormControl variant={'floating'} isInvalid={!!errors.date}>
+                    <FormControl variant='floating' isInvalid={!!errors.date}>
                         <Input
                             {...register('date', { required: 'Поле является обязательным' })}
-                            autoComplete="off"
-                            placeholder="Дата"
-                            type="date"
+                            autoComplete='off'
+                            placeholder='Дата'
+                            type='date'
                         />
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.account}>
                         <Controller
-                            name="account"
+                            name='account'
                             control={control}
                             rules={{ required: 'Поле является обязательным' }}
                             render={({ field }) => {
@@ -124,7 +124,7 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
                                                 onChange(selectedOption.name)
                                             }
                                         }}
-                                        placeholder="Выберите счет *"
+                                        placeholder='Выберите счет *'
                                         isClearable
                                         isSearchable
                                     />
@@ -136,7 +136,7 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
 
                     <FormControl isInvalid={!!errors.financeCategoryId}>
                         <Controller
-                            name="financeCategoryId"
+                            name='financeCategoryId'
                             control={control}
                             rules={{ required: 'Поле является обязательным' }}
                             render={({ field }) => {
@@ -155,7 +155,7 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
                                                 onChange(selectedOption.id)
                                             }
                                         }}
-                                        placeholder="Категория *"
+                                        placeholder='Категория *'
                                         isClearable
                                         isSearchable
                                     />
@@ -167,7 +167,7 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
 
                     <FormControl isInvalid={!!errors.clientId}>
                         <Controller
-                            name="clientId"
+                            name='clientId'
                             control={control}
                             rules={{ required: 'Поле является обязательным' }}
                             render={({ field }) => {
@@ -184,7 +184,7 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
                                                 onChange(selectedOption.id)
                                             }
                                         }}
-                                        placeholder="Контрагент *"
+                                        placeholder='Контрагент *'
                                         isClearable
                                         isSearchable
                                     />
@@ -196,16 +196,16 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
 
                     <FormControl>
                         <Textarea
-                            placeholder="Комментарий"
+                            placeholder='Комментарий'
                             maxLength={50}
-                            size="sm"
+                            size='sm'
                             {...register('comment')}
-                            resize="none"
+                            resize='none'
                         />
                     </FormControl>
                 </Box>
                 <Box style={{ width: '100%', textAlign: 'center', textAlignLast: 'right' }}>
-                    <Button colorScheme="blue" mr={3}>
+                    <Button colorScheme='blue' mr={3}>
                         Закрыть
                     </Button>
                     <Button
@@ -216,7 +216,7 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
                     </Button>
                 </Box>
                 <Box>
-                    <Text color={'RGB(149, 147, 147)'}>
+                    <Text color='RGB(149, 147, 147)'>
                         Остаток суммы {Number(totalSumm) - Number(financeData?.totalAmount)} тг
                     </Text>
                 </Box>

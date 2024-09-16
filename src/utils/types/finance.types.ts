@@ -3,7 +3,7 @@ export type ArrivalInputs = {
     amount: number | null
     date: Date
     account: string
-    financeCategoryId: number  | undefined
+    financeCategoryId: number | undefined
     contragentId: number | undefined
     comment: string
     invoiceNumber: number

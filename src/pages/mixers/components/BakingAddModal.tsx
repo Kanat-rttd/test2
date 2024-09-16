@@ -21,10 +21,10 @@ import { createBaking, updateBaking } from '@/utils/services/baking.service'
 import { useEffect, useState } from 'react'
 import { useApi } from '@/utils/services/axios'
 import { useForm } from 'react-hook-form'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { BakingDataType } from '@/utils/types/baking.types'
 import dayjs from 'dayjs'
 import InputNumber from '@/components/shared/NumberInput'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 interface ClientAddModalProps {
     data?: BakingDataType | null
@@ -110,9 +110,9 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
 
     return (
         <Modal isCentered isOpen={isOpen} onClose={handleModalClose}>
-            <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+            <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(10px) hue-rotate(90deg)' />
             <ModalContent>
-                <ModalHeader>{'Добавить'} заказ</ModalHeader>
+                <ModalHeader>Добавить заказ</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                     <Stack spacing={4}>
@@ -122,16 +122,16 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
                             >
                                 <FormControl isInvalid={!!errors.breadType} isRequired>
-                                    <FormLabel fontWeight={'bold'}>Вид хлеба</FormLabel>
+                                    <FormLabel fontWeight='bold'>Вид хлеба</FormLabel>
                                     <Select
                                         {...register('breadType', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        variant="filled"
-                                        placeholder=""
+                                        variant='filled'
+                                        placeholder=''
                                         defaultValue={data ? data.product?.id : ''}
                                     >
-                                        <option disabled value="">
+                                        <option disabled value=''>
                                             Выберите хлеб
                                         </option>
                                         {products?.map((product) => (
@@ -145,7 +145,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 {bakingGoods.map((item, index) => {
                                     return (
                                         <Box key={index}>
-                                            <FormLabel fontWeight={'bold'}>
+                                            <FormLabel fontWeight='bold'>
                                                 {
                                                     goodsCategoriesData?.find(
                                                         (category) =>
@@ -156,11 +156,11 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             <InputGroup>
                                                 <Input
                                                     isRequired
-                                                    type="number"
-                                                    autoComplete="off"
-                                                    placeholder="Количество"
-                                                    min="0"
-                                                    step="0.01"
+                                                    type='number'
+                                                    autoComplete='off'
+                                                    placeholder='Количество'
+                                                    min='0'
+                                                    step='0.01'
                                                     onKeyDown={(e) => {
                                                         if (e.key === '-') {
                                                             e.preventDefault()
@@ -192,9 +192,9 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                                     }}
                                                 />
                                                 <InputRightAddon
-                                                    w={'15%'}
-                                                    display={'flex'}
-                                                    justifyContent={'center'}
+                                                    w='15%'
+                                                    display='flex'
+                                                    justifyContent='center'
                                                 >
                                                     {
                                                         goodsCategoriesData?.find(
@@ -210,19 +210,19 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 })}
 
                                 <FormControl isInvalid={!!errors.temperature} isRequired>
-                                    <FormLabel fontWeight={'bold'}>T</FormLabel>
+                                    <FormLabel fontWeight='bold'>T</FormLabel>
                                     <InputNumber
                                         {...register('temperature', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        placeholder=""
+                                        placeholder=''
                                     />
                                     <FormErrorMessage>
                                         {errors.temperature?.message}
                                     </FormErrorMessage>
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.dateTime} isRequired>
-                                    <FormLabel fontWeight={'bold'}>Дата и время</FormLabel>
+                                    <FormLabel fontWeight='bold'>Дата и время</FormLabel>
                                     <Input
                                         {...register('dateTime', {
                                             required: 'Поле является обязательным',
@@ -234,7 +234,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                             borderRadius: '5px',
                                             padding: '0 15px',
                                         }}
-                                        type="datetime-local"
+                                        type='datetime-local'
                                         defaultValue={
                                             data
                                                 ? dayjs(data.dateTime).format('YYYY-MM-DD HH:mm')
@@ -244,22 +244,22 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                     <FormErrorMessage>{errors.dateTime?.message}</FormErrorMessage>
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.output} isRequired>
-                                    <FormLabel fontWeight={'bold'}>Выход</FormLabel>
+                                    <FormLabel fontWeight='bold'>Выход</FormLabel>
                                     <InputNumber
                                         {...register('output', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        placeholder=""
+                                        placeholder=''
                                     />
                                     <FormErrorMessage>{errors.output?.message}</FormErrorMessage>
                                 </FormControl>
                                 <FormControl isInvalid={!!errors.defective} isRequired>
-                                    <FormLabel fontWeight={'bold'}>Брак</FormLabel>
+                                    <FormLabel fontWeight='bold'>Брак</FormLabel>
                                     <InputNumber
                                         {...register('defective', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        placeholder=""
+                                        placeholder=''
                                     />
                                     <FormErrorMessage>{errors.defective?.message}</FormErrorMessage>
                                 </FormControl>
@@ -271,11 +271,11 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                     }}
                                 >
                                     <Input
-                                        width={'40%'}
-                                        type="submit"
-                                        bg="purple.500"
-                                        color="white"
-                                        cursor="pointer"
+                                        width='40%'
+                                        type='submit'
+                                        bg='purple.500'
+                                        color='white'
+                                        cursor='pointer'
                                         value={data ? 'Редактировать' : 'Добавить'}
                                     />
                                 </Box>
@@ -283,7 +283,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                         </Box>
                     </Stack>
                 </ModalBody>
-                <ModalFooter display={'flex'} alignSelf={'center'} gap={5}></ModalFooter>
+                <ModalFooter display='flex' alignSelf='center' gap={5}></ModalFooter>
             </ModalContent>
         </Modal>
     )

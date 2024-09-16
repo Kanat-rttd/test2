@@ -29,16 +29,16 @@ const Header: React.FC<StyledContainerProps> = ({ buttons }) => {
     }
     return (
         <Box className={classes.header}>
-            <Box width={'100%'} display={'flex'}>
+            <Box width='100%' display='flex'>
                 <MenuAccordion />
                 {buttons && (
-                    <Box w={'100%'} h={'100%'}>
+                    <Box w='100%' h='100%'>
                         {buttons?.map((button) => {
                             return (
                                 <Button
                                     key={button.path}
-                                    height={'100%'}
-                                    p={'0 25px'}
+                                    height='100%'
+                                    p='0 25px'
                                     onClick={() => navigate(button.path)}
                                     style={
                                         button.isCurrentPage
@@ -55,8 +55,8 @@ const Header: React.FC<StyledContainerProps> = ({ buttons }) => {
             </Box>
             <Box className={classes.logo}>
                 <Menu>
-                    <MenuButton borderRadius="25px">
-                        <Avatar width={'35px'} height={'35px'} bg="teal.500" mr={2} />
+                    <MenuButton borderRadius='25px'>
+                        <Avatar width='35px' height='35px' bg='teal.500' mr={2} />
                     </MenuButton>
                     <MenuList>
                         <MenuItem onClick={handleLogOut}>

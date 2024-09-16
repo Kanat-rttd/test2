@@ -54,7 +54,7 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
     return (
         <>
             <TableContainer style={{ minHeight: '70dvh', maxHeight: '70dvh', overflowY: 'auto' }}>
-                <Table variant="simple">
+                <Table variant='simple'>
                     <Thead>
                         <Tr>
                             <Th>№</Th>

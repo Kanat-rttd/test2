@@ -113,38 +113,34 @@ const RequestForm = () => {
                 <>
                     <MobileNavbar />
                     <Box
-                        display="flex"
-                        flexDirection="column"
-                        height="100vh"
-                        backgroundColor={'white'}
+                        display='flex'
+                        flexDirection='column'
+                        height='100vh'
+                        backgroundColor='white'
                         gap={5}
                     >
                         <Box
-                            borderBottom={'2px solid #E2E2E2'}
-                            width={'100%'}
-                            display={'flex'}
-                            flexDirection={'column'}
-                            textAlign={'center'}
-                            alignItems={'center'}
+                            borderBottom='2px solid #E2E2E2'
+                            width='100%'
+                            display='flex'
+                            flexDirection='column'
+                            textAlign='center'
+                            alignItems='center'
                             p={5}
                             gap={4}
                         >
                             <Heading>Заказ</Heading>
-                            <FormControl
-                                display={'flex'}
-                                justifyContent={'center'}
-                                alignItems={'center'}
-                            >
+                            <FormControl display='flex' justifyContent='center' alignItems='center'>
                                 <FormLabel>Смена: </FormLabel>
                                 <Input
-                                    variant="filled"
-                                    placeholder="Filled"
-                                    width={'50%'}
-                                    borderRadius={'15'}
-                                    name="date"
-                                    type="date"
+                                    variant='filled'
+                                    placeholder='Filled'
+                                    width='50%'
+                                    borderRadius='15'
+                                    name='date'
+                                    type='date'
                                     defaultValue={dayjs(selectedDate).format('YYYY-MM-DD')}
-                                    textAlign={'center'}
+                                    textAlign='center'
                                     onChange={(e) => setSelectedDate(new Date(e.target.value))}
                                 />
                             </FormControl>
@@ -156,36 +152,36 @@ const RequestForm = () => {
                                     <Box
                                         key={index}
                                         p={5}
-                                        display={'flex'}
-                                        flexDirection={'row'}
-                                        alignItems={'center'}
-                                        borderBottom={'2px solid #E2E2E2'}
+                                        display='flex'
+                                        flexDirection='row'
+                                        alignItems='center'
+                                        borderBottom='2px solid #E2E2E2'
                                         className={classes.inputsContainer}
                                     >
-                                        <Box width={'40%'}>
-                                            <Text fontWeight={'bold'}>{product.name}</Text>
+                                        <Box width='40%'>
+                                            <Text fontWeight='bold'>{product.name}</Text>
                                         </Box>
                                         <Box
-                                            display={'flex'}
-                                            width={'60%'}
-                                            justifyContent={'space-between'}
+                                            display='flex'
+                                            width='60%'
+                                            justifyContent='space-between'
                                         >
                                             <Input
-                                                w={'85%'}
-                                                variant="filled"
+                                                w='85%'
+                                                variant='filled'
                                                 borderRadius={15}
-                                                name="quantity"
-                                                placeholder="Количество"
-                                                backgroundColor={'gray.100'}
+                                                name='quantity'
+                                                placeholder='Количество'
+                                                backgroundColor='gray.100'
                                                 value={product.quantity || ''}
                                                 onChange={(e) => handleQuantityChange(index, e)}
-                                                min="0"
+                                                min='0'
                                             />
                                             <IconButton
-                                                bg={'transparent'}
-                                                color={'gray'}
-                                                size={'md'}
-                                                aria-label="remove item"
+                                                bg='transparent'
+                                                color='gray'
+                                                size='md'
+                                                aria-label='remove item'
                                                 icon={<CloseIcon />}
                                                 onClick={() => handleRemoveProduct(index)}
                                             />
@@ -195,44 +191,44 @@ const RequestForm = () => {
                             </VStack>
                         </Box>
 
-                        <Box textAlign={'center'} p={5}>
+                        <Box textAlign='center' p={5}>
                             <IconButton
-                                backgroundColor={'#F7B23B'}
+                                backgroundColor='#F7B23B'
                                 borderRadius={15}
-                                color={'white'}
-                                size={'md'}
-                                aria-label="Send email"
+                                color='white'
+                                size='md'
+                                aria-label='Send email'
                                 marginRight={3}
                                 icon={<AddIcon />}
                                 onClick={onToggle}
                             />
                         </Box>
 
-                        <Box m={5} borderBottom={'1px solid #7C7C7C'}>
-                            <Text mb="8px" color={'#7C7C7C'} textAlign={'left'}>
+                        <Box m={5} borderBottom='1px solid #7C7C7C'>
+                            <Text mb='8px' color='#7C7C7C' textAlign='left'>
                                 Комментарий
                             </Text>
                             <Input
-                                border={'none'}
+                                border='none'
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
                             />
                         </Box>
 
-                        <Box textAlign={'center'} p={5}>
+                        <Box textAlign='center' p={5}>
                             <Input
-                                mb={'80px'}
-                                variant="filled"
-                                size={'lg'}
-                                color={'white'}
-                                backgroundColor={'#F7B23B'}
-                                placeholder="Filled"
-                                width={'100%'}
-                                borderRadius={'15'}
-                                textAlign={'center'}
-                                value={'Заказать'}
+                                mb='80px'
+                                variant='filled'
+                                size='lg'
+                                color='white'
+                                backgroundColor='#F7B23B'
+                                placeholder='Filled'
+                                width='100%'
+                                borderRadius='15'
+                                textAlign='center'
+                                value='Заказать'
                                 onClick={handleSubmit}
-                                type="submit"
+                                type='submit'
                             />
                         </Box>
                     </Box>

@@ -31,13 +31,13 @@ const Debt = () => {
 
     return (
         <>
-            <Box padding={5} width={'20%'}>
+            <Box padding={5} width='20%'>
                 <Select
                     mt={1}
-                    w={'100%'}
-                    size={'sm'}
+                    w='100%'
+                    size='sm'
                     borderRadius={5}
-                    placeholder="Поставщик"
+                    placeholder='Поставщик'
                     value={getParam('providerId')}
                     onChange={(event) => setParam('providerId', event.target.value)}
                 >
@@ -48,9 +48,9 @@ const Debt = () => {
                     ))}
                 </Select>
             </Box>
-            <Box padding={'10px 20px'}>
+            <Box padding='10px 20px'>
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                    <Table variant="simple">
+                    <Table variant='simple'>
                         <Thead>
                             <Tr>
                                 <Th>№</Th>
@@ -77,11 +77,11 @@ const Debt = () => {
                         </Tbody>
                         <Tfoot>
                             <Tr>
-                                <Th color={'#000'} fontSize={15}>
+                                <Th color='#000' fontSize={15}>
                                     ИТОГО
                                 </Th>
-                                <Th width={'77%'}> </Th>
-                                <Th color={'#000'} fontSize={15}>
+                                <Th width='77%'> </Th>
+                                <Th color='#000' fontSize={15}>
                                     {purchasesData?.totalDebt}
                                 </Th>
                             </Tr>

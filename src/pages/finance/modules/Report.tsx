@@ -41,7 +41,7 @@ interface Report {
 
 const Report = () => {
     const { getURLs } = useURLParameters()
-    
+
     // const { data } = useSWR<Report>(['finance/report'], {
     //     fetcher: () => getReportData(),
     // })
@@ -68,7 +68,7 @@ const Report = () => {
 
     return (
         <>
-           {/* <Box
+            {/* <Box
                 display="flex"
                 justifyContent={'space-between'}
                 flexDirection={'row'}
@@ -83,16 +83,16 @@ const Report = () => {
                 <Avatar bg="teal.500" />
             </Box> */}
             <Box className={styles.container}>
-                <Box display="flex" gap="10px">
+                <Box display='flex' gap='10px'>
                     <Box className={styles.scoreSelect}>
                         <Select
-                        size={'sm'}
-                        borderRadius={5}
-                            placeholder="Счет"
+                            size='sm'
+                            borderRadius={5}
+                            placeholder='Счет'
                             // value={selectedScore}
                             // onChange={handleChangeSelect}
-                            width="100%"
-                            background="w"
+                            width='100%'
+                            background='w'
                         >
                             {score.map((s) => (
                                 <option key={s.value} value={s.label}>
@@ -101,11 +101,11 @@ const Report = () => {
                             ))}
                         </Select>
                     </Box>
-                    <Box width={'20%'}>
+                    <Box width='20%'>
                         <DateRange />
                     </Box>
                 </Box>
-                <Box w="100%" display="flex" justifyContent="center">
+                <Box w='100%' display='flex' justifyContent='center'>
                     <Box
                         style={{
                             overflow: 'auto',
@@ -118,12 +118,12 @@ const Report = () => {
                             gap: '5px',
                         }}
                     >
-                        <Row label="ОСТАТОК НА НАЧАЛО" value={data?.initial} />
+                        <Row label='ОСТАТОК НА НАЧАЛО' value={data?.initial} />
                         {defaultData?.map((item, index) => (
                             <Row key={index} label={item.name} value={item.total} />
                         ))}
                         <Row
-                            label="Движение средств от операционной деятельности"
+                            label='Движение средств от операционной деятельности'
                             value={operationTotal}
                             isTotal
                         />
@@ -131,15 +131,15 @@ const Report = () => {
                             <Row key={index} label={item.name} value={item.total} />
                         ))}
                         <Row
-                            label="Движение средств от финансовой деятельности"
+                            label='Движение средств от финансовой деятельности'
                             value={financialTotal}
                             isTotal
                         />
                         {financialData?.map((item, index) => (
                             <Row key={index} label={item.name} value={item.total} />
                         ))}
-                        <Row label="Баланс переводов" value={balance} />
-                        <Row label="ОСТАТОК НА КОНЕЦ" value={total} />
+                        <Row label='Баланс переводов' value={balance} />
+                        <Row label='ОСТАТОК НА КОНЕЦ' value={total} />
                     </Box>
                 </Box>
             </Box>
@@ -167,7 +167,7 @@ const Row = ({
             paddingLeft: isTotal ? '20px' : '0',
         }}
     >
-        <Text color={'var(--deep-blue)'} fontWeight={isTotal ? 600 : undefined} fontSize={20}>
+        <Text color='var(--deep-blue)' fontWeight={isTotal ? 600 : undefined} fontSize={20}>
             {label}
         </Text>
         <Text color={value && value < 0 ? 'var(--red)' : 'var(--green)'}>

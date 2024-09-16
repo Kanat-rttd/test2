@@ -7,13 +7,13 @@ import { Box, Spinner } from '@chakra-ui/react'
 const Loading = () => {
     return (
         <Box
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            justifyContent="center"
-            height="100vh"
+            display='flex'
+            flexDirection='column'
+            alignItems='center'
+            justifyContent='center'
+            height='100vh'
         >
-            <Spinner thickness="5px" size="xl" speed="0.65s" color="blue.500" />
+            <Spinner thickness='5px' size='xl' speed='0.65s' color='blue.500' />
         </Box>
     )
 }

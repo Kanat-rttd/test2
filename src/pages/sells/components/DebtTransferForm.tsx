@@ -16,7 +16,7 @@ import { useApi } from '@/utils/services/axios'
 import classes from '../index.module.css'
 import { ContragentCategoryType, ContragentType } from '@/utils/types/contragent.types'
 import { MagazineType } from '@/utils/types/magazine.type'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import InputNumber from '@/components/shared/NumberInput'
 
@@ -127,7 +127,10 @@ const DebtTransferForm = () => {
             return
         }
 
-        if (selectedProvider?.contragentType.type == 'реализатор' && contragentsMagazinesData != undefined) {
+        if (
+            selectedProvider?.contragentType.type == 'реализатор' &&
+            contragentsMagazinesData != undefined
+        ) {
             const magazinesIds = magazinesData
                 .filter((magazine) => magazine.clientId == selectedProvider.mainId)
                 .map((magazine) => magazine.id)
@@ -150,18 +153,18 @@ const DebtTransferForm = () => {
 
     return (
         <>
-            <Box height={'100%'} display={'flex'} flexDirection={'column'} alignItems={'center'}>
+            <Box height='100%' display='flex' flexDirection='column' alignItems='center'>
                 <Box
-                    width={'50%'}
-                    display={'flex'}
-                    flexDirection={'column'}
-                    gap={'15px'}
+                    width='50%'
+                    display='flex'
+                    flexDirection='column'
+                    gap='15px'
                     flex={1}
-                    border={'1px solid gray'}
+                    border='1px solid gray'
                     p={5}
                     borderRadius={5}
                 >
-                    <Heading size={'md'} textAlign={'center'}>
+                    <Heading size='md' textAlign='center'>
                         Перевод долга
                     </Heading>
                     <Divider></Divider>
@@ -172,12 +175,12 @@ const DebtTransferForm = () => {
                         <FormControl
                             isInvalid={!!errors.from}
                             isRequired
-                            display={'flex'}
-                            width={'100%'}
+                            display='flex'
+                            width='100%'
                         >
-                            <FormLabel width={'13%'}>От:</FormLabel>
+                            <FormLabel width='13%'>От:</FormLabel>
                             <Controller
-                                name="from"
+                                name='from'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -198,7 +201,7 @@ const DebtTransferForm = () => {
                                                 onChange(selectedOption?.id)
                                                 setSelectedProvider(selectedOption)
                                             }}
-                                            placeholder=""
+                                            placeholder=''
                                             isClearable
                                             isSearchable
                                             className={classes.select}
@@ -209,15 +212,10 @@ const DebtTransferForm = () => {
                             <FormErrorMessage>{errors.from?.message}</FormErrorMessage>
                         </FormControl>
 
-                        <FormControl
-                            isInvalid={!!errors.to}
-                            isRequired
-                            display={'flex'}
-                            width={'100%'}
-                        >
-                            <FormLabel width={'13%'}>Кому:</FormLabel>
+                        <FormControl isInvalid={!!errors.to} isRequired display='flex' width='100%'>
+                            <FormLabel width='13%'>Кому:</FormLabel>
                             <Controller
-                                name="to"
+                                name='to'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -241,7 +239,7 @@ const DebtTransferForm = () => {
                                             onChange={(selectedOption: ContragentType | null) => {
                                                 onChange(selectedOption?.id)
                                             }}
-                                            placeholder=""
+                                            placeholder=''
                                             isClearable
                                             isSearchable
                                             className={classes.select}
@@ -256,24 +254,24 @@ const DebtTransferForm = () => {
                             <InputNumber
                                 maxLength={20}
                                 {...register('summa', { required: 'Поле является обязательным' })}
-                                placeholder="Сумма *"
+                                placeholder='Сумма *'
                             />
                             <FormErrorMessage>{errors.summa?.message}</FormErrorMessage>
                         </FormControl>
 
-                        <FormControl variant={'floating'} isInvalid={!!errors.date}>
+                        <FormControl variant='floating' isInvalid={!!errors.date}>
                             <Input
                                 {...register('date', { required: 'Поле является обязательным' })}
-                                autoComplete="off"
-                                placeholder="Дата"
+                                autoComplete='off'
+                                placeholder='Дата'
                                 defaultValue={new Date().toISOString().split('T')[0]}
-                                type="date"
+                                type='date'
                             />
                         </FormControl>
 
                         <FormControl isInvalid={!!errors.invoiceNumber}>
                             <Controller
-                                name="invoiceNumber"
+                                name='invoiceNumber'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
@@ -298,7 +296,7 @@ const DebtTransferForm = () => {
                                             onChange={(selectedOption: InvoiceData | null) => {
                                                 onChange(selectedOption?.invoiceNumber)
                                             }}
-                                            placeholder="Номер накладной *"
+                                            placeholder='Номер накладной *'
                                             isClearable
                                             isSearchable
                                         />
@@ -310,11 +308,11 @@ const DebtTransferForm = () => {
 
                         <FormControl>
                             <Textarea
-                                placeholder="Комментарий"
+                                placeholder='Комментарий'
                                 maxLength={50}
-                                size="sm"
+                                size='sm'
                                 {...register('comment')}
-                                resize="none"
+                                resize='none'
                             />
                         </FormControl>
                         <Box
@@ -325,12 +323,12 @@ const DebtTransferForm = () => {
                             }}
                         >
                             <Input
-                                width={'40%'}
-                                type="submit"
-                                bg="purple.500"
-                                color="white"
-                                cursor="pointer"
-                                value={'Подтвердить'}
+                                width='40%'
+                                type='submit'
+                                bg='purple.500'
+                                color='white'
+                                cursor='pointer'
+                                value='Подтвердить'
                             />
                         </Box>
                     </form>

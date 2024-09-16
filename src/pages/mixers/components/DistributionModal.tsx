@@ -18,11 +18,11 @@ import { useState, useEffect } from 'react'
 
 import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
 import { useForm } from 'react-hook-form'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import { FacilityUnit } from '@/utils/types/product.types'
 import { useApi } from '@/utils/services/axios'
 import { DepartPersonalType } from '@/utils/types/departPersonal.types'
 import { createShiftAccounting } from '@/utils/services/shiftAccounting.service'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 interface DistributionModalProps {
     isOpen: boolean
@@ -42,9 +42,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
 }) => {
     const { loading, error } = useNotify()
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
-    const { data: departPersonalData } = useApi<DepartPersonalType[]>(
-        'departPersonal?status=1',
-    )
+    const { data: departPersonalData } = useApi<DepartPersonalType[]>('departPersonal?status=1')
 
     const [selectedFacilityUnit, setSelectedFacilityUnit] = useState<string>('')
     const [selectedPersonals, setSelectedPersonals] = useState<DepartPersonalNames[]>([])
@@ -145,7 +143,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
             <ModalContent>
                 <ModalHeader>{data ? 'Изменить' : 'Добавить'} часы</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody display={'flex'} gap={'10px'} flexDirection={'column'}>
+                <ModalBody display='flex' gap='10px' flexDirection='column'>
                     <form
                         onSubmit={handleSubmitForm(handleConfirm)}
                         style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
@@ -155,7 +153,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                 {...register('bakingFacilityUnitId', {
                                     required: 'Поле является обязательным',
                                 })}
-                                placeholder="Цех"
+                                placeholder='Цех'
                                 defaultValue={data ? data.bakingFacilityUnitId : ''}
                                 onChange={handleFacilityUnitChange}
                             >
@@ -175,9 +173,9 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                 {...register('date', {
                                     required: 'Поле является обязательным',
                                 })}
-                                autoComplete="off"
-                                placeholder="Дата *"
-                                type="date"
+                                autoComplete='off'
+                                placeholder='Дата *'
+                                type='date'
                                 defaultValue={new Date().toISOString().split('T')[0]}
                             />
                             <FormErrorMessage>{errors.date?.message}</FormErrorMessage>
@@ -186,14 +184,14 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                         {selectedFacilityUnit && (
                             <>
                                 <Box
-                                    width={'100%'}
-                                    gap={'10px'}
-                                    border={'1px solid #E2E8F0'}
-                                    padding={'5px'}
-                                    borderRadius={'8px'}
-                                    marginTop={'5px'}
-                                    display={'flex'}
-                                    flexWrap={'wrap'}
+                                    width='100%'
+                                    gap='10px'
+                                    border='1px solid #E2E8F0'
+                                    padding='5px'
+                                    borderRadius='8px'
+                                    marginTop='5px'
+                                    display='flex'
+                                    flexWrap='wrap'
                                 >
                                     {departPersonalData?.map((user) => {
                                         if (
@@ -202,8 +200,8 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                         ) {
                                             return (
                                                 <Checkbox
-                                                    w={'45%'}
-                                                    p={'0 15px'}
+                                                    w='45%'
+                                                    p='0 15px'
                                                     checked={selectedPersonals.some(
                                                         (item) => item.name === user.name,
                                                     )}
@@ -222,24 +220,24 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                         }
                                     })}
                                 </Box>
-                                <Box display={'flex'} flexDirection={'column'} gap={'10px'} pl={1}>
+                                <Box display='flex' flexDirection='column' gap='10px' pl={1}>
                                     {selectedPersonals.map(({ name, hours }, index) => {
                                         return (
                                             <Box
-                                                width={'100%'}
-                                                display={'flex'}
-                                                gap={'10px'}
-                                                alignItems={'center'}
+                                                width='100%'
+                                                display='flex'
+                                                gap='10px'
+                                                alignItems='center'
                                                 key={name}
                                             >
-                                                <Text w={'40%'}>
+                                                <Text w='40%'>
                                                     {index + 1}. {name}
                                                 </Text>
                                                 <Input
-                                                    w={'60%'}
+                                                    w='60%'
                                                     required={hours > 1}
-                                                    type="number"
-                                                    placeholder="Кол-во"
+                                                    type='number'
+                                                    placeholder='Кол-во'
                                                     value={isNaN(hours) ? '' : hours.toString()}
                                                     onChange={(e) => {
                                                         const newValue = e.target.value
@@ -252,7 +250,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                                             handleHoursChange(e, name)
                                                         }
                                                     }}
-                                                    min="0"
+                                                    min='0'
                                                     onKeyDown={(e) => {
                                                         if (e.key === '-') {
                                                             e.preventDefault()
@@ -274,11 +272,11 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                             }}
                         >
                             <Input
-                                width={'40%'}
-                                type="submit"
-                                bg="purple.500"
-                                color="white"
-                                cursor="pointer"
+                                width='40%'
+                                type='submit'
+                                bg='purple.500'
+                                color='white'
+                                cursor='pointer'
                                 value={data ? 'Редактировать' : 'Добавить'}
                             />
                         </Box>

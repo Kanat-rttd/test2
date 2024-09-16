@@ -5,7 +5,7 @@ import classes from '../styles.module.css'
 interface StyledTableContainerProps extends TableContainerProps {
     isLoading?: boolean
     children?: React.ReactNode
-    style?: any
+    style?: React.CSSProperties
 }
 
 const StyledTableContainer: React.FC<StyledTableContainerProps> = ({
@@ -17,14 +17,13 @@ const StyledTableContainer: React.FC<StyledTableContainerProps> = ({
     return (
         <Box className={classes.tableWrapper}>
             <TableContainer className={classes.tableContainer} style={style} {...props}>
-                    {isLoading ? (
-                        <div className={classes.spinnerOverlay}>
-                            <Spinner size="lg" color="blue.500" />
-                        </div>
-                    ) : (
-                        children
-                    )}
-
+                {isLoading ? (
+                    <div className={classes.spinnerOverlay}>
+                        <Spinner size='lg' color='blue.500' />
+                    </div>
+                ) : (
+                    children
+                )}
             </TableContainer>
         </Box>
     )

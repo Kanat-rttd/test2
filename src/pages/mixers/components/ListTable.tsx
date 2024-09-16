@@ -10,10 +10,10 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import { FacilityUnit } from '@/utils/types/product.types'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
-// import { useNotify } from '@/utils/providers/ToastProvider'
+// import {useNotify } from '@/utils/hooks/useNotify'
 import EditModal from './EditModal'
 import { deleteShiftAccounting } from '@/utils/services/shiftAccounting.service'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 // interface Dispatch {
 //     id: number
@@ -88,13 +88,13 @@ export default function ListTable({ shiftAccounting, mutate }: ListTableProps) {
     return (
         <>
             <UniversalComponent>
-                <Box display={'flex'} gap={'15px'} width={'fit-content'} mt={-3} mb={2}>
+                <Box display='flex' gap='15px' width='fit-content' mt={-3} mb={2}>
                     <DateRange />
                     <Select
-                        size={'sm'}
+                        size='sm'
                         borderRadius={5}
-                        placeholder="Цех"
-                        width={'fit-content'}
+                        placeholder='Цех'
+                        width='fit-content'
                         defaultValue={getParam('facilityUnit')}
                         onChange={(e) => setParam('facilityUnit', e.target.value)}
                     >
@@ -107,7 +107,7 @@ export default function ListTable({ shiftAccounting, mutate }: ListTableProps) {
                 </Box>
 
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                    <Table variant="simple">
+                    <Table variant='simple'>
                         <Thead>
                             <Tr>
                                 <Th>№</Th>
@@ -156,10 +156,10 @@ export default function ListTable({ shiftAccounting, mutate }: ListTableProps) {
                                             </Td>
                                             <Td>
                                                 <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
+                                                    variant='outline'
+                                                    size='sm'
+                                                    colorScheme='teal'
+                                                    aria-label='Send email'
                                                     marginRight={2}
                                                     onClick={() => {
                                                         setSelectedData(row)
@@ -168,10 +168,10 @@ export default function ListTable({ shiftAccounting, mutate }: ListTableProps) {
                                                     icon={<EditIcon />}
                                                 />
                                                 <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
+                                                    variant='outline'
+                                                    size='sm'
+                                                    colorScheme='teal'
+                                                    aria-label='Send email'
                                                     marginRight={3}
                                                     onClick={() => {
                                                         setSelectedData(row)
@@ -204,13 +204,13 @@ export default function ListTable({ shiftAccounting, mutate }: ListTableProps) {
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}
-                header="Удалить"
-                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                header='Удалить'
+                body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                 actionBtn={() => {
                     dialog.onClose()
                     handlerDeleteShiftAccounting(selectedData)
                 }}
-                actionText="Удалить"
+                actionText='Удалить'
             />
         </>
     )

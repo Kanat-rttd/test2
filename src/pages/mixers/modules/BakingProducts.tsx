@@ -18,7 +18,7 @@ import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import Dialog from '@/components/Dialog'
-import { useNotify } from '@/utils/providers/ToastProvider'
+import { useNotify } from '@/utils/hooks/useNotify'
 import { deleteBaking } from '@/utils/services/baking.service'
 import { FacilityUnit } from '@/utils/types/product.types'
 import { BakingDataType, BakingType } from '@/utils/types/baking.types'
@@ -71,15 +71,15 @@ const BakingPage = () => {
     return (
         <>
             <Box p={5} mt={1}>
-                <Box display={'flex'} justifyContent={'space-between'} width={'100%'}>
-                    <Box marginBottom={7} display={'flex'} gap={15} width={'100%'}>
+                <Box display='flex' justifyContent='space-between' width='100%'>
+                    <Box marginBottom={7} display='flex' gap={15} width='100%'>
                         <DateRange />
                         <Select
-                            placeholder="Цех"
-                            width={'17%'}
-                            size={'sm'}
+                            placeholder='Цех'
+                            width='17%'
+                            size='sm'
                             borderRadius={5}
-                            justifyContent={'space-between'}
+                            justifyContent='space-between'
                             defaultValue={getParam('facilityUnit')}
                             onChange={(e) => setParam('facilityUnit', e.target.value)}
                         >
@@ -91,12 +91,12 @@ const BakingPage = () => {
                         </Select>
                     </Box>
                     <Button
-                        size={'md'}
-                        backgroundColor={'#6B6FDB'}
-                        color={'white'}
-                        fontSize={'px'}
-                        borderRadius={'10px'}
-                        width={'15%'}
+                        size='md'
+                        backgroundColor='#6B6FDB'
+                        color='white'
+                        fontSize='px'
+                        borderRadius='10px'
+                        width='15%'
                         onClick={() => {
                             setSelectedBaking(undefined)
                             onOpen()
@@ -112,24 +112,24 @@ const BakingPage = () => {
                     />
                 </Box>
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                    <Table variant="simple">
+                    <Table variant='simple'>
                         <Thead>
                             <Tr>
                                 <Th>Вид хлеба</Th>
                                 <Th sx={styles}>Время и дата</Th>
-                                <Td sx={styles} textAlign={'center'}>
+                                <Td sx={styles} textAlign='center'>
                                     Мука
                                 </Td>
-                                <Td sx={styles} textAlign={'center'}>
+                                <Td sx={styles} textAlign='center'>
                                     Соль
                                 </Td>
-                                <Td sx={styles} textAlign={'center'}>
+                                <Td sx={styles} textAlign='center'>
                                     Дрожжи
                                 </Td>
-                                <Td sx={styles} textAlign={'center'}>
+                                <Td sx={styles} textAlign='center'>
                                     Солод
                                 </Td>
-                                <Td sx={styles} textAlign={'center'}>
+                                <Td sx={styles} textAlign='center'>
                                     Масло
                                 </Td>
                                 <Th sx={styles}>t°</Th>
@@ -142,30 +142,28 @@ const BakingPage = () => {
                             {bakingsData?.bakingData.length ? (
                                 bakingsData?.bakingData.map((bakingRow, index) => {
                                     return (
-                                        <Tr key={index} textAlign={'center'}>
+                                        <Tr key={index} textAlign='center'>
                                             <Td>{bakingRow.product?.name}</Td>
-                                            <Td textAlign={'center'}>
+                                            <Td textAlign='center'>
                                                 {dayjs(bakingRow.dateTime).format(
                                                     'HH:mm DD.MM.YYYY',
                                                 )}
                                             </Td>
-                                            <Td textAlign={'center'}>{bakingRow.flour.quantity}</Td>
-                                            <Td textAlign={'center'}>{bakingRow.salt.quantity}</Td>
-                                            <Td textAlign={'center'}>{bakingRow.yeast.quantity}</Td>
-                                            <Td textAlign={'center'}>{bakingRow.malt.quantity}</Td>
-                                            <Td textAlign={'center'}>
-                                                {bakingRow.butter.quantity}
-                                            </Td>
+                                            <Td textAlign='center'>{bakingRow.flour.quantity}</Td>
+                                            <Td textAlign='center'>{bakingRow.salt.quantity}</Td>
+                                            <Td textAlign='center'>{bakingRow.yeast.quantity}</Td>
+                                            <Td textAlign='center'>{bakingRow.malt.quantity}</Td>
+                                            <Td textAlign='center'>{bakingRow.butter.quantity}</Td>
 
-                                            <Td textAlign={'center'}>{bakingRow.temperature}</Td>
-                                            <Td textAlign={'center'}>{bakingRow.output}</Td>
-                                            <Td textAlign={'center'}>{bakingRow.defective}</Td>
+                                            <Td textAlign='center'>{bakingRow.temperature}</Td>
+                                            <Td textAlign='center'>{bakingRow.output}</Td>
+                                            <Td textAlign='center'>{bakingRow.defective}</Td>
                                             <Td>
                                                 <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
+                                                    variant='outline'
+                                                    size='sm'
+                                                    colorScheme='teal'
+                                                    aria-label='Send email'
                                                     marginRight={3}
                                                     onClick={() => {
                                                         setSelectedBaking(bakingRow)
@@ -174,10 +172,10 @@ const BakingPage = () => {
                                                     icon={<EditIcon />}
                                                 />
                                                 <IconButton
-                                                    variant="outline"
-                                                    size={'sm'}
-                                                    colorScheme="teal"
-                                                    aria-label="Send email"
+                                                    variant='outline'
+                                                    size='sm'
+                                                    colorScheme='teal'
+                                                    aria-label='Send email'
                                                     marginRight={3}
                                                     onClick={() => {
                                                         setSelectedBaking(bakingRow)
@@ -200,7 +198,7 @@ const BakingPage = () => {
                         </Tbody>
                         <Tfoot>
                             <Tr>
-                                <Th fontSize={16} fontWeight={'bold'} color={'#000'}>
+                                <Th fontSize={16} fontWeight='bold' color='#000'>
                                     Итого
                                 </Th>
                                 <Th sx={styles}></Th>
@@ -221,13 +219,13 @@ const BakingPage = () => {
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}
-                header="Удалить"
-                body="Вы уверены? Вы не сможете отменить это действие впоследствии."
+                header='Удалить'
+                body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
                 actionBtn={() => {
                     dialog.onClose()
                     handlerDelete(selectedBaking)
                 }}
-                actionText="Удалить"
+                actionText='Удалить'
             />
         </>
     )

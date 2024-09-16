@@ -44,8 +44,10 @@ const DateRange = () => {
     })
 
     useEffect(() => {
-        if (dayjs(selectionRange.startDate).format('YYYY-MM-DD') !== getParam('startDate') ||
-            dayjs(selectionRange.endDate).format('YYYY-MM-DD') !== getParam('endDate')) {
+        if (
+            dayjs(selectionRange.startDate).format('YYYY-MM-DD') !== getParam('startDate') ||
+            dayjs(selectionRange.endDate).format('YYYY-MM-DD') !== getParam('endDate')
+        ) {
             setParamObject({
                 startDate: dayjs(selectionRange.startDate).format('YYYY-MM-DD'),
                 endDate: dayjs(selectionRange.endDate).format('YYYY-MM-DD'),
@@ -87,35 +89,35 @@ const DateRange = () => {
             <PopoverTrigger>
                 <Box
                     onClick={onOpen}
-                    maxWidth="250px"
-                    backgroundColor="white"
-                    cursor="pointer"
-                    minWidth="fit-content"
-                    display="flex"
-                    alignItems="center"
-                    padding="0.2rem 1.5rem"
-                    height={'32px'}
+                    maxWidth='250px'
+                    backgroundColor='white'
+                    cursor='pointer'
+                    minWidth='fit-content'
+                    display='flex'
+                    alignItems='center'
+                    padding='0.2rem 1.5rem'
+                    height='32px'
                     borderRadius={5}
-                    border="1px solid"
-                    borderColor="inherit"
-                    justifyContent="center"
+                    border='1px solid'
+                    borderColor='inherit'
+                    justifyContent='center'
                 >
-                    <Text size="sm">{formattedDate}</Text>
+                    <Text size='sm'>{formattedDate}</Text>
                 </Box>
             </PopoverTrigger>
             <Portal>
-                <PopoverContent width="fit-content">
+                <PopoverContent width='fit-content'>
                     <PopoverArrow />
                     <PopoverBody>
                         <DateRangePicker
-                            className="dateRangePicker"
+                            className='dateRangePicker'
                             onChange={handleSelect}
                             ranges={[selectionRange]}
                             months={1}
-                            direction="vertical"
+                            direction='vertical'
                             showMonthAndYearPickers={false}
-                            monthDisplayFormat="LLLL"
-                            weekdayDisplayFormat="EEEEE"
+                            monthDisplayFormat='LLLL'
+                            weekdayDisplayFormat='EEEEE'
                             locale={ru}
                             rangeColors={['#92D3D6']}
                             showDateDisplay={false}
@@ -124,8 +126,8 @@ const DateRange = () => {
                             staticRanges={staticRanges}
                         />
                     </PopoverBody>
-                    <Box textAlign={'right'} padding={'5px'}>
-                        <Button onClick={handleConfirmDate} mr={'10px'}>
+                    <Box textAlign='right' padding='5px'>
+                        <Button onClick={handleConfirmDate} mr='10px'>
                             Принять
                         </Button>
                         <Button onClick={handleCancelDate}>Отмена</Button>

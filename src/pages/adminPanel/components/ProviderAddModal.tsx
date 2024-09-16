@@ -13,10 +13,10 @@ import {
 } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 import { useEffect } from 'react'
-import { useNotify } from '@/utils/providers/ToastProvider'
 import StatusSelect from '@/components/shared/StatusSelect'
 import { createProvider, updateProvider } from '@/utils/services/provider.service'
 import { ProviderForm, ProviderType } from '@/utils/types/provider.types'
+import { useNotify } from '@/utils/hooks/useNotify'
 
 type ModalProps = {
     isOpen: boolean
@@ -88,7 +88,7 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                     <ModalHeader>{selectedData ? 'Редактировать' : 'Добавить'}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        <Box display={'flex'} flexDirection={'column'} gap={3}>
+                        <Box display='flex' flexDirection='column' gap={3}>
                             <form
                                 onSubmit={handleSubmitForm(sendData)}
                                 style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}
@@ -99,9 +99,9 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                                         {...register('providerName', {
                                             required: 'Поле является обязательным',
                                         })}
-                                        autoComplete="off"
-                                        placeholder="Наименование *"
-                                        type="text"
+                                        autoComplete='off'
+                                        placeholder='Наименование *'
+                                        type='text'
                                     />
                                     <FormErrorMessage>
                                         {errors.providerName?.message}
@@ -124,11 +124,11 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                                     }}
                                 >
                                     <Input
-                                        width={'40%'}
-                                        type="submit"
-                                        bg="purple.500"
-                                        color="white"
-                                        cursor="pointer"
+                                        width='40%'
+                                        type='submit'
+                                        bg='purple.500'
+                                        color='white'
+                                        cursor='pointer'
                                         value={selectedData ? 'Редактировать' : 'Добавить'}
                                     />
                                 </Box>
