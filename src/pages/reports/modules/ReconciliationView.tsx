@@ -17,7 +17,7 @@ interface Client {
 
 type ReconciliationType = {
     reportData: {
-        adjustedDate: Date
+        AdjustedDate: Date
         ClientName: string
         Sales: number
         Returns: number
@@ -65,7 +65,7 @@ const ReconciliationView = () => {
     const getUniqDates = () => {
         const uniqDates = new Set<Date>()
         reconciliationViewData?.reportData.forEach((item) => {
-            uniqDates.add(item.adjustedDate)
+            uniqDates.add(item.AdjustedDate)
         })
         return [...uniqDates]
     }
@@ -76,7 +76,7 @@ const ReconciliationView = () => {
 
     const groupedData: FilteredDataType[] = dates.map((date) => {
         const filteredReports = reconciliationViewData?.reportData.filter(
-            (item) => item.adjustedDate === date,
+            (item) => item.AdjustedDate === date,
         )
         const groupedReport: ReportType | undefined = filteredReports?.reduce(
             (acc, item) => {

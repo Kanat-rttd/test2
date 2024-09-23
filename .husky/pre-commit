@@ -1,3 +1,2 @@
-npx tsc --noEmit
-npm run format
-npm run lint
+npx run typeCheck
+npx lint-staged
