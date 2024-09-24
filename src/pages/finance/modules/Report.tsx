@@ -85,19 +85,19 @@ const Report = () => {
                             gap: '5px',
                         }}
                     >
-                        <Row label='ОСТАТОК НА НАЧАЛО' value={initial} />
+                        <Row label='ОСТАТОК НА НАЧАЛО' value={initial ?? 0} />
                         <Row
                             label='Движение средств от операционной деятельности'
-                            value={operational}
+                            value={operational ?? 0}
                             isTotal
                         />
                         <Row
                             label='Движение средств от финансовой деятельности'
-                            value={financial}
+                            value={financial ?? 0}
                             isTotal
                         />
-                        <Row label='Баланс переводов' value={balance} />
-                        <Row label='ОСТАТОК НА КОНЕЦ' value={total} />
+                        <Row label='Баланс переводов' value={balance ?? 0} />
+                        <Row label='ОСТАТОК НА КОНЕЦ' value={total ?? 0} />
                     </Box>
                 </Box>
             </Box>
