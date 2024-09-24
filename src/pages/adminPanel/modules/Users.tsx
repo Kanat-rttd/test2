@@ -105,49 +105,53 @@ const AdminPanel = () => {
                             </Thead>
                             <Tbody>
                                 {usersData?.length ? (
-                                    usersData?.map((user, index) => {
-                                        const ordinalNumber: number = index + 1
-                                        return (
-                                            <Tr key={index}>
-                                                <Td>{ordinalNumber}</Td>
-                                                <Td>{user.name}</Td>
-                                                <Td>{user.surname}</Td>
-                                                <Td>{user.phone}</Td>
-                                                <Td>{user.status ? 'Активный' : 'Неактивный'}</Td>
-                                                <Td>{user.userClass}</Td>
-                                                <Td>{user.fixSalary}</Td>
-                                                <Td sx={{ width: '5%' }}>
-                                                    <IconButton
-                                                        variant='outline'
-                                                        size='sm'
-                                                        colorScheme='teal'
-                                                        aria-label='Send email'
-                                                        marginRight={3}
-                                                        onClick={() => {
-                                                            setSelectedData(user)
-                                                            onOpen()
-                                                        }}
-                                                        icon={<EditIcon />}
-                                                    />
-                                                    <IconButton
-                                                        variant='outline'
-                                                        size='sm'
-                                                        colorScheme='teal'
-                                                        aria-label='Send email'
-                                                        marginRight={3}
-                                                        onClick={() => {
-                                                            setSelectedData(user)
-                                                            setDialog({
-                                                                ...dialog,
-                                                                isOpen: true,
-                                                            })
-                                                        }}
-                                                        icon={<DeleteIcon />}
-                                                    />
-                                                </Td>
-                                            </Tr>
-                                        )
-                                    })
+                                    usersData
+                                        .filter((user) => user.name !== 'Default User')
+                                        ?.map((user, index) => {
+                                            const ordinalNumber: number = index + 1
+                                            return (
+                                                <Tr key={index}>
+                                                    <Td>{ordinalNumber}</Td>
+                                                    <Td>{user.name}</Td>
+                                                    <Td>{user.surname}</Td>
+                                                    <Td>{user.phone}</Td>
+                                                    <Td>
+                                                        {user.status ? 'Активный' : 'Неактивный'}
+                                                    </Td>
+                                                    <Td>{user.userClass}</Td>
+                                                    <Td>{user.fixSalary}</Td>
+                                                    <Td sx={{ width: '5%' }}>
+                                                        <IconButton
+                                                            variant='outline'
+                                                            size='sm'
+                                                            colorScheme='teal'
+                                                            aria-label='Send email'
+                                                            marginRight={3}
+                                                            onClick={() => {
+                                                                setSelectedData(user)
+                                                                onOpen()
+                                                            }}
+                                                            icon={<EditIcon />}
+                                                        />
+                                                        <IconButton
+                                                            variant='outline'
+                                                            size='sm'
+                                                            colorScheme='teal'
+                                                            aria-label='Send email'
+                                                            marginRight={3}
+                                                            onClick={() => {
+                                                                setSelectedData(user)
+                                                                setDialog({
+                                                                    ...dialog,
+                                                                    isOpen: true,
+                                                                })
+                                                            }}
+                                                            icon={<DeleteIcon />}
+                                                        />
+                                                    </Td>
+                                                </Tr>
+                                            )
+                                        })
                                 ) : (
                                     <Tr>
                                         <Td>Нет данных</Td>
