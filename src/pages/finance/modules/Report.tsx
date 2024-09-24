@@ -16,10 +16,19 @@ interface Report {
 }
 
 const Report = () => {
-    const { getURLs } = useURLParameters()
+    const { getURLs, setParam } = useURLParameters()
 
     const { data: financeData } = useApi<Report>(`finance/report?${getURLs().toString()}`)
     // const [data, setData] = useState<Report | undefined>(undefined)
+
+    useEffect(() => {
+        const today = new Date()
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
+        const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0)
+
+        setParam('startDate', firstDay.toISOString())
+        setParam('endDate', lastDay.toISOString())
+    })
 
     useEffect(() => {
         if (financeData) {
