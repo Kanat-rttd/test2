@@ -1,106 +1,73 @@
-import { Box, Select, Text } from '@chakra-ui/react'
+import { Avatar, Box, Text } from '@chakra-ui/react'
 import styles from '../style.module.css'
 import DateRange from '../../../components/DateRange'
-// import Drawler from '@/components/Menu'
-// import { getReportData } from '@/utils/services/finance.service'
-// import useSWR from 'swr'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
+import Drawler from '@/components/Menu'
+import { useEffect } from 'react'
 
 interface Report {
     initial: number
-    defaultData: [
-        {
-            name: string
-            total: number
-        },
-    ]
-    data: {
-        operational: {
-            total: number
-            data: [
-                {
-                    name: string
-                    total: number
-                },
-            ]
-        }
-        financial: {
-            total: number
-            data: [
-                {
-                    name: string
-                    total: number
-                },
-            ]
-        }
-    }
+    operational: number
+    financial: number
     balance: number
+    final: number
     total: number
 }
 
 const Report = () => {
     const { getURLs } = useURLParameters()
 
-    // const { data } = useSWR<Report>(['finance/report'], {
-    //     fetcher: () => getReportData(),
-    // })
-    const { data } = useApi<Report>(`finance/report?${getURLs().toString()}`)
+    const { data: financeData } = useApi<Report>(`finance/report?${getURLs().toString()}`)
+    // const [data, setData] = useState<Report | undefined>(undefined)
 
-    const score = [
-        {
-            label: 'Kaspi',
-            value: 1,
-        },
-    ]
+    useEffect(() => {
+        if (financeData) {
+            // setData(financeData)
+        }
+    }, [financeData])
 
-    //TODO: Перепишите бэк если вам на фронте приходится так делать с данными
-    const defaultData = data?.defaultData
-
-    const operationalData = data?.data.operational.data
-    const operationTotal = data?.data.operational.total
-
-    const financialData = data?.data.financial.data
-    const financialTotal = data?.data.financial.total
-
-    const balance = data?.balance
-    const total = data?.total
+    const initial = financeData?.initial
+    const operational = financeData?.operational
+    const financial = financeData?.financial
+    const balance = financeData?.balance
+    const total = financeData?.total
 
     return (
         <>
-            {/* <Box
-                display="flex"
-                justifyContent={'space-between'}
-                flexDirection={'row'}
-                alignItems={'center'}
-                backgroundColor={'rgba(128, 128, 128, 0.1)'}
-                height={'60px'}
-                p={'0 1rem'}
+            <Box
+                display='flex'
+                justifyContent='space-between'
+                flexDirection='row'
+                alignItems='center'
+                backgroundColor='rgba(128, 128, 128, 0.1)'
+                height='60px'
+                p='0 1rem'
             >
-                <Box width={'100%'}>
+                <Box width='100%'>
                     <Drawler></Drawler>
                 </Box>
-                <Avatar bg="teal.500" />
-            </Box> */}
+                <Avatar bg='teal.500' />
+            </Box>
             <Box className={styles.container}>
                 <Box display='flex' gap='10px'>
-                    <Box className={styles.scoreSelect}>
-                        <Select
-                            size='sm'
-                            borderRadius={5}
-                            placeholder='Счет'
-                            // value={selectedScore}
-                            // onChange={handleChangeSelect}
-                            width='100%'
-                            background='w'
-                        >
-                            {score.map((s) => (
-                                <option key={s.value} value={s.label}>
-                                    {s.label}
-                                </option>
-                            ))}
-                        </Select>
-                    </Box>
+                    {/*<Box className={styles.scoreSelect}>*/}
+                    {/*    <Select*/}
+                    {/*        size='sm'*/}
+                    {/*        borderRadius={5}*/}
+                    {/*        placeholder='Все счета'*/}
+                    {/*        value={getParam('accountName')}*/}
+                    {/*        onChange={(e) => setParam('accountName', e.target.value)}*/}
+                    {/*        width='100%'*/}
+                    {/*        background='w'*/}
+                    {/*    >*/}
+                    {/*        {accounts?.map((account) => (*/}
+                    {/*            <option key={account.id} value={account.name}>*/}
+                    {/*                {account.name}*/}
+                    {/*            </option>*/}
+                    {/*        ))}*/}
+                    {/*    </Select>*/}
+                    {/*</Box>*/}
                     <Box width='20%'>
                         <DateRange />
                     </Box>
@@ -118,26 +85,17 @@ const Report = () => {
                             gap: '5px',
                         }}
                     >
-                        <Row label='ОСТАТОК НА НАЧАЛО' value={data?.initial} />
-                        {defaultData?.map((item, index) => (
-                            <Row key={index} label={item.name} value={item.total} />
-                        ))}
+                        <Row label='ОСТАТОК НА НАЧАЛО' value={initial} />
                         <Row
                             label='Движение средств от операционной деятельности'
-                            value={operationTotal}
+                            value={operational}
                             isTotal
                         />
-                        {operationalData?.map((item, index) => (
-                            <Row key={index} label={item.name} value={item.total} />
-                        ))}
                         <Row
                             label='Движение средств от финансовой деятельности'
-                            value={financialTotal}
+                            value={financial}
                             isTotal
                         />
-                        {financialData?.map((item, index) => (
-                            <Row key={index} label={item.name} value={item.total} />
-                        ))}
                         <Row label='Баланс переводов' value={balance} />
                         <Row label='ОСТАТОК НА КОНЕЦ' value={total} />
                     </Box>
@@ -176,6 +134,5 @@ const Row = ({
     </Box>
 )
 const minusValue = (value: number): string => {
-    const formatted = value < 0 ? `(${Math.abs(value).toLocaleString()})` : value.toLocaleString()
-    return formatted
+    return value < 0 ? `(${Math.abs(value).toLocaleString()})` : value.toLocaleString()
 }

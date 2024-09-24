@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, FormErrorMessage, Input, Textarea } from '@chakra-ui/react'
 import Select from 'react-select'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { TransferInputs } from '@/utils/types/finance.types'
 import { createTransfer } from '@/utils/services/finance.service'
 import { useApi } from '@/utils/services/axios'
@@ -61,9 +61,9 @@ const Transfer = () => {
                 />
             </FormControl>
 
-            <FormControl isInvalid={!!errors.fromAccount}>
+            <FormControl isInvalid={!!errors.fromAccountId}>
                 <Controller
-                    name='fromAccount'
+                    name='fromAccountId'
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
@@ -73,10 +73,10 @@ const Transfer = () => {
                                 options={accounts}
                                 getOptionValue={(option: Account) => `${option.id}`}
                                 getOptionLabel={(option: Account) => option.name}
-                                value={accounts?.filter((option) => String(option.name) == value)}
+                                value={accounts?.filter((option) => Number(option.id) == value)}
                                 onChange={(selectedOption: Account | null) => {
                                     if (selectedOption) {
-                                        onChange(selectedOption.name)
+                                        onChange(selectedOption.id)
                                     }
                                 }}
                                 placeholder='Со счета*'
@@ -86,12 +86,12 @@ const Transfer = () => {
                         )
                     }}
                 />
-                <FormErrorMessage>{errors.fromAccount?.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.fromAccountId?.message}</FormErrorMessage>
             </FormControl>
 
-            <FormControl isInvalid={!!errors.toAccount}>
+            <FormControl isInvalid={!!errors.toAccountId}>
                 <Controller
-                    name='toAccount'
+                    name='toAccountId'
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
@@ -101,10 +101,10 @@ const Transfer = () => {
                                 options={accounts}
                                 getOptionValue={(option: Account) => `${option.id}`}
                                 getOptionLabel={(option: Account) => option.name}
-                                value={accounts?.filter((option) => String(option.name) == value)}
+                                value={accounts?.filter((option) => Number(option.id) == value)}
                                 onChange={(selectedOption: Account | null) => {
                                     if (selectedOption) {
-                                        onChange(selectedOption.name)
+                                        onChange(selectedOption.id)
                                     }
                                 }}
                                 placeholder='На счет*'
@@ -114,7 +114,7 @@ const Transfer = () => {
                         )
                     }}
                 />
-                <FormErrorMessage>{errors.toAccount?.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.toAccountId?.message}</FormErrorMessage>
             </FormControl>
 
             <Textarea

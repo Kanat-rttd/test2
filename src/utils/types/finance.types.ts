@@ -2,7 +2,7 @@ export type ArrivalInputs = {
     clientId: number
     amount: number | null
     date: Date
-    account: string
+    financeAccountId: number
     financeCategoryId: number | undefined
     contragentId: number | undefined
     comment: string
@@ -10,9 +10,9 @@ export type ArrivalInputs = {
 }
 
 export type TransferInputs = {
-    fromAccount: string
+    fromAccountId: number
     amount: number | null
-    toAccount: string
+    toAccountId: number
     date: Date
     comment: string
 }

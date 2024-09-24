@@ -1,24 +1,13 @@
 import { ArrivalInputs } from '@/utils/types/finance.types'
 import { Box, Button, FormControl, FormErrorMessage, Input, Textarea } from '@chakra-ui/react'
 import Select from 'react-select'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { createArrival } from '@/utils/services/finance.service'
 import { useApi } from '@/utils/services/axios'
 import { ContragentType } from '@/utils/types/contragent.types'
 import InputNumber from '@/components/shared/NumberInput'
 import { useEffect, useState } from 'react'
 import { useNotify } from '@/utils/hooks/useNotify'
-
-const account = [
-    {
-        id: 1,
-        name: 'Счёт 1',
-    },
-    {
-        id: 2,
-        name: 'Счёт 2',
-    },
-]
 
 interface Category {
     id: number
@@ -86,6 +75,7 @@ type ArrivalProps = {
 const Arrival = ({ categoriesData }: ArrivalProps) => {
     const { loading } = useNotify()
 
+    const { data: accounts } = useApi<Account[]>('/financeAccount')
     const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
     const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=1')
     const [filteredFinanceCategories, setFilteredFinanceCategories] = useState<Category[]>([])
@@ -176,22 +166,22 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                 />
             </FormControl>
 
-            <FormControl isInvalid={!!errors.account}>
+            <FormControl isInvalid={!!errors.financeAccountId}>
                 <Controller
-                    name='account'
+                    name='financeAccountId'
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
                     render={({ field }) => {
                         const { onChange, value } = field
                         return (
                             <Select
-                                options={account}
+                                options={accounts}
                                 getOptionLabel={(option: Account) => option.name}
                                 getOptionValue={(option: Account) => `${option.name}`}
-                                value={account?.filter((option) => String(option.name) == value)}
+                                value={accounts?.filter((option) => Number(option.id) == value)}
                                 // onChange={(val: Account) => onChange(val?.name)}
                                 onChange={(selectedOption: Account | null) => {
-                                    onChange(selectedOption?.name)
+                                    onChange(selectedOption?.id)
                                 }}
                                 placeholder='Выберите счет *'
                                 isClearable
@@ -200,7 +190,7 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                         )
                     }}
                 />
-                <FormErrorMessage>{errors.account?.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.financeAccountId?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl isInvalid={!!errors.financeCategoryId}>
@@ -219,7 +209,9 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                                 }
                                 getOptionLabel={(option: Category) => option.name}
                                 getOptionValue={(option: Category) => `${option.id}`}
-                                value={categoriesData?.filter((option) => option.id == value)}
+                                value={categoriesData?.filter(
+                                    (option) => Number(option.id) == value,
+                                )}
                                 // onChange={(val: Category) => onChange(val?.id)}
                                 onChange={(selectedOption: Category | null) => {
                                     onChange(selectedOption?.id)

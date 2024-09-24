@@ -21,7 +21,7 @@ export const getReportData = async () => {
 }
 
 export const createArrival = async (data: {
-    account: string
+    financeAccountId: number
     amount: number | null
     financeCategoryId: number | undefined
     contragentId: number | undefined
@@ -32,14 +32,13 @@ export const createArrival = async (data: {
     const requestData = {
         data: data,
     }
-    const response = await $host.post('finance/arrival', requestData)
-    return response
+    return await $host.post('finance/arrival', requestData)
 }
 
 export const createInvoiceArrival = async (
     invoiceNumber: number | undefined,
     data: {
-        account: string
+        financeAccountId: number
         amount: number | null
         financeCategoryId: number | undefined
         contragentId: number | undefined
@@ -52,12 +51,11 @@ export const createInvoiceArrival = async (
         data: data,
     }
 
-    const response = await $host.post('finance/arrival', requestData)
-    return response
+    return await $host.post('finance/arrival', requestData)
 }
 
 export const createConsumption = async (data: {
-    account: string
+    financeAccountId: number
     amount: number | null
     financeCategoryId: number | undefined
     contragentId: number | undefined
@@ -67,13 +65,12 @@ export const createConsumption = async (data: {
     const requestData = {
         data: data,
     }
-    const response = await $host.post('finance/consumption', requestData)
-    return response
+    return await $host.post('finance/consumption', requestData)
 }
 
 export const createTransfer = async (data: {
-    fromAccount: string
-    toAccount: string
+    fromAccountId: number
+    toAccountId: number
     date: Date
     comment: string
     amount: number | null
@@ -81,8 +78,7 @@ export const createTransfer = async (data: {
     const requestData = {
         data: data,
     }
-    const response = await $host.post('finance/transfer', requestData)
-    return response
+    return await $host.post('finance/transfer', requestData)
 }
 
 // export const getSaleById = async (id: number) => {

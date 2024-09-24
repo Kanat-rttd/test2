@@ -103,9 +103,9 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
                         />
                     </FormControl>
 
-                    <FormControl isInvalid={!!errors.account}>
+                    <FormControl isInvalid={!!errors.financeAccountId}>
                         <Controller
-                            name='account'
+                            name='financeAccountId'
                             control={control}
                             rules={{ required: 'Поле является обязательным' }}
                             render={({ field }) => {
@@ -115,13 +115,11 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
                                         options={account}
                                         getOptionLabel={(option: Account) => option.name}
                                         getOptionValue={(option: Account) => `${option.name}`}
-                                        value={account?.filter(
-                                            (option) => String(option.name) == value,
-                                        )}
+                                        value={account?.filter((option) => option.id == value)}
                                         // onChange={(val: Account) => onChange(val?.name)}
                                         onChange={(selectedOption: Account | null) => {
                                             if (selectedOption) {
-                                                onChange(selectedOption.name)
+                                                onChange(selectedOption.id)
                                             }
                                         }}
                                         placeholder='Выберите счет *'
@@ -131,7 +129,7 @@ const Arrival: React.FC<ArrivalFormProps> = ({ invoiceNumber, totalSumm }) => {
                                 )
                             }}
                         />
-                        <FormErrorMessage>{errors.account?.message}</FormErrorMessage>
+                        <FormErrorMessage>{errors.financeAccountId?.message}</FormErrorMessage>
                     </FormControl>
 
                     <FormControl isInvalid={!!errors.financeCategoryId}>
