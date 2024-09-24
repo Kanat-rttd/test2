@@ -1,9 +1,8 @@
-import { Avatar, Box, Text } from '@chakra-ui/react'
+import { Box, Text } from '@chakra-ui/react'
 import styles from '../style.module.css'
 import DateRange from '../../../components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
-import Drawler from '@/components/Menu'
 import { useEffect } from 'react'
 
 interface Report {
@@ -34,74 +33,58 @@ const Report = () => {
     const total = financeData?.total
 
     return (
-        <>
-            <Box
-                display='flex'
-                justifyContent='space-between'
-                flexDirection='row'
-                alignItems='center'
-                backgroundColor='rgba(128, 128, 128, 0.1)'
-                height='60px'
-                p='0 1rem'
-            >
-                <Box width='100%'>
-                    <Drawler></Drawler>
-                </Box>
-                <Avatar bg='teal.500' />
-            </Box>
-            <Box className={styles.container}>
-                <Box display='flex' gap='10px'>
-                    {/*<Box className={styles.scoreSelect}>*/}
-                    {/*    <Select*/}
-                    {/*        size='sm'*/}
-                    {/*        borderRadius={5}*/}
-                    {/*        placeholder='Все счета'*/}
-                    {/*        value={getParam('accountName')}*/}
-                    {/*        onChange={(e) => setParam('accountName', e.target.value)}*/}
-                    {/*        width='100%'*/}
-                    {/*        background='w'*/}
-                    {/*    >*/}
-                    {/*        {accounts?.map((account) => (*/}
-                    {/*            <option key={account.id} value={account.name}>*/}
-                    {/*                {account.name}*/}
-                    {/*            </option>*/}
-                    {/*        ))}*/}
-                    {/*    </Select>*/}
-                    {/*</Box>*/}
-                    <Box width='20%'>
-                        <DateRange />
-                    </Box>
-                </Box>
-                <Box w='100%' display='flex' justifyContent='center'>
-                    <Box
-                        style={{
-                            overflow: 'auto',
-                            borderRadius: '5px',
-                            width: '100%',
-                            boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-                            padding: '1rem',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '5px',
-                        }}
-                    >
-                        <Row label='ОСТАТОК НА НАЧАЛО' value={initial ?? 0} />
-                        <Row
-                            label='Движение средств от операционной деятельности'
-                            value={operational ?? 0}
-                            isTotal
-                        />
-                        <Row
-                            label='Движение средств от финансовой деятельности'
-                            value={financial ?? 0}
-                            isTotal
-                        />
-                        <Row label='Баланс переводов' value={balance ?? 0} />
-                        <Row label='ОСТАТОК НА КОНЕЦ' value={total ?? 0} />
-                    </Box>
+        <Box className={styles.container}>
+            <Box display='flex' gap='10px'>
+                {/*<Box className={styles.scoreSelect}>*/}
+                {/*    <Select*/}
+                {/*        size='sm'*/}
+                {/*        borderRadius={5}*/}
+                {/*        placeholder='Все счета'*/}
+                {/*        value={getParam('accountName')}*/}
+                {/*        onChange={(e) => setParam('accountName', e.target.value)}*/}
+                {/*        width='100%'*/}
+                {/*        background='w'*/}
+                {/*    >*/}
+                {/*        {accounts?.map((account) => (*/}
+                {/*            <option key={account.id} value={account.name}>*/}
+                {/*                {account.name}*/}
+                {/*            </option>*/}
+                {/*        ))}*/}
+                {/*    </Select>*/}
+                {/*</Box>*/}
+                <Box width='20%'>
+                    <DateRange />
                 </Box>
             </Box>
-        </>
+            <Box w='100%' display='flex' justifyContent='center'>
+                <Box
+                    style={{
+                        overflow: 'auto',
+                        borderRadius: '5px',
+                        width: '100%',
+                        boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
+                        padding: '1rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '5px',
+                    }}
+                >
+                    <Row label='ОСТАТОК НА НАЧАЛО' value={initial ?? 0} />
+                    <Row
+                        label='Движение средств от операционной деятельности'
+                        value={operational ?? 0}
+                        isTotal
+                    />
+                    <Row
+                        label='Движение средств от финансовой деятельности'
+                        value={financial ?? 0}
+                        isTotal
+                    />
+                    <Row label='Баланс переводов' value={balance ?? 0} />
+                    <Row label='ОСТАТОК НА КОНЕЦ' value={total ?? 0} />
+                </Box>
+            </Box>
+        </Box>
     )
 }
 
