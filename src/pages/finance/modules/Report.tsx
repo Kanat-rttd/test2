@@ -4,7 +4,7 @@ import DateRange from '../../../components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
 import Drawler from '@/components/Menu'
-import { useEffect } from 'react'
+import { useEffect, useLayoutEffect } from 'react'
 
 interface Report {
     initial: number
@@ -21,7 +21,7 @@ const Report = () => {
     const { data: financeData } = useApi<Report>(`finance/report?${getURLs().toString()}`)
     // const [data, setData] = useState<Report | undefined>(undefined)
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         const today = new Date()
         const firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
         const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0)
