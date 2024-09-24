@@ -6,11 +6,14 @@ import { useEffect, useState } from 'react'
 import DateRange from '../../../components/DateRange'
 import IsMobile from '@/utils/helpers/isMobile'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
-import { useApi } from '@/utils/services/axios'
+import { mutate, useApi } from '@/utils/services/axios'
 import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
+import { useNotify } from '@/utils/hooks/useNotify.ts'
+import { deleteFinance } from '@/utils/services/finance.service.ts'
 
 export type History = {
+    id: number
     date: Date
     account: string
     amount: string
@@ -49,6 +52,7 @@ interface Account {
 }
 
 const History = () => {
+    const { success, error } = useNotify()
     const { getURLs, setParam, getParam } = useURLParameters()
     const [sortOrder, setSortOrder] = useState('asc')
     const [isHovered, setIsHovered] = useState(false)
@@ -94,6 +98,19 @@ const History = () => {
     const handleDelete = (transaction: History) => {
         onOpen()
         setSelectedData(transaction)
+    }
+
+    const handleDeleteConfirm = async () => {
+        if (selectedData) {
+            deleteFinance(selectedData.id)
+                .then((res: any) => {
+                    mutate(`finance?${getURLs().toString()}`)
+                    success(res.data.message)
+                })
+                .catch((err: any) => {
+                    error(err.response.data.error)
+                })
+        }
     }
 
     return (
@@ -215,7 +232,7 @@ const History = () => {
                             </Text>
                         </>
                     }
-                    actionBtn={() => console.log('Удалить')}
+                    actionBtn={handleDeleteConfirm}
                     actionText='Удалить'
                 />
             </Box>

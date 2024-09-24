@@ -95,3 +95,7 @@ export const createTransfer = async (data: {
 //     const response = await $host.post('sales/status/test', data)
 //     return response
 // }
+
+export const deleteFinance = async (id: number) => {
+    return await $host.delete(`finance/${id}`)
+}
