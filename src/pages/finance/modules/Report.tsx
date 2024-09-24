@@ -4,7 +4,7 @@ import DateRange from '../../../components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
 import Drawler from '@/components/Menu'
-import { useEffect, useLayoutEffect } from 'react'
+import { useEffect } from 'react'
 
 interface Report {
     initial: number
@@ -16,19 +16,10 @@ interface Report {
 }
 
 const Report = () => {
-    const { getURLs, setParam } = useURLParameters()
+    const { getURLs } = useURLParameters()
 
     const { data: financeData } = useApi<Report>(`finance/report?${getURLs().toString()}`)
     // const [data, setData] = useState<Report | undefined>(undefined)
-
-    useLayoutEffect(() => {
-        const today = new Date()
-        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
-        const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0)
-
-        setParam('startDate', firstDay.toISOString())
-        setParam('endDate', lastDay.toISOString())
-    })
 
     useEffect(() => {
         if (financeData) {
