@@ -2,7 +2,6 @@ import IsMobile from '@/utils/helpers/isMobile'
 import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import Arrival from '../components/Arrival'
 import Consumption from '../components/Consumption'
-import Transfer from '../components/Transfer'
 import { useState } from 'react'
 import { useApi } from '@/utils/services/axios'
 
@@ -37,7 +36,7 @@ const Input = () => {
                             <TabList justifyContent='center'>
                                 <Tab onClick={() => setSelectedType('Приход')}>Приход</Tab>
                                 <Tab onClick={() => setSelectedType('Расход')}>Расход</Tab>
-                                <Tab>Перевод</Tab>
+                                {/*<Tab>Перевод</Tab>*/}
                             </TabList>
                             <TabPanels>
                                 <TabPanel display='flex' flexDirection='column' gap='15px'>
@@ -46,9 +45,9 @@ const Input = () => {
                                 <TabPanel display='flex' flexDirection='column' gap='15px'>
                                     <Consumption categoriesData={categoriesData} />
                                 </TabPanel>
-                                <TabPanel display='flex' flexDirection='column' gap='15px'>
-                                    <Transfer />
-                                </TabPanel>
+                                {/*<TabPanel display='flex' flexDirection='column' gap='15px'>*/}
+                                {/*    <Transfer />*/}
+                                {/*</TabPanel>*/}
                             </TabPanels>
                         </Tabs>
                     </Box>

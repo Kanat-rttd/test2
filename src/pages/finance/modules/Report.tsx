@@ -29,7 +29,7 @@ const Report = () => {
     const initial = financeData?.initial
     const operational = financeData?.operational
     const financial = financeData?.financial
-    const balance = financeData?.balance
+    // const balance = financeData?.balance
     const total = financeData?.total
 
     return (
@@ -80,7 +80,7 @@ const Report = () => {
                         value={financial ?? 0}
                         isTotal
                     />
-                    <Row label='Баланс переводов' value={balance ?? 0} />
+                    {/*<Row label='Баланс переводов' value={balance ?? 0} />*/}
                     <Row label='ОСТАТОК НА КОНЕЦ' value={total ?? 0} />
                 </Box>
             </Box>
