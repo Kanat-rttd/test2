@@ -71,10 +71,13 @@ const AdminPanel = () => {
             <UniversalComponent>
                 <Box display='flex' flexDirection='column' p={5}>
                     <Box marginBottom={6} display='flex' justifyContent='space-between'>
-                        <Box display='flex' gap='15px' width='fit-content'>
+                        <Box display='flex' gap='15px' width='100%'>
                             <Select
                                 placeholder='Статус'
-                                width='fit-content'
+                                width='20%'
+                                size='sm'
+                                borderRadius={5}
+                                justifyContent='space-between'
                                 onChange={(e) => applyFilters(e.target.value)}
                             >
                                 <option value={1}>Активный</option>
