@@ -18,9 +18,9 @@ export type BakingDataType = {
 }
 
 export type BakingDetailType = {
-    bakingId: number
+    // bakingId: number
     goodsCategoryId: number
-    id: number
+    // id: number
     quantity: number | undefined
 }
 
