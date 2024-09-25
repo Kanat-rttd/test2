@@ -145,72 +145,98 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 </FormErrorMessage>
                                 {fields.map((field, index) => {
                                     return (
-                                        <Flex mt={2} flexDirection='row' gap={2} key={field.id}>
-                                            <Select
-                                                {...register(
-                                                    `bakingDetails.${index}.goodsCategoryId`,
-                                                    {
-                                                        required: 'Поле является обязательным',
-                                                        valueAsNumber: true,
-                                                    },
-                                                )}
-                                            >
-                                                {goodsCategoriesData?.map(({ id, category }) => (
-                                                    <option key={id} value={id}>
-                                                        {category}
-                                                    </option>
-                                                ))}
-                                            </Select>
-                                            <InputGroup>
-                                                <Input
-                                                    isRequired
-                                                    type='number'
-                                                    autoComplete='off'
-                                                    placeholder='Количество'
-                                                    min='0'
-                                                    step='0.01'
-                                                    onKeyDown={(e) => {
-                                                        if (e.key === '-') {
-                                                            e.preventDefault()
-                                                        }
-                                                        if (e.key === 'e') {
-                                                            e.preventDefault()
-                                                        }
-                                                        if (
-                                                            e.key === 'ArrowUp' ||
-                                                            e.key === 'ArrowDown'
-                                                        ) {
-                                                            e.preventDefault()
-                                                        }
-                                                    }}
+                                        <FormControl
+                                            isRequired
+                                            isInvalid={!!errors.bakingDetails?.[index]?.message}
+                                        >
+                                            <Flex mt={2} flexDirection='row' gap={2} key={field.id}>
+                                                <Select
+                                                    isInvalid={!!errors.bakingDetails?.[index]}
                                                     {...register(
-                                                        `bakingDetails.${index}.quantity`,
+                                                        `bakingDetails.${index}.goodsCategoryId`,
                                                         {
+                                                            required: 'Поле является обязательным',
                                                             valueAsNumber: true,
+                                                            validate: (v) => {
+                                                                if (isNaN(v)) {
+                                                                    return false
+                                                                }
+                                                            },
                                                         },
                                                     )}
-                                                />
-                                                {watch?.[index]?.goodsCategoryId && (
-                                                    <InputRightAddon
-                                                        w='15%'
-                                                        display='flex'
-                                                        justifyContent='center'
-                                                    >
-                                                        {
-                                                            goodsCategoriesData?.find(
-                                                                (category) =>
-                                                                    category.id ===
-                                                                    watch?.[index]?.goodsCategoryId,
-                                                            )?.unitOfMeasure
-                                                        }
-                                                    </InputRightAddon>
-                                                )}
-                                            </InputGroup>
+                                                >
+                                                    <option disabled value={NaN}>
+                                                        Выберите категорию
+                                                    </option>
+                                                    {goodsCategoriesData?.map(
+                                                        ({ id, category }) => (
+                                                            <option
+                                                                hidden={fields.some(
+                                                                    (field) =>
+                                                                        field.goodsCategoryId ===
+                                                                        id,
+                                                                )}
+                                                                key={id}
+                                                                value={id}
+                                                            >
+                                                                {category}
+                                                            </option>
+                                                        ),
+                                                    )}
+                                                </Select>
+                                                <InputGroup>
+                                                    <Input
+                                                        isRequired
+                                                        type='number'
+                                                        autoComplete='off'
+                                                        placeholder='Количество'
+                                                        min='0'
+                                                        step='0.01'
+                                                        onKeyDown={(e) => {
+                                                            if (e.key === '-') {
+                                                                e.preventDefault()
+                                                            }
+                                                            if (e.key === 'e') {
+                                                                e.preventDefault()
+                                                            }
+                                                            if (
+                                                                e.key === 'ArrowUp' ||
+                                                                e.key === 'ArrowDown'
+                                                            ) {
+                                                                e.preventDefault()
+                                                            }
+                                                        }}
+                                                        {...register(
+                                                            `bakingDetails.${index}.quantity`,
+                                                            {
+                                                                required: true,
+                                                                valueAsNumber: true,
+                                                            },
+                                                        )}
+                                                    />
+                                                    {watch?.[index]?.goodsCategoryId && (
+                                                        <InputRightAddon
+                                                            w='15%'
+                                                            display='flex'
+                                                            justifyContent='center'
+                                                        >
+                                                            {
+                                                                goodsCategoriesData?.find(
+                                                                    (category) =>
+                                                                        category.id ===
+                                                                        watch?.[index]
+                                                                            ?.goodsCategoryId,
+                                                                )?.unitOfMeasure
+                                                            }
+                                                        </InputRightAddon>
+                                                    )}
+                                                </InputGroup>
 
-                                            <Button onClick={() => remove(index)}>
-                                                <DeleteIcon />
-                                            </Button>
-                                        </Flex>
+                                                <Button onClick={() => remove(index)}>
+                                                    <DeleteIcon />
+                                                </Button>
+                                            </Flex>
+                                        </FormControl>
                                     )
                                 })}
                             </FormControl>
@@ -219,7 +245,7 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                                 size='sm'
                                 onClick={() =>
                                     append({
-                                        goodsCategoryId: goodsCategoriesData![0].id,
+                                        goodsCategoryId: NaN,
                                         quantity: undefined,
                                     })
                                 }
