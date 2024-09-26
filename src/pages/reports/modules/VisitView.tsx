@@ -7,13 +7,18 @@ import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
 import { useEffect, useState } from 'react'
 
-interface DepartPersonal {
+// interface DepartPersonal {
+//     id: number
+//     name: string
+//     surname: string
+//     status: string
+//     userClass: string
+//     fixSalary: string
+// }
+
+interface BakingFacilityUnit {
     id: number
-    name: string
-    surname: string
-    status: string
-    userClass: string
-    fixSalary: string
+    facilityUnit: string
 }
 
 type FilteredData = {
@@ -30,7 +35,7 @@ const VisitView = () => {
     const { data: visitViewData } = useApi<ShiftAccountingType[]>(
         `shiftAccounting?${getURLs().toString()}`,
     )
-    const { data: departPersonalData } = useApi<DepartPersonal[]>('departPersonal')
+    const { data: bakingFacilityUnitData } = useApi<BakingFacilityUnit[]>('mixers')
 
     const [personalNames, setPersonalNames] = useState<string[]>([])
     const [dates, setDates] = useState<Date[]>([])
@@ -114,13 +119,13 @@ const VisitView = () => {
                             size='sm'
                             borderRadius={5}
                             width='fit-content'
-                            value={getParam('personal')}
-                            onChange={(e) => setParam('personal', e.target.value)}
+                            value={getParam('facilityUnit')}
+                            onChange={(e) => setParam('facilityUnit', e.target.value)}
                         >
-                            <option value=''>Все клиенты</option>
-                            {departPersonalData?.map((personal) => (
-                                <option key={personal.id} value={personal.id}>
-                                    {personal.name}
+                            <option value=''>Все заводы</option>
+                            {bakingFacilityUnitData?.map(({ id, facilityUnit }) => (
+                                <option key={id} value={id}>
+                                    {facilityUnit}
                                 </option>
                             ))}
                         </Select>
