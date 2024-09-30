@@ -1,9 +1,10 @@
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Icon, Text, Tooltip } from '@chakra-ui/react'
 import styles from '../style.module.css'
 import DateRange from '../../../components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
 import { useEffect } from 'react'
+import { QuestionIcon } from '@chakra-ui/icons'
 
 interface Report {
     initial: number
@@ -69,19 +70,29 @@ const Report = () => {
                         gap: '5px',
                     }}
                 >
-                    <Row label='ОСТАТОК НА НАЧАЛО' value={initial ?? 0} />
+                    <Row
+                        label='ОСТАТОК НА НАЧАЛО'
+                        description='Это сумма, которая была на счету компании на начало отчетного периода. Начальный остаток средств.'
+                        value={initial ?? 0}
+                    />
                     <Row
                         label='Движение средств от операционной деятельности'
+                        description='Поступления или оттоки денежных средств, связанные с основной деятельностью компании, такой как продажа продуктов, выплаты заработной платы и т.д.'
                         value={operational ?? 0}
                         isTotal
                     />
                     <Row
                         label='Движение средств от финансовой деятельности'
+                        description='Денежные потоки, связанные с привлечением или возвратом финансовых средств, например, кредиты, выплаты процентов по займам или инвестирования.'
                         value={financial ?? 0}
                         isTotal
                     />
                     {/*<Row label='Баланс переводов' value={balance ?? 0} />*/}
-                    <Row label='ОСТАТОК НА КОНЕЦ' value={total ?? 0} />
+                    <Row
+                        label='ОСТАТОК НА КОНЕЦ'
+                        description='Это итоговая сумма денежных средств на конец отчетного периода после учета всех операций.'
+                        value={total ?? 0}
+                    />
                 </Box>
             </Box>
         </Box>
@@ -92,10 +103,12 @@ export default Report
 
 const Row = ({
     label,
+    description,
     value,
     isTotal,
 }: {
     label: string
+    description?: string
     value: number | undefined
     isTotal?: boolean
 }) => (
@@ -108,9 +121,16 @@ const Row = ({
             paddingLeft: isTotal ? '20px' : '0',
         }}
     >
-        <Text color='var(--deep-blue)' fontWeight={isTotal ? 600 : undefined} fontSize={20}>
-            {label}
-        </Text>
+        <Box display='flex' alignItems='center' gap='10px'>
+            <Text color='var(--deep-blue)' fontWeight={isTotal ? 600 : undefined} fontSize={20}>
+                {label}
+            </Text>
+            {description && (
+                <Tooltip label={description} aria-label='description'>
+                    <Icon fontSize='14px' as={QuestionIcon} />
+                </Tooltip>
+            )}
+        </Box>
         <Text color={value && value < 0 ? 'var(--red)' : 'var(--green)'}>
             {value && minusValue(value)}
         </Text>
