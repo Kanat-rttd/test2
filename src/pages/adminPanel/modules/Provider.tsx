@@ -78,7 +78,6 @@ const AdminProvider = () => {
                             <Select
                                 name='status'
                                 placeholder='Статус'
-                                width='fit-content'
                                 onChange={(e) => handleSelectChange(e.target.value)}
                             >
                                 <option value={1}>Активный</option>

@@ -44,6 +44,7 @@ interface ProviderGoods {
 const AdminGoods = () => {
     const { error, success } = useNotify()
     const [selectedStatus, setSelectedStatus] = useState('')
+    const [selectedProvider, setSelectedProvider] = useState('')
     const { data: goodsCategories } = useApi<GoodsCategory[]>('goodsCategories')
     const [dialog, setDialog] = useState({
         isOpen: false,
@@ -52,15 +53,12 @@ const AdminGoods = () => {
 
     const { data: providerGoodsData, isLoading } = useApi<ProviderGoods[]>('providerGoods', {
         status: selectedStatus,
+        providerId: selectedProvider,
     })
     const { data: providerData } = useApi<ProviderType[]>('providers')
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<ProviderGoods>()
-
-    const handleSelectChange = (status: string) => {
-        setSelectedStatus(status)
-    }
 
     const handlerDeleteProvider = (selectedData: ProviderGoods | undefined) => {
         if (selectedData) {
@@ -98,11 +96,21 @@ const AdminGoods = () => {
                             <Select
                                 name='status'
                                 placeholder='Статус'
-                                width='fit-content'
-                                onChange={(e) => handleSelectChange(e.target.value)}
+                                onChange={(e) => setSelectedStatus(e.target.value)}
                             >
                                 <option value={1}>Активный</option>
                                 <option value={0}>Неактивный</option>
+                            </Select>
+                            <Select
+                                name='provider'
+                                placeholder='Поставщик'
+                                onChange={(e) => setSelectedProvider(e.target.value)}
+                            >
+                                {providerData?.map(({ providerName, id }) => (
+                                    <option key={id} value={id}>
+                                        {providerName}
+                                    </option>
+                                ))}
                             </Select>
                         </Box>
 
