@@ -21,6 +21,7 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import GoodsAddModal from '../components/GoodsAddModal'
 import { ProviderType } from '@/utils/types/provider.types'
 import { useNotify } from '@/utils/hooks/useNotify'
+import { useURLParameters } from '@/utils/hooks/useURLParameters.tsx'
 
 type GoodsCategory = {
     id: number
@@ -43,18 +44,16 @@ interface ProviderGoods {
 
 const AdminGoods = () => {
     const { error, success } = useNotify()
-    const [selectedStatus, setSelectedStatus] = useState('')
-    const [selectedProvider, setSelectedProvider] = useState('')
     const { data: goodsCategories } = useApi<GoodsCategory[]>('goodsCategories')
+    const { getURLs, getParam, setParam } = useURLParameters()
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const { data: providerGoodsData, isLoading } = useApi<ProviderGoods[]>('providerGoods', {
-        status: selectedStatus,
-        providerId: selectedProvider,
-    })
+    const { data: providerGoodsData, isLoading } = useApi<ProviderGoods[]>(
+        `providerGoods?${getURLs().toString()}`,
+    )
     const { data: providerData } = useApi<ProviderType[]>('providers')
 
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -65,7 +64,7 @@ const AdminGoods = () => {
             const responsePromise: Promise<any> = deleteProviderGoods(selectedData.id)
             responsePromise
                 .then((res) => {
-                    mutate(`providerGoods?status=${selectedStatus}`)
+                    mutate(`providerGoods?${getURLs().toString()}`)
                     success(res.data.message)
                 })
                 .catch((err) => {
@@ -78,7 +77,7 @@ const AdminGoods = () => {
     }
 
     const handledSuccess = () => {
-        mutate(`providerGoods?status=${selectedStatus}`)
+        mutate(`providerGoods?${getURLs().toString()}`)
         setSelectedData(undefined)
     }
 
@@ -96,7 +95,8 @@ const AdminGoods = () => {
                             <Select
                                 name='status'
                                 placeholder='Статус'
-                                onChange={(e) => setSelectedStatus(e.target.value)}
+                                value={getParam('status')}
+                                onChange={(e) => setParam('status', e.target.value)}
                             >
                                 <option value={1}>Активный</option>
                                 <option value={0}>Неактивный</option>
@@ -104,7 +104,8 @@ const AdminGoods = () => {
                             <Select
                                 name='provider'
                                 placeholder='Поставщик'
-                                onChange={(e) => setSelectedProvider(e.target.value)}
+                                value={getParam('providerId')}
+                                onChange={(e) => setParam('providerId', e.target.value)}
                             >
                                 {providerData?.map(({ providerName, id }) => (
                                     <option key={id} value={id}>

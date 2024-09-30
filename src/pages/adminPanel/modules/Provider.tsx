@@ -20,10 +20,11 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import { ProviderType } from '@/utils/types/provider.types'
 import { deleteProvider } from '@/utils/services/provider.service'
 import { useNotify } from '@/utils/hooks/useNotify'
+import { useURLParameters } from '@/utils/hooks/useURLParameters.tsx'
 
 const AdminProvider = () => {
     const { error, success } = useNotify()
-    const [selectedStatus, setSelectedStatus] = useState('')
+    const { getURLs, getParam, setParam } = useURLParameters()
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
@@ -33,16 +34,10 @@ const AdminProvider = () => {
         data: providersData,
         isLoading,
         mutate: mutateProviderData,
-    } = useApi<ProviderType[]>('providers', {
-        status: selectedStatus,
-    })
+    } = useApi<ProviderType[]>(`providers?${getURLs().toString()}`)
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [selectedData, setSelectedData] = useState<ProviderType>()
-
-    const handleSelectChange = (status: string) => {
-        setSelectedStatus(status)
-    }
 
     const handlerDeleteProvider = (selectedData: ProviderType | undefined) => {
         if (selectedData) {
@@ -78,7 +73,8 @@ const AdminProvider = () => {
                             <Select
                                 name='status'
                                 placeholder='Статус'
-                                onChange={(e) => handleSelectChange(e.target.value)}
+                                value={getParam('status')}
+                                onChange={(e) => setParam('status', e.target.value)}
                             >
                                 <option value={1}>Активный</option>
                                 <option value={0}>Неактивный</option>
