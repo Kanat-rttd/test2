@@ -117,5 +117,6 @@ const Row = ({
     </Box>
 )
 const minusValue = (value: number): string => {
-    return value < 0 ? `(${Math.abs(value).toLocaleString()})` : value.toLocaleString()
+    // return value < 0 ? `(${Math.abs(value).toLocaleString()})` : value.toLocaleString()
+    return value.toLocaleString()
 }
