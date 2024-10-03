@@ -1,10 +1,9 @@
 import { Box, Icon, Text, Tooltip } from '@chakra-ui/react'
-import styles from '../style.module.css'
 import DateRange from '../../../components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
-import { useEffect } from 'react'
 import { QuestionIcon } from '@chakra-ui/icons'
+import IsMobile from '@/utils/helpers/isMobile.ts'
 
 interface Report {
     initial: number
@@ -19,43 +18,16 @@ const Report = () => {
     const { getURLs } = useURLParameters()
 
     const { data: financeData } = useApi<Report>(`finance/report?${getURLs().toString()}`)
-    // const [data, setData] = useState<Report | undefined>(undefined)
-
-    useEffect(() => {
-        if (financeData) {
-            // setData(financeData)
-        }
-    }, [financeData])
 
     const initial = financeData?.initial
     const operational = financeData?.operational
     const financial = financeData?.financial
-    // const balance = financeData?.balance
     const total = financeData?.total
 
     return (
-        <Box className={styles.container}>
-            <Box display='flex' gap='10px'>
-                {/*<Box className={styles.scoreSelect}>*/}
-                {/*    <Select*/}
-                {/*        size='sm'*/}
-                {/*        borderRadius={5}*/}
-                {/*        placeholder='Все счета'*/}
-                {/*        value={getParam('accountName')}*/}
-                {/*        onChange={(e) => setParam('accountName', e.target.value)}*/}
-                {/*        width='100%'*/}
-                {/*        background='w'*/}
-                {/*    >*/}
-                {/*        {accounts?.map((account) => (*/}
-                {/*            <option key={account.id} value={account.name}>*/}
-                {/*                {account.name}*/}
-                {/*            </option>*/}
-                {/*        ))}*/}
-                {/*    </Select>*/}
-                {/*</Box>*/}
-                <Box width='20%'>
-                    <DateRange />
-                </Box>
+        <Box display='flex' flexDirection='column' gap='1rem' padding={IsMobile() ? 0 : 5}>
+            <Box width='55%' display='flex' gap='10px'>
+                <DateRange />
             </Box>
             <Box w='100%' display='flex' justifyContent='center'>
                 <Box

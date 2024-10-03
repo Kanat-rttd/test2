@@ -110,7 +110,7 @@ const History = () => {
     return (
         <>
             <Box display='flex' flexDirection='column' gap='1rem' padding={IsMobile() ? 0 : 5}>
-                <Box width='55%' gap='15px' mt={2} mb={1} display='flex'>
+                <Box width='55%' gap='10px' display='flex'>
                     <DateRange />
                     <Select
                         placeholder='Все категории'
