@@ -1,4 +1,4 @@
-import { Table, Tr, Th, Tbody, Td, Box, Select } from '@chakra-ui/react'
+import { Table, Tr, Th, Tbody, Td, Box, Select, Tooltip } from '@chakra-ui/react'
 import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useApi } from '@/utils/services/axios'
@@ -8,6 +8,7 @@ type AdjustmentType = {
     quantity: number
     goodsCategoryId: number
     createdAt: Date
+    comment: string
     goodsCategory: {
         id: number
         category: string
@@ -38,6 +39,7 @@ const AdjustmentsHictory = () => {
                                     <Th>Дата</Th>
                                     <Th>Категория товара</Th>
                                     <Th>Количество</Th>
+                                    <Th maxWidth='200px'>Комментарий</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -51,6 +53,18 @@ const AdjustmentsHictory = () => {
                                                 </Td>
                                                 <Td>{item.goodsCategory.category}</Td>
                                                 <Td>{item.quantity}</Td>
+                                                <Td maxWidth='200px'>
+                                                    <Tooltip label={item.comment}>
+                                                        <Box
+                                                            overflow='hidden'
+                                                            whiteSpace='nowrap'
+                                                            cursor='pointer'
+                                                            textOverflow='ellipsis'
+                                                        >
+                                                            {item.comment}
+                                                        </Box>
+                                                    </Tooltip>
+                                                </Td>
                                             </Tr>
                                         )
                                     })
