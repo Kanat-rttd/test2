@@ -46,9 +46,6 @@ const BreadView = () => {
     const [dates, setDates] = useState<Date[]>([])
     const [filteredProducts, setFilteredProducts] = useState<FilteredData[] | undefined>([])
 
-    const startDate = dayjs(getParam('startDate')).format('DD.MM.YYYY')
-    const endDate = dayjs(getParam('endDate')).format('DD.MM.YYYY')
-
     const getUniqDates = () => {
         const uniqDates = new Set<Date>()
         breadViewData?.reportData?.forEach((item) => {
@@ -121,6 +118,9 @@ const BreadView = () => {
             (productName) =>
                 breadViewData?.totals.find((item) => item.name === productName)?.totalQuantity ?? 0,
         )
+
+        const startDate = new Date(getParam('startDate')).toLocaleDateString()
+        const endDate = new Date(getParam('endDate')).toLocaleDateString()
 
         generateExcel(`Отчет по продукции с ${startDate} по ${endDate}`, [
             headers,
