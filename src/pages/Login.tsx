@@ -45,7 +45,8 @@ const Login = () => {
         setPassword(e.target.value)
     }
 
-    const handleConfirmClick = () => {
+    const handleSubmit = (e: React.FormEvent<HTMLDivElement>) => {
+        e.preventDefault()
         const data = { phone: phoneNumber, pass: password }
 
         loginUser(data)
@@ -83,7 +84,7 @@ const Login = () => {
                 <Heading textAlign='left'>Вход</Heading>
                 <Text color='#7C7C7C'>Введите телефон и пароль</Text>
             </Box>
-            <Stack width='100%' spacing={4}>
+            <Stack onSubmit={handleSubmit} as='form' width='100%' spacing={4}>
                 <Box>
                     <Text mb='8px'>Телефон: </Text>
                     <InputGroup size='lg'>
@@ -123,9 +124,9 @@ const Login = () => {
                 <Button
                     size='lg'
                     borderRadius={15}
-                    onClick={handleConfirmClick}
                     backgroundColor='#F7B23B'
                     color='white'
+                    type='submit'
                 >
                     Войти
                 </Button>
