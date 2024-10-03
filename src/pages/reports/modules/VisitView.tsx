@@ -1,4 +1,4 @@
-import { Box, Select, Td, Th, Tr, Tbody, Table } from '@chakra-ui/react'
+import { Box, Select, Td, Th, Tr, Tbody, Table, Button } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '../../../components/DateRange'
 import dayjs from 'dayjs'
@@ -6,15 +6,8 @@ import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
 import { useEffect, useState } from 'react'
-
-// interface DepartPersonal {
-//     id: number
-//     name: string
-//     surname: string
-//     status: string
-//     userClass: string
-//     fixSalary: string
-// }
+import { useNotify } from '@/utils/hooks/useNotify.ts'
+import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
 
 interface BakingFacilityUnit {
     id: number
@@ -31,6 +24,7 @@ type FilteredData = {
 
 const VisitView = () => {
     const { getURLs, setParam, getParam } = useURLParameters()
+    const { error } = useNotify()
 
     const { data: visitViewData } = useApi<ShiftAccountingType[]>(
         `shiftAccounting?${getURLs().toString()}`,
@@ -109,10 +103,45 @@ const VisitView = () => {
         }, 0)
     }
 
+    const exportExcel = () => {
+        if (filteredData?.length === 0 || !filteredData) {
+            return error('Нет данных для экспорта')
+        }
+
+        const headers = ['#', 'Дата', ...personalNames]
+        const formattedData = filteredData.map((entry, idx) => {
+            const numbers = headers
+                .slice(2)
+                .map(
+                    (name) =>
+                        entry.personals.find(({ personalName }) => personalName === name)
+                            ?.totalQuantity || 0,
+                )
+
+            return [idx + 1, new Date(entry.date).toLocaleDateString(), ...numbers]
+        })
+
+        const total = headers.slice(2).map((header) => getColumnTotal(header))
+
+        const startDate = new Date(getParam('startDate')).toLocaleDateString()
+        const endDate = new Date(getParam('endDate')).toLocaleDateString()
+
+        generateExcel(`Отчет по посещению с ${startDate} по ${endDate}`, [
+            headers,
+            ...formattedData,
+            ['', 'ИТОГО', ...total],
+        ])
+    }
+
     return (
         <Box>
             <Box width='100%' height='100%' p={5} mt={1}>
-                <Box marginBottom={6} display='flex' justifyContent='space-between'>
+                <Box
+                    className='print-hidden'
+                    marginBottom={6}
+                    display='flex'
+                    justifyContent='space-between'
+                >
                     <Box display='flex' gap='15px' width='100%'>
                         <DateRange />
                         <Select
@@ -129,6 +158,11 @@ const VisitView = () => {
                                 </option>
                             ))}
                         </Select>
+                    </Box>
+
+                    <Box display='flex' gap='15px'>
+                        <Button onClick={exportExcel}>Экспорт в Excel</Button>
+                        <Button onClick={() => window.print()}>Экспорт в PDF</Button>
                     </Box>
                 </Box>
                 <Box>

@@ -163,7 +163,7 @@ const BreadView = () => {
                         ))}
                     </Select>
                 </Box>
-                <Box display='flex'>
+                <Box display='flex' gap='15px'>
                     <Button type='button' onClick={exportExcel}>
                         Экспорт в Excel
                     </Button>
