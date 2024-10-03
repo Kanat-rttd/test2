@@ -1,6 +1,21 @@
 * {
     box-sizing: border-box;
 }
+
 body {
     overflow-y: hidden;
+}
+
+
+.print-hidden {
+    @media print {
+        display: none !important;
+    }
+}
+
+@media print {
+    tr > td:not(:first-child), th:not(:first-child) {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
 }

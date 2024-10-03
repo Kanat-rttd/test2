@@ -58,7 +58,12 @@ const MenuAccordion = () => {
 
     return (
         <>
-            <Button ref={btnRef} colorScheme='white' onClick={toggleDrawer}>
+            <Button
+                className='print-hidden'
+                ref={btnRef}
+                colorScheme='white'
+                onClick={toggleDrawer}
+            >
                 <Icon viewBox='0 0 24 24' fill='none' boxSize={6} color='black'>
                     <path d='M4 6H20M4 12H20M4 18H20' stroke='#000000' strokeWidth='2'></path>
                 </Icon>

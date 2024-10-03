@@ -28,7 +28,7 @@ const Header: React.FC<StyledContainerProps> = ({ buttons }) => {
         navigate(LOGIN_ROUTE, { replace: true })
     }
     return (
-        <Box className={classes.header}>
+        <Box as='header' className={classes.header}>
             <Box width='100%' display='flex'>
                 <MenuAccordion />
                 {buttons && (
@@ -40,6 +40,7 @@ const Header: React.FC<StyledContainerProps> = ({ buttons }) => {
                                     height='100%'
                                     p='0 25px'
                                     onClick={() => navigate(button.path)}
+                                    className={button.isCurrentPage ? '' : 'print-hidden'}
                                     style={
                                         button.isCurrentPage
                                             ? { backgroundColor: 'rgba(217, 217, 217, 1)' }
