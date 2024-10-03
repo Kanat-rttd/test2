@@ -46,11 +46,6 @@ interface Category {
     type: string
 }
 
-interface Account {
-    id: number
-    name: string
-}
-
 const History = () => {
     const { success, error } = useNotify()
     const { getURLs, setParam, getParam } = useURLParameters()
@@ -59,7 +54,6 @@ const History = () => {
 
     const { data: financeData } = useApi<Finance[]>(`finance?${getURLs().toString()}`)
     const { data: categoriesData } = useApi<Category[] | undefined>(`financeCategories`)
-    const { data: accounts } = useApi<Account[]>('financeAccount')
 
     const [selectedData, setSelectedData] = useState<History | null>(null)
     const [data, setData] = useState<Finance[] | undefined>(undefined)
@@ -119,20 +113,6 @@ const History = () => {
                 <Box width='55%' gap='15px' mt={2} mb={1} display='flex'>
                     <DateRange />
                     <Select
-                        placeholder='Все счета'
-                        width='90%'
-                        size='sm'
-                        borderRadius={5}
-                        value={getParam('accountName')}
-                        onChange={(e) => setParam('accountName', e.target.value)}
-                    >
-                        {accounts?.map((account, index) => (
-                            <option key={index} value={account.name}>
-                                {account.name}
-                            </option>
-                        ))}
-                    </Select>
-                    <Select
                         placeholder='Все категории'
                         width='90%'
                         size='sm'
@@ -181,7 +161,6 @@ const History = () => {
                                             <ChevronUpIcon boxSize={6} />
                                         )}
                                     </Th>
-                                    <Th w='20%'>Счёт</Th>
                                     <Th w='25%'>Категория</Th>
                                     <Th w='25%'>Комментарий</Th>
                                     <Th w='25%'>Сумма</Th>
@@ -192,7 +171,6 @@ const History = () => {
                                     data?.map((transaction, index) => (
                                         <Tr key={index} onClick={() => handleDelete(transaction)}>
                                             <Td>{dayjs(transaction.date).format('DD.MM.YYYY')}</Td>
-                                            <Td>{transaction.account}</Td>
                                             <Td>{transaction.financeCategory.name}</Td>
                                             <Td>{transaction.comment}</Td>
                                             <Td>{transaction.amount}</Td>
