@@ -10,36 +10,9 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import { FacilityUnit } from '@/utils/types/product.types'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
-// import {useNotify } from '@/utils/hooks/useNotify'
 import EditModal from './EditModal'
 import { deleteShiftAccounting } from '@/utils/services/shiftAccounting.service'
 import { useNotify } from '@/utils/hooks/useNotify'
-
-// interface Dispatch {
-//     id: number
-//     clientId: number
-//     createdAt: Date
-//     dispatch: string
-//     goodsDispatchDetails: [
-//         {
-//             id: number
-//             productId: number
-//             quantity: number
-//             product: {
-//                 name: string
-//                 price: number
-//                 bakingFacilityUnit: {
-//                     id: number
-//                     facilityUnit: string
-//                 }
-//             }
-//         },
-//     ]
-//     client: {
-//         id: number
-//         name: string
-//     }
-// }
 
 interface ListTableProps {
     shiftAccounting: ShiftAccountingType[] | undefined

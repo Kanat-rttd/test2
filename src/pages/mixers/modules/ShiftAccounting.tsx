@@ -16,7 +16,7 @@ import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
 import { useApi } from '@/utils/services/axios'
 
 export default function ShiftAccounting() {
-    const { setParam, getURLs } = useURLParameters()
+    const { getURLs } = useURLParameters()
 
     const { data: shiftAccounting, mutate: mutateShiftAccountingData } = useApi<
         ShiftAccountingType[]
@@ -24,23 +24,14 @@ export default function ShiftAccounting() {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const clearParam = () => {
-        setParam('facilityUnit', '')
-        setParam('personal', '')
-    }
-
-    const handleSuccess = () => {
-        mutateShiftAccountingData()
-    }
-
     return (
         <Box mt={1}>
             <Tabs variant='soft-rounded' height='100%' mt='-10px'>
                 <Box width='100%' height='100%' p={5}>
                     <Box display='flex' justifyContent='space-between'>
                         <TabList height='22px'>
-                            <Tab onClick={clearParam}>List</Tab>
-                            <Tab onClick={clearParam}>Pivot</Tab>
+                            <Tab>List</Tab>
+                            <Tab>Pivot</Tab>
                         </TabList>
                         <Button colorScheme='purple' onClick={onOpen}>
                             Добавить часы
@@ -63,7 +54,7 @@ export default function ShiftAccounting() {
                 isOpen={isOpen}
                 onClose={onClose}
                 onOpen={onOpen}
-                onSuccess={handleSuccess}
+                onSuccess={mutateShiftAccountingData}
                 data={undefined}
             />
         </Box>

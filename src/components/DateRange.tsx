@@ -53,7 +53,7 @@ const DateRange = () => {
                 endDate: dayjs(selectionRange.endDate).format('YYYY-MM-DD'),
             })
         }
-    }, [selectionRange, setParamObject, getParam])
+    }, [selectionRange])
 
     const handleConfirmDate = () => {
         onClose()
