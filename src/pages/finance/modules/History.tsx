@@ -1,6 +1,17 @@
 import Dialog from '@/components/Dialog'
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
-import { Box, Select, Table, Tbody, Td, Text, Th, Tr, useDisclosure } from '@chakra-ui/react'
+import {
+    Box,
+    Button,
+    Select,
+    Table,
+    Tbody,
+    Td,
+    Text,
+    Th,
+    Tr,
+    useDisclosure,
+} from '@chakra-ui/react'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import DateRange from '../../../components/DateRange'
@@ -11,6 +22,7 @@ import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useNotify } from '@/utils/hooks/useNotify.ts'
 import { deleteFinance } from '@/utils/services/finance.service.ts'
+import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
 
 export type History = {
     id: number
@@ -107,25 +119,59 @@ const History = () => {
         }
     }
 
+    const exportExcel = () => {
+        if (data?.length === 0 || !data) {
+            return error('Нет данных для экспорта')
+        }
+
+        const headers = ['№', 'Дата', 'Категория', 'Комментарий', 'Сумма']
+
+        const formattedData = data.map((item, idx) => [
+            idx + 1,
+            new Date(item.date).toLocaleDateString(),
+            item.financeCategory.name,
+            item.comment,
+            item.amount,
+        ])
+
+        const startDate = new Date(getParam('startDate')).toLocaleDateString()
+        const endDate = new Date(getParam('endDate')).toLocaleDateString()
+
+        generateExcel(`Отчет по продукции с ${startDate} по ${endDate}`, [
+            headers,
+            ...formattedData,
+        ])
+    }
+
     return (
         <>
             <Box display='flex' flexDirection='column' gap='1rem' padding={IsMobile() ? 0 : 5}>
-                <Box width='55%' gap='10px' display='flex'>
-                    <DateRange />
-                    <Select
-                        placeholder='Все категории'
-                        width='90%'
-                        size='sm'
-                        borderRadius={5}
-                        value={getParam('categoryId')}
-                        onChange={(e) => setParam('categoryId', e.target.value)}
-                    >
-                        {categoriesData?.map((category, index) => (
-                            <option key={index} value={category.id}>
-                                {category.name}
-                            </option>
-                        ))}
-                    </Select>
+                <Box className='print-hidden' display='flex' justifyContent='space-between'>
+                    <Box display='flex' gap='15px'>
+                        <DateRange />
+                        <Select
+                            placeholder='Все категории'
+                            width='90%'
+                            size='sm'
+                            borderRadius={5}
+                            value={getParam('categoryId')}
+                            onChange={(e) => setParam('categoryId', e.target.value)}
+                        >
+                            {categoriesData?.map((category, index) => (
+                                <option key={index} value={category.id}>
+                                    {category.name}
+                                </option>
+                            ))}
+                        </Select>
+                    </Box>
+                    <Box display='flex' gap='15px'>
+                        <Button type='button' onClick={exportExcel}>
+                            Экспорт в Excel
+                        </Button>
+                        <Button type='button' onClick={() => window.print()}>
+                            Экспорт в PDF
+                        </Button>
+                    </Box>
                 </Box>
 
                 <UniversalComponent>
