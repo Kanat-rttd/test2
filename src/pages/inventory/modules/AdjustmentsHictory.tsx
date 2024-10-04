@@ -1,8 +1,10 @@
-import { Table, Tr, Th, Tbody, Td, Box, Select, Tooltip } from '@chakra-ui/react'
+import { Table, Tr, Th, Tbody, Td, Box, Select, Tooltip, Button } from '@chakra-ui/react'
 import { TableContainer, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useApi } from '@/utils/services/axios'
 import dayjs from 'dayjs'
+import { useNotify } from '@/utils/hooks/useNotify.ts'
+import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
 
 type AdjustmentType = {
     quantity: number
@@ -17,18 +19,52 @@ type AdjustmentType = {
 }
 
 const AdjustmentsHictory = () => {
+    const { error } = useNotify()
     const { data: adjustmentData } = useApi<AdjustmentType[]>('adjustment')
+
+    const exportExcel = async () => {
+        if (!adjustmentData || adjustmentData.length === 0) {
+            return error('Нет данных для экспорта')
+        }
+
+        const headers = ['№', 'Дата', 'Категория товара', 'Количество', 'Комментарий']
+        const data = [
+            headers,
+            ...adjustmentData.map((item, idx) => [
+                idx + 1,
+                new Date(item.createdAt).toLocaleDateString(),
+                item.goodsCategory.category,
+                item.quantity,
+                item.comment,
+            ]),
+        ]
+
+        await generateExcel('История корректировок', data)
+    }
 
     return (
         <>
             <UniversalComponent>
                 <Box display='flex' flexDirection='column' p={5} mt={1}>
-                    <Box marginBottom={5} display='flex' justifyContent='space-between'>
+                    <Box
+                        className='print-hidden'
+                        marginBottom={5}
+                        display='flex'
+                        justifyContent='space-between'
+                    >
                         <Box display='flex' gap='15px' width='fit-content'>
                             <Select placeholder='Название' width='fit-content' name='status'>
                                 <option value='1'>Активен</option>
                                 <option value='0'>Приостановлен</option>
                             </Select>
+                        </Box>
+                        <Box display='flex' gap='15px'>
+                            <Button type='button' onClick={exportExcel}>
+                                Экспорт в Excel
+                            </Button>
+                            <Button type='button' onClick={() => window.print()}>
+                                Экспорт в PDF
+                            </Button>
                         </Box>
                     </Box>
                     <TableContainer style={{ width: '100%', overflowY: 'auto' }}>
