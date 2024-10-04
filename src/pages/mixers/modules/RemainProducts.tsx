@@ -124,7 +124,7 @@ const RemainProducts = () => {
                         </Button>
                     </Box>
                 </Box>
-                <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
+                <TableContainer>
                     <Table variant='simple'>
                         <Thead>
                             <Tr>

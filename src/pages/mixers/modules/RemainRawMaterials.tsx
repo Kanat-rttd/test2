@@ -1,9 +1,11 @@
-import { Table, Tr, Th, Tbody, Td, Box, Select } from '@chakra-ui/react'
+import { Table, Tr, Th, Tbody, Td, Box, Select, Button } from '@chakra-ui/react'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '@/components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
+import { useNotify } from '@/utils/hooks/useNotify.ts'
 
 type RemainRawMaterials = {
     id: number
@@ -30,18 +32,64 @@ type Remain = {
 }
 
 const RemainRawMaterials = () => {
-    const { getURLs } = useURLParameters()
+    const { getURLs, getParam } = useURLParameters()
+    const { error } = useNotify()
     const { data: remainRawMaterials } = useApi<Remain>(
         `reports/remainRawMaterials?${getURLs().toString()}`,
     )
 
-    console.log(remainRawMaterials)
+    const exportExcel = async () => {
+        if (!remainRawMaterials || remainRawMaterials?.data.length === 0) {
+            return error('Нет данных для экспорта')
+        }
+
+        const headers = [
+            '№',
+            'Название',
+            'Остаток на начало',
+            'Расход',
+            'Приход',
+            'Остаток на конец',
+        ]
+
+        const formattedData = remainRawMaterials.data.map((item, idx) => [
+            idx + 1,
+            item.category,
+            item.openingStock,
+            item.consumption,
+            item.incoming,
+            item.closingStock,
+        ])
+
+        const totals = [
+            '',
+            'ИТОГО',
+            remainRawMaterials.totals.openingStock,
+            remainRawMaterials.totals.consumption,
+            remainRawMaterials.totals.incoming,
+            remainRawMaterials.totals.closingStock,
+        ]
+
+        const startDate = new Date(getParam('startDate')).toLocaleDateString()
+        const endDate = new Date(getParam('endDate')).toLocaleDateString()
+
+        await generateExcel(`Остаток продукции с ${startDate} по ${endDate}`, [
+            headers,
+            ...formattedData,
+            totals,
+        ])
+    }
 
     return (
         <>
             <UniversalComponent>
                 <Box display='flex' flexDirection='column' p={5} mt={1}>
-                    <Box marginBottom={5} display='flex' justifyContent='space-between'>
+                    <Box
+                        className='print-hidden'
+                        marginBottom={5}
+                        display='flex'
+                        justifyContent='space-between'
+                    >
                         <Box display='flex' gap='15px' width='fit-content'>
                             <DateRange />
                             <Select
@@ -54,6 +102,14 @@ const RemainRawMaterials = () => {
                                 <option value='1'>Активен</option>
                                 <option value='0'>Приостановлен</option>
                             </Select>
+                        </Box>
+                        <Box display='flex' gap='15px'>
+                            <Button type='button' onClick={exportExcel}>
+                                Экспорт в Excel
+                            </Button>
+                            <Button type='button' onClick={() => window.print()}>
+                                Экспорт в PDF
+                            </Button>
                         </Box>
                     </Box>
                     <TableContainer style={{ width: '100%', overflowY: 'auto' }}>

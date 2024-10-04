@@ -16,20 +16,8 @@ const UniversalComponent: React.FC<UniversalComponentProps> = ({
         <Box
             className={`universal-component ${className}`}
             style={{ ...style, maxWidth: '100vw', maxHeight: '100vh', height: '100vh' }}
-            // overflow: 'hidden'
         >
             {children}
-            <style>
-                {`
-                .universal-component {
-                    display: flex;
-                    flex-direction: column;
-                    width: 100%;
-                    height: 100%;
-                    box-sizing: border-box;
-                }
-      `}{' '}
-            </style>
         </Box>
     )
 }
