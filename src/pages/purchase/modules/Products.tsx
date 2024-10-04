@@ -7,6 +7,7 @@ import DateRange from '@/components/DateRange'
 import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
 import { ProviderType } from '@/utils/types/provider.types'
 import { PurchaseType } from '@/utils/types/purchase.types'
+import { useRef } from 'react'
 
 interface AllPurchases {
     purchases: PurchaseType[]
@@ -17,23 +18,29 @@ interface AllPurchases {
 
 const Products = () => {
     const { getParam, setParam, getURLs } = useURLParameters()
+    const { isOpen, onOpen, onClose } = useDisclosure()
     const { data: providersData } = useApi<ProviderType[]>('providers')
     const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
+    const ref = useRef<{ export: () => Promise<void> }>()
 
     const { data: purchasesData, mutate: mutatePurchaseData } = useApi<AllPurchases>(
         `productPurchase?${getURLs().toString()}`,
     )
 
-    const handleAddProduct = () => {
-        mutatePurchaseData()
+    const handleAddProduct = async () => {
+        await mutatePurchaseData()
     }
-
-    const { isOpen, onOpen, onClose } = useDisclosure()
 
     return (
         <>
             <Box width='100%' p={5} pt={7}>
-                <Box display='flex' alignItems='center' justifyContent='space-between' mb={5}>
+                <Box
+                    className='print-hidden'
+                    display='flex'
+                    alignItems='center'
+                    justifyContent='space-between'
+                    mb={5}
+                >
                     <Box display='flex' gap='15px' mb='5px'>
                         <DateRange />
                         <Select
@@ -76,11 +83,20 @@ const Products = () => {
                             <option value='Не оплачено'>Не оплачено</option>
                         </Select>
                     </Box>
-                    <Button colorScheme='purple' onClick={onOpen}>
-                        Добавить закупки
-                    </Button>
+
+                    <Box display='flex' gap='15px'>
+                        <Button size='sm' colorScheme='purple' onClick={onOpen}>
+                            Добавить закупки
+                        </Button>
+                        <Button size='sm' type='button' onClick={() => ref.current?.export()}>
+                            Экспорт в Excel
+                        </Button>
+                        <Button size='sm' type='button' onClick={() => window.print()}>
+                            Экспорт в PDF
+                        </Button>
+                    </Box>
                 </Box>
-                <ListTable purchasesData={purchasesData} mutate={mutatePurchaseData} />
+                <ListTable ref={ref} purchasesData={purchasesData} mutate={mutatePurchaseData} />
             </Box>
             <PurchaseModal isOpen={isOpen} onClose={onClose} onSuccess={handleAddProduct} />
         </>

@@ -1,6 +1,6 @@
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { Table, Tbody, Tr, Th, Td, useDisclosure, IconButton } from '@chakra-ui/react'
-import { useState } from 'react'
+import { forwardRef, useImperativeHandle, useState } from 'react'
 import EditModal from './EditModal'
 import dayjs from 'dayjs'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
@@ -9,6 +9,7 @@ import Dialog from '@/components/Dialog'
 import { useNotify } from '@/utils/hooks/useNotify'
 import { deletePurchase } from '@/utils/services/productPurchase.service'
 import { PurchaseType } from '@/utils/types/purchase.types'
+import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
 
 interface AllPurchases {
     purchases: PurchaseType[]
@@ -22,45 +23,86 @@ interface ListTableProps {
     mutate: () => void
 }
 
-const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
-    const { loading } = useNotify()
+const ListTable = forwardRef(({ purchasesData, mutate }: ListTableProps, ref) => {
+    const { loading, error } = useNotify()
     const { getParam } = useURLParameters()
-
-    const filteredPurchases = purchasesData?.purchases.filter((purchase) => {
-        if (getParam('providerId') && Number(getParam('providerId')) !== purchase.provider.id) {
-            return false
-        }
-        return true
-    })
+    const [selectedData, setSelectedData] = useState<PurchaseType>()
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     const [dialog, setDialog] = useState({
         isOpen: false,
         onClose: () => setDialog({ ...dialog, isOpen: false }),
     })
 
-    const [selectedData, setSelectedData] = useState<PurchaseType>()
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const filteredPurchases = purchasesData?.purchases.filter((purchase) => {
+        return !getParam('providerId') || Number(getParam('providerId')) === purchase.provider.id
+    })
 
     const handleSelected = (data: PurchaseType) => {
         setSelectedData(data)
         onOpen()
     }
 
-    const handleUpdateProduct = () => {
-        mutate()
-    }
-
-    const handlerDelete = (selectedData: PurchaseType | undefined) => {
+    const handlerDelete = async (selectedData: PurchaseType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deletePurchase(selectedData.id)
             loading(responsePromise)
-            responsePromise.then(() => {
-                mutate()
-            })
+            await responsePromise
+            mutate()
         } else {
             console.error('No Purchase data available to delete.')
         }
     }
+
+    useImperativeHandle(ref, () => ({
+        async export() {
+            if (!filteredPurchases || filteredPurchases.length === 0) {
+                return error('Нет данных для экспорта')
+            }
+
+            const startDate = new Date(getParam('startDate')).toLocaleDateString()
+            const endDate = new Date(getParam('endDate')).toLocaleDateString()
+
+            const headers = [
+                '№',
+                'Дата',
+                'Поставщик',
+                'Товар',
+                'Количество',
+                'Цена',
+                'Сумма',
+                'Сумма доставки',
+                'Статус',
+            ]
+            const data = [
+                headers,
+                ...filteredPurchases.map((item, idx) => [
+                    idx + 1,
+                    new Date(item.date).toLocaleDateString(),
+                    item.provider.providerName,
+                    item.providerGood.goods,
+                    item.quantity,
+                    item.price,
+                    item.totalSum,
+                    item.deliverySum,
+                    item.status,
+                ]),
+                [
+                    '',
+                    'ИТОГО',
+                    '',
+                    '',
+                    '',
+                    purchasesData?.totalQuantity,
+                    purchasesData?.totalSum,
+                    purchasesData?.totalDeliverySum,
+                    '',
+                ],
+            ]
+
+            await generateExcel(`Закуп с ${startDate} по ${endDate}`, data)
+        },
+    }))
 
     return (
         <>
@@ -77,7 +119,7 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
                             <Th>Сумма</Th>
                             <Th>Сумма доставки</Th>
                             <Th>Статус</Th>
-                            <Th>Действия</Th>
+                            <Th className='print-hidden'>Действия</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -94,7 +136,7 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
                                         <Td>{purchase.totalSum}</Td>
                                         <Td>{purchase.deliverySum}</Td>
                                         <Td>{purchase.status}</Td>
-                                        <Td>
+                                        <Td className='print-hidden'>
                                             <IconButton
                                                 variant='outline'
                                                 size='sm'
@@ -158,21 +200,21 @@ const ListTable = ({ purchasesData, mutate }: ListTableProps) => {
                 selectedData={selectedData}
                 isOpen={isOpen}
                 onClose={onClose}
-                onSuccess={handleUpdateProduct}
+                onSuccess={mutate}
             />
             <Dialog
                 isOpen={dialog.isOpen}
                 onClose={dialog.onClose}
                 header='Удалить'
                 body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
-                actionBtn={() => {
+                actionBtn={async () => {
                     dialog.onClose()
-                    handlerDelete(selectedData)
+                    await handlerDelete(selectedData)
                 }}
                 actionText='Удалить'
             />
         </>
     )
-}
+})
 
 export default ListTable
