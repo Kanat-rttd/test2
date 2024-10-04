@@ -1,7 +1,9 @@
-import { Box, Select, Table, Tr, Td, Tbody, Th } from '@chakra-ui/react'
+import { Box, Select, Table, Tr, Td, Tbody, Th, Button } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import { useEffect, useState } from 'react'
+import { useNotify } from '@/utils/hooks/useNotify.ts'
+import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
 
 interface CalculationsData {
     Data: {
@@ -18,20 +20,37 @@ interface CalculationsData {
 }
 
 const ProviderTable = () => {
+    const { error } = useNotify()
     const { data: calculationsData } = useApi<CalculationsData>('debtTransfer/calculations')
     const [filteredData, setFilteredData] = useState<
-        | {
-              ClientName: string
-              Sales: number
-              Returns: number
-              Overhead: number
-              Expenses: number
-              Payments: number
-              Credit: number
-              Debt: number
-          }[]
-        | undefined
+        {
+            ClientName: string
+            Sales: number
+            Returns: number
+            Overhead: number
+            Expenses: number
+            Payments: number
+            Credit: number
+            Debt: number
+        }[]
     >([])
+
+    const exportExcel = async () => {
+        if (!filteredData || filteredData.length === 0) {
+            return error('Нет данных для экспорта')
+        }
+
+        const headers = ['№', 'Реализатор', 'Сумма долга']
+        const data = [headers]
+
+        filteredData.forEach((item, idx) => {
+            data.push([(idx + 1).toString(), item.ClientName, item.Debt.toString()])
+        })
+
+        data.push(['ИТОГО', '', calculationsData!.Total.toString()])
+
+        await generateExcel('Учет долгов (Реализаторы)', data)
+    }
 
     useEffect(() => {
         if (calculationsData) {
@@ -42,10 +61,17 @@ const ProviderTable = () => {
 
     return (
         <>
-            <Box width='25%' marginBottom={4}>
-                <Select placeholder='Реализатор' size='sm' borderRadius={5} width='80%'>
+            <Box className='print-hidden' display='flex' marginBottom={4} gap='15px'>
+                <Select placeholder='Реализатор' size='sm' borderRadius={5} width='20%'>
                     <option>Реализатор</option>
                 </Select>
+
+                <Button type='button' onClick={exportExcel}>
+                    Экспорт в Excel
+                </Button>
+                <Button type='button' onClick={() => window.print()}>
+                    Экспорт в PDF
+                </Button>
             </Box>
 
             <Box style={filteredData && filteredData.length >= 7 ? { height: '100dvh' } : {}}>

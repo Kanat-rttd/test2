@@ -1,7 +1,9 @@
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
-import { Box, Select, Table, Tr, Td, Tbody, Th } from '@chakra-ui/react'
+import { Box, Select, Table, Tr, Td, Tbody, Th, Button } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import { useState } from 'react'
+import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
+import { useNotify } from '@/utils/hooks/useNotify.ts'
 
 interface MagazineDebtView {
     mainData: [
@@ -22,6 +24,7 @@ interface MagazineData {
 
 const MagazineTable = () => {
     const [filters, setFilters] = useState({ MagazineName: '' })
+    const { error } = useNotify()
 
     const { data: magazineDebtData } = useApi<MagazineDebtView>('reports/magazineDebt', filters)
     const { data: magazinesData } = useApi<MagazineData[]>('magazines')
@@ -34,17 +37,35 @@ const MagazineTable = () => {
         }))
     }
 
+    const exportExcel = async () => {
+        if (!magazineDebtData?.mainData) {
+            return error('Нет данных для экспорта')
+        }
+
+        const headers = ['№', 'Магазин', 'Сумма долга']
+        const data = [headers]
+
+        magazineDebtData?.mainData
+            .filter((item) => Number(item.Debit) !== 0)
+            .forEach((item, idx) => {
+                data.push([(idx + 1).toString(), item.MagazineName, item.Debit.toString()])
+            })
+
+        data.push(['ИТОГО', '', magazineDebtData.total.toString()])
+
+        await generateExcel('Учет долгов (Магазины)', data)
+    }
+
     return (
         <>
-            <Box width='25%' marginBottom={4}>
+            <Box className='print-hidden' display='flex' marginBottom={4} gap='15px'>
                 <Select
                     name='MagazineName'
                     placeholder='Магазин'
-                    width='fit-content'
                     onChange={handleSelectChange}
-                    w='80%'
                     size='sm'
                     borderRadius={5}
+                    width='20%'
                 >
                     {magazinesData?.map((item, index) => (
                         <option key={index} value={item.name}>
@@ -52,6 +73,12 @@ const MagazineTable = () => {
                         </option>
                     ))}
                 </Select>
+                <Button type='button' onClick={exportExcel}>
+                    Экспорт в Excel
+                </Button>
+                <Button type='button' onClick={() => window.print()}>
+                    Экспорт в PDF
+                </Button>
             </Box>
             <Box
                 style={
@@ -71,8 +98,9 @@ const MagazineTable = () => {
                         </Thead>
                         <Tbody>
                             {magazineDebtData?.mainData.length ? (
-                                magazineDebtData?.mainData.map((item, index) => {
-                                    if (Number(item.Debit) != 0) {
+                                magazineDebtData?.mainData
+                                    .filter((item) => Number(item.Debit) !== 0)
+                                    .map((item, index) => {
                                         return (
                                             <Tr key={index}>
                                                 <Td>{index + 1}</Td>
@@ -80,8 +108,7 @@ const MagazineTable = () => {
                                                 <Td>{item.Debit}</Td>
                                             </Tr>
                                         )
-                                    }
-                                })
+                                    })
                             ) : (
                                 <Tr>
                                     <Td>Нет данных</Td>
