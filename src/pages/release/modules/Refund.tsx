@@ -15,6 +15,7 @@ import DateRange from '@/components/DateRange'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useApi } from '@/utils/services/axios'
 import ListTable from '../components/ListTable'
+import { useEffect, useRef } from 'react'
 
 export interface FacilityUnit {
     id: number
@@ -28,12 +29,20 @@ const Refund = () => {
     }
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const listRef = useRef()
+    const tableRef = useRef()
+    const selectedRef = useRef<{ export: () => void }>()
+
+    useEffect(() => {
+        selectedRef.current = listRef.current
+    })
 
     return (
         <Box>
             <UniversalComponent>
                 <Box width='100%' height='100%' p={5}>
                     <Box
+                        className='print-hidden'
                         marginBottom='35px'
                         height='5%'
                         display='flex'
@@ -55,22 +64,44 @@ const Refund = () => {
                             </Select>
                         </Box>
 
-                        <Button colorScheme='purple' height='32px' onClick={onOpen} p='0 15px'>
-                            Возврат продукции
-                        </Button>
+                        <Box display='flex' gap='15px'>
+                            <Button size='sm' colorScheme='purple' onClick={onOpen} p='0 15px'>
+                                Возврат продукции
+                            </Button>
+                            <Button
+                                size='sm'
+                                type='button'
+                                onClick={() => selectedRef.current?.export()}
+                            >
+                                Экспорт в Excel
+                            </Button>
+                            <Button size='sm' type='button' onClick={window.print}>
+                                Экспорт в PDF
+                            </Button>
+                        </Box>
                     </Box>
                     <Box>
-                        <Tabs variant='soft-rounded' mt='-10px'>
-                            <TabList height='22px'>
+                        <Tabs
+                            onChange={(idx) => {
+                                if (idx === 0) {
+                                    selectedRef.current = listRef.current
+                                } else {
+                                    selectedRef.current = tableRef.current
+                                }
+                            }}
+                            variant='soft-rounded'
+                            mt='-10px'
+                        >
+                            <TabList className='print-hidden' height='22px'>
                                 <Tab>List</Tab>
                                 <Tab>Pivot</Tab>
                             </TabList>
                             <TabPanels>
                                 <TabPanel p='10px 0'>
-                                    <ListTable status='1' />
+                                    <ListTable ref={listRef} status='1' />
                                 </TabPanel>
                                 <TabPanel p='10px 0'>
-                                    <PivotTable status='1' />
+                                    <PivotTable ref={tableRef} status='1' />
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>

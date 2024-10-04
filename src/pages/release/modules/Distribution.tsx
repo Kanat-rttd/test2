@@ -78,13 +78,13 @@ const Distribution = () => {
                 </Box>
 
                 <Box display='flex' gap='15px'>
-                    <Button colorScheme='purple' onClick={onOpen} p='0 25px'>
+                    <Button size='sm' colorScheme='purple' onClick={onOpen} p='0 25px'>
                         Выдача продукции
                     </Button>
-                    <Button type='button' onClick={() => selectedRef.current?.export()}>
+                    <Button size='sm' type='button' onClick={() => selectedRef.current?.export()}>
                         Экспорт в Excel
                     </Button>
-                    <Button type='button' onClick={window.print}>
+                    <Button size='sm' type='button' onClick={window.print}>
                         Экспорт в PDF
                     </Button>
                 </Box>
