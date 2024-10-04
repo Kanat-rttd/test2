@@ -1,7 +1,7 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { Table, Tbody, Td, Th, Tr, useDisclosure, IconButton } from '@chakra-ui/react'
-import { useState } from 'react'
+import { forwardRef, useImperativeHandle, useState } from 'react'
 import EditModal from './EditModal'
 // import { mutate } from 'swr'
 import { useApi } from '@/utils/services/axios'
@@ -10,6 +10,7 @@ import { useNotify } from '@/utils/hooks/useNotify'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import dayjs from 'dayjs'
+import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
 
 interface DispatchData {
     data: DispatchType[]
@@ -42,9 +43,9 @@ interface DispatchType {
     }
 }
 
-const ListTable: React.FC = () => {
-    const { getURLs } = useURLParameters()
-    const { loading } = useNotify()
+const ListTable = forwardRef((_props, ref) => {
+    const { getURLs, getParam } = useURLParameters()
+    const { loading, error } = useNotify()
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     const [selectedRow, setSelectedRow] = useState<DispatchType | null>(null)
@@ -68,22 +69,62 @@ const ListTable: React.FC = () => {
         setModal({ ...modal, isOpen: false })
     }
 
-    const handleSuccess = () => {
-        mutateDispatchData()
+    const handleSuccess = async () => {
+        await mutateDispatchData()
     }
 
-    const handlerDeleteUser = () => {
+    const handlerDeleteUser = async () => {
         if (selectedRow) {
             const responsePromise: Promise<any> = deleteDispatch(selectedRow.id)
             loading(responsePromise)
-            responsePromise.then(() => {
-                mutateDispatchData()
-                onClose()
-            })
+            await responsePromise
+            await mutateDispatchData()
+            onClose()
         } else {
             console.error('No user data available to delete.')
         }
     }
+
+    useImperativeHandle(ref, () => ({
+        async export() {
+            if (!dispatchData || dispatchData.data.length === 0) {
+                return error('Нет данных для экспорта')
+            }
+
+            const data = [['№', 'Дата', 'Реализатор', 'Продукт', 'Количество', 'Цена', 'Сумма']]
+            const startDate = new Date(getParam('startDate')).toLocaleDateString()
+            const endDate = new Date(getParam('endDate')).toLocaleDateString()
+
+            let idx = 1
+
+            dispatchData.data.forEach((item) => {
+                item.goodsDispatchDetails.forEach((detail) => {
+                    data.push([
+                        idx.toString(),
+                        new Date(item.createdAt).toLocaleDateString(),
+                        item.contragent.contragentName,
+                        detail.product.name,
+                        detail.quantity.toString(),
+                        detail.price.toString(),
+                        (Number(detail.price) * Number(detail.quantity)).toString(),
+                    ])
+                    idx++
+                })
+            })
+
+            data.push([
+                '',
+                'ИТОГО',
+                '',
+                '',
+                dispatchData.totalQuantity.toString(),
+                '',
+                dispatchData.totalPrice.toString(),
+            ])
+
+            await generateExcel(`Журнал продаж с ${startDate} по ${endDate}`, data)
+        },
+    }))
 
     return (
         <>
@@ -98,7 +139,7 @@ const ListTable: React.FC = () => {
                             <Th>Количество </Th>
                             <Th>Цена</Th>
                             <Th>Сумма</Th>
-                            <Th>Действия</Th>
+                            <Th className='print-hidden'>Действия</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -174,7 +215,7 @@ const ListTable: React.FC = () => {
                                                     )}
                                                 </div>
                                             </Td>
-                                            <Td>
+                                            <Td className='print-hidden'>
                                                 <IconButton
                                                     variant='outline'
                                                     size='sm'
@@ -246,6 +287,6 @@ const ListTable: React.FC = () => {
             />
         </>
     )
-}
+})
 
 export default ListTable

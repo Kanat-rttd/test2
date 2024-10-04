@@ -1,8 +1,9 @@
-import { Box, Select } from '@chakra-ui/react'
+import { Box, Button, Select } from '@chakra-ui/react'
 import ListTable from '../components/ListTable'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { useRef } from 'react'
 
 interface FacilityUnit {
     id: number
@@ -36,7 +37,7 @@ const JournalPage = () => {
     const { data: clientsData } = useApi<Client[]>('client')
     const { data: productData } = useApi<Product[]>('product')
 
-    console.log('test')
+    const listRef = useRef<{ export: () => Promise<void> }>()
 
     return (
         <>
@@ -48,7 +49,12 @@ const JournalPage = () => {
                 p={5}
                 mt={2}
             >
-                <Box marginBottom={6} display='flex' justifyContent='space-between'>
+                <Box
+                    className='print-hidden'
+                    marginBottom={6}
+                    display='flex'
+                    justifyContent='space-between'
+                >
                     <Box display='flex' gap='15px' width='fit-content'>
                         <DateRange />
                         <Select
@@ -92,9 +98,17 @@ const JournalPage = () => {
                             ))}
                         </Select>
                     </Box>
+                    <Box display='flex' gap='15px'>
+                        <Button size='sm' type='button' onClick={() => listRef.current?.export()}>
+                            Экспорт в Excel
+                        </Button>
+                        <Button size='sm' type='button' onClick={() => window.print()}>
+                            Экспорт в PDF
+                        </Button>
+                    </Box>
                 </Box>
                 <Box position='relative'>
-                    <ListTable />
+                    <ListTable ref={listRef} />
                 </Box>
             </Box>
             {/* <DistributionModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} status="0" /> */}
