@@ -1,7 +1,7 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { IconButton, Table, Tbody, Td, Th, Tr, useDisclosure } from '@chakra-ui/react'
-import { useState } from 'react'
+import { forwardRef, useImperativeHandle, useState } from 'react'
 import dayjs from 'dayjs'
 import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
@@ -10,6 +10,7 @@ import { useNotify } from '@/utils/hooks/useNotify'
 import { deleteDispatch } from '@/utils/services/dispatch.service'
 import { DispatchType } from '@/utils/types/dispatch.types'
 import DistributionModal from './DistributionModal'
+import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
 
 export interface ListTableProps {
     status: string
@@ -21,12 +22,13 @@ type Dispatch = {
     totalQuantity: number
 }
 
-export default function ListTable({ status }: ListTableProps) {
+const ListTable = forwardRef(({ status }: ListTableProps, ref) => {
     const { loading } = useNotify()
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const { getURLs } = useURLParameters()
+    const { getURLs, getParam } = useURLParameters()
 
     const [selectedData, setSelectedData] = useState<DispatchType>()
+    const { error } = useNotify()
 
     const [dialog, setDialog] = useState({
         isOpen: false,
@@ -37,22 +39,43 @@ export default function ListTable({ status }: ListTableProps) {
         `release?${getURLs().toString()}&status=${status}`,
     )
 
-    const handlerDelete = (selectedData: DispatchType | undefined) => {
+    const handlerDelete = async (selectedData: DispatchType | undefined) => {
         if (selectedData) {
             const responsePromise: Promise<any> = deleteDispatch(selectedData.id)
             loading(responsePromise)
-            responsePromise.then(() => {
-                mutateDispatchesData()
-            })
+            await responsePromise
+            await mutateDispatchesData()
         } else {
             console.error('No data available to delete.')
         }
     }
 
-    const onSuccess = () => {
-        mutateDispatchesData()
+    const onSuccess = async () => {
+        await mutateDispatchesData()
         setSelectedData(undefined)
     }
+
+    useImperativeHandle(ref, () => ({
+        async export() {
+            if (!dispatchesData || !dispatchesData.data.length) {
+                return error('Нет данных для экспорта')
+            }
+
+            const headers = ['№', 'Дата и время', 'Реализатор', 'Виды хлеба', 'Количество']
+            const formatted = dispatchesData.data.map((item, idx) => [
+                idx + 1,
+                dayjs(item.createdAt).format('HH:mm DD.MM.YYYY'),
+                item.contragent.contragentName,
+                item.goodsDispatchDetails.map((details) => details.product.name).join('\n'),
+                item.goodsDispatchDetails.map((details) => details.quantity).join('\n'),
+            ])
+
+            const startDate = new Date(getParam('startDate')).toLocaleDateString()
+            const endDate = new Date(getParam('endDate')).toLocaleDateString()
+
+            await generateExcel(`Выдача с ${startDate} по ${endDate}`, [headers, ...formatted])
+        },
+    }))
 
     return (
         <>
@@ -65,7 +88,7 @@ export default function ListTable({ status }: ListTableProps) {
                             <Th>Виды хлеба</Th>
                             <Th>Количество </Th>
                             <Th>Дата и время</Th>
-                            <Th>Действия</Th>
+                            <Th className='print-hidden'>Действия</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
@@ -111,7 +134,7 @@ export default function ListTable({ status }: ListTableProps) {
                                             <Td>
                                                 {dayjs(row.createdAt).format('HH:mm DD.MM.YYYY')}
                                             </Td>
-                                            <Td>
+                                            <Td className='print-hidden'>
                                                 <IconButton
                                                     variant='outline'
                                                     size='sm'
@@ -170,12 +193,13 @@ export default function ListTable({ status }: ListTableProps) {
                 onClose={dialog.onClose}
                 header='Удалить'
                 body='Вы уверены? Вы не сможете отменить это действие впоследствии.'
-                actionBtn={() => {
+                actionBtn={async () => {
                     dialog.onClose()
-                    handlerDelete(selectedData)
+                    await handlerDelete(selectedData)
                 }}
                 actionText='Удалить'
             />
         </>
     )
-}
+})
+export default ListTable

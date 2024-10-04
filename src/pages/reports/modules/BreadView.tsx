@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, Select, Td, Th, Tr, Tbody, Table, Button } from '@chakra-ui/react'
+import { Box, Button, Select, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '../../../components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
@@ -87,15 +87,13 @@ const BreadView = () => {
             }
         })
 
-        const result: FilteredData[] = Object.keys(groupedData).map((date) => ({
+        return Object.keys(groupedData).map((date) => ({
             date,
             products: groupedData[date],
         }))
-
-        return result
     }
 
-    const exportExcel = () => {
+    const exportExcel = async () => {
         if (filteredProducts?.length === 0 || !filteredProducts) {
             return error('Нет данных для экспорта')
         }
@@ -122,7 +120,7 @@ const BreadView = () => {
         const startDate = new Date(getParam('startDate')).toLocaleDateString()
         const endDate = new Date(getParam('endDate')).toLocaleDateString()
 
-        generateExcel(`Отчет по продукции с ${startDate} по ${endDate}`, [
+        await generateExcel(`Отчет по продукции с ${startDate} по ${endDate}`, [
             headers,
             ...formattedData,
             ['', 'ИТОГО', ...total],

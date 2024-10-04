@@ -114,7 +114,7 @@ const ReconciliationView = () => {
         setFilteredData(getFilteredData())
     }, [dates])
 
-    const exportExcel = () => {
+    const exportExcel = async () => {
         if (filteredData?.length === 0 || !filteredData) {
             return error('Нет данных для экспорта')
         }
@@ -146,7 +146,7 @@ const ReconciliationView = () => {
         const startDate = new Date(getParam('startDate')).toLocaleDateString()
         const endDate = new Date(getParam('endDate')).toLocaleDateString()
 
-        generateExcel(`Акт сверки с ${startDate} по ${endDate}`, [
+        await generateExcel(`Акт сверки с ${startDate} по ${endDate}`, [
             headers,
             ...formattedData,
             [

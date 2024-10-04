@@ -1,9 +1,11 @@
 import { Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react'
 import { TableContainer, Thead } from '@/components/ui'
 import { DispatchType } from '@/utils/types/dispatch.types'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
+import { useNotify } from '@/utils/hooks/useNotify.ts'
+import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
 
 interface PivotTableProps {
     status: string
@@ -15,10 +17,11 @@ type Dispatch = {
     totalQuantity: number
 }
 
-const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
-    const { getURLs } = useURLParameters()
+const PivotTable = forwardRef(({ status }: PivotTableProps, ref) => {
+    const { getURLs, getParam } = useURLParameters()
     const [data, setData] = useState<DispatchType[]>([])
-    const [headers, setHeaders] = useState<any[]>([])
+    const [headers, setHeaders] = useState<{ bread: string }[]>([])
+    const { error } = useNotify()
 
     const { data: dispatchesData } = useApi<Dispatch>(
         `release?${getURLs().toString()}&status=${status}`,
@@ -51,6 +54,35 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
         setData(dispatchesData.data.filter((row: DispatchType) => row.dispatch == Number(status)))
     }, [dispatchesData])
 
+    useImperativeHandle(ref, () => ({
+        async export() {
+            if (!data || !data.length) {
+                return error('Нет данных для экспорта')
+            }
+
+            const formatted = data
+                .sort((a, b) => a.id - b.id)
+                .map((item, idx) => [
+                    idx + 1,
+                    item.contragent.contragentName,
+                    ...headers.map(
+                        (header) =>
+                            item.goodsDispatchDetails.find(
+                                (detail) => detail.product.name === header.bread,
+                            )?.quantity || 0,
+                    ),
+                ])
+
+            const startDate = new Date(getParam('startDate')).toLocaleDateString()
+            const endDate = new Date(getParam('endDate')).toLocaleDateString()
+
+            await generateExcel(`Выдача с ${startDate} по ${endDate}`, [
+                ['№', 'Реализатор', ...headers.map((h) => h.bread)],
+                ...formatted,
+            ])
+        },
+    }))
+
     return (
         <>
             <TableContainer style={{ minHeight: '70dvh', maxHeight: '70dvh', overflowY: 'auto' }}>
@@ -76,7 +108,7 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
                                             const quantity = row.goodsDispatchDetails.find(
                                                 (detail) => detail.product.name === header.bread,
                                             )?.quantity
-                                            return <Td key={index}>{quantity}</Td>
+                                            return <Td key={index}>{quantity || 0}</Td>
                                         })}
                                     </Tr>
                                 ))
@@ -94,6 +126,6 @@ const PivotTable: React.FC<PivotTableProps> = ({ status }) => {
             </TableContainer>
         </>
     )
-}
+})
 
 export default PivotTable
