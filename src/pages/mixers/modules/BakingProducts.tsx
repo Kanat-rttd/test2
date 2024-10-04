@@ -23,6 +23,7 @@ import { deleteBaking } from '@/utils/services/baking.service'
 import { FacilityUnit } from '@/utils/types/product.types'
 import { BakingDataType, BakingType } from '@/utils/types/baking.types'
 import dayjs from 'dayjs'
+import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
 
 const styles = {
     textAlign: 'center',
@@ -32,6 +33,7 @@ const styles = {
 }
 
 const BakingPage = () => {
+    const { error } = useNotify()
     const { getURLs, getParam, setParam } = useURLParameters()
     const { loading } = useNotify()
     const { onOpen, onClose, isOpen } = useDisclosure()
@@ -68,10 +70,70 @@ const BakingPage = () => {
         // setBakingsDetails()
     }, [bakingsData])
 
+    const exportExcel = () => {
+        if (bakingsData?.bakingData.length === 0 || !bakingsData) {
+            return error('Нет данных для экспорта')
+        }
+
+        const headers = [
+            '№',
+            'Вид хлеба',
+            'Время и дата',
+            'Мука',
+            'Соль',
+            'Дрожжи',
+            'Солод',
+            'Масло',
+            't°',
+            'Выход',
+            'Брак',
+        ]
+
+        const formattedData = bakingsData.bakingData.map((entry, idx) => [
+            idx + 1,
+            entry.product?.name,
+            new Date(entry.dateTime).toLocaleString(),
+            entry.flour.quantity || 0,
+            entry.salt.quantity || 0,
+            entry.yeast.quantity || 0,
+            entry.malt.quantity || 0,
+            entry.butter.quantity || 0,
+            entry.temperature || 0,
+            entry.output || 0,
+            entry.defective || 0,
+        ])
+
+        const startDate = new Date(getParam('startDate')).toLocaleDateString()
+        const endDate = new Date(getParam('endDate')).toLocaleDateString()
+
+        generateExcel(`Отчет по продукции с ${startDate} по ${endDate}`, [
+            headers,
+            ...formattedData,
+            [
+                '',
+                'ИТОГО',
+                '',
+                bakingsData.totals.totalFlour,
+                bakingsData.totals.totalSalt,
+                bakingsData.totals.totalYeast,
+                bakingsData.totals.totalMalt,
+                bakingsData.totals.totalButter,
+                '',
+                bakingsData.totals.totalOutput,
+                bakingsData.totals.totalDefective,
+            ],
+        ])
+    }
+
     return (
         <>
             <Box p={5} mt={1}>
-                <Box display='flex' justifyContent='space-between' width='100%'>
+                <Box
+                    className='print-hidden'
+                    display='flex'
+                    justifyContent='space-between'
+                    width='100%'
+                >
                     <Box marginBottom={7} display='flex' gap={15} width='100%'>
                         <DateRange />
                         <Select
@@ -90,20 +152,29 @@ const BakingPage = () => {
                             ))}
                         </Select>
                     </Box>
-                    <Button
-                        size='md'
-                        backgroundColor='#6B6FDB'
-                        color='white'
-                        fontSize='px'
-                        borderRadius='10px'
-                        width='15%'
-                        onClick={() => {
-                            setSelectedBaking(undefined)
-                            onOpen()
-                        }}
-                    >
-                        Добавить
-                    </Button>
+                    <Box display='flex' gap='15px'>
+                        <Button
+                            size='md'
+                            backgroundColor='#6B6FDB'
+                            color='white'
+                            fontSize='px'
+                            borderRadius='10px'
+                            // width='15%'
+                            onClick={() => {
+                                setSelectedBaking(undefined)
+                                onOpen()
+                            }}
+                        >
+                            Добавить
+                        </Button>
+                        <Button type='button' onClick={exportExcel}>
+                            Экспорт в Excel
+                        </Button>
+                        <Button type='button' onClick={() => window.print()}>
+                            Экспорт в PDF
+                        </Button>
+                    </Box>
+
                     <BakingAddModal
                         data={selectedBaking}
                         isOpen={isOpen}
@@ -135,7 +206,7 @@ const BakingPage = () => {
                                 <Th sx={styles}>t°</Th>
                                 <Th sx={styles}>Выход</Th>
                                 <Th sx={styles}>Брак</Th>
-                                <Th>Действия</Th>
+                                <Th className='print-hidden'>Действия</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -149,16 +220,26 @@ const BakingPage = () => {
                                                     'HH:mm DD.MM.YYYY',
                                                 )}
                                             </Td>
-                                            <Td textAlign='center'>{bakingRow.flour.quantity}</Td>
-                                            <Td textAlign='center'>{bakingRow.salt.quantity}</Td>
-                                            <Td textAlign='center'>{bakingRow.yeast.quantity}</Td>
-                                            <Td textAlign='center'>{bakingRow.malt.quantity}</Td>
-                                            <Td textAlign='center'>{bakingRow.butter.quantity}</Td>
+                                            <Td textAlign='center'>
+                                                {bakingRow.flour.quantity || 0}
+                                            </Td>
+                                            <Td textAlign='center'>
+                                                {bakingRow.salt.quantity || 0}
+                                            </Td>
+                                            <Td textAlign='center'>
+                                                {bakingRow.yeast.quantity || 0}
+                                            </Td>
+                                            <Td textAlign='center'>
+                                                {bakingRow.malt.quantity || 0}
+                                            </Td>
+                                            <Td textAlign='center'>
+                                                {bakingRow.butter.quantity || 0}
+                                            </Td>
 
-                                            <Td textAlign='center'>{bakingRow.temperature}</Td>
-                                            <Td textAlign='center'>{bakingRow.output}</Td>
-                                            <Td textAlign='center'>{bakingRow.defective}</Td>
-                                            <Td>
+                                            <Td textAlign='center'>{bakingRow.temperature || 0}</Td>
+                                            <Td textAlign='center'>{bakingRow.output || 0}</Td>
+                                            <Td textAlign='center'>{bakingRow.defective || 0}</Td>
+                                            <Td className='print-hidden'>
                                                 <IconButton
                                                     variant='outline'
                                                     size='sm'
