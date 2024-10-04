@@ -1,7 +1,7 @@
 import Dialog from '@/components/Dialog'
 import { DeleteIcon, EditIcon } from '@chakra-ui/icons'
 import { Box, IconButton, Select, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
-import { useState } from 'react'
+import { forwardRef, useImperativeHandle, useState } from 'react'
 import dayjs from 'dayjs'
 import { useApi } from '@/utils/services/axios'
 import { TableContainer, Thead } from '@/components/ui'
@@ -13,14 +13,15 @@ import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
 import EditModal from './EditModal'
 import { deleteShiftAccounting } from '@/utils/services/shiftAccounting.service'
 import { useNotify } from '@/utils/hooks/useNotify'
+import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
 
 interface ListTableProps {
     shiftAccounting: ShiftAccountingType[] | undefined
     mutate: () => void
 }
 
-export default function ListTable({ shiftAccounting, mutate }: ListTableProps) {
-    const { loading } = useNotify()
+const ListTable = forwardRef(({ shiftAccounting, mutate }: ListTableProps, ref) => {
+    const { loading, error } = useNotify()
     const { getParam, setParam } = useURLParameters()
 
     const [dialog, setDialog] = useState({
@@ -58,25 +59,58 @@ export default function ListTable({ shiftAccounting, mutate }: ListTableProps) {
         }
     }
 
+    useImperativeHandle(ref, () => ({
+        async export() {
+            if (!shiftAccounting || shiftAccounting.length === 0) {
+                return error('Нет данных для экспорта')
+            }
+
+            const headers = ['№', 'Дата', 'Цех', 'Сотрудник', 'Количество часов']
+            const data: Array<Array<unknown>> = []
+
+            let idx = 1
+
+            shiftAccounting.forEach((item) => {
+                item.shiftAccountingDetails.forEach((detail) => {
+                    data.push([
+                        idx.toString(),
+                        new Date(item.date).toLocaleDateString(),
+                        item.bakingFacilityUnit.facilityUnit,
+                        detail.departPersonal.name,
+                        detail.shiftTime.toString(),
+                    ])
+                    idx++
+                })
+            })
+
+            const startDate = new Date(getParam('startDate')).toLocaleDateString()
+            const endDate = new Date(getParam('endDate')).toLocaleDateString()
+
+            await generateExcel(`Учет смен c ${startDate} по ${endDate}`, [headers, ...data])
+        },
+    }))
+
     return (
         <>
             <UniversalComponent>
-                <Box display='flex' gap='15px' width='fit-content' mt={-3} mb={2}>
-                    <DateRange />
-                    <Select
-                        size='sm'
-                        borderRadius={5}
-                        placeholder='Цех'
-                        width='fit-content'
-                        defaultValue={getParam('facilityUnit')}
-                        onChange={(e) => setParam('facilityUnit', e.target.value)}
-                    >
-                        {facilityUnits?.map((item, index) => (
-                            <option key={index} value={item.id}>
-                                {item.facilityUnit}
-                            </option>
-                        ))}
-                    </Select>
+                <Box className='print-hidden' display='flex' justifyContent='space-between'>
+                    <Box display='flex' gap='15px' width='fit-content' mt={-3} mb={2}>
+                        <DateRange />
+                        <Select
+                            size='sm'
+                            borderRadius={5}
+                            placeholder='Цех'
+                            width='fit-content'
+                            defaultValue={getParam('facilityUnit')}
+                            onChange={(e) => setParam('facilityUnit', e.target.value)}
+                        >
+                            {facilityUnits?.map((item, index) => (
+                                <option key={index} value={item.id}>
+                                    {item.facilityUnit}
+                                </option>
+                            ))}
+                        </Select>
+                    </Box>
                 </Box>
 
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
@@ -88,7 +122,7 @@ export default function ListTable({ shiftAccounting, mutate }: ListTableProps) {
                                 <Th>Цех</Th>
                                 <Th>Сотрудник </Th>
                                 <Th>Кол-во часов</Th>
-                                <Th>Действия</Th>
+                                <Th className='print-hidden'>Действия</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -127,7 +161,7 @@ export default function ListTable({ shiftAccounting, mutate }: ListTableProps) {
                                                     ))}
                                                 </div>
                                             </Td>
-                                            <Td>
+                                            <Td className='print-hidden'>
                                                 <IconButton
                                                     variant='outline'
                                                     size='sm'
@@ -187,4 +221,6 @@ export default function ListTable({ shiftAccounting, mutate }: ListTableProps) {
             />
         </>
     )
-}
+})
+
+export default ListTable

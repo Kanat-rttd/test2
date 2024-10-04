@@ -7,13 +7,17 @@ import { FacilityUnit } from '@/utils/types/product.types'
 import { ShiftAccountingType } from '@/utils/types/shiftAccounting.types'
 import { Box, Select, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import dayjs from 'dayjs'
+import { forwardRef, useImperativeHandle } from 'react'
+import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
+import { useNotify } from '@/utils/hooks/useNotify.ts'
 
 interface PivotTableProps {
     shiftAccounting: ShiftAccountingType[] | undefined
 }
 
-const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
+const PivotTable = forwardRef(({ shiftAccounting }: PivotTableProps, ref) => {
     const { getParam, setParam } = useURLParameters()
+    const { error } = useNotify()
     const { data: departPersonalData } = useApi<DepartPersonalType[]>('departPersonal')
     const { data: facilityUnits } = useApi<FacilityUnit[] | undefined>(`mixers`)
 
@@ -32,6 +36,36 @@ const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
             return total + (Number(product?.shiftTime) || 0)
         }, 0)
     }
+
+    useImperativeHandle(ref, () => ({
+        async export() {
+            if (!shiftAccounting || shiftAccounting.length === 0) {
+                return error('Нет данных для экспорта')
+            }
+
+            const headers = ['№', 'Дата', ...Array.from(uniqPersonal)]
+
+            const formatted = shiftAccounting.map((item, idx) => {
+                const numbers = Array.from(uniqPersonal).map(
+                    (name) =>
+                        item.shiftAccountingDetails.find(
+                            (prod) => prod.departPersonal.name === name,
+                        )?.shiftTime || 0,
+                )
+
+                return [idx + 1, new Date(item.date).toLocaleDateString(), ...numbers]
+            })
+
+            const startDate = new Date(getParam('startDate')).toLocaleDateString()
+            const endDate = new Date(getParam('endDate')).toLocaleDateString()
+
+            await generateExcel(`Учет смен c ${startDate} по ${endDate}`, [
+                headers,
+                ...formatted,
+                ['', 'ИТОГО', ...Array.from(uniqPersonal).map((name) => getColumnTotal(name))],
+            ])
+        },
+    }))
 
     return (
         <Box width='100%'>
@@ -124,6 +158,6 @@ const PivotTable = ({ shiftAccounting }: PivotTableProps) => {
             </TableContainer>
         </Box>
     )
-}
+})
 
 export default PivotTable
