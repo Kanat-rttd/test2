@@ -5,6 +5,8 @@ import { useApi } from '@/utils/services/axios'
 import dayjs from 'dayjs'
 import { useNotify } from '@/utils/hooks/useNotify.ts'
 import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
+import { useURLParameters } from '@/utils/hooks/useURLParameters.tsx'
+import { ProviderGoodsType } from '@/utils/types/providerGoog.types.ts'
 
 type AdjustmentType = {
     quantity: number
@@ -19,8 +21,10 @@ type AdjustmentType = {
 }
 
 const AdjustmentsHictory = () => {
+    const { getParam, setParam, getURLs } = useURLParameters()
     const { error } = useNotify()
-    const { data: adjustmentData } = useApi<AdjustmentType[]>('adjustment')
+    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
+    const { data: adjustmentData } = useApi<AdjustmentType[]>(`adjustment?${getURLs().toString()}`)
 
     const exportExcel = async () => {
         if (!adjustmentData || adjustmentData.length === 0) {
@@ -52,17 +56,28 @@ const AdjustmentsHictory = () => {
                         display='flex'
                         justifyContent='space-between'
                     >
-                        <Box display='flex' gap='15px' width='fit-content'>
-                            <Select placeholder='Название' width='fit-content' name='status'>
-                                <option value='1'>Активен</option>
-                                <option value='0'>Приостановлен</option>
+                        <Box display='flex' gap='15px'>
+                            <Select
+                                placeholder='Товар'
+                                size='sm'
+                                borderRadius={5}
+                                defaultValue={getParam('productId')}
+                                onChange={(e) => {
+                                    setParam('productId', e.target.value)
+                                }}
+                            >
+                                {providerGoodsData?.map((item, index) => (
+                                    <option key={index} value={item.id}>
+                                        {item.goods}
+                                    </option>
+                                ))}
                             </Select>
                         </Box>
                         <Box display='flex' gap='15px'>
-                            <Button type='button' onClick={exportExcel}>
+                            <Button size='sm' type='button' onClick={exportExcel}>
                                 Экспорт в Excel
                             </Button>
-                            <Button type='button' onClick={() => window.print()}>
+                            <Button size='sm' type='button' onClick={() => window.print()}>
                                 Экспорт в PDF
                             </Button>
                         </Box>
