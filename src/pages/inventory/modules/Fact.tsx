@@ -14,6 +14,7 @@ type GoodsCategoryType = {
     category: string
     unitOfMeasure: string
 }
+
 const Fact = () => {
     const { getURLs, setParam, getParam } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()

@@ -6,7 +6,6 @@ import dayjs from 'dayjs'
 import { useNotify } from '@/utils/hooks/useNotify.ts'
 import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
 import { useURLParameters } from '@/utils/hooks/useURLParameters.tsx'
-import { ProviderGoodsType } from '@/utils/types/providerGoog.types.ts'
 
 type AdjustmentType = {
     quantity: number
@@ -20,10 +19,17 @@ type AdjustmentType = {
     }
 }
 
+type GoodsCategoryType = {
+    id: number
+    category: string
+    unitOfMeasure: string
+}
+
 const AdjustmentsHictory = () => {
     const { getParam, setParam, getURLs } = useURLParameters()
     const { error } = useNotify()
-    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
+
+    const { data: goodsCategoriesData } = useApi<GoodsCategoryType[]>('goodsCategories')
     const { data: adjustmentData } = useApi<AdjustmentType[]>(`adjustment?${getURLs().toString()}`)
 
     const exportExcel = async () => {
@@ -56,19 +62,18 @@ const AdjustmentsHictory = () => {
                         display='flex'
                         justifyContent='space-between'
                     >
-                        <Box display='flex' gap='15px'>
+                        <Box width='100%' display='flex' gap='15px'>
                             <Select
-                                placeholder='Товар'
+                                placeholder='Все товары'
+                                width='20%'
                                 size='sm'
                                 borderRadius={5}
-                                defaultValue={getParam('productId')}
-                                onChange={(e) => {
-                                    setParam('productId', e.target.value)
-                                }}
+                                value={getParam('goodsCategoryId')}
+                                onChange={(e) => setParam('goodsCategoryId', e.target.value)}
                             >
-                                {providerGoodsData?.map((item, index) => (
+                                {goodsCategoriesData?.map((item, index) => (
                                     <option key={index} value={item.id}>
-                                        {item.goods}
+                                        {item.category}
                                     </option>
                                 ))}
                             </Select>
