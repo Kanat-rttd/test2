@@ -165,7 +165,12 @@ const ReconciliationView = () => {
     return (
         <Box>
             <Box width='100%' height='100%' p={5} mt={1}>
-                <Box marginBottom={6} display='flex' justifyContent='space-between'>
+                <Box
+                    className='print-hidden'
+                    marginBottom={6}
+                    display='flex'
+                    justifyContent='space-between'
+                >
                     <Box display='flex' gap='15px' width='100%'>
                         <DateRange />
                         <Select
