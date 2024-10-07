@@ -34,16 +34,11 @@ const Products = () => {
     return (
         <>
             <Box width='100%' p={5} pt={7}>
-                <Box
-                    className='print-hidden'
-                    display='flex'
-                    alignItems='center'
-                    justifyContent='space-between'
-                    mb={5}
-                >
+                <Box display='flex' alignItems='center' justifyContent='space-between' mb={5}>
                     <Box display='flex' gap='15px' mb='5px'>
                         <DateRange />
                         <Select
+                            className='print-hidden'
                             size='sm'
                             borderRadius={5}
                             placeholder='Поставщик'
@@ -58,6 +53,7 @@ const Products = () => {
                             ))}
                         </Select>
                         <Select
+                            className='print-hidden'
                             size='sm'
                             borderRadius={5}
                             placeholder='Товар'
@@ -72,6 +68,7 @@ const Products = () => {
                             ))}
                         </Select>
                         <Select
+                            className='print-hidden'
                             placeholder='Статус'
                             width='fit-content'
                             value={getParam('paymentStatus')}
@@ -84,7 +81,7 @@ const Products = () => {
                         </Select>
                     </Box>
 
-                    <Box display='flex' gap='15px'>
+                    <Box className='print-hidden' display='flex' gap='15px'>
                         <Button size='sm' colorScheme='purple' onClick={onOpen}>
                             Добавить закупки
                         </Button>
