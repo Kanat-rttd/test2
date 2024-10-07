@@ -122,8 +122,9 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
                 />
             </FormControl>
 
-            <FormControl isInvalid={!!errors.financeAccountId}>
+            <FormControl hidden isInvalid={!!errors.financeAccountId}>
                 <Controller
+                    defaultValue={1}
                     name='financeAccountId'
                     control={control}
                     rules={{ required: 'Поле является обязательным' }}
