@@ -136,15 +136,11 @@ const VisitView = () => {
     return (
         <Box>
             <Box width='100%' height='100%' p={5} mt={1}>
-                <Box
-                    className='print-hidden'
-                    marginBottom={6}
-                    display='flex'
-                    justifyContent='space-between'
-                >
+                <Box marginBottom={6} display='flex' justifyContent='space-between'>
                     <Box display='flex' gap='15px' width='100%'>
                         <DateRange />
                         <Select
+                            className='print-hidden'
                             size='sm'
                             borderRadius={5}
                             width='fit-content'
@@ -160,7 +156,7 @@ const VisitView = () => {
                         </Select>
                     </Box>
 
-                    <Box display='flex' gap='15px'>
+                    <Box className='print-hidden' display='flex' gap='15px'>
                         <Button onClick={exportExcel}>Экспорт в Excel</Button>
                         <Button onClick={() => window.print()}>Экспорт в PDF</Button>
                     </Box>
