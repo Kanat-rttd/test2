@@ -85,7 +85,7 @@ const PivotTable = forwardRef(({ status }: PivotTableProps, ref) => {
 
     return (
         <>
-            <TableContainer style={{ minHeight: '70dvh', maxHeight: '70dvh', overflowY: 'auto' }}>
+            <TableContainer>
                 <Table variant='simple'>
                     <Thead>
                         <Tr>

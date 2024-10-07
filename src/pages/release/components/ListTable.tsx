@@ -61,25 +61,34 @@ const ListTable = forwardRef(({ status }: ListTableProps, ref) => {
                 return error('Нет данных для экспорта')
             }
 
-            const headers = ['№', 'Дата и время', 'Реализатор', 'Виды хлеба', 'Количество']
-            const formatted = dispatchesData.data.map((item, idx) => [
-                idx + 1,
-                dayjs(item.createdAt).format('HH:mm DD.MM.YYYY'),
-                item.contragent.contragentName,
-                item.goodsDispatchDetails.map((details) => details.product.name).join('\n'),
-                item.goodsDispatchDetails.map((details) => details.quantity).join('\n'),
-            ])
+            const headers = ['№', 'Дата и время', 'Реализатор', 'Вид хлеба', 'Количество']
+            const data: any[][] = []
+
+            let idx = 1
+
+            dispatchesData.data.forEach((item) =>
+                item.goodsDispatchDetails.forEach((detail) => {
+                    data.push([
+                        idx,
+                        new Date(item.createdAt).toLocaleDateString(),
+                        item.contragent.contragentName,
+                        detail.product.name,
+                        detail.quantity,
+                    ])
+                    idx++
+                }),
+            )
 
             const startDate = new Date(getParam('startDate')).toLocaleDateString()
             const endDate = new Date(getParam('endDate')).toLocaleDateString()
 
-            await generateExcel(`Выдача с ${startDate} по ${endDate}`, [headers, ...formatted])
+            await generateExcel(`Выдача с ${startDate} по ${endDate}`, [headers, ...data])
         },
     }))
 
     return (
         <>
-            <TableContainer style={{ minHeight: '70dvh', maxHeight: '70dvh', overflowY: 'auto' }}>
+            <TableContainer>
                 <Table>
                     <Thead>
                         <Tr>

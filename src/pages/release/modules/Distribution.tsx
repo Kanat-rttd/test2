@@ -52,16 +52,11 @@ const Distribution = () => {
 
     return (
         <Box>
-            <Box
-                className='print-hidden'
-                p={5}
-                height='5%'
-                display='flex'
-                justifyContent='space-between'
-            >
+            <Box p={5} height='5%' display='flex' justifyContent='space-between'>
                 <Box display='flex' gap='15px' width='100%'>
                     <DateRange />
                     <Select
+                        className='print-hidden'
                         size='sm'
                         borderRadius={5}
                         placeholder='Цех'
@@ -77,7 +72,7 @@ const Distribution = () => {
                     </Select>
                 </Box>
 
-                <Box display='flex' gap='15px'>
+                <Box className='print-hidden' display='flex' gap='15px'>
                     <Button size='sm' colorScheme='purple' onClick={onOpen} p='0 25px'>
                         Выдача продукции
                     </Button>
