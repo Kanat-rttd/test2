@@ -119,7 +119,7 @@ const History = () => {
         }
     }
 
-    const exportExcel = () => {
+    const exportExcel = async () => {
         if (data?.length === 0 || !data) {
             return error('Нет данных для экспорта')
         }
@@ -137,7 +137,7 @@ const History = () => {
         const startDate = new Date(getParam('startDate')).toLocaleDateString()
         const endDate = new Date(getParam('endDate')).toLocaleDateString()
 
-        generateExcel(`Отчет по продукции с ${startDate} по ${endDate}`, [
+        await generateExcel(`История финансов с ${startDate} по ${endDate}`, [
             headers,
             ...formattedData,
         ])
@@ -146,10 +146,11 @@ const History = () => {
     return (
         <>
             <Box display='flex' flexDirection='column' gap='1rem' padding={IsMobile() ? 0 : 5}>
-                <Box className='print-hidden' display='flex' justifyContent='space-between'>
+                <Box display='flex' justifyContent='space-between'>
                     <Box display='flex' gap='15px'>
                         <DateRange />
                         <Select
+                            className='print-hidden'
                             placeholder='Все категории'
                             width='90%'
                             size='sm'
@@ -164,11 +165,11 @@ const History = () => {
                             ))}
                         </Select>
                     </Box>
-                    <Box display='flex' gap='15px'>
+                    <Box className='print-hidden' display='flex' gap='15px'>
                         <Button type='button' onClick={exportExcel}>
                             Экспорт в Excel
                         </Button>
-                        <Button type='button' onClick={() => window.print()}>
+                        <Button type='button' onClick={window.print}>
                             Экспорт в PDF
                         </Button>
                     </Box>
