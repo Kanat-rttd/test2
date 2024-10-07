@@ -49,15 +49,11 @@ const JournalPage = () => {
                 p={5}
                 mt={2}
             >
-                <Box
-                    className='print-hidden'
-                    marginBottom={6}
-                    display='flex'
-                    justifyContent='space-between'
-                >
+                <Box marginBottom={6} display='flex' justifyContent='space-between'>
                     <Box display='flex' gap='15px' width='fit-content'>
                         <DateRange />
                         <Select
+                            className='print-hidden'
                             placeholder='Цех'
                             width='90%'
                             size='sm'
@@ -72,6 +68,7 @@ const JournalPage = () => {
                             ))}
                         </Select>
                         <Select
+                            className='print-hidden'
                             placeholder='Реализатор'
                             width='90%'
                             size='sm'
@@ -85,6 +82,7 @@ const JournalPage = () => {
                             ))}
                         </Select>
                         <Select
+                            className='print-hidden'
                             placeholder='Продукт'
                             width='90%'
                             size='sm'
@@ -98,7 +96,7 @@ const JournalPage = () => {
                             ))}
                         </Select>
                     </Box>
-                    <Box display='flex' gap='15px'>
+                    <Box className='print-hidden' display='flex' gap='15px'>
                         <Button size='sm' type='button' onClick={() => listRef.current?.export()}>
                             Экспорт в Excel
                         </Button>

@@ -128,8 +128,8 @@ const ListTable = forwardRef((_props, ref) => {
 
     return (
         <>
-            <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                <Table variant='simple' width='100%'>
+            <TableContainer overflowY='auto'>
+                <Table variant='simple'>
                     <Thead>
                         <Tr position='sticky' top={0} backgroundColor='white' zIndex={9}>
                             <Th textAlign='center'>№</Th>
