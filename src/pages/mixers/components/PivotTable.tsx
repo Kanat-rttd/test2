@@ -73,6 +73,7 @@ const PivotTable = forwardRef(({ shiftAccounting }: PivotTableProps, ref) => {
                 <Box display='flex' gap='15px' mb='5px'>
                     <DateRange />
                     <Select
+                        className='print-hidden'
                         size='sm'
                         borderRadius={4}
                         placeholder='Сотрудники'
@@ -87,6 +88,7 @@ const PivotTable = forwardRef(({ shiftAccounting }: PivotTableProps, ref) => {
                         ))}
                     </Select>
                     <Select
+                        className='print-hidden'
                         size='sm'
                         borderRadius={5}
                         placeholder='Цех'

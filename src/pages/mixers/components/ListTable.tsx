@@ -93,10 +93,11 @@ const ListTable = forwardRef(({ shiftAccounting, mutate }: ListTableProps, ref) 
     return (
         <>
             <UniversalComponent>
-                <Box className='print-hidden' display='flex' justifyContent='space-between'>
+                <Box display='flex' justifyContent='space-between'>
                     <Box display='flex' gap='15px' width='fit-content' mt={-3} mb={2}>
                         <DateRange />
                         <Select
+                            className='print-hidden'
                             size='sm'
                             borderRadius={5}
                             placeholder='Цех'

@@ -63,11 +63,7 @@ export default function ShiftAccounting() {
                             >
                                 Экспорт в Excel
                             </Button>
-                            <Button
-                                size='sm'
-                                type='button'
-                                onClick={() => selectedRef.current?.export()}
-                            >
+                            <Button size='sm' type='button' onClick={window.print}>
                                 Экспорт в PDF
                             </Button>
                         </Box>
