@@ -42,7 +42,6 @@ const Refund = () => {
             <UniversalComponent>
                 <Box width='100%' height='100%' p={5}>
                     <Box
-                        className='print-hidden'
                         marginBottom='35px'
                         height='5%'
                         display='flex'
@@ -51,6 +50,7 @@ const Refund = () => {
                         <Box display='flex' gap='15px' width='fit-content'>
                             <DateRange />
                             <Select
+                                className='print-hidden'
                                 placeholder='Цех'
                                 width='fit-content'
                                 size='sm'
@@ -64,7 +64,7 @@ const Refund = () => {
                             </Select>
                         </Box>
 
-                        <Box display='flex' gap='15px'>
+                        <Box className='print-hidden' display='flex' gap='15px'>
                             <Button size='sm' colorScheme='purple' onClick={onOpen} p='0 15px'>
                                 Возврат продукции
                             </Button>

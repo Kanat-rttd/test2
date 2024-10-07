@@ -82,7 +82,7 @@ const ListTable = forwardRef(({ status }: ListTableProps, ref) => {
             const startDate = new Date(getParam('startDate')).toLocaleDateString()
             const endDate = new Date(getParam('endDate')).toLocaleDateString()
 
-            await generateExcel(`Выдача с ${startDate} по ${endDate}`, [headers, ...data])
+            await generateExcel(`Возврат с ${startDate} по ${endDate}`, [headers, ...data])
         },
     }))
 
