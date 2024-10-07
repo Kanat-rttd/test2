@@ -138,15 +138,11 @@ const BreadView = () => {
 
     return (
         <Box as='main' width='100%' height='100%' p={5} mt={1}>
-            <Box
-                css={{ '@media print': { display: 'none' } }}
-                marginBottom={6}
-                display='flex'
-                justifyContent='space-between'
-            >
+            <Box marginBottom={6} display='flex' justifyContent='space-between'>
                 <Box display='flex' gap='15px' width='100%'>
                     <DateRange />
                     <Select
+                        className='print-hidden'
                         size='sm'
                         borderRadius={5}
                         width='fit-content'
@@ -161,7 +157,7 @@ const BreadView = () => {
                         ))}
                     </Select>
                 </Box>
-                <Box display='flex' gap='15px'>
+                <Box className='print-hidden' display='flex' gap='15px'>
                     <Button type='button' onClick={exportExcel}>
                         Экспорт в Excel
                     </Button>
