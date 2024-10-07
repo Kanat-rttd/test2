@@ -74,7 +74,7 @@ const ProviderTable = () => {
                 </Button>
             </Box>
 
-            <Box style={filteredData && filteredData.length >= 7 ? { height: '100dvh' } : {}}>
+            <Box>
                 <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
                     <Table variant='simple'>
                         <Thead>
