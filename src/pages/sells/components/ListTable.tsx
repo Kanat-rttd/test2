@@ -11,6 +11,7 @@ import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import dayjs from 'dayjs'
 import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
+import UniversalComponent from '@/components/ui/UniversalComponent.tsx'
 
 interface DispatchData {
     data: DispatchType[]
@@ -127,7 +128,7 @@ const ListTable = forwardRef((_props, ref) => {
     }))
 
     return (
-        <>
+        <UniversalComponent>
             <TableContainer overflowY='auto'>
                 <Table variant='simple'>
                     <Thead>
@@ -285,7 +286,7 @@ const ListTable = forwardRef((_props, ref) => {
                 }}
                 actionText='Удалить'
             />
-        </>
+        </UniversalComponent>
     )
 })
 
