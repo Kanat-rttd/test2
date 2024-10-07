@@ -96,15 +96,11 @@ const RemainProducts = () => {
     return (
         <UniversalComponent>
             <Box display='flex' flexDirection='column' p={5} mt={1}>
-                <Box
-                    className='print-hidden'
-                    marginBottom={5}
-                    display='flex'
-                    justifyContent='space-between'
-                >
+                <Box marginBottom={5} display='flex' justifyContent='space-between'>
                     <Box display='flex' gap='15px' width='fit-content'>
                         <DateRange />
                         <Select
+                            className='print-hidden'
                             size='sm'
                             borderRadius={5}
                             placeholder='Название'
@@ -115,7 +111,7 @@ const RemainProducts = () => {
                             <option value='0'>Приостановлен</option>
                         </Select>
                     </Box>
-                    <Box display='flex' gap='15px'>
+                    <Box className='print-hidden' display='flex' gap='15px'>
                         <Button type='button' onClick={exportExcel}>
                             Экспорт в Excel
                         </Button>
