@@ -47,7 +47,7 @@ interface Finance {
         type: string
     }
     financeCategoryId: number
-    clientId: number
+    contragentId: number
     account: string
     comment: string
 }
@@ -58,6 +58,17 @@ interface Category {
     type: string
 }
 
+interface Contragent {
+    id: number
+    contragentName: string
+    contragentType: {
+        id: number
+        type: string
+    }
+    mainId: number
+    status: boolean
+}
+
 const History = () => {
     const { success, error } = useNotify()
     const { getURLs, setParam, getParam } = useURLParameters()
@@ -66,6 +77,7 @@ const History = () => {
 
     const { data: financeData } = useApi<Finance[]>(`finance?${getURLs().toString()}`)
     const { data: categoriesData } = useApi<Category[] | undefined>(`financeCategories`)
+    const { data: contragentData } = useApi<Contragent[]>('contragent')
 
     const [selectedData, setSelectedData] = useState<History | null>(null)
     const [data, setData] = useState<Finance[] | undefined>(undefined)
@@ -187,19 +199,16 @@ const History = () => {
                                     zIndex={9}
                                 >
                                     <Th
-                                        w='25%'
+                                        display='flex'
+                                        cursor='pointer'
+                                        color={isHovered ? '#ccc' : 'black'}
+                                        alignItems='center'
+                                        transition='color 0.2s'
+                                        onMouseEnter={handleMouseEnter}
+                                        onMouseLeave={handleMouseLeave}
                                         onClick={() =>
                                             sortData(sortOrder === 'asc' ? 'desc' : 'asc')
                                         }
-                                        style={{
-                                            cursor: 'pointer',
-                                            color: isHovered ? '#CCC' : 'black',
-                                            transition: 'color 0.2s',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                        }}
-                                        onMouseEnter={handleMouseEnter}
-                                        onMouseLeave={handleMouseLeave}
                                     >
                                         Дата
                                         {sortOrder === 'asc' ? (
@@ -208,9 +217,10 @@ const History = () => {
                                             <ChevronUpIcon boxSize={6} />
                                         )}
                                     </Th>
-                                    <Th w='25%'>Категория</Th>
-                                    <Th w='25%'>Комментарий</Th>
-                                    <Th w='25%'>Сумма</Th>
+                                    <Th>Контрагент</Th>
+                                    <Th>Категория</Th>
+                                    <Th>Комментарий</Th>
+                                    <Th>Сумма</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -218,6 +228,13 @@ const History = () => {
                                     data?.map((transaction, index) => (
                                         <Tr key={index} onClick={() => handleDelete(transaction)}>
                                             <Td>{dayjs(transaction.date).format('DD.MM.YYYY')}</Td>
+                                            <Td>
+                                                {
+                                                    contragentData?.find(
+                                                        (c) => c.id === transaction.contragentId,
+                                                    )?.contragentName
+                                                }
+                                            </Td>
                                             <Td>{transaction.financeCategory.name}</Td>
                                             <Td>{transaction.comment}</Td>
                                             <Td>{transaction.amount}</Td>
@@ -245,9 +262,6 @@ const History = () => {
                             <Text>
                                 <strong>Дата:</strong>{' '}
                                 {dayjs(selectedData?.date).format('DD.MM.YYYY')}
-                            </Text>
-                            <Text>
-                                <strong>Счет:</strong> {selectedData?.account}
                             </Text>
                             <Text>
                                 <strong>Сумма:</strong> {selectedData?.amount}
