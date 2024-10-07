@@ -70,7 +70,7 @@ const BakingPage = () => {
         // setBakingsDetails()
     }, [bakingsData])
 
-    const exportExcel = () => {
+    const exportExcel = async () => {
         if (bakingsData?.bakingData.length === 0 || !bakingsData) {
             return error('Нет данных для экспорта')
         }
@@ -106,7 +106,7 @@ const BakingPage = () => {
         const startDate = new Date(getParam('startDate')).toLocaleDateString()
         const endDate = new Date(getParam('endDate')).toLocaleDateString()
 
-        generateExcel(`Отчет по продукции с ${startDate} по ${endDate}`, [
+        await generateExcel(`Выпечка с ${startDate} по ${endDate}`, [
             headers,
             ...formattedData,
             [
@@ -128,15 +128,11 @@ const BakingPage = () => {
     return (
         <>
             <Box p={5} mt={1}>
-                <Box
-                    className='print-hidden'
-                    display='flex'
-                    justifyContent='space-between'
-                    width='100%'
-                >
+                <Box display='flex' justifyContent='space-between' width='100%'>
                     <Box marginBottom={7} display='flex' gap={15} width='100%'>
                         <DateRange />
                         <Select
+                            className='print-hidden'
                             placeholder='Цех'
                             width='17%'
                             size='sm'
@@ -152,7 +148,7 @@ const BakingPage = () => {
                             ))}
                         </Select>
                     </Box>
-                    <Box display='flex' gap='15px'>
+                    <Box className='print-hidden' display='flex' gap='15px'>
                         <Button
                             size='md'
                             backgroundColor='#6B6FDB'
