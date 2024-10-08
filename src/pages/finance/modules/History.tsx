@@ -136,11 +136,12 @@ const History = () => {
             return error('Нет данных для экспорта')
         }
 
-        const headers = ['№', 'Дата', 'Категория', 'Комментарий', 'Сумма']
+        const headers = ['№', 'Дата', 'Контрагент', 'Категория', 'Комментарий', 'Сумма']
 
         const formattedData = data.map((item, idx) => [
             idx + 1,
             new Date(item.date).toLocaleDateString(),
+            contragentData?.find((c) => c.id === item.contragentId)?.contragentName,
             item.financeCategory.name,
             item.comment,
             item.amount,
