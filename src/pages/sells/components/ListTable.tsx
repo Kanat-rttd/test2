@@ -179,7 +179,7 @@ const ListTable = forwardRef((_props, ref) => {
                                                     {row.goodsDispatchDetails.map(
                                                         (details, index) => (
                                                             <span key={index}>
-                                                                {details.quantity}
+                                                                {details.quantity.formatted()}
                                                             </span>
                                                         ),
                                                     )}
@@ -194,7 +194,9 @@ const ListTable = forwardRef((_props, ref) => {
                                                 >
                                                     {row.goodsDispatchDetails.map(
                                                         (details, index) => (
-                                                            <span key={index}>{details.price}</span>
+                                                            <span key={index}>
+                                                                {Number(details.price).formatted()}
+                                                            </span>
                                                         ),
                                                     )}
                                                 </div>
@@ -209,8 +211,10 @@ const ListTable = forwardRef((_props, ref) => {
                                                     {row.goodsDispatchDetails.map(
                                                         (details, index) => (
                                                             <span key={index}>
-                                                                {Number(details.price) *
-                                                                    Number(details.quantity)}
+                                                                {(
+                                                                    Number(details.price) *
+                                                                    Number(details.quantity)
+                                                                ).formatted()}
                                                             </span>
                                                         ),
                                                     )}

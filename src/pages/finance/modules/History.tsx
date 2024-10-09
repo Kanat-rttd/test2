@@ -238,7 +238,7 @@ const History = () => {
                                             </Td>
                                             <Td>{transaction.financeCategory.name}</Td>
                                             <Td>{transaction.comment}</Td>
-                                            <Td>{transaction.amount}</Td>
+                                            <Td>{Number(transaction.amount).formatted()}</Td>
                                         </Tr>
                                     ))
                                 ) : (

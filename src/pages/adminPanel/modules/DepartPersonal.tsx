@@ -127,7 +127,7 @@ const AdminPanel = () => {
                                                 <Td>{user.surname}</Td>
                                                 <Td>{user.status ? 'Активный' : 'Неактивный'}</Td>
                                                 <Td>{user.userClass}</Td>
-                                                <Td>{user.fixSalary}</Td>
+                                                <Td>{Number(user.fixSalary).formatted()}</Td>
                                                 <Td sx={{ width: '5%' }}>
                                                     <IconButton
                                                         variant='outline'

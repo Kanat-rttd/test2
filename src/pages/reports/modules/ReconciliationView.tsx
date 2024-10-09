@@ -219,12 +219,12 @@ const ReconciliationView = () => {
                                         <Tr key={index}>
                                             <Td>{index + 1}</Td>
                                             <Td>{dayjs(item.date).format('DD.MM.YYYY')}</Td>
-                                            <Td>{item.reportData?.Sales || 0}</Td>
-                                            <Td>{item.reportData?.Expenses || 0}</Td>
-                                            <Td>{item.reportData?.Credit || 0}</Td>
-                                            <Td>{item.reportData?.Payments || 0}</Td>
-                                            <Td>{item.reportData?.Overhead || 0}</Td>
-                                            <Td>{item.reportData?.Debt || 0}</Td>
+                                            <Td>{(item.reportData?.Sales || 0).formatted()}</Td>
+                                            <Td>{(item.reportData?.Expenses || 0).formatted()}</Td>
+                                            <Td>{(item.reportData?.Credit || 0).formatted()}</Td>
+                                            <Td>{(item.reportData?.Payments || 0).formatted()}</Td>
+                                            <Td>{(item.reportData?.Overhead || 0).formatted()}</Td>
+                                            <Td>{(item.reportData?.Debt || 0).formatted()}</Td>
                                         </Tr>
                                     ))
                                 ) : (
@@ -240,22 +240,22 @@ const ReconciliationView = () => {
                                     </Th>
                                     <Th></Th>
                                     <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalSales}
+                                        {reconciliationViewData?.totalSales.formatted()}
                                     </Th>
                                     <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalExpenses}
+                                        {reconciliationViewData?.totalExpenses.formatted()}
                                     </Th>
                                     <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalCredit}
+                                        {reconciliationViewData?.totalCredit.formatted()}
                                     </Th>
                                     <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalPayments}
+                                        {reconciliationViewData?.totalPayments.formatted()}
                                     </Th>
                                     <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalOverhead}
+                                        {reconciliationViewData?.totalOverhead.formatted()}
                                     </Th>
                                     <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalDebt}
+                                        {reconciliationViewData?.totalDebt.formatted()}
                                     </Th>
                                 </Tr>
                             </Tfoot>

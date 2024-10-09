@@ -175,7 +175,7 @@ const AdminPanel = () => {
                                             <Tr key={index}>
                                                 <Td>{index + 1}</Td>
                                                 <Td>{overData.contragent?.contragentName}</Td>
-                                                <Td>{overData.price}</Td>
+                                                <Td>{Number(overData.price).formatted()}</Td>
                                                 <Td>{overData.month}</Td>
                                                 <Td>{overData.year}</Td>
                                                 <Td>

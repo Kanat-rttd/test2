@@ -150,7 +150,7 @@ const AdminPanel = () => {
                                                     <Td>{ordinalNumber}</Td>
                                                     <Td>{user.name}</Td>
                                                     <Td>{user.surname}</Td>
-                                                    <Td>+7{user.contact}</Td>
+                                                    <Td>{user.contact.formattedPhone()}</Td>
                                                     <Td>{user.telegrammId}</Td>
                                                     <Td>
                                                         {user.status ? 'Активный' : 'Неактивный'}

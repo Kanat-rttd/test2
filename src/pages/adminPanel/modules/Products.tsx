@@ -12,11 +12,7 @@ import {
 } from '@chakra-ui/react'
 import ProductAddModal from '../components/ProductAddModal'
 import { useState, useEffect } from 'react'
-import {
-    getAllProducts,
-    deleteProduct,
-    findByFilters,
-} from '../../../utils/services/product.service'
+import { getAllProducts, deleteProduct, findByFilters } from '@/utils/services/product.service.ts'
 import { EditIcon, DeleteIcon } from '@chakra-ui/icons'
 import Dialog from '@/components/Dialog'
 import { useApi } from '@/utils/services/axios'
@@ -162,8 +158,8 @@ const AdminPanel = () => {
                                                     <Td>
                                                         {product.status ? 'Активный' : 'Неактивный'}
                                                     </Td>
-                                                    <Td>{product.price}</Td>
-                                                    <Td>{product.costPrice}</Td>
+                                                    <Td>{product.price.formatted()}</Td>
+                                                    <Td>{product.costPrice.formatted()}</Td>
                                                     <Td>
                                                         <IconButton
                                                             variant='outline'

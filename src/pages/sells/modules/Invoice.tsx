@@ -1,5 +1,5 @@
 import { Box, Button, Select, Text, useDisclosure } from '@chakra-ui/react'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useApi } from '@/utils/services/axios'
 import InvoiceModal from '../components/InvoiceModal'
 import dayjs from 'dayjs'
@@ -82,7 +82,7 @@ const InvoicePage = () => {
 
     const [selectedRow, setSelectedRow] = useState<InvoiceData | null>(null)
 
-    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
         const { name, value } = event.target
         setParam(name, value)
     }
@@ -157,14 +157,15 @@ const InvoicePage = () => {
                                             justifyContent='space-between'
                                         >
                                             <Text minWidth='40%' textAlign='start'>
-                                                Сверху: {overPrice} ₸
+                                                Сверху: {Number(overPrice).formatted()} ₸
                                             </Text>
                                             <Text minW='60%' textAlign='start'>
-                                                Сумма: {row.totalSum} ₸
+                                                Сумма: {row.totalSum.formatted()} ₸
                                             </Text>
                                         </Box>
                                         <Text w='12%' textAlign='start'>
-                                            Итого: {Number(overPrice) + row.totalSum} ₸
+                                            Итого: {(Number(overPrice) + row.totalSum).formatted()}{' '}
+                                            ₸
                                         </Text>
                                     </Button>
                                 )

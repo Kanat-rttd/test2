@@ -180,7 +180,9 @@ const AdminPanel = () => {
                                                                             {value.name}
                                                                         </Td>
                                                                         <Td w='20%' isNumeric>
-                                                                            {value.price}
+                                                                            {Number(
+                                                                                value.price,
+                                                                            ).formatted()}
                                                                         </Td>
                                                                         <Td></Td>
                                                                         <Td w='20%' isNumeric>
