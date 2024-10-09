@@ -105,7 +105,7 @@ const MagazineTable = () => {
                                             <Tr key={index}>
                                                 <Td>{index + 1}</Td>
                                                 <Td>{item.MagazineName}</Td>
-                                                <Td>{item.Debit}</Td>
+                                                <Td>{Number(item.Debit).formatted()}</Td>
                                             </Tr>
                                         )
                                     })
@@ -122,7 +122,7 @@ const MagazineTable = () => {
                                 </Th>
                                 <Th width='60%'> </Th>
                                 <Th color='#000' fontSize={15}>
-                                    {magazineDebtData?.total}
+                                    {magazineDebtData?.total.formatted()}
                                 </Th>
                             </Tr>
                         </Tfoot>

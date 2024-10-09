@@ -131,10 +131,10 @@ const ListTable = forwardRef(({ purchasesData, mutate }: ListTableProps, ref) =>
                                         <Td>{dayjs(purchase.date).format('DD.MM.YYYY')}</Td>
                                         <Td>{purchase.provider.providerName}</Td>
                                         <Td>{purchase.providerGood.goods}</Td>
-                                        <Td>{purchase.quantity}</Td>
-                                        <Td>{purchase.price}</Td>
-                                        <Td>{purchase.totalSum}</Td>
-                                        <Td>{purchase.deliverySum}</Td>
+                                        <Td>{purchase.quantity.formatted()}</Td>
+                                        <Td>{purchase.price.formatted()}</Td>
+                                        <Td>{purchase.totalSum.formatted()}</Td>
+                                        <Td>{purchase.deliverySum.formatted()}</Td>
                                         <Td>{purchase.status}</Td>
                                         <Td className='print-hidden'>
                                             <IconButton
@@ -182,13 +182,13 @@ const ListTable = forwardRef(({ purchasesData, mutate }: ListTableProps, ref) =>
                             <Th> </Th>
                             <Th> </Th>
                             <Th color='#000' fontSize={15} fontWeight='bold'>
-                                {purchasesData?.totalQuantity}
+                                {purchasesData?.totalQuantity.formatted()}
                             </Th>
                             <Th color='#000' fontSize={15} fontWeight='bold'>
-                                {purchasesData?.totalSum}
+                                {purchasesData?.totalSum.formatted()}
                             </Th>
                             <Th color='#000' fontSize={15} fontWeight='bold'>
-                                {purchasesData?.totalDeliverySum}
+                                {purchasesData?.totalDeliverySum.formatted()}
                             </Th>
                             <Th> </Th>
                             <Th> </Th>

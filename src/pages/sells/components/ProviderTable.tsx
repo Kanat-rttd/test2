@@ -91,7 +91,7 @@ const ProviderTable = () => {
                                         <Tr key={index}>
                                             <Td>{index + 1}</Td>
                                             <Td>{item.ClientName}</Td>
-                                            <Td>{item.Debt}</Td>
+                                            <Td>{item.Debt.formatted()}</Td>
                                         </Tr>
                                     )
                                 })
@@ -108,7 +108,7 @@ const ProviderTable = () => {
                                 </Th>
                                 <Th width='60%'></Th>
                                 <Th color='#000' fontSize={15}>
-                                    {calculationsData?.Total}
+                                    {calculationsData?.Total.formatted()}
                                 </Th>
                             </Tr>
                         </Tfoot>

@@ -65,7 +65,7 @@ const Debt = () => {
                                         <Tr key={index}>
                                             <Td>{index + 1}</Td>
                                             <Td>{item.providerName}</Td>
-                                            <Td>{item.debt}</Td>
+                                            <Td>{Number(item.debt).formatted()}</Td>
                                         </Tr>
                                     )
                                 })
@@ -82,7 +82,7 @@ const Debt = () => {
                                 </Th>
                                 <Th width='77%'> </Th>
                                 <Th color='#000' fontSize={15}>
-                                    {purchasesData?.totalDebt}
+                                    {Number(purchasesData?.totalDebt).formatted()}
                                 </Th>
                             </Tr>
                         </Tfoot>
