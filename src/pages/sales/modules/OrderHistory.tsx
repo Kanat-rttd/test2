@@ -1,14 +1,11 @@
-import { Box, Heading, Input, IconButton, Text, VStack } from '@chakra-ui/react'
-import { CloseIcon } from '@chakra-ui/icons'
-import { useState, ChangeEvent, useEffect } from 'react'
+import { Box, Container, Heading, IconButton, Input, Text, VStack } from '@chakra-ui/react'
+import { ChevronLeftIcon, CloseIcon } from '@chakra-ui/icons'
+import { ChangeEvent, useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import MobileNavbar from '@/components/MobileNavbar'
-import { useParams } from 'react-router-dom'
-import { getSaleById } from '@/utils/services/sales.service'
-import { ChevronLeftIcon } from '@chakra-ui/icons'
-import { useNavigate } from 'react-router-dom'
-import { SALES_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
-import { saveOrderChanges } from '@/utils/services/sales.service'
+import { useNavigate, useParams } from 'react-router-dom'
+import { getSaleById, saveOrderChanges } from '@/utils/services/sales.service'
+import { SALES_HISTORY_ROUTE, SALES_REQUEST_FORM_ROUTE } from '@/utils/constants/routes.consts'
 import SuccessPage from '../components/SuccessPage'
 import ErrorPage from '../components/ErrorPage'
 
@@ -57,11 +54,7 @@ const OrderHistory = () => {
         }
     }, [orderId])
 
-    const reset = () => {
-        setOrderData(null)
-        setIsSuccess(false)
-        setIsError(false)
-    }
+    const reset = () => navigator(SALES_REQUEST_FORM_ROUTE)
 
     const handleRemoveProduct = (productId: number): void => {
         if (orderData) {
@@ -94,8 +87,8 @@ const OrderHistory = () => {
 
     const handleQuantityChange = (index: number, event: ChangeEvent<HTMLInputElement>): void => {
         const updatedProducts = [...selectedProducts]
-        const value = event.target.value === '' ? 0 : parseInt(event.target.value)
-        updatedProducts[index].orderedQuantity = value
+        updatedProducts[index].orderedQuantity =
+            event.target.value === '' ? 0 : parseInt(event.target.value)
         setSelectedProducts(updatedProducts)
     }
 
@@ -129,8 +122,9 @@ const OrderHistory = () => {
                 <ErrorPage />
             ) : (
                 <>
-                    <MobileNavbar></MobileNavbar>
-                    <Box
+                    <MobileNavbar />
+                    <Container
+                        maxWidth='4xl'
                         display='flex'
                         flexDirection='column'
                         height='100vh'
@@ -249,7 +243,7 @@ const OrderHistory = () => {
                                 onClick={handleSaveChanges}
                             />
                         </Box>
-                    </Box>
+                    </Container>
                 </>
             )}
         </div>
