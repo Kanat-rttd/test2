@@ -82,21 +82,25 @@ const MobileNavbar = () => {
             borderTopRightRadius={15}
             boxShadow='2px 2px 15px #e3e3e3'
             width='100%'
-            height='14vh'
+            p={3}
             display='flex'
             flexDirection='row'
             justifyContent='space-evenly'
             zIndex={10}
         >
-            <Box textAlign='center' p={5} onClick={() => navigate(SALES_REQUEST_FORM_ROUTE)}>
+            <Box
+                cursor='pointer'
+                textAlign='center'
+                onClick={() => navigate(SALES_REQUEST_FORM_ROUTE)}
+            >
                 <Icon as={MySvgIcon} boxSize={8} color='red.500' />
                 <Text fontWeight='bold'>Заказ</Text>
             </Box>
-            <Box textAlign='center' p={5} onClick={() => navigate(SALES_HISTORY_ROUTE)}>
+            <Box cursor='pointer' textAlign='center' onClick={() => navigate(SALES_HISTORY_ROUTE)}>
                 <Icon as={historySvg} boxSize={8} color='red.500' />
                 <Text fontWeight='bold'>История</Text>
             </Box>
-            <Box textAlign='center' p={5} onClick={handleLogOut}>
+            <Box cursor='pointer' textAlign='center' onClick={handleLogOut}>
                 <Icon as={exitSvg} boxSize={8} color='red.500' />
                 <Text fontWeight='bold'>Выход</Text>
             </Box>

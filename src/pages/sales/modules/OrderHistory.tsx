@@ -57,6 +57,12 @@ const OrderHistory = () => {
         }
     }, [orderId])
 
+    const reset = () => {
+        setOrderData(null)
+        setIsSuccess(false)
+        setIsError(false)
+    }
+
     const handleRemoveProduct = (productId: number): void => {
         if (orderData) {
             const removedOrderDetails = orderData.orderDetails.filter(
@@ -118,7 +124,7 @@ const OrderHistory = () => {
     return (
         <div style={{ overflowY: 'auto', height: '100dvh' }}>
             {isSuccess ? (
-                <SuccessPage />
+                <SuccessPage reset={reset} />
             ) : isError ? (
                 <ErrorPage />
             ) : (

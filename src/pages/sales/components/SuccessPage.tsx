@@ -1,13 +1,10 @@
-import { Box, Heading, Text, Input, Image } from '@chakra-ui/react'
-import { SALES_HISTORY_ROUTE, SALES_REQUEST_FORM_ROUTE } from '@/utils/constants/routes.consts'
+import { Box, Heading, Text, Image, Button } from '@chakra-ui/react'
+import { SALES_HISTORY_ROUTE } from '@/utils/constants/routes.consts'
 import { useNavigate } from 'react-router-dom'
+import SuccessImg from '../../../assets/success.png'
 
-const SuccessPage = () => {
+const SuccessPage = ({ reset }: { reset: () => void }) => {
     const navigator = useNavigate()
-
-    const redirectToSalesForm = () => {
-        navigator(SALES_REQUEST_FORM_ROUTE)
-    }
 
     const redirectToHistory = () => {
         navigator(SALES_HISTORY_ROUTE)
@@ -24,12 +21,7 @@ const SuccessPage = () => {
             justifyContent='center'
             alignItems='center'
         >
-            <Image
-                src='/src/assets/Success.png'
-                alt='SuccessImg'
-                mb={5}
-                style={{ marginTop: '-20px', marginBottom: '25px' }}
-            />
+            <Image pr={7} src={SuccessImg} alt='SuccessImg' />
 
             <Heading as='h2' size='lg' mb={50}>
                 Заказ успешно создан
@@ -38,31 +30,30 @@ const SuccessPage = () => {
             <Text mb={3}>Ваши товары скоро будут ждать вас</Text>
 
             <Box position='absolute' bottom={0} left={0} right={0} p={5}>
-                <Input
-                    variant='filled'
+                <Button
                     size='lg'
                     color='white'
                     backgroundColor='#F7B23B'
-                    placeholder='Filled'
                     width='100%'
                     borderRadius={15}
                     textAlign='center'
-                    defaultValue='Еще заказ'
                     mb={2}
-                    onClick={redirectToSalesForm}
-                />
-                <Input
+                    onClick={reset}
+                >
+                    Еще заказ
+                </Button>
+                <Button
                     variant='filled'
                     size='lg'
                     color='black'
                     backgroundColor='white'
-                    placeholder='Filled'
                     width='100%'
                     borderRadius={15}
                     textAlign='center'
-                    defaultValue='История заказов'
                     onClick={redirectToHistory}
-                />
+                >
+                    История заказов
+                </Button>
             </Box>
         </Box>
     )

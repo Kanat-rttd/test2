@@ -1,4 +1,4 @@
-import { Box, Heading, Text, IconButton } from '@chakra-ui/react'
+import { Box, Heading, Text, IconButton, Container } from '@chakra-ui/react'
 import MobileNavbar from '@/components/MobileNavbar'
 import { getAllSales } from '@/utils/services/sales.service'
 import { useState, useEffect } from 'react'
@@ -46,41 +46,45 @@ const History = () => {
     }, [])
 
     return (
-        <div style={{ overflowY: 'scroll', height: '100dvh' }}>
-            <MobileNavbar></MobileNavbar>
-            <Box display='flex' flexDirection='column' height='100vh' textAlign='center'>
-                <Box borderBottom='1px solid black' p={5}>
-                    <Heading size='md'>История</Heading>
-                </Box>
-                <Box>
-                    {getSalesData.map((order, index) => (
-                        <Box
-                            key={index}
-                            p={5}
-                            display='flex'
-                            flexDirection='row'
-                            justifyContent='space-between'
-                            alignItems='center'
-                            borderBottom='1px solid black'
-                        >
-                            <Box display='flex' flexDirection='row' gap={10}>
-                                <Text>{dayjs(order.createdAt).locale(ru).format('DD MMM')}</Text>
-                                <Text fontWeight='bold'>#{order.id}</Text>
+        <>
+            <MobileNavbar />
+            <Container overflowY='scroll' maxWidth='4xl'>
+                <Box display='flex' flexDirection='column' height='100vh' textAlign='center'>
+                    <Box borderBottom='1px solid black' p={5}>
+                        <Heading size='md'>История</Heading>
+                    </Box>
+                    <Box>
+                        {getSalesData.map((order, index) => (
+                            <Box
+                                key={index}
+                                p={5}
+                                display='flex'
+                                flexDirection='row'
+                                justifyContent='space-between'
+                                alignItems='center'
+                                borderBottom='1px solid black'
+                            >
+                                <Box display='flex' flexDirection='row' gap={10}>
+                                    <Text>
+                                        {dayjs(order.createdAt).locale(ru).format('DD MMM')}
+                                    </Text>
+                                    <Text fontWeight='bold'>#{order.id}</Text>
+                                </Box>
+                                <IconButton
+                                    variant='filled'
+                                    w={8}
+                                    h={8}
+                                    colorScheme='black'
+                                    aria-label='Edit product'
+                                    icon={<ChevronRightIcon />}
+                                    onClick={() => navigator(`${SALES_HISTORY_ROUTE}/${order.id}`)}
+                                />
                             </Box>
-                            <IconButton
-                                variant='filled'
-                                w={8}
-                                h={8}
-                                colorScheme='black'
-                                aria-label='Edit product'
-                                icon={<ChevronRightIcon />}
-                                onClick={() => navigator(`${SALES_HISTORY_ROUTE}/${order.id}`)}
-                            />
-                        </Box>
-                    ))}
+                        ))}
+                    </Box>
                 </Box>
-            </Box>
-        </div>
+            </Container>
+        </>
     )
 }
 

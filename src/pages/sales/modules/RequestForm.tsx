@@ -8,6 +8,7 @@ import {
     useToast,
     FormControl,
     FormLabel,
+    Container,
 } from '@chakra-ui/react'
 import { AddIcon, CloseIcon } from '@chakra-ui/icons'
 import { useDisclosure } from '@chakra-ui/react'
@@ -40,6 +41,12 @@ const RequestForm = () => {
     const userInfo = getUserInfo()
 
     console.log(userInfo)
+
+    const reset = () => {
+        setSelectedProducts([])
+        setIsSuccess(false)
+        setIsError(false)
+    }
 
     const handleAddProduct = (product: Product): void => {
         setSelectedProducts([...selectedProducts, { ...product, quantity: null }])
@@ -106,13 +113,14 @@ const RequestForm = () => {
     return (
         <div style={{ overflowY: 'auto', height: '100dvh' }}>
             {isSuccess ? (
-                <SuccessPage />
+                <SuccessPage reset={reset} />
             ) : isError ? (
                 <ErrorPage />
             ) : (
                 <>
                     <MobileNavbar />
-                    <Box
+                    <Container
+                        maxWidth='4xl'
                         display='flex'
                         flexDirection='column'
                         height='100vh'
@@ -231,7 +239,7 @@ const RequestForm = () => {
                                 type='submit'
                             />
                         </Box>
-                    </Box>
+                    </Container>
                 </>
             )}
             <BottomModal
