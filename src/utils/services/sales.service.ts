@@ -10,8 +10,7 @@ export const createSale = async (data: {
     date: Date
     clientId: number
 }) => {
-    const response = await $host.post('sales', data)
-    return response
+    return await $host.post('sales', data)
 }
 
 export const updateSale = async (
@@ -22,8 +21,7 @@ export const updateSale = async (
         clientId: number
     },
 ) => {
-    const response = await $host.put(`sales/${id}`, data)
-    return response
+    return await $host.put(`sales/${id}`, data)
 }
 
 export const saveOrderChanges = async (
@@ -38,13 +36,11 @@ export const saveOrderChanges = async (
         }
     }[],
 ) => {
-    const response = await $host.put(`sales/order/${id}`, data)
-    return response
+    return await $host.put(`sales/order/${id}`, data)
 }
 
 export const deleteSale = async (id: number) => {
-    const response = await $host.delete(`sales/${id}`)
-    return response
+    return await $host.delete(`sales/${id}`)
 }
 
 export const getSaleById = async (id: number) => {
@@ -53,11 +49,15 @@ export const getSaleById = async (id: number) => {
 }
 
 export const setDoneStatus = async (id: number) => {
-    const response = await $host.put(`sales/status/${id}`)
-    return response
+    return await $host.put(`sales/status/${id}`)
 }
 
 export const getByFacilityUnit = async (data: { facilityUnitId: string }) => {
-    const response = await $host.post('sales/status/test', data)
-    return response
+    return await $host.post('sales/status/test', data)
+}
+
+export const getByClient = async () => {
+    const res = await $host.get(`sales/client`)
+    console.log(res)
+    return res.data
 }

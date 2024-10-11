@@ -1,6 +1,6 @@
 import { Box, Heading, Text, IconButton, Container } from '@chakra-ui/react'
 import MobileNavbar from '@/components/MobileNavbar'
-import { getAllSales } from '@/utils/services/sales.service'
+import { getByClient } from '@/utils/services/sales.service'
 import { useState, useEffect } from 'react'
 import { ChevronRightIcon } from '@chakra-ui/icons'
 import dayjs from 'dayjs'
@@ -36,10 +36,8 @@ const History = () => {
     const navigator = useNavigate()
     const [getSalesData, setSalesData] = useState<SalesOrder[]>([])
 
-    console.log(getSalesData)
-
     useEffect(() => {
-        getAllSales().then((res) => {
+        getByClient().then((res) => {
             setSalesData(res)
             console.log(res)
         })
