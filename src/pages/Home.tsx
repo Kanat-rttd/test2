@@ -1,22 +1,16 @@
 import TopNavBar from '../components/NavBar'
-import { Box, Image } from '@chakra-ui/react'
 import MobileNavbar from '@/components/MobileNavbar'
 import IsMobile from '@/utils/helpers/isMobile'
-import MainBg from '../assets/main-bg.png'
+import mainBg from '@/assets/main-bg.png'
+import { AspectRatio, Image } from '@chakra-ui/react'
 
 const Home = () => {
     return (
         <>
             {IsMobile() ? <MobileNavbar /> : <TopNavBar />}
-            <Box
-                display='flex'
-                flexDirection='column'
-                alignItems='center'
-                justifyContent='center'
-                height='100vh'
-            >
-                <Image width='90%' src={MainBg} alt='main-bg' />
-            </Box>
+            <AspectRatio height='90dvh' ratio={1920 / 1080}>
+                <Image src={mainBg} alt='bg' objectFit='cover' />
+            </AspectRatio>
         </>
     )
 }

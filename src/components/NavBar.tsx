@@ -1,5 +1,4 @@
-import { Text, Flex, Image } from '@chakra-ui/react'
-// import Drawler from './Menu'
+import { Flex, Image, Text } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { MAIN_ROUTE } from '@/utils/constants/routes.consts'
 import MenuAccordion from './MenuAccordion'
