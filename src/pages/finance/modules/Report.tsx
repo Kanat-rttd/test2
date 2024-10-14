@@ -7,8 +7,32 @@ import IsMobile from '@/utils/helpers/isMobile.ts'
 
 interface Report {
     initial: number
-    operational: number
-    financial: number
+    operational: {
+        total: number
+        items: {
+            amount: number
+            comment: ''
+            date: Date
+            financeCategory: {
+                id: number
+                name: string
+                type: string
+            }
+        }[]
+    }
+    financial: {
+        total: number
+        items: {
+            amount: number
+            comment: ''
+            date: Date
+            financeCategory: {
+                id: number
+                name: string
+                type: string
+            }
+        }[]
+    }
     balance: number
     final: number
     total: number
@@ -50,13 +74,13 @@ const Report = () => {
                     <Row
                         label='Движение средств от операционной деятельности'
                         description='Поступления или оттоки денежных средств, связанные с основной деятельностью компании, такой как продажа продуктов, выплаты заработной платы и т.д.'
-                        value={operational ?? 0}
+                        value={operational?.total ?? 0}
                         isTotal
                     />
                     <Row
                         label='Движение средств от финансовой деятельности'
                         description='Денежные потоки, связанные с привлечением или возвратом финансовых средств, например, кредиты, выплаты процентов по займам или инвестирования.'
-                        value={financial ?? 0}
+                        value={financial?.total ?? 0}
                         isTotal
                     />
                     {/*<Row label='Баланс переводов' value={balance ?? 0} />*/}
