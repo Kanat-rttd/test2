@@ -48,14 +48,12 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
     }, [selectedData, isOpen, reset])
 
     const sendData = (formData: ProviderForm) => {
-        const responsePromise: Promise<any> = selectedData
+        const responsePromise: Promise<{ data: { message: string } }> = selectedData
             ? updateProvider(selectedData.id, {
                   ...formData,
-                  status: Number(formData.status) ? true : false,
+                  status: !!Number(formData.status),
               })
-            : createProvider({ ...formData, status: Number(formData.status) ? true : false })
-
-        console.log('123')
+            : createProvider({ ...formData, status: !!Number(formData.status) })
 
         responsePromise
             .then((res) => {
@@ -95,7 +93,7 @@ const ProviderAddModal = ({ isOpen, onClose, selectedData, onSuccess }: ModalPro
                             >
                                 <FormControl isInvalid={!!errors.providerName}>
                                     <Input
-                                        maxLength={20}
+                                        maxLength={50}
                                         {...register('providerName', {
                                             required: 'Поле является обязательным',
                                         })}
