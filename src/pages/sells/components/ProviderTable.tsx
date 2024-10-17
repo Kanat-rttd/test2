@@ -1,4 +1,4 @@
-import { Box, Select, Table, Tr, Td, Tbody, Th, Button } from '@chakra-ui/react'
+import { Box, Button, Select, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import { useEffect, useState } from 'react'
@@ -7,14 +7,8 @@ import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
 
 interface CalculationsData {
     Data: {
-        ClientName: string
-        Sales: number
-        Returns: number
-        Overhead: number
-        Expenses: number
-        Payments: number
-        Credit: number
-        Debt: number
+        contragentName: string
+        debt: number
     }[]
     Total: number
 }
@@ -22,18 +16,7 @@ interface CalculationsData {
 const ProviderTable = () => {
     const { error } = useNotify()
     const { data: calculationsData } = useApi<CalculationsData>('debtTransfer/calculations')
-    const [filteredData, setFilteredData] = useState<
-        {
-            ClientName: string
-            Sales: number
-            Returns: number
-            Overhead: number
-            Expenses: number
-            Payments: number
-            Credit: number
-            Debt: number
-        }[]
-    >([])
+    const [filteredData, setFilteredData] = useState<CalculationsData['Data']>([])
 
     const exportExcel = async () => {
         if (!filteredData || filteredData.length === 0) {
@@ -44,7 +27,7 @@ const ProviderTable = () => {
         const data = [headers]
 
         filteredData.forEach((item, idx) => {
-            data.push([(idx + 1).toString(), item.ClientName, item.Debt.toString()])
+            data.push([(idx + 1).toString(), item.contragentName, item.debt.toString()])
         })
 
         data.push(['ИТОГО', '', calculationsData!.Total.toString()])
@@ -54,7 +37,7 @@ const ProviderTable = () => {
 
     useEffect(() => {
         if (calculationsData) {
-            const _filteredData = calculationsData.Data.filter((item) => item.Debt != 0)
+            const _filteredData = calculationsData.Data.filter((item) => item.debt != 0)
             setFilteredData(_filteredData)
         }
     }, [calculationsData])
@@ -90,8 +73,8 @@ const ProviderTable = () => {
                                     return (
                                         <Tr key={index}>
                                             <Td>{index + 1}</Td>
-                                            <Td>{item.ClientName}</Td>
-                                            <Td>{item.Debt.formatted()}</Td>
+                                            <Td>{item.contragentName}</Td>
+                                            <Td>{item.debt.formatted()}</Td>
                                         </Tr>
                                     )
                                 })
