@@ -1,5 +1,5 @@
 import { Box, Button, Select, Text, useDisclosure } from '@chakra-ui/react'
-import { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
 import { useApi } from '@/utils/services/axios'
 import InvoiceModal from '../components/InvoiceModal'
 import dayjs from 'dayjs'
@@ -71,8 +71,6 @@ const InvoicePage = () => {
         `release/invoice?${getURLs().toString()}`,
     )
 
-    console.log(dispatchesData)
-
     const currentMonth = dayjs().month() + 1
     const currentYear = dayjs().year()
 
@@ -81,11 +79,6 @@ const InvoicePage = () => {
     )
 
     const [selectedRow, setSelectedRow] = useState<InvoiceData | null>(null)
-
-    const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        const { name, value } = event.target
-        setParam(name, value)
-    }
 
     return (
         <>
@@ -100,7 +93,7 @@ const InvoicePage = () => {
                                 size='sm'
                                 borderRadius={5}
                                 name='clientId'
-                                onChange={handleSelectChange}
+                                onChange={(event) => setParam('contragentId', event.target.value)}
                             >
                                 {clientsData?.map((client, index) => (
                                     <option key={index} value={client.id}>
