@@ -51,7 +51,7 @@ const Row = ({ label, description, value, items }: RowProps) => {
                     <List width='100%'>
                         {items.map((item, index) => (
                             <ListItem key={index} display='flex' justifyContent='space-between'>
-                                <Text>{item.financeCategory.name}</Text>
+                                <Text>{item.financeCategory?.name}</Text>
                                 <Text
                                     color={
                                         item.amount < 0
