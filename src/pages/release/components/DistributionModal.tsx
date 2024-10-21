@@ -105,9 +105,9 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
             products: formData.products.map((product) => ({
                 productId: product.productId,
                 quantity: Number(product.quantity),
-                price: data?.goodsDispatchDetails?.find(
-                    (item) => item.productId == product?.productId,
-                )?.price,
+                price:
+                    data?.goodsDispatchDetails.find((item) => item.id == product.productId)
+                        ?.price ?? products?.find((item) => item.id == product.productId)?.price,
             })),
             dispatch: status,
         }

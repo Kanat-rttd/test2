@@ -1,5 +1,5 @@
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
-import { Box, Select, Table, Tr, Td, Tbody, Th, Button } from '@chakra-ui/react'
+import { Box, Button, Select, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import { useState } from 'react'
 import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
