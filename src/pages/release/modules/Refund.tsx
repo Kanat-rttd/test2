@@ -16,6 +16,7 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useApi } from '@/utils/services/axios'
 import ListTable from '../components/ListTable'
 import { useEffect, useRef } from 'react'
+import { useURLParameters } from '@/utils/hooks/useURLParameters.tsx'
 
 export interface FacilityUnit {
     id: number
@@ -24,9 +25,7 @@ export interface FacilityUnit {
 
 const Refund = () => {
     const { data: facilityUnitsData } = useApi<FacilityUnit[]>('mixers')
-    const handleSuccess = () => {
-        console.log('1')
-    }
+    const { setParam } = useURLParameters()
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     const listRef = useRef()
@@ -55,6 +54,7 @@ const Refund = () => {
                                 width='fit-content'
                                 size='sm'
                                 borderRadius={5}
+                                onChange={(event) => setParam('facilityUnit', event.target.value)}
                             >
                                 {facilityUnitsData?.map((unit, index) => (
                                     <option key={index} value={unit.id}>
@@ -111,7 +111,7 @@ const Refund = () => {
             <DistributionModal
                 isOpen={isOpen}
                 onClose={onClose}
-                onSuccess={handleSuccess}
+                onSuccess={() => console.log('1')}
                 data={undefined}
                 status='1'
             />
