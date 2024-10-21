@@ -4,6 +4,8 @@ import { TableContainer, Tfoot, Thead } from '@/components/ui'
 import { useEffect, useState } from 'react'
 import { useNotify } from '@/utils/hooks/useNotify.ts'
 import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
+import { ContragentCategoryType, ContragentType } from '@/utils/types/contragent.types.ts'
+import { useURLParameters } from '@/utils/hooks/useURLParameters.tsx'
 
 interface CalculationsData {
     Data: {
@@ -15,8 +17,17 @@ interface CalculationsData {
 
 const ProviderTable = () => {
     const { error } = useNotify()
-    const { data: calculationsData } = useApi<CalculationsData>('debtTransfer/calculations')
+    const { setParam, getURLs } = useURLParameters()
+    const { data: calculationsData } = useApi<CalculationsData>(
+        `debtTransfer/calculations?${getURLs().toString()}`,
+    )
     const [filteredData, setFilteredData] = useState<CalculationsData['Data']>([])
+    const { data: contragentsTypesData } = useApi<ContragentCategoryType[]>('contragentType')
+    const { data: clientsData } = useApi<ContragentType[]>(
+        `contragent?status=1&type=${
+            contragentsTypesData?.find((item) => item.type === 'реализатор')?.id
+        }`,
+    )
 
     const exportExcel = async () => {
         if (!filteredData || filteredData.length === 0) {
@@ -45,8 +56,18 @@ const ProviderTable = () => {
     return (
         <>
             <Box className='print-hidden' display='flex' marginBottom={4} gap='15px'>
-                <Select placeholder='Реализатор' size='sm' borderRadius={5} width='20%'>
-                    <option>Реализатор</option>
+                <Select
+                    onChange={(event) => setParam('contragentName', event.target.value)}
+                    placeholder='Реализатор'
+                    size='sm'
+                    borderRadius={5}
+                    width='20%'
+                >
+                    {clientsData?.map((client) => (
+                        <option key={client.id} value={client.contragentName}>
+                            {client.contragentName}
+                        </option>
+                    ))}
                 </Select>
 
                 <Button type='button' onClick={exportExcel}>
