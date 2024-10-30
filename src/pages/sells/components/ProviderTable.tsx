@@ -9,7 +9,7 @@ import { useURLParameters } from '@/utils/hooks/useURLParameters.tsx'
 
 interface CalculationsData {
     Data: {
-        contragentName: string
+        client: string
         debt: number
     }[]
     Total: number
@@ -38,7 +38,7 @@ const ProviderTable = () => {
         const data = [headers]
 
         filteredData.forEach((item, idx) => {
-            data.push([(idx + 1).toString(), item.contragentName, item.debt.toString()])
+            data.push([(idx + 1).toString(), item.client, item.debt.toString()])
         })
 
         data.push(['ИТОГО', '', calculationsData!.Total.toString()])
@@ -94,7 +94,7 @@ const ProviderTable = () => {
                                     return (
                                         <Tr key={index}>
                                             <Td>{index + 1}</Td>
-                                            <Td>{item.contragentName}</Td>
+                                            <Td>{item.client}</Td>
                                             <Td>{item.debt.formatted()}</Td>
                                         </Tr>
                                     )
