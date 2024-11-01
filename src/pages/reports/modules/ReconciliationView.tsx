@@ -1,4 +1,4 @@
-import { Box, Select, Th, Tr, Tbody, Table, Td, Button } from '@chakra-ui/react'
+import { Box, Button, Select, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '../../../components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
@@ -123,6 +123,7 @@ const ReconciliationView = () => {
             '№',
             'Дата',
             'Продажи',
+            'Возврат',
             'Оплата за услуги',
             'Перевод долга',
             'Выплата',
@@ -134,6 +135,7 @@ const ReconciliationView = () => {
             index + 1,
             new Date(item.date).toLocaleDateString(),
             item.reportData?.Sales || 0,
+            item.reportData?.Returns || 0,
             item.reportData?.Expenses || 0,
             item.reportData?.Credit || 0,
             item.reportData?.Payments || 0,
@@ -153,6 +155,7 @@ const ReconciliationView = () => {
                 '',
                 'ИТОГО',
                 reconciliationViewData?.totalSales,
+                reconciliationViewData?.totalReturns,
                 reconciliationViewData?.totalExpenses,
                 reconciliationViewData?.totalCredit,
                 reconciliationViewData?.totalPayments,
@@ -206,6 +209,7 @@ const ReconciliationView = () => {
                                     <Th>№</Th>
                                     <Th>Дата</Th>
                                     <Th>Продажи</Th>
+                                    <Th>Возврат</Th>
                                     <Th>Оплата за услуги</Th>
                                     <Th>Перевод долга</Th>
                                     <Th>Выплата</Th>
@@ -220,6 +224,7 @@ const ReconciliationView = () => {
                                             <Td>{index + 1}</Td>
                                             <Td>{dayjs(item.date).format('DD.MM.YYYY')}</Td>
                                             <Td>{(item.reportData?.Sales || 0).formatted()}</Td>
+                                            <Td>{(item.reportData?.Returns || 0).formatted()}</Td>
                                             <Td>{(item.reportData?.Expenses || 0).formatted()}</Td>
                                             <Td>{(item.reportData?.Credit || 0).formatted()}</Td>
                                             <Td>{(item.reportData?.Payments || 0).formatted()}</Td>
@@ -241,6 +246,9 @@ const ReconciliationView = () => {
                                     <Th></Th>
                                     <Th fontSize={15} color='#000'>
                                         {reconciliationViewData?.totalSales.formatted()}
+                                    </Th>
+                                    <Th fontSize={15} color='#000'>
+                                        {reconciliationViewData?.totalReturns.formatted()}
                                     </Th>
                                     <Th fontSize={15} color='#000'>
                                         {reconciliationViewData?.totalExpenses.formatted()}
