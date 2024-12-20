@@ -65,8 +65,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow, onS
     const { loading } = useNotify()
     // const { data: clients } = useApi<ClientType[]>('client')
 
-    const { data: contragents } = useApi<ContragentType[]>('contragent')
-    console.log(contragents)
+    const { data: contragents } = useApi<ContragentType[]>('contragent?type=1')
 
     const { data: products } = useApi<Product[]>('product')
 
