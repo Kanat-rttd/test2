@@ -3,6 +3,9 @@ import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
 import {
     Box,
     Button,
+    Input,
+    InputGroup,
+    InputLeftElement,
     Select,
     Table,
     Tbody,
@@ -23,6 +26,7 @@ import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useNotify } from '@/utils/hooks/useNotify.ts'
 import { deleteFinance } from '@/utils/services/finance.service.ts'
 import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
+import { Search2Icon } from '@chakra-ui/icons'
 
 export type History = {
     id: number
@@ -82,6 +86,15 @@ const History = () => {
     const [selectedData, setSelectedData] = useState<History | null>(null)
     const [data, setData] = useState<Finance[] | undefined>(undefined)
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [searchValue, setSearchValue] = useState<string>('')
+
+    useEffect(() => {
+        if (data && searchValue) {
+            setData(data.filter((transaction) => transaction.comment.includes(searchValue)))
+        } else if (financeData) {
+            setData(financeData)
+        }
+    }, [searchValue])
 
     useEffect(() => {
         if (financeData) {
@@ -179,6 +192,17 @@ const History = () => {
                         </Select>
                     </Box>
                     <Box className='print-hidden' display='flex' gap='15px'>
+                        <InputGroup w='300px'>
+                            <InputLeftElement pointerEvents='none' children={<Search2Icon />} />
+                            <Input
+                                value={searchValue}
+                                onChange={(e) => setSearchValue(e.target.value)}
+                                placeholder='Поиск по комментариям'
+                                _placeholder={{
+                                    fontSize: '15px',
+                                }}
+                            />
+                        </InputGroup>
                         <Button type='button' onClick={exportExcel}>
                             Экспорт в Excel
                         </Button>
