@@ -146,7 +146,7 @@ const RemainProducts = () => {
                                             <Td>{product.distributionPeriod}</Td>
                                             <Td>{product.defect}</Td>
                                             <Td>{product.returnsPeriod}</Td>
-                                            <Td>{product.closingStock}</Td>
+                                            <Td>{product.closingStock - product.defect}</Td>
                                         </Tr>
                                     )
                                 })
