@@ -93,7 +93,10 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
         html2canvas(contentRef, { scale: window.devicePixelRatio * 2 }).then((canvas) => {
             const imgData = canvas.toDataURL('image/png')
             pdf.addImage(imgData, 'PNG', x, y, contentWidth, contentHeight)
-            pdf.save('invoice.pdf')
+
+            pdf.save(
+                `${selectedRow?.contragentName}_${dayjs(selectedRow?.createdAt).format('DD.MM.YYYY')}.pdf`,
+            )
         })
     }
 
@@ -119,13 +122,13 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                             onClick={generatePDF}
                             icon={<DownloadIcon />}
                         />
-                        <Box ref={modalContentRef} p={5}>
+                        <Box fontSize={12} ref={modalContentRef} py={3} px={8}>
                             <Box display='flex' justifyContent='space-between'>
                                 <Text>#{selectedRow?.invoiceNumber}</Text>
                             </Box>
                             <Box display='flex' justifyContent='space-between' p={2} pb={2}>
                                 <Text>Расходная накладная от</Text>
-                                <Text>{dayjs(selectedRow?.createdAt).format('DD-MM-YYYY')}</Text>
+                                <Text>{dayjs(selectedRow?.createdAt).format('DD.MM.YYYY')}</Text>
                             </Box>
                             <Divider
                                 size='lg'
@@ -158,7 +161,7 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                 orientation='horizontal'
                                 marginBottom={3}
                             />
-                            <Table size='xs' variant='unstyled' fontSize='12px'>
+                            <Table size='xs' variant='unstyled' fontSize='10px'>
                                 <Thead>
                                     <Tr>
                                         <Th border='none' color='RGB(108, 112, 219)'>
@@ -195,11 +198,11 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                     ))}
                                 </Tbody>
                             </Table>
-                            <Box display='flex' marginBottom={3} mt={3}>
+                            <Box fontSize={12} display='flex' marginBottom={3} mt={3}>
                                 <Text marginLeft='auto'>Получено</Text>
                                 <Text>________</Text>
                             </Box>
-                            <Box display='flex' flexDirection='column'>
+                            <Box fontSize={12} display='flex' flexDirection='column'>
                                 <Text marginLeft='auto' fontWeight='bold'>
                                     Сверху: {overPrice} тг
                                 </Text>
@@ -209,28 +212,6 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                             </Box>
                         </Box>
                     </Box>
-                    {/* <Box w={'1px'} bgColor={'black'} height={'95%'} alignSelf={'center'}></Box> */}
-
-                    {/* <Box width={'50%'} p={7}>
-                        <Box>
-                            <Heading size={'md'} textAlign={'center'}>
-                                Оплата
-                            </Heading>
-                            <Divider
-                                size={'lg'}
-                                borderColor={'black'}
-                                borderWidth={'2px'}
-                                orientation="horizontal"
-                            />
-                        </Box>
-
-                        <Box height={'100%'}>
-                            <Arrival
-                                invoiceNumber={selectedRow?.invoiceNumber}
-                                totalSumm={selectedRow?.totalSum}
-                            />
-                        </Box>
-                    </Box> */}
                 </ModalBody>
             </ModalContent>
         </Modal>
