@@ -8,7 +8,7 @@ import getUserInfo from '@/utils/helpers/getUserInfo'
 const Home = () => {
     const user = getUserInfo()
     const classes = JSON.parse(user?.class || '[]') as { label: string }[]
-    const isClient = classes.map(({ label }) => label === 'Реализатор')
+    const isClient = classes.some(({ label }) => label === 'Реализатор')
 
     return (
         <>
