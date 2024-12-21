@@ -14,6 +14,12 @@ import {
     Select,
 } from '@chakra-ui/react'
 import { useEffect } from 'react'
+import {
+    AutoComplete,
+    AutoCompleteInput,
+    AutoCompleteItem,
+    AutoCompleteList,
+} from '@choc-ui/chakra-autocomplete'
 
 import { createDispatch, updateDispatchQuantity } from '@/utils/services/dispatch.service'
 import { useNotify } from '@/utils/hooks/useNotify'
@@ -90,29 +96,30 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     }, [data])
 
     const handleConfirm: SubmitHandler<FormType> = (formData) => {
-        const createData = {
-            contragentId: formData.contragentId,
-            products: formData.products.map((product) => ({
-                productId: product.productId !== undefined ? product.productId : null,
-                quantity: Number(product.quantity),
-                productPrice: products?.find((item) => item.id == product.productId)?.price,
-            })),
-
-            dispatch: status,
-        }
-        const updateData = {
-            contragentId: formData.contragentId,
-            products: formData.products.map((product) => ({
-                productId: product.productId,
-                quantity: Number(product.quantity),
-                price:
-                    data?.goodsDispatchDetails.find((item) => item.id == product.productId)
-                        ?.price ?? products?.find((item) => item.id == product.productId)?.price,
-            })),
-            dispatch: status,
-        }
-
         try {
+            const createData = {
+                contragentId: formData.contragentId,
+                products: formData.products.map((product) => ({
+                    productId: product.productId !== undefined ? product.productId : null,
+                    quantity: Number(product.quantity),
+                    productPrice: products?.find((item) => item.id == product.productId)?.price,
+                })),
+
+                dispatch: status,
+            }
+            const updateData = {
+                contragentId: formData.contragentId,
+                products: formData.products.map((product) => ({
+                    productId: product.productId,
+                    quantity: Number(product.quantity),
+                    price:
+                        data?.goodsDispatchDetails.find((item) => item.id == product.productId)
+                            ?.price ??
+                        products?.find((item) => item.id == product.productId)?.price,
+                })),
+                dispatch: status,
+            }
+
             const responsePromise: Promise<any> = data
                 ? updateDispatchQuantity(data.id, updateData)
                 : createDispatch(createData)
@@ -147,29 +154,42 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
                                 render={({ field }) => {
-                                    const { onChange, value } = field
-                                    const selectedContragentId = value !== null ? String(value) : ''
                                     return (
-                                        <Select
-                                            required
-                                            placeholder='Выберите получателя'
-                                            width='100%'
-                                            value={selectedContragentId}
-                                            onChange={(selectedOption) => {
-                                                onChange(selectedOption)
-                                            }}
+                                        <AutoComplete
+                                            rollNavigation
+                                            freeSolo
+                                            value={field.value}
+                                            onChange={field.onChange}
                                         >
-                                            {clientsData?.map((client, index) => {
-                                                return (
-                                                    <option key={index} value={Number(client.id)}>
-                                                        {client.contragentName}
-                                                    </option>
-                                                )
-                                            })}
-                                        </Select>
+                                            {({ isOpen, onClose, onOpen }) => (
+                                                <>
+                                                    <AutoCompleteInput
+                                                        autoComplete='off'
+                                                        name={field.name}
+                                                        placeholder='Выберите получателя'
+                                                        onClick={onOpen}
+                                                    />
+                                                    <AutoCompleteList
+                                                        visibility={isOpen ? 'visible' : 'hidden'}
+                                                    >
+                                                        {clientsData?.map((client) => (
+                                                            <AutoCompleteItem
+                                                                key={client.id}
+                                                                value={Number(client.id)}
+                                                                label={client.contragentName}
+                                                                onSelect={() => onClose()}
+                                                            >
+                                                                {client.contragentName}
+                                                            </AutoCompleteItem>
+                                                        ))}
+                                                    </AutoCompleteList>
+                                                </>
+                                            )}
+                                        </AutoComplete>
                                     )
                                 }}
                             />
+
                             <FormErrorMessage>{errors.contragentId?.message}</FormErrorMessage>
                         </FormControl>
                         <FormControl isRequired gap='1rem' display='flex' flexDirection='column'>
@@ -239,6 +259,7 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                             >
                                 Добавить
                             </Button>
+                            <FormErrorMessage>{errors.products?.root?.message}</FormErrorMessage>
                         </FormControl>
 
                         <Box
