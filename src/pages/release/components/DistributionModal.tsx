@@ -81,19 +81,17 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
     })
 
     useEffect(() => {
-        if (data) {
-            const _data = data.goodsDispatchDetails.map((order) => {
-                return {
-                    productId: Number(order.productId),
-                    quantity: Number(order.quantity),
-                }
-            })
+        if (data?.goodsDispatchDetails) {
+            const _data = data.goodsDispatchDetails.map((order) => ({
+                productId: Number(order.productId),
+                quantity: Number(order.quantity),
+            }))
             setValue('contragentId', Number(data.contragentId))
             setValue('products', _data)
         } else {
             reset()
         }
-    }, [data])
+    }, [data, reset, setValue])
 
     const handleConfirm: SubmitHandler<FormType> = (formData) => {
         try {
@@ -153,35 +151,41 @@ const DistributionModal: React.FC<DistributionModalProps> = ({
                                 name='contragentId'
                                 control={control}
                                 rules={{ required: 'Поле является обязательным' }}
-                                render={({ field }) => {
+                                render={({ field: { value, onChange, name } }) => {
+                                    const inputValue = value
+                                        ? clientsData?.find((i) => i.id == value)?.contragentName
+                                        : ''
+
                                     return (
                                         <AutoComplete
                                             rollNavigation
                                             freeSolo
-                                            value={field.value}
-                                            onChange={field.onChange}
+                                            value={inputValue}
+                                            onChange={onChange}
                                         >
                                             {({ isOpen, onClose, onOpen }) => (
                                                 <>
                                                     <AutoCompleteInput
                                                         autoComplete='off'
-                                                        name={field.name}
+                                                        name={name}
                                                         placeholder='Выберите получателя'
                                                         onClick={onOpen}
                                                     />
                                                     <AutoCompleteList
                                                         visibility={isOpen ? 'visible' : 'hidden'}
                                                     >
-                                                        {clientsData?.map((client) => (
-                                                            <AutoCompleteItem
-                                                                key={client.id}
-                                                                value={Number(client.id)}
-                                                                label={client.contragentName}
-                                                                onSelect={() => onClose()}
-                                                            >
-                                                                {client.contragentName}
-                                                            </AutoCompleteItem>
-                                                        ))}
+                                                        {clientsData?.map((client) => {
+                                                            return (
+                                                                <AutoCompleteItem
+                                                                    key={client.id}
+                                                                    value={Number(client.id)}
+                                                                    label={client.contragentName}
+                                                                    onSelect={() => onClose()}
+                                                                >
+                                                                    {client.contragentName}
+                                                                </AutoCompleteItem>
+                                                            )
+                                                        })}
                                                     </AutoCompleteList>
                                                 </>
                                             )}
