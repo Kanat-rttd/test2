@@ -14,6 +14,7 @@ import MenuAccordion from '../MenuAccordion'
 import { useNavigate } from 'react-router-dom'
 import { LOGIN_ROUTE } from '@/utils/constants/routes.consts'
 import { buttonsData } from '@/utils/constants/headerButtons.consts'
+import cn from 'classnames'
 
 interface StyledContainerProps extends BoxProps {
     children?: React.ReactNode
@@ -28,7 +29,7 @@ const Header: React.FC<StyledContainerProps> = ({ buttons }) => {
         navigate(LOGIN_ROUTE, { replace: true })
     }
     return (
-        <Box as='header' className={classes.header}>
+        <Box as='header' className={cn(classes.header, 'print-hidden')}>
             <Box width='100%' display='flex'>
                 <MenuAccordion />
                 {buttons && (
@@ -40,7 +41,6 @@ const Header: React.FC<StyledContainerProps> = ({ buttons }) => {
                                     height='100%'
                                     p='0 25px'
                                     onClick={() => navigate(button.path)}
-                                    className={button.isCurrentPage ? '' : 'print-hidden'}
                                     style={
                                         button.isCurrentPage
                                             ? { backgroundColor: 'rgba(217, 217, 217, 1)' }

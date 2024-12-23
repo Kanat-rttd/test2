@@ -7,6 +7,7 @@ import DateRange from '@/components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { OverPriceType } from '@/utils/types/overPrice.types'
 import { ContragentCategoryType, ContragentType } from '@/utils/types/contragent.types'
+import { DownloadAll } from '../components/DownloadAll'
 
 interface InvoiceData {
     createdAt: Date
@@ -85,7 +86,7 @@ const InvoicePage = () => {
             <Box>
                 <Box width='100%' height='100%' p={5} mt={2}>
                     <Box marginBottom={5} display='flex' justifyContent='space-between'>
-                        <Box display='flex' gap='15px' width='fit-content'>
+                        <Box className='print-hidden' display='flex' gap='15px' width='fit-content'>
                             <DateRange />
                             <Select
                                 placeholder='Реализатор'
@@ -102,8 +103,10 @@ const InvoicePage = () => {
                                 ))}
                             </Select>
                         </Box>
+                        <DownloadAll invoices={dispatchesData} overPrices={overPriceData} />
                     </Box>
                     <Box
+                        className='print-hidden'
                         style={{
                             height: '100%',
                             width: '100%',

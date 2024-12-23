@@ -31,6 +31,15 @@ body {
         appearance: none !important;
     }
 
+    .print-visible {
+        padding-top: 10px;
+        display: block !important;
+    }
+
+    .avoid_break {
+        page-break-inside: avoid;
+    }
+
     .chakra-select__icon-wrapper {
         display: none !important;
     }
