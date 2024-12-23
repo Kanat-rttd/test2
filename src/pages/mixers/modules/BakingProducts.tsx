@@ -182,6 +182,7 @@ const BakingPage = () => {
                     <Table variant='simple'>
                         <Thead>
                             <Tr>
+                                <Th>#</Th>
                                 <Th>Вид хлеба</Th>
                                 <Th sx={styles}>Время и дата</Th>
                                 <Td sx={styles} textAlign='center'>
@@ -209,7 +210,8 @@ const BakingPage = () => {
                             {bakingsData?.bakingData.length ? (
                                 bakingsData?.bakingData.map((bakingRow, index) => {
                                     return (
-                                        <Tr key={index} textAlign='center'>
+                                        <Tr key={bakingRow.id} textAlign='center'>
+                                            <Td>{index}</Td>
                                             <Td>{bakingRow.product?.name}</Td>
                                             <Td textAlign='center'>
                                                 {dayjs(bakingRow.dateTime).format(
@@ -278,6 +280,7 @@ const BakingPage = () => {
                                 <Th fontSize={16} fontWeight='bold' color='#000'>
                                     Итого
                                 </Th>
+                                <Th sx={styles}></Th>
                                 <Th sx={styles}></Th>
                                 <Th sx={styles}>{bakingsData?.totals?.totalFlour || 0}</Th>
                                 <Th sx={styles}>{bakingsData?.totals?.totalSalt || 0}</Th>
