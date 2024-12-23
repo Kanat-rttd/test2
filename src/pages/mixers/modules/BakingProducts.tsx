@@ -200,7 +200,6 @@ const BakingPage = () => {
                                 <Td sx={styles} textAlign='center'>
                                     Масло
                                 </Td>
-                                <Th sx={styles}>t°</Th>
                                 <Th sx={styles}>Выход</Th>
                                 <Th sx={styles}>Брак</Th>
                                 <Th className='print-hidden'>Действия</Th>
@@ -234,7 +233,6 @@ const BakingPage = () => {
                                                 {bakingRow.butter.quantity || 0}
                                             </Td>
 
-                                            <Td textAlign='center'>{bakingRow.temperature || 0}</Td>
                                             <Td textAlign='center'>{bakingRow.output || 0}</Td>
                                             <Td textAlign='center'>{bakingRow.defective || 0}</Td>
                                             <Td className='print-hidden'>
@@ -287,7 +285,6 @@ const BakingPage = () => {
                                 <Th sx={styles}>{bakingsData?.totals?.totalYeast || 0}</Th>
                                 <Th sx={styles}>{bakingsData?.totals?.totalMalt || 0}</Th>
                                 <Th sx={styles}>{bakingsData?.totals?.totalButter || 0}</Th>
-                                <Th sx={styles}></Th>
                                 <Th sx={styles}>{bakingsData?.totals?.totalOutput || 0}</Th>
                                 <Th sx={styles}>{bakingsData?.totals?.totalDefective || 0}</Th>
                                 <Th sx={styles}></Th>
