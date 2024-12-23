@@ -84,7 +84,6 @@ const BakingPage = () => {
             'Дрожжи',
             'Солод',
             'Масло',
-            't°',
             'Выход',
             'Брак',
         ]
@@ -98,7 +97,6 @@ const BakingPage = () => {
             entry.yeast.quantity || 0,
             entry.malt.quantity || 0,
             entry.butter.quantity || 0,
-            entry.temperature || 0,
             entry.output || 0,
             entry.defective || 0,
         ])
@@ -118,7 +116,6 @@ const BakingPage = () => {
                 bakingsData.totals.totalYeast,
                 bakingsData.totals.totalMalt,
                 bakingsData.totals.totalButter,
-                '',
                 bakingsData.totals.totalOutput,
                 bakingsData.totals.totalDefective,
             ],
@@ -210,7 +207,7 @@ const BakingPage = () => {
                                 bakingsData?.bakingData.map((bakingRow, index) => {
                                     return (
                                         <Tr key={bakingRow.id} textAlign='center'>
-                                            <Td>{index}</Td>
+                                            <Td>{index + 1}</Td>
                                             <Td>{bakingRow.product?.name}</Td>
                                             <Td textAlign='center'>
                                                 {dayjs(bakingRow.dateTime).format(

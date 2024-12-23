@@ -80,6 +80,8 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
     }, [data, isOpen, reset])
 
     const sendData = (formData: BakingDataType) => {
+        console.log(formData)
+
         const responsePromise: Promise<any> = data
             ? updateBaking(data.id, { ...formData })
             : createBaking({ ...formData })
@@ -252,16 +254,6 @@ const BakingAddModal = ({ data, isOpen, onClose, onSuccess }: ClientAddModalProp
                             >
                                 <AddIcon />
                             </Button>
-                            <FormControl isInvalid={!!errors.temperature} isRequired>
-                                <FormLabel fontWeight='bold'>T</FormLabel>
-                                <InputNumber
-                                    {...register('temperature', {
-                                        required: 'Поле является обязательным',
-                                    })}
-                                    placeholder=''
-                                />
-                                <FormErrorMessage>{errors.temperature?.message}</FormErrorMessage>
-                            </FormControl>
                             <FormControl isInvalid={!!errors.dateTime} isRequired>
                                 <FormLabel fontWeight='bold'>Дата и время</FormLabel>
                                 <Input

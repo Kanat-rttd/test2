@@ -8,7 +8,6 @@ export const getAllBakings = async () => {
 
 export const createBaking = async (data: {
     breadType: string
-    temperature: string
     dateTime: string
     output: string
     defective: string
@@ -25,7 +24,6 @@ export const updateBaking = async (
     id: number,
     data: {
         breadType: PathString
-        temperature: string
         dateTime: string
         output: string
         defective: string

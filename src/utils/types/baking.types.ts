@@ -1,7 +1,6 @@
 export type BakingDataType = {
     id: number
     breadType: string
-    temperature: string
     output: string
     defective: string
     dateTime: string
