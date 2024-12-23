@@ -6,7 +6,6 @@ export type ArrivalInputs = {
     financeCategoryId: number | undefined
     contragentId: number | undefined
     comment: string
-    invoiceNumber: number
 }
 
 export type TransferInputs = {

@@ -27,7 +27,6 @@ export const createArrival = async (data: {
     contragentId: number | undefined
     comment: string
     date: Date
-    invoiceNumber: number | undefined
 }) => {
     const requestData = {
         data: data,

@@ -21,46 +21,6 @@ interface Account {
     name: string
 }
 
-interface InvoiceData {
-    createdAt: Date
-    contragentId: number
-    clientName: string
-    invoiceNumber: number
-    totalProducts: {
-        id: number
-        name: string
-        price: number
-        quantity: number
-        totalPrice: number
-    }[]
-    totalSum: number
-    dispatches: {
-        id: number
-        contragentId: number
-        createdAt: Date
-        dispatch: number
-        goodsDispatchDetails: {
-            id: number
-            productId: number
-            quantity: number
-            price: number | null
-            product: {
-                id: number
-                name: string
-                price: number
-                bakingFacilityUnit: {
-                    id: number
-                    facilityUnit: string
-                }
-            }
-        }[]
-        contragent: {
-            id: number
-            contragentName: string
-        }
-    }[]
-}
-
 const formatOptionLabel = (option: ContragentType) => (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span>{option.contragentName}</span>
@@ -76,11 +36,9 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
     const { loading } = useNotify()
 
     const { data: accounts } = useApi<Account[]>('/financeAccount')
-    const { data: dispatchesData } = useApi<InvoiceData[]>('release/invoice')
-    const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=1')
+    const { data: contragentsData } = useApi<ContragentType[]>('contragent?status=1')
     const [filteredFinanceCategories, setFilteredFinanceCategories] = useState<Category[]>([])
     const [filteredContragents, setFilteredContragents] = useState<ContragentType[]>([])
-    const [filteredDispatches, setFilteredDispatches] = useState<InvoiceData[] | undefined>([])
 
     const {
         register,
@@ -112,40 +70,34 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
     useEffect(() => {
         const values = getValues()
 
-        if (!contragetnsData || !categoriesData) return
+        if (!contragentsData || !categoriesData) return
 
         if (values.financeCategoryId !== null) {
             const contragentType = categoriesData.find(
                 (item) => item.id === Number(values.financeCategoryId),
             )?.contragentTypeId
-            const filteredContragents = contragetnsData.filter(
+            const filteredContragents = contragentsData.filter(
                 (item) => item.contragentTypeId === contragentType,
             )
             setFilteredContragents(filteredContragents)
         }
 
         if (values.contragentId !== null) {
-            const selectedContragent = contragetnsData.find(
+            const selectedContragent = contragentsData.find(
                 (item) => item.id === Number(values.contragentId),
             )
             const filteredFinanceCategories = categoriesData.filter(
                 (item) => item.contragentTypeId === selectedContragent?.contragentTypeId,
             )
             setFilteredFinanceCategories(filteredFinanceCategories)
-
-            if (selectedContragent?.contragentType.type === 'реализатор') {
-                setFilteredDispatches(
-                    dispatchesData?.filter((item) => item.contragentId === selectedContragent.id),
-                )
-            }
         }
     }, [watch('financeCategoryId'), watch('contragentId')])
 
     useEffect(() => {
-        if (contragetnsData) {
-            setFilteredContragents(contragetnsData)
+        if (contragentsData) {
+            setFilteredContragents(contragentsData)
         }
-    }, [contragetnsData])
+    }, [contragentsData])
 
     return (
         <>
@@ -242,13 +194,13 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                                 options={
                                     filteredContragents.length
                                         ? filteredContragents
-                                        : contragetnsData
+                                        : contragentsData
                                 }
                                 getOptionLabel={(option: ContragentType) =>
                                     `${option.contragentName} - ${option.contragentType.type}`
                                 }
                                 getOptionValue={(option: ContragentType) => `${option.id}`}
-                                value={contragetnsData?.filter((option) => option.id == value)}
+                                value={contragentsData?.filter((option) => option.id == value)}
                                 onChange={(selectedOption: ContragentType | null) => {
                                     onChange(selectedOption?.id)
                                 }}
@@ -261,35 +213,6 @@ const Arrival = ({ categoriesData }: ArrivalProps) => {
                     }}
                 />
                 <FormErrorMessage>{errors.contragentId?.message}</FormErrorMessage>
-            </FormControl>
-
-            <FormControl isInvalid={!!errors.invoiceNumber}>
-                <Controller
-                    name='invoiceNumber'
-                    control={control}
-                    render={({ field }) => {
-                        const { onChange, value } = field
-                        return (
-                            <Select
-                                options={filteredDispatches}
-                                getOptionLabel={(option: InvoiceData) =>
-                                    String(option.invoiceNumber)
-                                }
-                                getOptionValue={(option: InvoiceData) => `${option.invoiceNumber}`}
-                                value={dispatchesData?.filter(
-                                    (option) => String(option.invoiceNumber) == String(value),
-                                )}
-                                onChange={(selectedOption: InvoiceData | null) => {
-                                    onChange(selectedOption?.invoiceNumber)
-                                }}
-                                placeholder='Номер накладной'
-                                isClearable
-                                isSearchable
-                            />
-                        )
-                    }}
-                />
-                <FormErrorMessage>{errors.invoiceNumber?.message}</FormErrorMessage>
             </FormControl>
 
             <FormControl>
