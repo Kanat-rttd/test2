@@ -68,6 +68,13 @@ interface InvoiceData {
     }[]
 }
 
+const formatOptionLabel = (option: ContragentType) => (
+    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <span>{option.contragentName}</span>
+        <span style={{ marginLeft: '50px', color: '#bfbdbd' }}> {option.contragentType.type}</span>
+    </div>
+)
+
 const DebtTransferForm = () => {
     const { loading } = useNotify()
     const { getParam, setParam } = useURLParameters()
@@ -189,7 +196,7 @@ const DebtTransferForm = () => {
                                         <Select
                                             options={contragents}
                                             getOptionLabel={(option: ContragentType) =>
-                                                option.contragentName
+                                                `${option.contragentName} - ${option.contragentType.type}`
                                             }
                                             getOptionValue={(option: ContragentType) =>
                                                 `${option.id}`
@@ -205,6 +212,7 @@ const DebtTransferForm = () => {
                                             isClearable
                                             isSearchable
                                             className={classes.select}
+                                            formatOptionLabel={formatOptionLabel}
                                         />
                                     )
                                 }}
@@ -224,7 +232,7 @@ const DebtTransferForm = () => {
                                         <Select
                                             options={filteredContragents}
                                             getOptionLabel={(option: ContragentType) =>
-                                                option.contragentName
+                                                `${option.contragentName} - ${option.contragentType}`
                                             }
                                             getOptionValue={(option: ContragentType) =>
                                                 `${option.id}`
@@ -243,6 +251,7 @@ const DebtTransferForm = () => {
                                             isClearable
                                             isSearchable
                                             className={classes.select}
+                                            formatOptionLabel={formatOptionLabel}
                                         />
                                     )
                                 }}
