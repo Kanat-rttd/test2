@@ -46,6 +46,7 @@ import {
     // RELEASE_REPORT_ROUTE,
     VISIT_REPORT_ROUTE,
     RECONCILIATION_REPORT_ROUTE,
+    ADMIN_GOOD_CATEGORIES_ROUTE,
 } from './routes.consts'
 
 type MenuItem = {
@@ -158,6 +159,12 @@ export const subMenuItems: MenuItem[] = [
     {
         route: ADMIN_GOODS_ROUTE,
         label: 'Tовары',
+        path: ADMIN_ROUTE,
+        allowedClasses: ['Админ'],
+    },
+    {
+        route: ADMIN_GOOD_CATEGORIES_ROUTE,
+        label: 'Классификация товаров',
         path: ADMIN_ROUTE,
         allowedClasses: ['Админ'],
     },

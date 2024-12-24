@@ -54,6 +54,7 @@ import {
     BREAD_REPORT_ROUTE,
     VISIT_REPORT_ROUTE,
     RECONCILIATION_REPORT_ROUTE,
+    ADMIN_GOOD_CATEGORIES_ROUTE,
 } from './routes.consts'
 
 export type headerButton = {
@@ -151,6 +152,31 @@ export const headerButtons: headerButton[] = [
                 label: 'Товары',
                 isCurrentPage: false,
             },
+            {
+                path: ADMIN_GOOD_CATEGORIES_ROUTE,
+                label: 'Классификация товаров',
+                isCurrentPage: false,
+            },
+        ],
+    },
+    {
+        currentPage: ADMIN_GOOD_CATEGORIES_ROUTE,
+        buttonsData: [
+            {
+                path: ADMIN_PROVIDER_ROUTE,
+                label: 'Поставщики',
+                isCurrentPage: false,
+            },
+            {
+                path: ADMIN_GOODS_ROUTE,
+                label: 'Товары',
+                isCurrentPage: false,
+            },
+            {
+                path: ADMIN_GOOD_CATEGORIES_ROUTE,
+                label: 'Классификация товаров',
+                isCurrentPage: true,
+            },
         ],
     },
     {
@@ -165,6 +191,11 @@ export const headerButtons: headerButton[] = [
                 path: ADMIN_GOODS_ROUTE,
                 label: 'Товары',
                 isCurrentPage: true,
+            },
+            {
+                path: ADMIN_GOOD_CATEGORIES_ROUTE,
+                label: 'Классификация товаров',
+                isCurrentPage: false,
             },
         ],
     },
