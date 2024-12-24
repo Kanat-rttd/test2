@@ -29,45 +29,6 @@ interface DebtTransferInputs {
     comment: string
 }
 
-interface InvoiceData {
-    createdAt: Date
-    contragentId: number
-    invoiceNumber: number
-    totalProducts: {
-        id: number
-        name: string
-        price: number
-        quantity: number
-        totalPrice: number
-    }[]
-    totalSum: number
-    dispatches: {
-        id: number
-        clientId: number
-        createdAt: Date
-        dispatch: number
-        goodsDispatchDetails: {
-            id: number
-            productId: number
-            quantity: number
-            price: number | null
-            product: {
-                id: number
-                name: string
-                price: number
-                bakingFacilityUnit: {
-                    id: number
-                    facilityUnit: string
-                }
-            }
-        }[]
-        contragent: {
-            id: number
-            contragentName: string
-        }
-    }[]
-}
-
 const formatOptionLabel = (option: ContragentType) => (
     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <span>{option.contragentName}</span>
@@ -77,7 +38,7 @@ const formatOptionLabel = (option: ContragentType) => (
 
 const DebtTransferForm = () => {
     const { loading } = useNotify()
-    const { getParam, setParam } = useURLParameters()
+    const { setParam } = useURLParameters()
     const [selectedProvider, setSelectedProvider] = useState<ContragentType | null>(null)
 
     const { data: magazinesData } = useApi<MagazineType[]>('magazines?status=1')
@@ -92,9 +53,7 @@ const DebtTransferForm = () => {
             contragentsTypesData?.find((item) => item.type === 'реализатор')?.id
         }`,
     )
-    const { data: dispatchesData } = useApi<InvoiceData[]>(
-        `release/invoice?${getParam('contragentId')}`,
-    )
+
     const [contragents, setContragents] = useState<ContragentType[]>([])
     const [filteredContragents, setFilteredContragents] = useState<ContragentType[] | undefined>([])
 
@@ -276,43 +235,6 @@ const DebtTransferForm = () => {
                                 defaultValue={new Date().toISOString().split('T')[0]}
                                 type='date'
                             />
-                        </FormControl>
-
-                        <FormControl isInvalid={!!errors.invoiceNumber}>
-                            <Controller
-                                name='invoiceNumber'
-                                control={control}
-                                rules={{ required: 'Поле является обязательным' }}
-                                render={({ field }) => {
-                                    const { onChange, value } = field
-                                    return (
-                                        <Select
-                                            options={dispatchesData?.filter(
-                                                (item) =>
-                                                    item.contragentId ==
-                                                    Number(getParam('contragentId')),
-                                            )}
-                                            getOptionLabel={(option: InvoiceData) =>
-                                                String(option.invoiceNumber)
-                                            }
-                                            getOptionValue={(option: InvoiceData) =>
-                                                `${option.invoiceNumber}`
-                                            }
-                                            value={dispatchesData?.filter(
-                                                (option) =>
-                                                    String(option.invoiceNumber) == String(value),
-                                            )}
-                                            onChange={(selectedOption: InvoiceData | null) => {
-                                                onChange(selectedOption?.invoiceNumber)
-                                            }}
-                                            placeholder='Номер накладной *'
-                                            isClearable
-                                            isSearchable
-                                        />
-                                    )
-                                }}
-                            />
-                            <FormErrorMessage>{errors.invoiceNumber?.message}</FormErrorMessage>
                         </FormControl>
 
                         <FormControl>

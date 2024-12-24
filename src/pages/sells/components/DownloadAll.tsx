@@ -60,7 +60,13 @@ export const DownloadAll = ({ invoices, overPrices }: Props) => {
                         overPrices?.find((price) => price.contragentId == invoice.contragentId)
                             ?.price || 0
                     return (
-                        <Box className='avoid_break' fontSize={12} py={3} px={8}>
+                        <Box
+                            key={invoice.invoiceNumber}
+                            className='avoid_break'
+                            fontSize={12}
+                            py={3}
+                            px={8}
+                        >
                             <Box display='flex' justifyContent='space-between'>
                                 <Text>#{invoice?.invoiceNumber}</Text>
                             </Box>
