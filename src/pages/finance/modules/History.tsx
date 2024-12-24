@@ -11,6 +11,7 @@ import {
     Tbody,
     Td,
     Text,
+    Tfoot,
     Th,
     Tr,
     useDisclosure,
@@ -274,6 +275,23 @@ const History = () => {
                                     </Tr>
                                 )}
                             </Tbody>
+                            <Tfoot>
+                                <Tr>
+                                    <Th fontSize={15} color='#000'>
+                                        ИТОГО
+                                    </Th>
+                                    <Th></Th>
+                                    <Th></Th>
+                                    <Th></Th>
+                                    <Th fontSize={15} color='#000'>
+                                        {data
+                                            ?.reduce((acc, item) => {
+                                                return acc + Number(item.amount)
+                                            }, 0)
+                                            .formatted()}
+                                    </Th>
+                                </Tr>
+                            </Tfoot>
                         </Table>
                     </TableContainer>
                 </UniversalComponent>
