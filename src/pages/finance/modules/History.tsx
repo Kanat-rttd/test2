@@ -1,11 +1,12 @@
 import Dialog from '@/components/Dialog'
-import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons'
 import {
     Box,
     Button,
     Input,
     InputGroup,
     InputLeftElement,
+    InputRightElement,
     Select,
     Table,
     Tbody,
@@ -51,8 +52,11 @@ interface Finance {
         name: string
         type: string
     }
+    contragent?: {
+        id: number
+        contragentName: string
+    }
     financeCategoryId: number
-    contragentId: number
     account: string
     comment: string
 }
@@ -63,37 +67,31 @@ interface Category {
     type: string
 }
 
-interface Contragent {
-    id: number
-    contragentName: string
-    contragentType: {
-        id: number
-        type: string
-    }
-    mainId: number
-    status: boolean
-}
-
 const History = () => {
     const { success, error } = useNotify()
     const { getURLs, setParam, getParam } = useURLParameters()
     const [sortOrder, setSortOrder] = useState('asc')
     const [isHovered, setIsHovered] = useState(false)
+    const [searchValue, setSearchValue] = useState<string>(getParam('search'))
 
     const { data: financeData } = useApi<Finance[]>(`finance?${getURLs().toString()}`)
     const { data: categoriesData } = useApi<Category[] | undefined>(`financeCategories`)
-    const { data: contragentData } = useApi<Contragent[]>('contragent')
 
     const [selectedData, setSelectedData] = useState<History | null>(null)
     const [data, setData] = useState<Finance[] | undefined>(undefined)
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [searchValue, setSearchValue] = useState<string>('')
 
     useEffect(() => {
-        if (data && searchValue) {
-            setData(data.filter((transaction) => transaction.comment.includes(searchValue)))
-        } else if (financeData) {
-            setData(financeData)
+        if (searchValue) {
+            const timeout = setTimeout(() => {
+                setParam('search', searchValue)
+            }, 500)
+
+            return () => {
+                clearTimeout(timeout)
+            }
+        } else {
+            setParam('search', searchValue)
         }
     }, [searchValue])
 
@@ -155,7 +153,7 @@ const History = () => {
         const formattedData = data.map((item, idx) => [
             idx + 1,
             new Date(item.date).toLocaleDateString(),
-            contragentData?.find((c) => c.id === item.contragentId)?.contragentName,
+            item.contragent?.contragentName ?? '',
             item.financeCategory.name,
             item.comment,
             item.amount,
@@ -193,15 +191,20 @@ const History = () => {
                         </Select>
                     </Box>
                     <Box className='print-hidden' display='flex' gap='15px'>
-                        <InputGroup w='300px'>
+                        <InputGroup w='400px'>
                             <InputLeftElement pointerEvents='none' children={<Search2Icon />} />
                             <Input
                                 value={searchValue}
                                 onChange={(e) => setSearchValue(e.target.value)}
-                                placeholder='Поиск по комментариям'
+                                placeholder='Поиск по комментариям, контрагентам'
                                 _placeholder={{
                                     fontSize: '15px',
                                 }}
+                            />
+                            <InputRightElement
+                                onClick={() => setSearchValue('')}
+                                pointerEvents={'fill'}
+                                children={<CloseIcon boxSize={3} />}
                             />
                         </InputGroup>
                         <Button type='button' onClick={exportExcel}>
@@ -254,13 +257,7 @@ const History = () => {
                                     data?.map((transaction, index) => (
                                         <Tr key={index} onClick={() => handleDelete(transaction)}>
                                             <Td>{dayjs(transaction.date).format('DD.MM.YYYY')}</Td>
-                                            <Td>
-                                                {
-                                                    contragentData?.find(
-                                                        (c) => c.id === transaction.contragentId,
-                                                    )?.contragentName
-                                                }
-                                            </Td>
+                                            <Td>{transaction.contragent?.contragentName ?? ''}</Td>
                                             <Td>{transaction.financeCategory.name}</Td>
                                             <Td>{transaction.comment}</Td>
                                             <Td>{Number(transaction.amount).formatted()}</Td>
