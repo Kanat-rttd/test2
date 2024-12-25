@@ -36,7 +36,7 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
     const { loading } = useNotify()
 
     const { data: accounts } = useApi<Account[]>('financeAccount')
-    const { data: contragetnsData } = useApi<ContragentType[]>('contragent?status=1')
+    const { data: contragentsData } = useApi<ContragentType[]>('contragent?status=1')
     const [filteredFinanceCategories, setFilteredFinanceCategories] = useState<Category[]>([])
     const [filteredContragents, setFilteredContragents] = useState<ContragentType[]>([])
 
@@ -68,24 +68,20 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
     useEffect(() => {
         const values = getValues()
 
-        console.log(values)
-
-        if (!contragetnsData || !categoriesData) return
+        if (!contragentsData || !categoriesData) return
 
         if (values.financeCategoryId !== null) {
-            console.log('1', values.financeCategoryId)
-            console.log(categoriesData)
             const contragentType = categoriesData.find(
                 (item) => item.id === Number(values.financeCategoryId),
             )?.contragentTypeId
-            const filteredContragents = contragetnsData.filter(
+            const filteredContragents = contragentsData.filter(
                 (item) => item.contragentTypeId === contragentType,
             )
             setFilteredContragents(filteredContragents)
         }
 
         if (values.contragentId !== null) {
-            const contragentType = contragetnsData.find(
+            const contragentType = contragentsData.find(
                 (item) => item.id === Number(values.contragentId),
             )?.contragentTypeId
             const filteredFinanceCategories = categoriesData.filter(
@@ -96,10 +92,10 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
     }, [watch('financeCategoryId'), watch('contragentId')])
 
     useEffect(() => {
-        if (contragetnsData) {
-            setFilteredContragents(contragetnsData)
+        if (contragentsData) {
+            setFilteredContragents(contragentsData)
         }
-    }, [contragetnsData])
+    }, [contragentsData])
 
     return (
         <>
@@ -185,21 +181,27 @@ const Consumption = ({ categoriesData }: ArrivalProps) => {
                 <Controller
                     name='contragentId'
                     control={control}
-                    rules={{ required: 'Поле является обязательным' }}
+                    rules={{
+                        required: {
+                            message: 'Поле является обязательным',
+                            value: watch('financeCategoryId') !== 8,
+                        },
+                    }}
                     render={({ field }) => {
                         const { onChange, value } = field
                         return (
                             <Select
+                                required={watch('financeCategoryId') !== 8}
                                 options={
                                     filteredContragents.length
                                         ? filteredContragents
-                                        : contragetnsData
+                                        : contragentsData
                                 }
                                 getOptionLabel={(option: ContragentType) =>
                                     `${option.contragentName} - ${option.contragentType.type}`
                                 }
                                 getOptionValue={(option: ContragentType) => `${option.id}`}
-                                value={contragetnsData?.filter((option) => option.id == value)}
+                                value={contragentsData?.filter((option) => option.id == value)}
                                 onChange={(selectedOption: ContragentType | null) => {
                                     onChange(selectedOption?.id)
                                 }}
