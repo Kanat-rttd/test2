@@ -107,7 +107,7 @@ const ListTable = forwardRef(({ purchasesData, mutate }: ListTableProps, ref) =>
     return (
         <>
             <TableContainer style={{ width: '100%', overflowY: 'auto' }}>
-                <Table variant='simple'>
+                <Table variant='simple' size='sm'>
                     <Thead>
                         <Tr>
                             <Th>№</Th>

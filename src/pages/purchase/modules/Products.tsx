@@ -4,7 +4,6 @@ import PurchaseModal from '../components/PurchaseModal'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '@/components/DateRange'
-import { ProviderGoodsType } from '@/utils/types/providerGoog.types'
 import { ProviderType } from '@/utils/types/provider.types'
 import { PurchaseType } from '@/utils/types/purchase.types'
 import { useRef } from 'react'
@@ -16,11 +15,17 @@ interface AllPurchases {
     totalDeliverySum: number
 }
 
+interface GoodsCategory {
+    id: number
+    category: string
+    unitOfMeasure: string
+}
+
 const Products = () => {
     const { getParam, setParam, getURLs } = useURLParameters()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { data: providersData } = useApi<ProviderType[]>('providers')
-    const { data: providerGoodsData } = useApi<ProviderGoodsType[]>('providerGoods')
+    const { data: goodsCategories } = useApi<GoodsCategory[]>('goodsCategories')
     const ref = useRef<{ export: () => Promise<void> }>()
 
     const { data: purchasesData, mutate: mutatePurchaseData } = useApi<AllPurchases>(
@@ -57,13 +62,13 @@ const Products = () => {
                             size='sm'
                             borderRadius={5}
                             placeholder='Товар'
-                            value={getParam('rawMaterialId')}
-                            onChange={(event) => setParam('rawMaterialId', event.target.value)}
+                            value={getParam('goodsCategoryId')}
+                            onChange={(event) => setParam('goodsCategoryId', event.target.value)}
                             width='fit-content'
                         >
-                            {providerGoodsData?.map((units) => (
-                                <option key={units.id} value={units.id}>
-                                    {units.goods}
+                            {goodsCategories?.map(({ id, category }) => (
+                                <option key={id} value={id}>
+                                    {category}
                                 </option>
                             ))}
                         </Select>
