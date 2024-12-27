@@ -50,6 +50,16 @@ export const deleteDispatch = async (id: number) => {
     return response
 }
 
+export const moveDateDispatch = async (startDate: string, endDate: string, newDate: string) => {
+    return await $host.put(
+        'release/changeDate',
+        { newDate },
+        {
+            params: { startDate, endDate },
+        },
+    )
+}
+
 // export const getSaleById = async (id: number) => {
 //     const { data } = await $host.get(`sales/${id}`)
 //     return data

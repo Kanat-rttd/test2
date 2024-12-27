@@ -4,6 +4,7 @@ import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { useRef } from 'react'
+import { ChangeDate } from '../components/ChangeDate'
 
 interface FacilityUnit {
     id: number
@@ -97,6 +98,7 @@ const JournalPage = () => {
                         </Select>
                     </Box>
                     <Box className='print-hidden' display='flex' gap='15px'>
+                        <ChangeDate />
                         <Button size='sm' type='button' onClick={() => listRef.current?.export()}>
                             Экспорт в Excel
                         </Button>
