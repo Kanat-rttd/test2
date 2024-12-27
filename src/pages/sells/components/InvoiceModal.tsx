@@ -126,7 +126,13 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                             <Box display='flex' justifyContent='space-between'>
                                 <Text>#{selectedRow?.invoiceNumber}</Text>
                             </Box>
-                            <Box display='flex' justifyContent='space-between' p={2} pb={2}>
+                            <Box
+                                fontSize={15}
+                                display='flex'
+                                justifyContent='space-between'
+                                p={2}
+                                pb={2}
+                            >
                                 <Text>Расходная накладная от</Text>
                                 <Text>{dayjs(selectedRow?.createdAt).format('DD.MM.YYYY')}</Text>
                             </Box>
@@ -136,23 +142,16 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                 borderWidth='2px'
                                 orientation='horizontal'
                             />
-                            <Box display='flex' justifyContent='space-between' pt={1} p={2} pb={3}>
-                                <Box
-                                    display='flex'
-                                    justifyContent='space-between'
-                                    flexDirection='column'
-                                >
-                                    <Text>Получатель</Text>
-                                    <Text>Покупатель</Text>
-                                </Box>
-                                <Box
-                                    display='flex'
-                                    flexDirection='column'
-                                    justifyContent='space-between'
-                                >
-                                    <Text></Text>
-                                    <Text>{selectedRow?.contragentName}</Text>
-                                </Box>
+                            <Box
+                                fontSize={15}
+                                display='flex'
+                                justifyContent='space-between'
+                                pt={1}
+                                p={2}
+                                pb={3}
+                            >
+                                <Text>Покупатель</Text>
+                                <Text>{selectedRow?.contragentName}</Text>
                             </Box>
                             <Divider
                                 size='lg'
