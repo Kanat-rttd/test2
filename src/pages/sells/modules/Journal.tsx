@@ -3,8 +3,9 @@ import ListTable from '../components/ListTable'
 import DateRange from '@/components/DateRange'
 import { useApi } from '@/utils/services/axios'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { ChangeDate } from '../components/ChangeDate'
+import getUserInfo from '@/utils/helpers/getUserInfo'
 
 interface FacilityUnit {
     id: number
@@ -39,6 +40,11 @@ const JournalPage = () => {
     const { data: productData } = useApi<Product[]>('product')
 
     const listRef = useRef<{ export: () => Promise<void> }>()
+
+    const [classes] = useState(() => {
+        const user = getUserInfo()
+        return user?.class ? (JSON.parse(user.class) as { label: string }[]) : []
+    })
 
     return (
         <>
@@ -98,7 +104,9 @@ const JournalPage = () => {
                         </Select>
                     </Box>
                     <Box className='print-hidden' display='flex' gap='15px'>
-                        <ChangeDate />
+                        {classes.length && classes.some((c) => c.label === 'Админ') && (
+                            <ChangeDate />
+                        )}
                         <Button size='sm' type='button' onClick={() => listRef.current?.export()}>
                             Экспорт в Excel
                         </Button>
