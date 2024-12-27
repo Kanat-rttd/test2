@@ -12,18 +12,18 @@ import {
     Tbody,
     Td,
     Text,
-    Tfoot,
     Th,
     Tr,
     useDisclosure,
 } from '@chakra-ui/react'
+
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import DateRange from '../../../components/DateRange'
 import IsMobile from '@/utils/helpers/isMobile'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
 import { mutate, useApi } from '@/utils/services/axios'
-import { TableContainer, Thead } from '@/components/ui'
+import { TableContainer, Thead, Tfoot } from '@/components/ui'
 import UniversalComponent from '@/components/ui/UniversalComponent'
 import { useNotify } from '@/utils/hooks/useNotify.ts'
 import { deleteFinance } from '@/utils/services/finance.service.ts'
@@ -159,12 +159,24 @@ const History = () => {
             item.amount,
         ])
 
-        const startDate = new Date(getParam('startDate')).toLocaleDateString()
-        const endDate = new Date(getParam('endDate')).toLocaleDateString()
+        const totals = [
+            'ИТОГО',
+            '',
+            '',
+            '',
+            '',
+            data?.reduce((acc, item) => {
+                return acc + Number(item.amount)
+            }, 0),
+        ]
+
+        const startDate = dayjs(getParam('startDate') || new Date()).format('DD.MM.YYYY')
+        const endDate = dayjs(getParam('endDate') || new Date()).format('DD.MM.YYYY')
 
         await generateExcel(`История финансов с ${startDate} по ${endDate}`, [
             headers,
             ...formattedData,
+            totals,
         ])
     }
 
@@ -217,16 +229,11 @@ const History = () => {
                 </Box>
 
                 <UniversalComponent>
-                    <TableContainer style={{ width: '100%', height: '100%', overflowY: 'auto' }}>
-                        <Table variant='simple' width='100%'>
+                    <TableContainer overflowY='auto'>
+                        <Table variant='simple'>
                             <Thead>
-                                <Tr
-                                    w='100%'
-                                    position='sticky'
-                                    top={0}
-                                    backgroundColor='white'
-                                    zIndex={9}
-                                >
+                                <Tr position='sticky' top={0} backgroundColor='white' zIndex={9}>
+                                    <Th textAlign='center'>№</Th>
                                     <Th
                                         display='flex'
                                         cursor='pointer'
@@ -255,7 +262,11 @@ const History = () => {
                             <Tbody>
                                 {data?.length ? (
                                     data?.map((transaction, index) => (
-                                        <Tr key={index} onClick={() => handleDelete(transaction)}>
+                                        <Tr
+                                            key={transaction.id}
+                                            onClick={() => handleDelete(transaction)}
+                                        >
+                                            <Td textAlign='center'>{index + 1}</Td>
                                             <Td>{dayjs(transaction.date).format('DD.MM.YYYY')}</Td>
                                             <Td>{transaction.contragent?.contragentName ?? ''}</Td>
                                             <Td>{transaction.financeCategory.name}</Td>
@@ -274,9 +285,10 @@ const History = () => {
                             </Tbody>
                             <Tfoot>
                                 <Tr>
-                                    <Th fontSize={15} color='#000'>
+                                    <Th fontSize={15} color='#000' textAlign='center'>
                                         ИТОГО
                                     </Th>
+                                    <Th></Th>
                                     <Th></Th>
                                     <Th></Th>
                                     <Th></Th>
