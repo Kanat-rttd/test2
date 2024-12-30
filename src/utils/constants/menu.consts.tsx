@@ -45,7 +45,7 @@ import {
     BREAD_REPORT_ROUTE,
     // RELEASE_REPORT_ROUTE,
     VISIT_REPORT_ROUTE,
-    RECONCILIATION_REPORT_ROUTE,
+    GENERAL_RECONCILIATION_REPORT_ROUTE,
     ADMIN_GOOD_CATEGORIES_ROUTE,
 } from './routes.consts'
 
@@ -332,7 +332,7 @@ export const subMenuItems: MenuItem[] = [
         allowedClasses: ['Админ', 'Отчеты'],
     },
     {
-        route: RECONCILIATION_REPORT_ROUTE,
+        route: GENERAL_RECONCILIATION_REPORT_ROUTE,
         label: 'Акт сверки общий',
         path: REPORT_ROUTE,
         allowedClasses: ['Админ', 'Отчеты'],

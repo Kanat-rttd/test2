@@ -53,7 +53,7 @@ import {
     // REPORT_ROUTE,
     BREAD_REPORT_ROUTE,
     VISIT_REPORT_ROUTE,
-    RECONCILIATION_REPORT_ROUTE,
+    GENERAL_RECONCILIATION_REPORT_ROUTE,
     ADMIN_GOOD_CATEGORIES_ROUTE,
 } from './routes.consts'
 
@@ -498,7 +498,7 @@ export const headerButtons: headerButton[] = [
                 isCurrentPage: false,
             },
             {
-                path: RECONCILIATION_REPORT_ROUTE,
+                path: GENERAL_RECONCILIATION_REPORT_ROUTE,
                 label: 'Акт сверки общий',
                 isCurrentPage: false,
             },
@@ -548,14 +548,14 @@ export const headerButtons: headerButton[] = [
                 isCurrentPage: true,
             },
             {
-                path: RECONCILIATION_REPORT_ROUTE,
+                path: GENERAL_RECONCILIATION_REPORT_ROUTE,
                 label: 'Акт сверки общий',
                 isCurrentPage: false,
             },
         ],
     },
     {
-        currentPage: RECONCILIATION_REPORT_ROUTE,
+        currentPage: GENERAL_RECONCILIATION_REPORT_ROUTE,
         buttonsData: [
             {
                 path: BREAD_REPORT_ROUTE,
@@ -573,7 +573,7 @@ export const headerButtons: headerButton[] = [
                 isCurrentPage: false,
             },
             {
-                path: RECONCILIATION_REPORT_ROUTE,
+                path: GENERAL_RECONCILIATION_REPORT_ROUTE,
                 label: 'Акт сверки общий',
                 isCurrentPage: true,
             },
