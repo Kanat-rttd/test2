@@ -6,9 +6,15 @@ import Loading from '../../components/Loading'
 const BreadView = lazy(() => import('./modules/BreadView'))
 const ReleaseView = lazy(() => import('./modules/ReleaseView'))
 const VisitView = lazy(() => import('./modules/VisitView'))
-const ReconciliationView = lazy(() => import('./modules/GeneralReconciliationView'))
+const GeneralReconciliationView = lazy(() => import('./modules/GeneralReconciliationView'))
+const ReconciliationView = lazy(() => import('./modules/ReconciliationView'))
 
-type PageType = 'visitView' | 'generalReconciliationView' | 'breadView' | 'releaseView'
+type PageType =
+    | 'visitView'
+    | 'generalReconciliationView'
+    | 'reconciliationView'
+    | 'breadView'
+    | 'releaseView'
 
 const ReleasePage = () => {
     const [content, setContent] = useState<JSX.Element | null>(null)
@@ -17,9 +23,10 @@ const ReleasePage = () => {
 
     const pagesMap: { [key in PageType]: JSX.Element } = {
         visitView: <VisitView />,
-        generalReconciliationView: <ReconciliationView />,
+        generalReconciliationView: <GeneralReconciliationView />,
         releaseView: <ReleaseView />,
         breadView: <BreadView />,
+        reconciliationView: <ReconciliationView />,
     }
 
     useEffect(() => {
