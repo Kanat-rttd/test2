@@ -24,7 +24,6 @@ type ReconciliationType = {
         Sales: number
         Returns: number
         Overhead: number
-        Expenses: number
         Payments: number
         Credit: number
         Debt: number
@@ -32,7 +31,6 @@ type ReconciliationType = {
     totalSales: number
     totalReturns: number
     totalOverhead: number
-    totalExpenses: number
     totalPayments: number
     totalCredit: number
     totalDebt: number
@@ -48,7 +46,6 @@ type ReportType = {
     Sales: number
     Returns: number
     Overhead: number
-    Expenses: number
     Payments: number
     Credit: number
     Debt: number
@@ -86,7 +83,6 @@ const ReconciliationView = () => {
                 acc.Sales += item.Sales
                 acc.Returns += item.Returns
                 acc.Overhead += Number(item.Overhead)
-                acc.Expenses += Number(item.Expenses)
                 acc.Payments += Number(item.Payments)
                 acc.Credit += Number(item.Credit)
                 acc.Debt += Number(item.Debt)
@@ -97,7 +93,6 @@ const ReconciliationView = () => {
                 Sales: 0,
                 Returns: 0,
                 Overhead: 0,
-                Expenses: 0,
                 Payments: 0,
                 Credit: 0,
                 Debt: 0,
@@ -124,7 +119,6 @@ const ReconciliationView = () => {
             'Дата',
             'Продажи',
             'Возврат',
-            'Оплата за услуги',
             'Перевод долга',
             'Выплата',
             'Сверху',
@@ -136,7 +130,6 @@ const ReconciliationView = () => {
             new Date(item.date).toLocaleDateString(),
             item.reportData?.Sales || 0,
             item.reportData?.Returns || 0,
-            item.reportData?.Expenses || 0,
             item.reportData?.Credit || 0,
             item.reportData?.Payments || 0,
             item.reportData?.Overhead || 0,
@@ -156,7 +149,6 @@ const ReconciliationView = () => {
                 'ИТОГО',
                 reconciliationViewData?.totalSales,
                 reconciliationViewData?.totalReturns,
-                reconciliationViewData?.totalExpenses,
                 reconciliationViewData?.totalCredit,
                 reconciliationViewData?.totalPayments,
                 reconciliationViewData?.totalOverhead,
@@ -210,7 +202,6 @@ const ReconciliationView = () => {
                                     <Th>Дата</Th>
                                     <Th>Продажи</Th>
                                     <Th>Возврат</Th>
-                                    <Th>Оплата за услуги</Th>
                                     <Th>Перевод долга</Th>
                                     <Th>Выплата</Th>
                                     <Th>Сверху</Th>
@@ -225,7 +216,6 @@ const ReconciliationView = () => {
                                             <Td>{dayjs(item.date).format('DD.MM.YYYY')}</Td>
                                             <Td>{(item.reportData?.Sales || 0).formatted()}</Td>
                                             <Td>{(item.reportData?.Returns || 0).formatted()}</Td>
-                                            <Td>{(item.reportData?.Expenses || 0).formatted()}</Td>
                                             <Td>{(item.reportData?.Credit || 0).formatted()}</Td>
                                             <Td>{(item.reportData?.Payments || 0).formatted()}</Td>
                                             <Td>{(item.reportData?.Overhead || 0).formatted()}</Td>
@@ -249,9 +239,6 @@ const ReconciliationView = () => {
                                     </Th>
                                     <Th fontSize={15} color='#000'>
                                         {reconciliationViewData?.totalReturns.formatted()}
-                                    </Th>
-                                    <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalExpenses.formatted()}
                                     </Th>
                                     <Th fontSize={15} color='#000'>
                                         {reconciliationViewData?.totalCredit.formatted()}
