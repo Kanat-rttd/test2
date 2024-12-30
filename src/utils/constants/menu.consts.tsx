@@ -333,7 +333,7 @@ export const subMenuItems: MenuItem[] = [
     },
     {
         route: RECONCILIATION_REPORT_ROUTE,
-        label: 'Акт сверки',
+        label: 'Акт сверки общий',
         path: REPORT_ROUTE,
         allowedClasses: ['Админ', 'Отчеты'],
     },

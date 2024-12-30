@@ -131,7 +131,7 @@ const ReconciliationView = () => {
         const startDate = new Date(getParam('startDate')).toLocaleDateString()
         const endDate = new Date(getParam('endDate')).toLocaleDateString()
 
-        await generateExcel(`Акт сверки с ${startDate} по ${endDate}`, [
+        await generateExcel(`Акт сверки общий с ${startDate} по ${endDate}`, [
             headers,
             ...formattedData,
             [

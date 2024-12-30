@@ -499,7 +499,7 @@ export const headerButtons: headerButton[] = [
             },
             {
                 path: RECONCILIATION_REPORT_ROUTE,
-                label: 'Акт сверки',
+                label: 'Акт сверки общий',
                 isCurrentPage: false,
             },
         ],
@@ -549,7 +549,7 @@ export const headerButtons: headerButton[] = [
             },
             {
                 path: RECONCILIATION_REPORT_ROUTE,
-                label: 'Акт сверки',
+                label: 'Акт сверки общий',
                 isCurrentPage: false,
             },
         ],
@@ -574,7 +574,7 @@ export const headerButtons: headerButton[] = [
             },
             {
                 path: RECONCILIATION_REPORT_ROUTE,
-                label: 'Акт сверки',
+                label: 'Акт сверки общий',
                 isCurrentPage: true,
             },
         ],
