@@ -1,4 +1,4 @@
-import { Box, Button, Select, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
+import { Box, Button, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import { useApi } from '@/utils/services/axios'
 import DateRange from '../../../components/DateRange'
 import { useURLParameters } from '@/utils/hooks/useURLParameters'
@@ -7,15 +7,6 @@ import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
 import { useNotify } from '@/utils/hooks/useNotify.ts'
-
-interface Client {
-    id: string
-    name: string
-    surname: string
-    contact: string
-    telegrammId: string
-    status: string
-}
 
 type ReconciliationType = {
     reportData: {
@@ -53,11 +44,10 @@ type ReportType = {
 
 const ReconciliationView = () => {
     const { error } = useNotify()
-    const { getURLs, getParam, setParam } = useURLParameters()
+    const { getURLs, getParam } = useURLParameters()
     const { data: reconciliationViewData } = useApi<ReconciliationType>(
         `reports/reconciliation?${getURLs().toString()}`,
     )
-    const { data: clientsData } = useApi<Client[]>('client')
     const [filteredData, setFilteredData] = useState<FilteredDataType[]>([])
 
     const [dates, setDates] = useState<Date[]>([])
@@ -168,20 +158,6 @@ const ReconciliationView = () => {
                 >
                     <Box display='flex' gap='15px' width='100%'>
                         <DateRange />
-                        <Select
-                            size='sm'
-                            borderRadius={5}
-                            width='fit-content'
-                            value={getParam('clientName')}
-                            onChange={(e) => setParam('clientName', e.target.value)}
-                        >
-                            <option value=''>Все клиенты</option>
-                            {clientsData?.map((client) => (
-                                <option key={client.id} value={client.name}>
-                                    {client.name}
-                                </option>
-                            ))}
-                        </Select>
                     </Box>
 
                     <Box display='flex' gap='15px'>
