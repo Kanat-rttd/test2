@@ -46,7 +46,7 @@ const ReconciliationView = () => {
     const { error } = useNotify()
     const { getURLs, getParam } = useURLParameters()
     const { data: reconciliationViewData } = useApi<ReconciliationType>(
-        `reports/reconciliation?${getURLs().toString()}`,
+        `reports/generalReconciliation?${getURLs().toString()}`,
     )
     const [filteredData, setFilteredData] = useState<FilteredDataType[]>([])
 
