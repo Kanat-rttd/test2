@@ -7,7 +7,6 @@ import {
     ModalCloseButton,
     Box,
     Text,
-    Divider,
     Table,
     Thead,
     Tr,
@@ -126,53 +125,53 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                             <Box display='flex' justifyContent='space-between'>
                                 <Text>#{selectedRow?.invoiceNumber}</Text>
                             </Box>
-                            <Box
-                                fontSize={15}
-                                display='flex'
-                                justifyContent='space-between'
-                                p={2}
-                                pb={2}
-                            >
+                            <Box display='flex' justifyContent='space-between'>
                                 <Text>Расходная накладная от</Text>
-                                <Text>{dayjs(selectedRow?.createdAt).format('DD.MM.YYYY')}</Text>
+                                <Text fontSize={15} fontWeight='bold'>
+                                    {dayjs(selectedRow?.createdAt).format('DD.MM.YYYY')}
+                                </Text>
                             </Box>
-                            <Divider
-                                size='lg'
-                                borderColor='black'
-                                borderWidth='2px'
-                                orientation='horizontal'
-                            />
-                            <Box
-                                fontSize={15}
-                                display='flex'
-                                justifyContent='space-between'
-                                pt={1}
-                                p={2}
-                                pb={3}
-                            >
+                            <Box display='flex' justifyContent='space-between'>
                                 <Text>Покупатель</Text>
-                                <Text>{selectedRow?.contragentName}</Text>
+                                <Text fontSize={15} fontWeight='bold'>
+                                    {selectedRow?.contragentName}
+                                </Text>
                             </Box>
-                            <Divider
-                                size='lg'
-                                borderColor='black'
-                                borderWidth='2px'
-                                orientation='horizontal'
-                                marginBottom={3}
-                            />
-                            <Table size='xs' variant='unstyled' fontSize='10px'>
+                            <Table
+                                mt={4}
+                                size='xs'
+                                layout='fixed'
+                                variant='unstyled'
+                                fontSize='10px'
+                            >
                                 <Thead>
                                     <Tr>
-                                        <Th border='none' color='RGB(108, 112, 219)'>
+                                        <Th
+                                            textAlign={'center'}
+                                            border='none'
+                                            color='RGB(108, 112, 219)'
+                                        >
                                             Продукция
                                         </Th>
-                                        <Th border='none' color='RGB(108, 112, 219)'>
+                                        <Th
+                                            textAlign={'center'}
+                                            border='none'
+                                            color='RGB(108, 112, 219)'
+                                        >
                                             Количество
                                         </Th>
-                                        <Th border='none' color='RGB(108, 112, 219)'>
+                                        <Th
+                                            textAlign={'center'}
+                                            border='none'
+                                            color='RGB(108, 112, 219)'
+                                        >
                                             Цена
                                         </Th>
-                                        <Th border='none' color='RGB(108, 112, 219)'>
+                                        <Th
+                                            textAlign={'center'}
+                                            border='none'
+                                            color='RGB(108, 112, 219)'
+                                        >
                                             Сумма
                                         </Th>
                                     </Tr>
@@ -181,16 +180,32 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                 <Tbody>
                                     {selectedRow?.totalProducts.map((item, index) => (
                                         <Tr key={index}>
-                                            <Td border='1px solid black' padding='1'>
+                                            <Td
+                                                textAlign={'center'}
+                                                border='1px solid black'
+                                                padding='1'
+                                            >
                                                 {item.name}
                                             </Td>
-                                            <Td border='1px solid black' padding='1'>
+                                            <Td
+                                                textAlign={'center'}
+                                                border='1px solid black'
+                                                padding='1'
+                                            >
                                                 {item.quantity}
                                             </Td>
-                                            <Td border='1px solid black' padding='1'>
+                                            <Td
+                                                textAlign={'center'}
+                                                border='1px solid black'
+                                                padding='1'
+                                            >
                                                 {item.price}
                                             </Td>
-                                            <Td border='1px solid black' padding='1'>
+                                            <Td
+                                                textAlign={'center'}
+                                                border='1px solid black'
+                                                padding='1'
+                                            >
                                                 {item.totalPrice}
                                             </Td>
                                         </Tr>

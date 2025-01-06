@@ -1,169 +1,56 @@
-import { Box, Button, Select, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
-import { useApi } from '@/utils/services/axios'
-import DateRange from '../../../components/DateRange'
-import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import DateRange from '@/components/DateRange'
 import { TableContainer, Tfoot, Thead } from '@/components/ui'
+import { useURLParameters } from '@/utils/hooks/useURLParameters'
+import { useApi } from '@/utils/services/axios'
+import { Box, Select, Table, Tbody, Td, Th, Tr } from '@chakra-ui/react'
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
-import { generateExcel } from '@/utils/services/spreadsheet.service.ts'
-import { useNotify } from '@/utils/hooks/useNotify.ts'
+import { useEffect, useMemo } from 'react'
 
-interface Client {
-    id: string
-    name: string
-    surname: string
-    contact: string
-    telegrammId: string
-    status: string
-}
-
-type ReconciliationType = {
-    reportData: {
-        adjustedDate: Date
-        ClientName: string
-        Sales: number
-        Returns: number
-        Overhead: number
-        Expenses: number
-        Payments: number
-        Credit: number
-        Debt: number
+type ReportData = {
+    fullReports: {
+        adjustedDate: string
+        sales: number
+        returns: number
+        overhead: number
+        payments: number
+        magazines: { [x: string]: number }[]
+        debt: number
     }[]
-    totalSales: number
-    totalReturns: number
-    totalOverhead: number
-    totalExpenses: number
-    totalPayments: number
-    totalCredit: number
-    totalDebt: number
+    allMagazines: string[]
 }
 
-type FilteredDataType = {
-    date: Date
-    reportData: ReportType | undefined
+interface Contragent {
+    id: number
+    contragentName: string
+    contragentTypeId: number
 }
 
-type ReportType = {
-    ClientName: string
-    Sales: number
-    Returns: number
-    Overhead: number
-    Expenses: number
-    Payments: number
-    Credit: number
-    Debt: number
-}
-
-const ReconciliationView = () => {
-    const { error } = useNotify()
+export default function ReconciliationView() {
     const { getURLs, getParam, setParam } = useURLParameters()
-    const { data: reconciliationViewData } = useApi<ReconciliationType>(
-        `reports/reconciliation?${getURLs().toString()}`,
+
+    const { data: contragents } = useApi<Contragent[]>('contragent')
+    const { data } = useApi<ReportData>(`reports/reconciliation?${getURLs().toString()}`)
+    const total = useMemo(
+        () =>
+            data?.fullReports.reduce(
+                (acc, cur) => {
+                    acc.sales += cur.sales
+                    acc.returns += cur.returns
+                    acc.payments += cur.payments
+                    acc.debt += cur.debt
+
+                    return acc
+                },
+                { sales: 0, returns: 0, payments: 0, debt: 0 },
+            ),
+        [data],
     )
-    const { data: clientsData } = useApi<Client[]>('client')
-    const [filteredData, setFilteredData] = useState<FilteredDataType[]>([])
-
-    const [dates, setDates] = useState<Date[]>([])
-
-    const getUniqDates = () => {
-        const uniqDates = new Set<Date>()
-        reconciliationViewData?.reportData.forEach((item) => {
-            uniqDates.add(item.adjustedDate)
-        })
-        return [...uniqDates]
-    }
 
     useEffect(() => {
-        setDates(getUniqDates())
-    }, [reconciliationViewData])
-
-    const groupedData: FilteredDataType[] = dates.map((date) => {
-        const filteredReports = reconciliationViewData?.reportData.filter(
-            (item) => item.adjustedDate === date,
-        )
-        const groupedReport: ReportType | undefined = filteredReports?.reduce(
-            (acc, item) => {
-                acc.Sales += item.Sales
-                acc.Returns += item.Returns
-                acc.Overhead += Number(item.Overhead)
-                acc.Expenses += Number(item.Expenses)
-                acc.Payments += Number(item.Payments)
-                acc.Credit += Number(item.Credit)
-                acc.Debt += Number(item.Debt)
-                return acc
-            },
-            {
-                ClientName: '',
-                Sales: 0,
-                Returns: 0,
-                Overhead: 0,
-                Expenses: 0,
-                Payments: 0,
-                Credit: 0,
-                Debt: 0,
-            },
-        )
-        return { date: new Date(date), reportData: groupedReport }
-    })
-
-    const getFilteredData = () => {
-        return groupedData.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-    }
-
-    useEffect(() => {
-        setFilteredData(getFilteredData())
-    }, [dates])
-
-    const exportExcel = async () => {
-        if (filteredData?.length === 0 || !filteredData) {
-            return error('Нет данных для экспорта')
+        if (!getParam('contragentId')) {
+            setParam('contragentId', contragents?.[0].id.toString()!)
         }
-
-        const headers = [
-            '№',
-            'Дата',
-            'Продажи',
-            'Возврат',
-            'Оплата за услуги',
-            'Перевод долга',
-            'Выплата',
-            'Сверху',
-            'Долг',
-        ]
-
-        const formattedData = filteredData.map((item, index) => [
-            index + 1,
-            new Date(item.date).toLocaleDateString(),
-            item.reportData?.Sales || 0,
-            item.reportData?.Returns || 0,
-            item.reportData?.Expenses || 0,
-            item.reportData?.Credit || 0,
-            item.reportData?.Payments || 0,
-            item.reportData?.Overhead || 0,
-            item.reportData?.Debt || 0,
-        ])
-
-        console.log(formattedData)
-
-        const startDate = new Date(getParam('startDate')).toLocaleDateString()
-        const endDate = new Date(getParam('endDate')).toLocaleDateString()
-
-        await generateExcel(`Акт сверки с ${startDate} по ${endDate}`, [
-            headers,
-            ...formattedData,
-            [
-                '',
-                'ИТОГО',
-                reconciliationViewData?.totalSales,
-                reconciliationViewData?.totalReturns,
-                reconciliationViewData?.totalExpenses,
-                reconciliationViewData?.totalCredit,
-                reconciliationViewData?.totalPayments,
-                reconciliationViewData?.totalOverhead,
-                reconciliationViewData?.totalDebt,
-            ],
-        ])
-    }
+    })
 
     return (
         <Box>
@@ -177,28 +64,21 @@ const ReconciliationView = () => {
                     <Box display='flex' gap='15px' width='100%'>
                         <DateRange />
                         <Select
+                            className='print-hidden'
                             size='sm'
                             borderRadius={5}
                             width='fit-content'
-                            value={getParam('clientName')}
-                            onChange={(e) => setParam('clientName', e.target.value)}
+                            value={getParam('contragentId')}
+                            onChange={(e) => setParam('contragentId', e.target.value)}
                         >
-                            <option value=''>Все клиенты</option>
-                            {clientsData?.map((client) => (
-                                <option key={client.id} value={client.name}>
-                                    {client.name}
-                                </option>
-                            ))}
+                            {contragents
+                                ?.filter((c) => c.contragentTypeId === 1)
+                                .map((client) => (
+                                    <option key={client.id} value={client.id}>
+                                        {client.contragentName}
+                                    </option>
+                                ))}
                         </Select>
-                    </Box>
-
-                    <Box display='flex' gap='15px'>
-                        <Button type='button' onClick={exportExcel}>
-                            Экспорт в Excel
-                        </Button>
-                        <Button type='button' onClick={() => window.print()}>
-                            Экспорт в PDF
-                        </Button>
                     </Box>
                 </Box>
                 <Box>
@@ -210,26 +90,27 @@ const ReconciliationView = () => {
                                     <Th>Дата</Th>
                                     <Th>Продажи</Th>
                                     <Th>Возврат</Th>
-                                    <Th>Оплата за услуги</Th>
-                                    <Th>Перевод долга</Th>
                                     <Th>Выплата</Th>
                                     <Th>Сверху</Th>
+                                    {data?.allMagazines.map((item) => <Th key={item}>{item}</Th>)}
                                     <Th>Долг</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {filteredData?.length ? (
-                                    filteredData.map((item, index) => (
-                                        <Tr key={index}>
+                                {data?.fullReports?.length ? (
+                                    data.fullReports.map((item, index) => (
+                                        <Tr key={item.adjustedDate}>
                                             <Td>{index + 1}</Td>
-                                            <Td>{dayjs(item.date).format('DD.MM.YYYY')}</Td>
-                                            <Td>{(item.reportData?.Sales || 0).formatted()}</Td>
-                                            <Td>{(item.reportData?.Returns || 0).formatted()}</Td>
-                                            <Td>{(item.reportData?.Expenses || 0).formatted()}</Td>
-                                            <Td>{(item.reportData?.Credit || 0).formatted()}</Td>
-                                            <Td>{(item.reportData?.Payments || 0).formatted()}</Td>
-                                            <Td>{(item.reportData?.Overhead || 0).formatted()}</Td>
-                                            <Td>{(item.reportData?.Debt || 0).formatted()}</Td>
+                                            <Td>{dayjs(item.adjustedDate).format('DD.MM.YYYY')}</Td>
+                                            <Td>{(item.sales || 0).formatted()}</Td>
+                                            <Td>{(item.returns || 0).formatted()}</Td>
+                                            <Td>{(item.payments || 0).formatted()}</Td>
+                                            <Td>{(item.overhead || 0).formatted()}</Td>
+                                            {data.allMagazines.map((am) => (
+                                                // @ts-ignore
+                                                <Td key={am}>{item.magazines[am]}</Td>
+                                            ))}
+                                            <Td>{(item.debt || 0).formatted()}</Td>
                                         </Tr>
                                     ))
                                 ) : (
@@ -243,27 +124,20 @@ const ReconciliationView = () => {
                                     <Th fontSize={15} color='#000'>
                                         ИТОГО
                                     </Th>
-                                    <Th></Th>
+                                    <Th />
                                     <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalSales.formatted()}
+                                        {total?.sales}
                                     </Th>
                                     <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalReturns.formatted()}
+                                        {total?.returns}
                                     </Th>
                                     <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalExpenses.formatted()}
+                                        {total?.payments}
                                     </Th>
+                                    <Th />
+                                    {data?.allMagazines.map(() => <Th />)}
                                     <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalCredit.formatted()}
-                                    </Th>
-                                    <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalPayments.formatted()}
-                                    </Th>
-                                    <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalOverhead.formatted()}
-                                    </Th>
-                                    <Th fontSize={15} color='#000'>
-                                        {reconciliationViewData?.totalDebt.formatted()}
+                                        {total?.debt}
                                     </Th>
                                 </Tr>
                             </Tfoot>
@@ -275,4 +149,3 @@ const ReconciliationView = () => {
     )
 }
 
-export default ReconciliationView
