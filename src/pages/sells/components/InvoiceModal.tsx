@@ -121,7 +121,7 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                             onClick={generatePDF}
                             icon={<DownloadIcon />}
                         />
-                        <Box fontSize={12} ref={modalContentRef} py={3} px={8}>
+                        <Box fontSize={13} ref={modalContentRef} py={3} px={8}>
                             <Box display='flex' justifyContent='space-between'>
                                 <Text>#{selectedRow?.invoiceNumber}</Text>
                             </Box>
@@ -179,7 +179,7 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                 </Thead>
                                 <Tbody>
                                     {selectedRow?.totalProducts.map((item, index) => (
-                                        <Tr key={index}>
+                                        <Tr key={index} fontSize={15}>
                                             <Td
                                                 textAlign={'center'}
                                                 border='1px solid black'
@@ -212,11 +212,11 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                     ))}
                                 </Tbody>
                             </Table>
-                            <Box fontSize={12} display='flex' marginBottom={3} mt={3}>
+                            <Box display='flex' marginBottom={3} mt={3}>
                                 <Text marginLeft='auto'>Получено</Text>
                                 <Text>________</Text>
                             </Box>
-                            <Box fontSize={12} display='flex' flexDirection='column'>
+                            <Box display='flex' flexDirection='column'>
                                 <Text marginLeft='auto' fontWeight='bold'>
                                     Сверху: {overPrice} тг
                                 </Text>
