@@ -1,5 +1,5 @@
 import { OverPriceType } from '@/utils/types/overPrice.types'
-import { Box, Button, Divider, Table, Tbody, Td, Th, Thead, Tr, Text } from '@chakra-ui/react'
+import { Box, Button, Table, Tbody, Td, Th, Thead, Tr, Text } from '@chakra-ui/react'
 import dayjs from 'dayjs'
 
 interface InvoiceData {
@@ -60,98 +60,107 @@ export const DownloadAll = ({ invoices, overPrices }: Props) => {
                         overPrices?.find((price) => price.contragentId == invoice.contragentId)
                             ?.price || 0
                     return (
-                        <Box
-                            key={invoice.invoiceNumber}
-                            className='avoid_break'
-                            fontSize={12}
-                            py={3}
-                            px={8}
-                        >
+                        <Box fontSize={13} className='avoid_break' py={3} px={8}>
                             <Box display='flex' justifyContent='space-between'>
-                                <Text>#{invoice?.invoiceNumber}</Text>
+                                <Text>#{invoice.invoiceNumber}</Text>
                             </Box>
-                            <Box display='flex' justifyContent='space-between' p={2} pb={2}>
+                            <Box display='flex' justifyContent='space-between'>
                                 <Text>Расходная накладная от</Text>
-                                <Text>{dayjs(invoice?.createdAt).format('DD.MM.YYYY')}</Text>
+                                <Text fontSize={15} fontWeight='bold'>
+                                    {dayjs(invoice.createdAt).format('DD.MM.YYYY')}
+                                </Text>
                             </Box>
-                            <Divider
-                                size='lg'
-                                borderColor='black'
-                                borderWidth='2px'
-                                orientation='horizontal'
-                            />
-                            <Box display='flex' justifyContent='space-between' pt={1} p={2} pb={3}>
-                                <Box
-                                    display='flex'
-                                    justifyContent='space-between'
-                                    flexDirection='column'
-                                >
-                                    <Text>Получатель</Text>
-                                    <Text>Покупатель</Text>
-                                </Box>
-                                <Box
-                                    display='flex'
-                                    flexDirection='column'
-                                    justifyContent='space-between'
-                                >
-                                    <Text></Text>
-                                    <Text>{invoice?.contragentName}</Text>
-                                </Box>
+                            <Box display='flex' justifyContent='space-between'>
+                                <Text>Покупатель</Text>
+                                <Text fontSize={15} fontWeight='bold'>
+                                    {invoice.contragentName}
+                                </Text>
                             </Box>
-                            <Divider
-                                size='lg'
-                                borderColor='black'
-                                borderWidth='2px'
-                                orientation='horizontal'
-                                marginBottom={3}
-                            />
-                            <Table size='xs' variant='unstyled' fontSize='10px'>
+                            <Table
+                                mt={4}
+                                size='xs'
+                                layout='fixed'
+                                variant='unstyled'
+                                fontSize='10px'
+                            >
                                 <Thead>
                                     <Tr>
-                                        <Th border='none' color='RGB(108, 112, 219)'>
+                                        <Th
+                                            textAlign={'center'}
+                                            border='none'
+                                            color='RGB(108, 112, 219)'
+                                        >
                                             Продукция
                                         </Th>
-                                        <Th border='none' color='RGB(108, 112, 219)'>
+                                        <Th
+                                            textAlign={'center'}
+                                            border='none'
+                                            color='RGB(108, 112, 219)'
+                                        >
                                             Количество
                                         </Th>
-                                        <Th border='none' color='RGB(108, 112, 219)'>
+                                        <Th
+                                            textAlign={'center'}
+                                            border='none'
+                                            color='RGB(108, 112, 219)'
+                                        >
                                             Цена
                                         </Th>
-                                        <Th border='none' color='RGB(108, 112, 219)'>
+                                        <Th
+                                            textAlign={'center'}
+                                            border='none'
+                                            color='RGB(108, 112, 219)'
+                                        >
                                             Сумма
                                         </Th>
                                     </Tr>
                                     <Tr height={2}></Tr>
                                 </Thead>
                                 <Tbody>
-                                    {invoice?.totalProducts.map((item, index) => (
-                                        <Tr key={index}>
-                                            <Td border='1px solid black' padding='1'>
+                                    {invoice.totalProducts.map((item) => (
+                                        <Tr key={item.id} fontSize={15}>
+                                            <Td
+                                                textAlign={'center'}
+                                                border='1px solid black'
+                                                padding='1'
+                                            >
                                                 {item.name}
                                             </Td>
-                                            <Td border='1px solid black' padding='1'>
+                                            <Td
+                                                textAlign={'center'}
+                                                border='1px solid black'
+                                                padding='1'
+                                            >
                                                 {item.quantity}
                                             </Td>
-                                            <Td border='1px solid black' padding='1'>
+                                            <Td
+                                                textAlign={'center'}
+                                                border='1px solid black'
+                                                padding='1'
+                                            >
                                                 {item.price}
                                             </Td>
-                                            <Td border='1px solid black' padding='1'>
+                                            <Td
+                                                textAlign={'center'}
+                                                border='1px solid black'
+                                                padding='1'
+                                            >
                                                 {item.totalPrice}
                                             </Td>
                                         </Tr>
                                     ))}
                                 </Tbody>
                             </Table>
-                            <Box fontSize={12} display='flex' marginBottom={3} mt={3}>
+                            <Box display='flex' marginBottom={3} mt={3}>
                                 <Text marginLeft='auto'>Получено</Text>
                                 <Text>________</Text>
                             </Box>
-                            <Box fontSize={12} display='flex' flexDirection='column'>
+                            <Box display='flex' flexDirection='column'>
                                 <Text marginLeft='auto' fontWeight='bold'>
                                     Сверху: {overPrice} тг
                                 </Text>
                                 <Text marginLeft='auto' fontWeight='bold'>
-                                    Всего: {Number(invoice?.totalSum) + Number(overPrice)} тг
+                                    Всего: {Number(invoice.totalSum) + Number(overPrice)} тг
                                 </Text>
                             </Box>
                         </Box>

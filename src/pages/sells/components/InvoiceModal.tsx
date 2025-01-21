@@ -178,8 +178,8 @@ const InvoiceModal: React.FC<EditModalProps> = ({ isOpen, onClose, selectedRow }
                                     <Tr height={2}></Tr>
                                 </Thead>
                                 <Tbody>
-                                    {selectedRow?.totalProducts.map((item, index) => (
-                                        <Tr key={index} fontSize={15}>
+                                    {selectedRow?.totalProducts.map((item) => (
+                                        <Tr key={item.id} fontSize={15}>
                                             <Td
                                                 textAlign={'center'}
                                                 border='1px solid black'
